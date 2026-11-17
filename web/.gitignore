@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+
+# scripts/sync-content.mjs 가 저장소의 README와 소스 파일로 만드는 생성물
+src/content/docs/
