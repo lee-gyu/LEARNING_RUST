@@ -1,0 +1,44 @@
+name: GitHub Pages 배포
+
+on:
+  # main에 푸시할 때마다 사이트를 다시 빌드해 배포합니다.
+  push:
+    branches: [main]
+  # Actions 탭에서 직접 실행할 수도 있습니다.
+  workflow_dispatch:
+
+# 저장소를 읽고 Pages에 배포하는 데 필요한 권한
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포가 겹치면 진행 중인 배포를 끝낸 뒤 가장 최근 것만 이어서 실행합니다.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # web/ 의 빌드가 저장소 루트의 README와 소스 파일을 읽으므로 저장소 전체를 받습니다.
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v7
+      # pnpm 버전은 web/package.json 의 packageManager 값을 따릅니다.
+      - name: 설치, 빌드, 아티팩트 업로드
+        uses: withastro/action@v6
+        with:
+          path: ./web
+          node-version: 24
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: GitHub Pages에 배포
+        id: deployment
+        uses: actions/deploy-pages@v5
