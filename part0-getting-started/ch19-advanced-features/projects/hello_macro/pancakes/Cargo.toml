@@ -1,0 +1,10 @@
+[package]
+name = "pancakes"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# crates.io에 올리지 않은 같은 워크스페이스의 크레이트는 경로로 가져옵니다.
+[dependencies]
+hello_macro = { path = "../hello_macro" }
+hello_macro_derive = { path = "../hello_macro_derive" }

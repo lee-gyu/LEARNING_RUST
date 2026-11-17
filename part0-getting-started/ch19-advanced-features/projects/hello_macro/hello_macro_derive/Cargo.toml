@@ -1,0 +1,17 @@
+[package]
+name = "hello_macro_derive"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 절차적 매크로는 컴파일러가 컴파일 도중에 불러 쓰는 특별한 크레이트여야 합니다.
+# 이 설정이 없으면 #[proc_macro_derive]를 쓸 수 없습니다.
+[lib]
+proc-macro = true
+
+[dependencies]
+# syn: 토큰(TokenStream)을 구문 트리(DeriveInput 등)로 해석합니다.
+# quote: quote! { ... }로 쓴 코드를 다시 토큰으로 바꿉니다.
+# proc_macro 크레이트는 컴파일러와 함께 오므로 여기 적지 않습니다.
+quote = "1.0.47"
+syn = "3.0.10"

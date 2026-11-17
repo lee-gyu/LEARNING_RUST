@@ -1,0 +1,8 @@
+[package]
+name = "p0-ch2-guessing-game"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+rand = "0.10.4"

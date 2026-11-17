@@ -1,0 +1,8 @@
+[package]
+name = "p0-ch16-async"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+trpl = "0.3.0"

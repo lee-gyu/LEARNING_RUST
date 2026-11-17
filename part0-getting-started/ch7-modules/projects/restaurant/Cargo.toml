@@ -1,0 +1,12 @@
+[package]
+name = "restaurant"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+# 여기부터는 `cargo new`가 만든 내용이 아니라 이 저장소에서 덧붙인 부분입니다.
+# 저장소 루트의 Cargo.toml이 모든 챕터를 묶는 워크스페이스라서, 빈 [workspace] 테이블로
+# 이 프로젝트가 스스로 워크스페이스의 루트임을 선언해 바깥 워크스페이스와 분리합니다.
+# (자세한 이유는 ch1-hello-cargo README의 "자주 하는 실수" 4번을 참고하세요.)
+[workspace]

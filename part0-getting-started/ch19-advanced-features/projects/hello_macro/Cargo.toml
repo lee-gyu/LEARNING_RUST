@@ -1,0 +1,13 @@
+# 세 크레이트를 하나로 묶는 워크스페이스의 매니페스트입니다. [package]가 없는 "가상 매니페스트"입니다.
+#
+# - hello_macro        : HelloMacro 트레이트를 정의한 라이브러리 크레이트
+# - hello_macro_derive : #[derive(HelloMacro)]를 처리하는 절차적 매크로 크레이트
+# - pancakes           : 둘을 가져와 쓰는 바이너리 크레이트
+#
+# 실행 파일이 pancakes 하나뿐이라 이 디렉터리에서 `cargo run` 한 번으로 결과를 볼 수 있습니다.
+#
+# 저장소 루트의 Cargo.toml도 워크스페이스입니다. 이 파일에 [workspace]가 있으므로 Cargo는
+# 이 디렉터리 아래의 크레이트를 루트 워크스페이스가 아니라 이 워크스페이스의 멤버로 다룹니다.
+[workspace]
+resolver = "3"
+members = ["hello_macro", "hello_macro_derive", "pancakes"]

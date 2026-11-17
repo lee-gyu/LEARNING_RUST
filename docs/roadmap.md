@@ -111,9 +111,9 @@ publish.workspace = true
 
 | 상태 | 작업 |
 | --- | --- |
-| ⬜ | 루트 `Cargo.toml` 작성 (`[workspace]`, `resolver = "3"`, `members = ["part*/ch*"]`, `[workspace.package]`에 `edition = "2024"`, `publish = false`) |
-| ⬜ | `.gitignore` 작성 (`target/`) |
-| ⬜ | 루트 `README.md` 작성 (저장소 소개, 로드맵 링크, 실행 방법) |
+| ✅ | 루트 `Cargo.toml` 작성 (`[workspace]`, `resolver = "3"`, `members = ["part*/ch*"]`, `[workspace.package]`에 `edition = "2024"`, `publish = false`) |
+| ✅ | `.gitignore` 작성 (`target/`) |
+| ✅ | 루트 `README.md` 작성 (저장소 소개, 로드맵 링크, 실행 방법) |
 
 파트별 추가 준비물은 각 파트의 "준비" 항목에 적었습니다.
 
@@ -129,26 +129,26 @@ publish.workspace = true
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch1-hello-cargo` | 설치(rustup/mise), `rustc`로 컴파일, `cargo new/build/run/check` | Hello World, 서식 출력 `println!` | Book 1 |
-| ⬜ | `ch2-guessing-game` | 입력 받기, `let`/`mut`, 외부 크레이트(`rand`), `match`, 반복 | 단계별 숫자 맞히기 게임 (4단계) | Book 2 |
-| ⬜ | `ch3-common-concepts` | 변수와 가변성, 섀도잉, 스칼라/복합 타입, 함수, 표현식과 구문, 제어 흐름 | 변수, 타입, 함수, `if`/`loop`/`while`/`for`, 피보나치·온도 변환 | Book 3 |
-| ⬜ | `ch4-ownership` | 소유권 규칙, 이동과 복사, 참조와 대여, 슬라이스 | 이동/복제, 불변·가변 대여, 문자열 슬라이스, 대여 규칙 위반(`compile_fail`) | Book 4 |
-| ⬜ | `ch5-structs` | 구조체 정의, 튜플 구조체, 메서드와 연관 함수, `derive(Debug)` | 구조체 생성/갱신 문법, 사각형 넓이 프로그램, `impl` 블록 | Book 5 |
-| ⬜ | `ch6-enums-pattern-matching` | 열거형, `Option<T>`, `match`, `if let`, `let...else` | 데이터를 가진 열거형, `Option` 처리, 패턴 바인딩 | Book 6 |
-| ⬜ | `ch7-modules` | 패키지/크레이트/모듈, 경로, `pub`, `use`, 파일 분리 | 인라인 모듈 예제 + 파일 분리 프로젝트(`projects/restaurant`) | Book 7 |
-| ⬜ | `ch8-collections` | `Vec<T>`, `String`과 UTF-8, `HashMap<K, V>` | 벡터 순회/수정, 문자열 결합·인덱싱, 단어 빈도수, 연습(중앙값·피그 라틴) | Book 8 |
-| ⬜ | `ch9-error-handling` | `panic!`, `Result<T, E>`, `?` 연산자, 패닉과 `Result`의 선택 기준 | 파일 열기 에러 처리, 에러 전파, 검증 타입(`Guess`) | Book 9 |
-| ⬜ | `ch10-generics-traits-lifetimes` | 제네릭, 트레이트 정의/구현, 트레이트 바운드, 라이프타임 명시 | 제네릭 `largest`, `Summary` 트레이트, `impl Trait`, `longest` 라이프타임 | Book 10 |
-| ⬜ | `ch11-testing` | `#[test]`, 단언 매크로, `should_panic`, 테스트 실행 옵션, 단위/통합 테스트 | 테스트가 포함된 라이브러리 프로젝트(`projects/adder`) | Book 11 |
-| ⬜ | `ch12-io-project-minigrep` | 인자 파싱, 파일 읽기, 모듈화, TDD, 환경 변수, 표준 에러 | 단계별 `minigrep` 프로젝트(`projects/minigrep`) | Book 12 |
-| ⬜ | `ch13-closures-iterators` | 클로저 캡처와 `Fn` 트레이트, `Iterator`, 어댑터, 성능 | 클로저 캡처 방식 3종, 반복자 어댑터 체인, minigrep 개선 | Book 13 |
-| ⬜ | `ch14-smart-pointers` | `Box<T>`, `Deref`, `Drop`, `Rc<T>`, `RefCell<T>`, 순환 참조와 `Weak<T>` | cons 리스트, 직접 만든 `MyBox`, 내부 가변성, 트리 구조 | Book 15 |
-| ⬜ | `ch15-concurrency` | 스레드, `move` 클로저, 채널, `Mutex<T>`/`Arc<T>`, `Send`/`Sync` | 스레드 생성·join, 메시지 전달, 공유 카운터 | Book 16 |
-| ⬜ | `ch16-async` | `async`/`await`, 퓨처, 동시 실행, 스트림, `Pin`, 태스크와 스레드 | 비동기 함수, `join`/`race`, 채널, 스트림 처리 | Book 17 |
-| ⬜ | `ch17-trait-objects-oop` | 캡슐화, 트레이트 객체(`dyn Trait`), 상태 패턴 | GUI 컴포넌트 예제, 블로그 상태 패턴(객체형/타입형 2가지) | Book 18 |
-| ⬜ | `ch18-patterns` | 패턴이 쓰이는 위치, 반박 가능성, 패턴 문법 전체 | 구조 분해, 가드, `@` 바인딩, 범위·무시 패턴 | Book 19 |
-| ⬜ | `ch19-advanced-features` | `unsafe` 기초, 연관 타입, 연산자 오버로딩, 뉴타입, 함수 포인터, 매크로 | 원시 포인터, `Add` 구현, `macro_rules!`, derive 매크로(`projects/hello_macro`) | Book 20 |
-| ⬜ | `ch20-web-server-project` | TCP 연결 처리, 스레드 풀, 우아한 종료 | 멀티스레드 웹 서버(`projects/hello-server`) | Book 21 |
+| ✅ | `ch1-hello-cargo` | 설치(rustup/mise), `rustc`로 컴파일, `cargo new/build/run/check` | Hello World, 서식 출력 `println!` | Book 1 |
+| ✅ | `ch2-guessing-game` | 입력 받기, `let`/`mut`, 외부 크레이트(`rand`), `match`, 반복 | 단계별 숫자 맞히기 게임 (4단계) | Book 2 |
+| ✅ | `ch3-common-concepts` | 변수와 가변성, 섀도잉, 스칼라/복합 타입, 함수, 표현식과 구문, 제어 흐름 | 변수, 타입, 함수, `if`/`loop`/`while`/`for`, 피보나치·온도 변환 | Book 3 |
+| ✅ | `ch4-ownership` | 소유권 규칙, 이동과 복사, 참조와 대여, 슬라이스 | 이동/복제, 불변·가변 대여, 문자열 슬라이스, 대여 규칙 위반(`compile_fail`) | Book 4 |
+| ✅ | `ch5-structs` | 구조체 정의, 튜플 구조체, 메서드와 연관 함수, `derive(Debug)` | 구조체 생성/갱신 문법, 사각형 넓이 프로그램, `impl` 블록 | Book 5 |
+| ✅ | `ch6-enums-pattern-matching` | 열거형, `Option<T>`, `match`, `if let`, `let...else` | 데이터를 가진 열거형, `Option` 처리, 패턴 바인딩 | Book 6 |
+| ✅ | `ch7-modules` | 패키지/크레이트/모듈, 경로, `pub`, `use`, 파일 분리 | 인라인 모듈 예제 + 파일 분리 프로젝트(`projects/restaurant`) | Book 7 |
+| ✅ | `ch8-collections` | `Vec<T>`, `String`과 UTF-8, `HashMap<K, V>` | 벡터 순회/수정, 문자열 결합·인덱싱, 단어 빈도수, 연습(중앙값·피그 라틴) | Book 8 |
+| ✅ | `ch9-error-handling` | `panic!`, `Result<T, E>`, `?` 연산자, 패닉과 `Result`의 선택 기준 | 파일 열기 에러 처리, 에러 전파, 검증 타입(`Guess`) | Book 9 |
+| ✅ | `ch10-generics-traits-lifetimes` | 제네릭, 트레이트 정의/구현, 트레이트 바운드, 라이프타임 명시 | 제네릭 `largest`, `Summary` 트레이트, `impl Trait`, `longest` 라이프타임 | Book 10 |
+| ✅ | `ch11-testing` | `#[test]`, 단언 매크로, `should_panic`, 테스트 실행 옵션, 단위/통합 테스트 | 테스트가 포함된 라이브러리 프로젝트(`projects/adder`) | Book 11 |
+| ✅ | `ch12-io-project-minigrep` | 인자 파싱, 파일 읽기, 모듈화, TDD, 환경 변수, 표준 에러 | 단계별 `minigrep` 프로젝트(`projects/minigrep`) | Book 12 |
+| ✅ | `ch13-closures-iterators` | 클로저 캡처와 `Fn` 트레이트, `Iterator`, 어댑터, 성능 | 클로저 캡처 방식 3종, 반복자 어댑터 체인, minigrep 개선 | Book 13 |
+| ✅ | `ch14-smart-pointers` | `Box<T>`, `Deref`, `Drop`, `Rc<T>`, `RefCell<T>`, 순환 참조와 `Weak<T>` | cons 리스트, 직접 만든 `MyBox`, 내부 가변성, 트리 구조 | Book 15 |
+| ✅ | `ch15-concurrency` | 스레드, `move` 클로저, 채널, `Mutex<T>`/`Arc<T>`, `Send`/`Sync` | 스레드 생성·join, 메시지 전달, 공유 카운터 | Book 16 |
+| ✅ | `ch16-async` | `async`/`await`, 퓨처, 동시 실행, 스트림, `Pin`, 태스크와 스레드 | 비동기 함수, `join`/`race`, 채널, 스트림 처리 | Book 17 |
+| ✅ | `ch17-trait-objects-oop` | 캡슐화, 트레이트 객체(`dyn Trait`), 상태 패턴 | GUI 컴포넌트 예제, 블로그 상태 패턴(객체형/타입형 2가지) | Book 18 |
+| ✅ | `ch18-patterns` | 패턴이 쓰이는 위치, 반박 가능성, 패턴 문법 전체 | 구조 분해, 가드, `@` 바인딩, 범위·무시 패턴 | Book 19 |
+| ✅ | `ch19-advanced-features` | `unsafe` 기초, 연관 타입, 연산자 오버로딩, 뉴타입, 함수 포인터, 매크로 | 원시 포인터, `Add` 구현, `macro_rules!`, derive 매크로(`projects/hello_macro`) | Book 20 |
+| ✅ | `ch20-web-server-project` | TCP 연결 처리, 스레드 풀, 우아한 종료 | 멀티스레드 웹 서버(`projects/hello-server`) | Book 21 |
 
 ### Part 1. 표준 라이브러리 — `part1-standard-lib/`
 
@@ -332,8 +332,8 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 
 | 파트 | 완료 / 전체 |
 | --- | --- |
-| 사전 작업 | 0 / 3 |
-| Part 0. 시작하기 | 0 / 20 |
+| 사전 작업 | 3 / 3 |
+| Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 0 / 14 |
 | Part 2. 에디션 | 0 / 6 |
 | Part 3. Cargo | 0 / 11 |
@@ -345,4 +345,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 9. 레퍼런스 | 0 / 10 |
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
-| **합계** | **0 / 109 챕터** |
+| **합계** | **20 / 109 챕터** |
