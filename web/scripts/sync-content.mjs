@@ -23,7 +23,7 @@ const OUT_DIR = path.join(WEB_DIR, 'src/content/docs');
 const ROOT_DOCS = {
 	'README.md': '',
 	'docs/roadmap.md': 'roadmap',
-	'PROGRESS.md': 'progress',
+	// 'PROGRESS.md': 'progress',
 };
 
 /** 코드 페이지로 만드는 파일: 확장자 → 코드 블록 언어 */
