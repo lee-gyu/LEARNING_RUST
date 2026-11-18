@@ -1,10 +1,15 @@
 name: GitHub Pages 배포
 
 on:
-  # main에 푸시할 때마다 사이트를 다시 빌드해 배포합니다.
+  # main에 푸시된 커밋이 파트 디렉터리(part0-…, part1-…)의 파일을 바꿨을 때만
+  # 사이트를 다시 빌드해 배포합니다. README뿐 아니라 예제 소스도 사이트의 페이지가 되므로
+  # 파트 디렉터리 아래 전체를 대상으로 합니다.
   push:
     branches: [main]
-  # Actions 탭에서 직접 실행할 수도 있습니다.
+    paths:
+      - 'part*/**'
+  # 그 밖의 변경(web/, 루트 README, PROGRESS.md, docs/roadmap.md)을 반영하려면
+  # Actions 탭에서 직접 실행합니다.
   workflow_dispatch:
 
 # 저장소를 읽고 Pages에 배포하는 데 필요한 권한
