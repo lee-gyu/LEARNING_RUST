@@ -3,7 +3,7 @@
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
 - 마지막 갱신: 2026-11-18
-- 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
 
@@ -73,6 +73,9 @@
 | ⬜ | `ch13-async-primitives` | | | | |
 | ⬜ | `ch14-ffi-any-misc` | | | | |
 
+- 툴체인 1.100.0 확인(2026-11-18): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했습니다. `compile_fail` 파일 106개가 모두 파일 이름의 에러 코드로 실패하고, Part 1 예제 32개의 출력은 1.98.1 때와 같습니다(실행마다 다른 줄 제외). Part 0 예제의 출력, `projects/` 아래 독립 프로젝트, README에 인용한 에러 메시지 문구는 다시 확인하지 않았습니다.
+- Clippy 1.100.0은 매크로가 펼친 코드에 `vec_init_then_push`를 내지 않습니다. Part 0 ch19 `08_macro_rules`의 `#[expect]` 두 개가 충족되지 않아 지우고 README 설명을 고쳤습니다.
+
 ## Part 2~11
 
 아직 시작하지 않았습니다. 챕터 목록은 [로드맵 3절](docs/roadmap.md#3-파트별-챕터-계획)을 따르며, 파트를 시작할 때 이 문서에 표를 추가합니다.
@@ -110,6 +113,8 @@
 - ch11: 에디션 2024의 문서 테스트 병합(`all doctests ran in …; merged doctests compilation took …` 줄)은 Part 2 `ch5-rust-2024-ecosystem`에서, `cargo test 이름`이 문서 테스트를 건너뛰는 동작은 Part 3 `ch9-testing-ci`에서 다시 다룹니다.
 - ch18: `while let Some(top) = stack.pop() && top > 2`는 조건이 거짓이 되는 순간에도 원소 하나를 이미 꺼냅니다. Part 2 `ch4-rust-2024-language`에서 let 체인의 함정으로 다룰 만합니다.
 - ch19: unsafe 예제는 Miri로 확인하지 못했습니다. Part 10을 시작해 nightly와 Miri를 준비하면 `ch19-advanced-features`의 `01`, `02` 예제를 `cargo +nightly miri run`으로 다시 확인합니다.
+- Part 1 ch1: README가 "툴체인은 1.98.1, 온라인 문서는 1.100.0"인 상황을 문서 버전이 어긋나는 예로 들고 `bool::toggle`이 E0599라고 설명합니다. 툴체인을 1.100.0으로 올린 뒤에는 `toggle`이 컴파일되므로, 이 예와 로컬 문서 버전 표기(`std 1.98.1`)를 현재 툴체인에 맞게 고칩니다.
+- 전체: 챕터 README 머리말의 "확인한 툴체인: rustc 1.98.1"은 작성 당시 기준입니다. 1.100.0에서 예제 출력과 에러 메시지까지 다시 확인한 챕터부터 표기를 바꿉니다.
 - Part 0 ch8: README 2.5절과 `05_vec_drop` 예제 설명이 "벡터가 drop되면 요소가 0번부터 차례로 drop된다"고 단정합니다. `Vec` 문서의 Guarantees 절은 요소의 drop 순서를 보장하지 않는다고 적고 있으므로(현재 구현은 앞에서부터), "현재 구현의 동작이며 보장되지 않음"이라는 단서를 붙일지 정합니다.
 - Part 1 ch2·ch4: README가 목표 분량을 넘었습니다(1077줄, 1060줄). 예제 출력과 에러 인용이 대부분이며, 줄일지는 읽어 보고 정합니다.
 - Part 0 전체: 챕터를 동시에 작성했기 때문에, README가 그때 아직 없던 챕터를 링크 없이 코드 서식의 이름(`ch10-generics-traits-lifetimes`)으로만 가리키는 곳이 있습니다. 내용에는 문제가 없고, 상대 링크로 바꾸는 것은 선택 사항입니다.

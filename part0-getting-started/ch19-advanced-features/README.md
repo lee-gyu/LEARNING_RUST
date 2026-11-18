@@ -672,7 +672,7 @@ macro_rules! my_vec {
 }
 ```
 
-**펼쳐진 코드도 보통 코드와 똑같이 검사됩니다.** The Book의 `vec!` 예제에는 첫 번째 갈래(`()`)가 없습니다. 그대로 `my_vec![]`을 부르면 `push`가 하나도 없는 `let mut temp_vec`이 만들어져 `unused_mut` 경고가 나고, 경고의 위치는 매크로 정의 안을, 원인은 그 매크로를 부른 곳을 가리킵니다(`this warning originates in the macro my_vec`). 그래서 빈 호출만 받는 갈래를 위에 두었습니다. 또 Clippy는 펼쳐진 `Vec::new()` + `push` 모양을 보고 `vec![]`을 쓰라고 권합니다(`vec_init_then_push`). 이 예제는 `vec!`을 흉내 내는 것이 목적이므로, 호출한 곳에 `#[expect(clippy::vec_init_then_push, reason = "...")]`를 달아 예상된 경고라고 표시했습니다.
+**펼쳐진 코드도 보통 코드와 똑같이 검사됩니다.** The Book의 `vec!` 예제에는 첫 번째 갈래(`()`)가 없습니다. 그대로 `my_vec![]`을 부르면 `push`가 하나도 없는 `let mut temp_vec`이 만들어져 `unused_mut` 경고가 나고, 경고의 위치는 매크로 정의 안을, 원인은 그 매크로를 부른 곳을 가리킵니다(`this warning originates in the macro my_vec`). 그래서 빈 호출만 받는 갈래를 위에 두었습니다. Clippy의 검사는 버전에 따라 다릅니다. Clippy 1.98.1은 펼쳐진 `Vec::new()` + `push` 모양을 보고 `vec![]`을 쓰라고 권했지만(`vec_init_then_push`), 1.100.0은 이 매크로가 펼친 코드에는 그 경고를 내지 않습니다. 그래서 예제에는 따로 표시를 달지 않았습니다. 매크로가 펼친 코드에서 나는 경고를 예상된 것으로 표시해야 할 때는, 매크로를 부른 곳에 `#[expect(lint 이름, reason = "...")]`를 답니다.
 
 [`08_macro_rules.rs`](examples/08_macro_rules.rs)에는 이 밖에 세 가지 매크로가 더 있습니다.
 

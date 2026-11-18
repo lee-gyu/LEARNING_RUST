@@ -2,7 +2,7 @@
 
 [rust-lang.org/learn](https://rust-lang.org/learn/)에 정리된 공식 학습 자료를 순서대로 따라가며, 챕터마다 **설명 문서(README.md)** 와 **실습 예제(.rs)** 를 작성하기 위한 전체 계획입니다.
 
-- 기준 툴체인: Rust 1.98 (stable), Edition 2024 — `mise.toml`의 `rust = "latest"`
+- 기준 툴체인: Rust 1.100 (stable), Edition 2024 — `mise.toml`의 `rust = "latest"`
 - 전체 규모: 12개 파트, 109개 챕터
 - 작업 단위: **챕터 1개 = 작업 1회**. 완료하면 이 문서의 상태 칸을 ⬜ → ✅ 로 바꿉니다.
 

@@ -70,11 +70,9 @@ unit_type!(Seconds, "초");
 fn main() {
     println!("1. my_vec!");
     let empty: Vec<i32> = my_vec![];
-    // 펼쳐진 코드(Vec::new() 뒤에 push를 이어 쓰는 모양)를 보고 Clippy가 vec![]을 쓰라고 권합니다.
-    // vec!의 동작을 흉내 내는 것이 이 예제의 목적이므로, 호출한 곳에 예상된 경고라고 표시합니다.
-    #[expect(clippy::vec_init_then_push, reason = "vec!을 흉내 낸 매크로라서")]
+    // 펼쳐진 코드는 Vec::new() 뒤에 push를 이어 쓰는 모양입니다. Clippy 1.98.1은 이 모양에
+    // vec![]을 쓰라고 권했지만(vec_init_then_push), 1.100.0은 이 매크로가 펼친 코드에는 경고하지 않습니다.
     let numbers = my_vec![1, 2, 3];
-    #[expect(clippy::vec_init_then_push, reason = "vec!을 흉내 낸 매크로라서")]
     let words = my_vec!["가", "나",]; // 끝의 쉼표도 허용됩니다.
     println!("    {empty:?} {numbers:?} {words:?}"); // 출력:     [] [1, 2, 3] ["가", "나"]
 
