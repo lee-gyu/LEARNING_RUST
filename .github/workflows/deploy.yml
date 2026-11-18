@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - 'part*/**'
+      - 'web/**'
   # 그 밖의 변경(web/, 루트 README, PROGRESS.md, docs/roadmap.md)을 반영하려면
   # Actions 탭에서 직접 실행합니다.
   workflow_dispatch:
