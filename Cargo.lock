@@ -743,6 +743,22 @@ name = "p0-ch9-error-handling"
 version = "0.0.0"
 
 [[package]]
+name = "p1-ch1-std-overview"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch2-option-result"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch3-strings-fmt"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch4-collections"
+version = "0.0.0"
+
+[[package]]
 name = "parking_lot"
 version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"

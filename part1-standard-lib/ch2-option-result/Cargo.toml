@@ -1,0 +1,5 @@
+[package]
+name = "p1-ch2-option-result"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
