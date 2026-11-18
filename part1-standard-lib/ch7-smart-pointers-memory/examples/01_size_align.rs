@@ -104,23 +104,23 @@ fn main() {
 
     // size_of::<T>()는 타입만 보고 컴파일할 때 정해집니다.
     // size_of_val(&값)은 참조가 가리키는 값의 크기를 잽니다. 동적 크기 타입(str, [T])도 잴 수 있습니다.
-    println!("\n== 5. size_of_val: 손잡이의 크기와 내용물의 크기 ==");
+    println!("\n== 5. size_of_val: 핸들의 크기와 내용물의 크기 ==");
     let scores: Vec<i32> = vec![90, 85, 77];
     let text = String::from("안녕");
     println!(
-        "Vec 손잡이 {}, 원소 슬라이스 {}",
+        "Vec 핸들 {}, 원소 슬라이스 {}",
         size_of_val(&scores),
         size_of_val(&scores[..])
     );
-    // 출력: Vec 손잡이 24, 원소 슬라이스 12
+    // 출력: Vec 핸들 24, 원소 슬라이스 12
     println!(
-        "String 손잡이 {}, 글자 {}",
+        "String 핸들 {}, 글자 {}",
         size_of_val(&text),
         size_of_val(text.as_str())
     );
-    // 출력: String 손잡이 24, 글자 6
-    // Vec과 String 자체는 (포인터, 용량, 길이) 세 칸 24바이트짜리 손잡이이고,
-    // 원소와 글자는 그 손잡이가 가리키는 힙에 있습니다. 힙 쪽 크기는 슬라이스로 재야 보입니다.
+    // 출력: String 핸들 24, 글자 6
+    // Vec과 String 자체는 (포인터, 용량, 길이) 세 칸 24바이트짜리 핸들이고,
+    // 원소와 글자는 그 핸들이 가리키는 힙에 있습니다. 힙 쪽 크기는 슬라이스로 재야 보입니다.
 
     // 필드를 실제로 읽어 dead_code 경고를 피합니다.
     let p = Packet {

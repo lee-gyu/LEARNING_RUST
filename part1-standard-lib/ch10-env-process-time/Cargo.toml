@@ -1,0 +1,5 @@
+[package]
+name = "p1-ch10-env-process-time"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

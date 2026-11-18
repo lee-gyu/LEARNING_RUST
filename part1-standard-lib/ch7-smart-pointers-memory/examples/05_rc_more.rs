@@ -47,8 +47,8 @@ fn main() {
     // 출력: a == b: true, ptr_eq(a, b): true
 
     println!("\n== 2. Rc<str>, Rc<[T]>: 바뀌지 않는 문자열·슬라이스를 공유하기 ==");
-    // Rc<String>은 Rc 할당 안에 String 손잡이가 있고, 글자는 또 다른 할당에 있습니다(두 번 따라감).
-    // Rc<str>은 카운트와 글자를 한 할당에 담고, 손잡이는 넓은 포인터(주소 + 길이)입니다.
+    // Rc<String>은 Rc 할당 안에 String 핸들이 있고, 글자는 또 다른 할당에 있습니다(두 번 따라감).
+    // Rc<str>은 카운트와 글자를 한 할당에 담고, 핸들은 넓은 포인터(주소 + 길이)입니다.
     let author: Rc<str> = Rc::from("김작가");
     let books: Vec<(&str, Rc<str>)> = vec![
         ("첫 책", Rc::clone(&author)),

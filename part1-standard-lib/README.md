@@ -26,5 +26,11 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch6-core-traits](ch6-core-traits/) | 변환(`From`/`Into`/`TryFrom`/`AsRef`)과 `as`의 선택 기준, `Borrow`·`ToOwned`·`Cow`, `std::ops` 연산자, 비교(`PartialEq`~`Ord`)와 해시 직접 구현 규칙, `Default`, `Clone`/`Copy` |
 | [ch7-smart-pointers-memory](ch7-smart-pointers-memory/) | 타입의 크기·메모리 정렬·니치 최적화, `std::mem`(`swap`/`replace`/`take`), `Box<[T]>`·`Box<str>`, `Rc` 넓히기(`make_mut`·`try_unwrap`·`new_cyclic`), 내부 가변성 도구 고르기(`Cell`/`RefCell`/`OnceCell`/`LazyCell`) |
 | [ch8-errors-panic](ch8-errors-panic/) | `Error` 트레이트, 에러 열거형 설계와 `From`으로 `?` 변환, `Box<dyn Error>`와 다운캐스트, `source` 체인 보고, 패닉 훅, `catch_unwind`, 백트레이스 |
+| [ch9-io-fs-path](ch9-io-fs-path/) | `Read`/`Write`/`BufRead`/`Seek`와 부분 읽기·쓰기, `BufReader`/`BufWriter`와 `flush`, 표준 입출력, 파일과 `OpenOptions`, `io::Error`와 `ErrorKind`, 디렉터리 순회, `Path`/`PathBuf` 조작 |
+| [ch10-env-process-time](ch10-env-process-time/) | 명령줄 인자(`args_os`)와 환경 변수(`VarError`, `set_var`가 unsafe인 이유), 종료 코드(`Termination`·`ExitCode`·`process::exit`), `Command`와 `status`/`output`/`spawn`, 파이프와 교착 상태, `wait`/`try_wait`/`kill`, `Duration`·`Instant`·`SystemTime` |
+| [ch11-threads-sync](ch11-threads-sync/) | 스코프 스레드와 `thread::Builder`, `Mutex` 넓히기·`RwLock`, `Condvar`와 생산자-소비자, `sync_channel`과 배압, 원자 타입, `OnceLock`/`LazyLock` 전역 초기화, 도구 선택표 |
+| [ch12-net](ch12-net/) | 주소 타입과 `ToSocketAddrs`, TCP 서버·클라이언트(포트 0, 제한 시간, `shutdown`, `try_clone`), 바이트 스트림과 메시지 경계 나누기, UDP 데이터그램, TCP·UDP 에코 서버 |
+| [ch13-async-primitives](ch13-async-primitives/) | `Future::poll`과 `Poll`, `Context`/`Waker`와 `Wake` 트레이트, 퓨처 직접 구현, `Pin`/`Unpin`과 `pin!`·`Box::pin`, `block_on`과 작은 실행기 만들기, `std::future`의 도구 |
+| [ch14-ffi-any-misc](ch14-ffi-any-misc/) | 문자열 타입 가족(`OsString`/`OsStr`, `CString`/`CStr`)과 C 함수 호출, `Any`·`TypeId`와 다운캐스트, 수치 래퍼(`Wrapping`/`Saturating`/`NonZero`) |
 
-작성된 챕터만 목차에 있습니다. 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
+Part 1의 14개 챕터가 모두 작성됐습니다. 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

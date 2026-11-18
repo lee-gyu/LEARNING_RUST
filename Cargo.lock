@@ -747,6 +747,26 @@ name = "p1-ch1-std-overview"
 version = "0.0.0"
 
 [[package]]
+name = "p1-ch10-env-process-time"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch11-threads-sync"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch12-net"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch13-async-primitives"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch14-ffi-any-misc"
+version = "0.0.0"
+
+[[package]]
 name = "p1-ch2-option-result"
 version = "0.0.0"
 
@@ -772,6 +792,10 @@ version = "0.0.0"
 
 [[package]]
 name = "p1-ch8-errors-panic"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch9-io-fs-path"
 version = "0.0.0"
 
 [[package]]

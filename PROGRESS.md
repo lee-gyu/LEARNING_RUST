@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-18
+- 마지막 갱신: 2026-11-19
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -13,7 +13,7 @@
 | --- | --- |
 | 사전 작업 | 3 / 3 |
 | Part 0. 시작하기 | 20 / 20 |
-| Part 1. 표준 라이브러리 | 8 / 14 |
+| Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2~11 | 0 / 75 |
 
 ## 사전 작업
@@ -66,14 +66,14 @@
 | ✅ | `ch6-core-traits` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 패닉하는 예제 없음. 해시 값과 주소는 출력하지 않고 같은지만 출력. `PartialEq` 없는 `==`(E0369)는 Part 0 ch11에 있어 뺌. `derive(Eq)`·`derive(Ord)` 누락 에러와 clippy가 잡는 실수 8가지는 README 표로만 실음. Rustlings 연습은 현재 이름(`conversions1`~`5`)으로 안내. `Infallible`은 1.100.0에서 `!`의 별칭이라 실제 동작대로 설명. README 941줄 |
 | ✅ | `ch7-smart-pointers-memory` | 예제 8 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 패닉하는 예제와 unsafe 코드 없음. 크기·오프셋은 64비트·1.100.0 기준이고, `01`의 필드 오프셋과 `02`의 3·4번 구역(문서가 보장하지 않는 니치)은 툴체인을 올리면 다시 확인. `static`에 두는 예는 `Cell` 대신 `OnceCell`로 만듦. E0716·E0499는 README 본문에만 인용. README 1006줄(`01`·`02`·`04`의 출력 블록은 일부 생략) |
 | ✅ | `ch8-errors-panic` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. `06`·`07`은 일부러 패닉하지만 안에서 붙잡아 종료 코드 0(표준 에러에 실행마다 다른 스레드 ID가 나옴). `08`은 `RUST_LIB_BACKTRACE` 값에 따라 출력이 달라 실행 명령에 환경 변수를 명시. `payload_as_str`(1.91)·`PanicHookInfo`(1.81) 사용. `Display` 없는 `impl Error`(E0277)는 Part 0 ch19와 겹쳐 README 표로만 실음. README 934줄 |
-| ⬜ | `ch9-io-fs-path` | | | | |
-| ⬜ | `ch10-env-process-time` | | | | |
-| ⬜ | `ch11-threads-sync` | | | | |
-| ⬜ | `ch12-net` | | | | |
-| ⬜ | `ch13-async-primitives` | | | | |
-| ⬜ | `ch14-ffi-any-misc` | | | | |
+| ✅ | `ch9-io-fs-path` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 1.100.0에서 작성·검증. 패닉하는 예제 없음. `04`는 표준 입력을 읽음(파이프로 넣어 실행, 입력이 없으면 요약만 표준 에러에 출력하고 종료 코드 0). `02`에 `#[cfg(test)]` 테스트 2개(`cargo test --example`). 파일은 임시 디렉터리에 만들고 지움 — `06`의 임시 경로 두 줄은 실행마다 다름. 운영체제 에러 번호와 메시지는 macOS 기준. `use std::io::Write` 누락 대신 `fmt::Write`로 파일에 `writeln!`하는 E0599를 실음. 터미널 여부 확인에 `IsTerminal` 사용. README 961줄 |
+| ✅ | `ch10-env-process-time` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 모든 예제가 종료 코드 0 — 0이 아닌 코드·`process::exit`·패닉은 자식 쪽에서만 일어남. `02`·`03`·`04`·`08`은 예제가 자기 자신을 자식으로 다시 실행하고, `03`의 6번·`04`의 5번 구역만 유닉스 명령(`sh`·`echo`·`sort`·`uniq`)을 씀. `06`의 "걸린 시간" 한 줄만 실행마다 다름. `08`은 약 1초 걸림. `Duration`에 실수를 곱하는 에러는 지침의 E0277이 아니라 E0308. 자기 환경은 바꾸지 않음(`set_var` 미사용). Linux·Windows 동작은 미확인. README 957줄 |
+| ✅ | `ch11-threads-sync` | 예제 8 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. unsafe 코드 없음. `01`·`02`·`03`은 일부러 스레드를 패닉시키지만 종료 코드 0(표준 에러에 실행마다 다른 스레드 ID). `07`의 "load 후 store" 줄은 일부러 만든 경쟁 조건이라 실행마다 다름. `02`의 `available_parallelism` 값과 스레드 생성 실패 메시지는 환경에 따라 다름. `fetch_update`가 1.99부터 deprecated라 `try_update`(1.95) 사용. `Arc` 안의 값 수정(E0596)은 Part 0 ch14와 겹쳐 뺌. README 957줄 |
+| ✅ | `ch12-net` | 예제 7 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 모든 소켓은 `127.0.0.1`의 포트 0(운영체제가 고름)에서만 열고 포트 번호는 출력하지 않음. 패닉하는 예제 없음. `03`은 교착 상태를 보이려고 64 MiB를 주고받아 메모리를 수백 MiB 쓰고 약 1초 걸림. 제한 시간 초과가 `WouldBlock`으로 나오는 것, `ConnectionRefused`, `localhost` 해석 결과, UDP 최대 크기 9216바이트는 macOS 기준. `recv_from`에 `String`을 넘기는 E0308은 README 표로만 실음. README 838줄 |
+| ✅ | `ch13-async-primitives` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 1.100.0에서 작성·검증. 외부 크레이트와 unsafe 코드 없이 표준 라이브러리만으로 퓨처·`block_on`·작은 실행기를 구현. 패닉하는 예제와 표준 에러 출력 없음. 시간과 바쁜 폴링 횟수는 비교 결과로만 출력해 실행마다 출력이 같음. `Send`가 아닌 값을 await 너머로 들고 가는 에러는 E 코드가 없어 메시지로 확인. 재귀 `async fn`(E0733)을 에러 예제로 추가. 타이머 스레드는 `join`하지 않지만 예제가 끝까지 기다림. README 824줄 |
+| ✅ | `ch14-ffi-any-misc` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 1.100.0에서 작성·검증. 패닉하는 예제 없음. unsafe 코드는 `04_calling_c`에만 있고(`strlen`·`getenv` 호출과 `CStr::from_ptr`, 블록마다 `SAFETY` 주석) **Miri로는 검증하지 못함**(nightly 미설치). `02`의 3·5번 구역은 유닉스 전용(`cfg(unix)`). C 타입 별칭은 macOS aarch64 기준(`c_char`는 `i8`). 임시 `CString`의 `as_ptr`는 에러가 아니라 경고(`dangling_pointers_from_temporaries`)라 README에 경고문만 인용. 트레이트 객체 업캐스트(1.86) 사용. README 956줄 |
 
-- Part 1 ch1~ch8 확인(2026-11-18, rustc 1.100.0): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 경고 없이 통과했고, `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. ch5~ch8은 1.100.0에서 작성·검증했습니다. Part 1 합계는 예제 64 / 에러 39 / 프로젝트 0입니다.
+- Part 1 전체 확인(2026-11-19, rustc 1.100.0): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 경고 없이 통과했고, `compile_fail` 파일 68개가 모두 기대한 에러로 실패하며, `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. ch1~ch4는 1.98.1에서, ch5~ch14는 1.100.0에서 작성·검증했습니다. Part 1 합계는 예제 111 / 에러 68 / 프로젝트 0입니다.
 - 툴체인 1.100.0 확인(2026-11-18): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했습니다. `compile_fail` 파일 106개가 모두 파일 이름의 에러 코드로 실패하고, Part 1 예제 32개의 출력은 1.98.1 때와 같습니다(실행마다 다른 줄 제외). Part 0 예제의 출력, `projects/` 아래 독립 프로젝트, README에 인용한 에러 메시지 문구는 다시 확인하지 않았습니다.
 - Clippy 1.100.0은 매크로가 펼친 코드에 `vec_init_then_push`를 내지 않습니다. Part 0 ch19 `08_macro_rules`의 `#[expect]` 두 개가 충족되지 않아 지우고 README 설명을 고쳤습니다.
 
@@ -107,6 +107,14 @@
 - 패닉 예제 주의: `panic!("{}", "상수")`처럼 서식 인자가 상수뿐이면 페이로드가 `String`이 아니라 `&str`입니다. 기본 훅의 `note: run with RUST_BACKTRACE=1` 줄은 처음 한 번만 나옵니다. Clippy 1.100.0은 `[(&str, fn() -> i32); 4]` 같은 타입에 `type_complexity`를 냅니다.
 - zsh는 `$var`를 단어로 나누지 않습니다. `env $combo cmd`처럼 변수 하나에 환경 변수 할당 여러 개를 담아 넘기면 잘못된 결과가 나오므로 `${=var}`를 씁니다.
 - 반복자 관련으로 clippy가 기본으로 잡는 것: `unnecessary_fold`, `filter_next`, `map_flatten`, `iter_cloned_collect`, `while_let_on_iterator`. `impl Iterator`를 돌려받아 `.rev()`를 붙이면 E0599가 아니라 E0277입니다. `type_name`은 `core::iter::adapters::map::Map`처럼 정의된 위치를 출력하므로 문서의 `std::iter::Map`과 경로가 다릅니다.
+- 동기화 예제 주의: `Condvar` 하나를 `Mutex` 둘과 쓰면 macOS에서 실행 중 패닉합니다(`attempted to use a condition variable with two mutexes`). 원자 타입의 `fetch_update`는 1.99부터 deprecated라 `try_update`/`update`를 씁니다. 스코프 스레드에 넘기는 클로저가 `&F`를 캡처하면 `F: Sync`가 필요하므로 `move`로 옮깁니다. 스레드의 진행 시점을 맞춰 `try_lock` 관찰을 결정적으로 만들 때는 `Barrier`가 유용합니다.
+- 잠금 관련 lint의 기본 수준: clippy `mutex_atomic`·`mutex_integer`는 꺼져 있습니다(restriction). 켜져 있는 것은 rustc `let_underscore_lock`·`invalid_atomic_ordering`(deny), clippy `mut_mutex_lock`·`readonly_write_lock`·`missing_const_for_thread_local`·`declare_interior_mutable_const`(warn)입니다.
+- 소켓 예제 주의: clippy `unused_io_amount`는 기본 deny라 `read`/`write`의 반환값을 버리면 에러입니다(`read_zero_byte_vec`는 꺼져 있음). macOS에서는 읽기 제한 시간 초과가 `TimedOut`이 아니라 `WouldBlock`으로 나오므로 둘을 함께 봅니다. 포트는 0으로 `bind`하고 `local_addr()`로 알아냅니다.
+- 프로세스 예제 주의: 이식성 있게 자식 프로세스를 보이려면 예제가 `current_exe()`에 "자식 모드" 인자를 붙여 자기 자신을 다시 실행합니다. clippy `zombie_processes`(warn)는 `spawn` 뒤 `wait`하지 않는 코드를 잡지만, 필드를 `unwrap()`으로 옮겨 쓴 경우는 놓칩니다. `Duration * 1.5`는 E0277이 아니라 E0308입니다(`Mul<u32>`뿐이라서). 릴리스 빌드에서는 `black_box`를 써도 반복문이 통째로 최적화될 수 있습니다.
+- 입출력 예제 주의: `println!`은 `BrokenPipe`에서 패닉하므로 예제 출력을 `| head`로 자르면 패닉이 보입니다. 입출력 관련 clippy 기본 수준: `unbuffered_bytes`(버퍼 없는 리더의 `bytes()`), `join_absolute_paths`, `write_literal`은 warn입니다. `io::Error::new`/`other`로 감싼 에러는 `Display`로는 안쪽 메시지를 보여 주지만 `source()`는 안쪽 에러를 돌려주지 않습니다. macOS에서는 파이프로 보낸 표준 출력도 줄 단위로 비워지지만 문서가 약속하는 동작은 아닙니다.
+- 여러 에이전트가 동시에 빌드할 때 `cargo run -q`가 잠금을 기다리며 아무 메시지 없이 오래 멈춘 것처럼 보인 일이 있었습니다(원인 미확인). 표준 입력을 읽는 예제는 `< /dev/null`이나 파이프를 명시하고 제한 시간을 걸어 실행합니다.
+- 비동기 예제 주의: `Send`가 아닌 값을 await 너머로 들고 간 퓨처를 `Send`를 요구하는 곳에 넘기면 E0277이 아니라 에러 코드 없는 `future cannot be sent between threads safely`가 납니다. await 전에 `drop(rc)`를 불러도 같은 에러가 나므로 블록으로 스코프를 끝냅니다. 관련 clippy 기본 수준: `async_yields_async`는 deny, `manual_noop_waker`·`waker_clone_wake`·`let_underscore_future`·`redundant_async_block`·`manual_async_fn`은 warn, `unused_async`·`future_not_send`·`large_futures`는 꺼져 있습니다.
+- FFI·`Any` 예제 주의: `c_char`의 부호는 플랫폼마다 다릅니다(macOS aarch64에서는 `i8`). `Wrapping`·`Saturating`·`NonZero`의 디버그 형식은 감싼 모양 없이 안의 값만 출력합니다. `Wrapping<u8> + u8`은 E0277이지만 `+=`는 됩니다. `Box<dyn Any>`에 `type_id()`를 부르면 상자 자체의 타입 ID가 나오고 clippy `type_id_on_box`가 잡습니다. `getenv`로 읽을 결정적인 값이 필요하면 `cargo run`이 넣어 주는 `CARGO_PKG_NAME`을 씁니다.
 - 스레드 출력 순서를 고정하려면 스레드 안에서 출력하지 말고 결과를 돌려받아 `main`에서 출력합니다. 공유된 `Mutex`를 여러 스레드에서 디버그 형식으로 출력하면 `"<locked>"`가 섞여 출력이 비결정적이 됩니다.
 
 ## 후속 조치
@@ -120,14 +128,18 @@
 - ch18: `while let Some(top) = stack.pop() && top > 2`는 조건이 거짓이 되는 순간에도 원소 하나를 이미 꺼냅니다. Part 2 `ch4-rust-2024-language`에서 let 체인의 함정으로 다룰 만합니다.
 - ch19: unsafe 예제는 Miri로 확인하지 못했습니다. Part 10을 시작해 nightly와 Miri를 준비하면 `ch19-advanced-features`의 `01`, `02` 예제를 `cargo +nightly miri run`으로 다시 확인합니다.
 - Part 0 ch19: README 2.14절의 "`!`를 타입으로 직접 적을 수 있는 곳은 함수의 반환 타입뿐이고 `let x: ! = panic!();`은 E0658"이라는 설명이 1.100.0에서는 맞지 않습니다. never 타입이 안정화되어 `let x: ! = …`과 `Vec<!>`가 컴파일됩니다(1.98.1에서는 E0658). 해당 문단을 고칩니다.
+- Part 1 ch14: Part 10에서 nightly와 Miri를 준비하면 `examples/04_calling_c.rs`의 unsafe 블록(29·35·41·76·79·103행)을 `cargo +nightly miri run`으로 확인합니다. Miri가 `strlen`·`getenv` 같은 외부 C 함수를 지원하는지도 그때 함께 확인합니다.
+- Part 10 `ch12-ffi-beneath-std`에 넘길 것: `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장.
+- Part 2를 쓸 때 참고: Rust By Example의 FFI 예제는 `extern { … }`(2021 이전 문법)를 씁니다. 2024 에디션에서는 `unsafe extern "C"`입니다.
 - Part 0 ch17: README 2.8절의 "`Box<dyn Error>`는 안에 무엇이 들었는지 타입으로 알 수 없다"는 설명은 다운캐스트로 실행 중에 물어볼 수 있다는 점에서 조금 부정확합니다. Part 1 ch8 2.5절이 보충했고, ch17 원문을 고칠지는 정합니다.
 - Part 2 `ch4-rust-2024-language`에 넘길 것: Part 1 ch7에서 확인한 Edition 2024 임시값 범위 — `if let` 조건식에서 만든 `Ref` 가드는 then 블록 끝에서 버려지고(2021에서는 `else` 끝까지), `match`와 `while let`은 본문 끝까지 살아 있습니다.
 - Part 10 `ch2-data-layout`에 넘길 것: `Packet { u8, u32, u8 }`은 기본 표현에서 8바이트, `#[repr(C)]`에서 12바이트이고, `Option<Cell<bool>>`은 2바이트입니다(1.100.0에서 확인).
 - Part 1 ch1: README가 "툴체인은 1.98.1, 온라인 문서는 1.100.0"인 상황을 문서 버전이 어긋나는 예로 들고 `bool::toggle`이 E0599라고 설명합니다. 툴체인을 1.100.0으로 올린 뒤에는 `toggle`이 컴파일되므로, 이 예와 로컬 문서 버전 표기(`std 1.98.1`)를 현재 툴체인에 맞게 고칩니다.
 - 전체: 챕터 README 머리말의 "확인한 툴체인: rustc 1.98.1"은 작성 당시 기준입니다. 1.100.0에서 예제 출력과 에러 메시지까지 다시 확인한 챕터부터 표기를 바꿉니다.
+- Part 1 ch12: `03_split_read_write`는 교착 상태를 확실히 보이려고 64 MiB를 주고받아 메모리를 수백 MiB 씁니다. 부담스러우면 크기를 줄일지 정합니다.
 - Part 0 ch8: README 2.5절과 `05_vec_drop` 예제 설명이 "벡터가 drop되면 요소가 0번부터 차례로 drop된다"고 단정합니다. `Vec` 문서의 Guarantees 절은 요소의 drop 순서를 보장하지 않는다고 적고 있으므로(현재 구현은 앞에서부터), "현재 구현의 동작이며 보장되지 않음"이라는 단서를 붙일지 정합니다.
 - Part 1 ch2·ch4: README가 목표 분량을 넘었습니다(1077줄, 1060줄). 예제 출력과 에러 인용이 대부분이며, 줄일지는 읽어 보고 정합니다.
-- Part 1 ch1~ch8: 네 챕터씩 동시에 작성해서, 같은 묶음의 챕터(ch1~ch4끼리, ch5~ch8끼리)와 뒤 챕터는 링크 없이 코드 서식의 이름으로만 가리킵니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
+- Part 1 전체: 여러 챕터를 동시에 작성해서, 같은 묶음의 챕터(ch1~ch4끼리, ch5~ch8끼리, ch9~ch14 일부)와 뒤 챕터는 링크 없이 코드 서식의 이름으로만 가리키는 곳이 있습니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 0 전체: 챕터를 동시에 작성했기 때문에, README가 그때 아직 없던 챕터를 링크 없이 코드 서식의 이름(`ch10-generics-traits-lifetimes`)으로만 가리키는 곳이 있습니다. 내용에는 문제가 없고, 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 0 전체: 예제 수(챕터당 4~13개)와 README 분량(600~1280줄)이 `tutor` 문서의 기준(보통 3~6개)보다 많은 챕터가 있습니다. 줄일지는 읽어 보고 정합니다.
 
@@ -231,11 +243,29 @@
 | clone-on-write / reflexive impl / discriminant | 쓰기 시 복제 / 반사 구현 / 판별값 |
 | alignment / padding / layout / representation | 메모리 정렬 / 패딩 / 메모리 배치 / 표현(기본 표현, 표현 지정) |
 | niche / tag / thin pointer / zero-sized type | 니치 / 태그 / 얇은 포인터 / 크기가 0인 타입 |
-| handle (`Vec`·`String`의 포인터·용량·길이) / placeholder value | 손잡이 / 자리 표시 값 |
+| handle (`JoinHandle`, 표준 입출력·파일·소켓의 핸들, `Vec`·`String`의 포인터·용량·길이 구조체) / placeholder value | 핸들 / 자리 표시 값 |
 | guard (`Ref`/`RefMut`) / reentrancy / scrutinee | 대여 가드 / 재진입 / 조건식 |
 | panic hook / payload / unwind safety / unwind boundary | 패닉 훅 / 페이로드 / 되감기 안전성 / 되감기 경계 |
 | `source` chain / downcast / wrap / error report | `source` 체인 / 다운캐스트 / 감싸다 / 에러 보고서 |
 | borrowed / owned (`Cow`, `Borrow`의 문맥) | 빌린 / 소유한 ("빌림과 소유") |
+| scoped thread / condition variable / spurious wakeup | 스코프 스레드 / 조건 변수 / 가짜 깨어남 |
+| atomic type / memory ordering / compare-and-swap | 원자 타입 / 메모리 순서 / 비교 후 교환 |
+| bounded channel / rendezvous channel / backpressure | 용량이 정해진 채널 / 랑데부 채널 / 배압 |
+| thread-local / lazy initialization / reader-writer lock | 스레드 지역 변수 / 지연 초기화 / 읽기-쓰기 잠금 |
+| snapshot / busy waiting / work stealing | 스냅숏 / 바쁜 대기 / 작업 훔치기 |
+| socket address / loopback / listener / datagram / ephemeral port | 소켓 주소 / 루프백 / 리스너 / 데이터그램 / 임시 포트 |
+| byte stream / framing / length prefix / delimiter | 바이트 스트림 / 메시지 경계 나누기(프레이밍) / 길이 접두사 / 구분자 |
+| timeout / name resolution / retransmission / non-blocking | 제한 시간 / 이름 해석 / 재전송 / 논블로킹 |
+| child / parent process / pipe / exit status / builder | 자식 프로세스 / 부모 프로세스 / 파이프 / 종료 상태 / 빌더 |
+| monotonic clock / system clock / Unix time / epoch | 단조 시계 / 시스템 시계 / 유닉스 시간 / 기준 시각 |
+| elapsed time / deadline / polling / zombie / reap | 경과 시간 / 마감 시점 / 폴링 / 좀비 / 거둬들이다 |
+| reader / writer / buffering / flush / line buffering | 리더 / 라이터 / 버퍼링 / 플러시(버퍼 비우기) / 줄 버퍼링 |
+| system call / EOF / seek / metadata | 시스템 호출 / EOF(입력의 끝) / 위치 옮기기 / 메타데이터 |
+| path component / separator / extension / symbolic link / canonical path | 구성 요소 / 구분자 / 확장자 / 심볼릭 링크 / 정규 경로 |
+| poll / waker / wake / pinned / task queue / busy polling | 폴링 / 웨이커 / 깨우다 / 고정된 / 태스크 대기열 / 바쁜 폴링 |
+| auto trait / pin projection / oneshot channel | 자동 트레이트 / 고정 투영 / 일회용 채널(oneshot) |
+| C string / NUL terminator / interior NUL | C 문자열 / NUL 종료 바이트(0 바이트) / 중간의 0 바이트 |
+| OS string (`OsString`/`OsStr`) / upcast / type map | 운영체제 문자열 / 업캐스트 / 타입 맵 |
 | fold / helper trait (`DoubleEndedIterator` 등) / iterator struct (`Map`, `Drain` 등) | 접기 / 보조 트레이트 / 반복자 구조체 |
 | associated constant / inherent impl / extern prelude | 연관 상수 / 고유 구현 / 외부 프렐류드 |
 | checked / saturating 연산 / Euclidean division / endian | 검사 연산 / 포화 연산 / 유클리드 나눗셈 / 엔디언 |

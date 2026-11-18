@@ -89,12 +89,12 @@ fn main() {
     let city: Box<str> = String::from("부산").into_boxed_str();
     let country: Box<str> = Box::from("대한민국"); // &str에서 바로 만들 수도 있습니다.
     println!("{city}, {country}, 글자 바이트 {}", city.len()); // 출력: 부산, 대한민국, 글자 바이트 6
-    // 이름 1000개를 담는다면 손잡이만 따져도 String은 24000바이트, Box<str>은 16000바이트입니다.
+    // 이름 1000개를 담는다면 핸들만 따져도 String은 24000바이트, Box<str>은 16000바이트입니다.
     println!(
-        "손잡이 1000개: String {}바이트, Box<str> {}바이트",
+        "핸들 1000개: String {}바이트, Box<str> {}바이트",
         size_of::<String>() * 1000,
         size_of::<Box<str>>() * 1000
-    ); // 출력: 손잡이 1000개: String 24000바이트, Box<str> 16000바이트
+    ); // 출력: 핸들 1000개: String 24000바이트, Box<str> 16000바이트
     let mut owned: String = city.into_string(); // 고쳐야 할 때는 다시 String으로 바꿉니다.
     owned.push_str("광역시");
     println!("{owned}"); // 출력: 부산광역시

@@ -15,7 +15,7 @@ struct DoubleBuffer {
 }
 
 impl DoubleBuffer {
-    // 다 그린 back을 front로 올립니다. 원소를 하나도 복사하지 않고 두 Vec의 손잡이만 맞바꿉니다.
+    // 다 그린 back을 front로 올립니다. 원소를 하나도 복사하지 않고 두 Vec의 핸들만 맞바꿉니다.
     fn present(&mut self) {
         mem::swap(&mut self.front, &mut self.back);
         self.back.clear(); // 이전 장면을 지우되 용량은 남겨 다음 장면에 재사용합니다.

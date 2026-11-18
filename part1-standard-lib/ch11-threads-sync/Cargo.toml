@@ -1,0 +1,5 @@
+[package]
+name = "p1-ch11-threads-sync"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
