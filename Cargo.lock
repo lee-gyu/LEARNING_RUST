@@ -759,6 +759,22 @@ name = "p1-ch4-collections"
 version = "0.0.0"
 
 [[package]]
+name = "p1-ch5-iterators"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch6-core-traits"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch7-smart-pointers-memory"
+version = "0.0.0"
+
+[[package]]
+name = "p1-ch8-errors-panic"
+version = "0.0.0"
+
+[[package]]
 name = "parking_lot"
 version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"

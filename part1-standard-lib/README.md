@@ -22,5 +22,9 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch2-option-result](ch2-option-result/) | `Option`/`Result` 콤비네이터(`map`·`and_then`·`map_err`·`unwrap_or_else` 등)와 선택표, 즉시 평가와 게으른 평가, 참조로 들여다보기(`as_ref`·`as_deref`), 상호 변환(`ok_or`·`transpose`), `?`와의 관계, `collect`로 모으기 |
 | [ch3-strings-fmt](ch3-strings-fmt/) | 문자열 찾기·나누기·다듬기·바꾸기와 검색 패턴, 글자 경계와 바이트 변환, 서식 문법 전체, `Display`/`Debug` 직접 구현(`Formatter`), `FromStr`과 파싱 |
 | [ch4-collections](ch4-collections/) | 컬렉션 선택 기준과 연산별 비용, `Vec` 편집·용량 관리, 정렬과 이진 탐색, entry API, `VecDeque`, `BTreeMap`/`BTreeSet`의 범위 조회, 집합 연산, `BinaryHeap` 우선순위 큐 |
+| [ch5-iterators](ch5-iterators/) | `Iterator`/`IntoIterator`/`FromIterator`·`Extend`의 관계, 어댑터와 소비 메서드 선택표, `peekable`·`scan`·`try_fold`, `DoubleEndedIterator`/`ExactSizeIterator`, 반복자 만들기(`from_fn`·`successors`·`impl Iterator`·직접 구현) |
+| [ch6-core-traits](ch6-core-traits/) | 변환(`From`/`Into`/`TryFrom`/`AsRef`)과 `as`의 선택 기준, `Borrow`·`ToOwned`·`Cow`, `std::ops` 연산자, 비교(`PartialEq`~`Ord`)와 해시 직접 구현 규칙, `Default`, `Clone`/`Copy` |
+| [ch7-smart-pointers-memory](ch7-smart-pointers-memory/) | 타입의 크기·메모리 정렬·니치 최적화, `std::mem`(`swap`/`replace`/`take`), `Box<[T]>`·`Box<str>`, `Rc` 넓히기(`make_mut`·`try_unwrap`·`new_cyclic`), 내부 가변성 도구 고르기(`Cell`/`RefCell`/`OnceCell`/`LazyCell`) |
+| [ch8-errors-panic](ch8-errors-panic/) | `Error` 트레이트, 에러 열거형 설계와 `From`으로 `?` 변환, `Box<dyn Error>`와 다운캐스트, `source` 체인 보고, 패닉 훅, `catch_unwind`, 백트레이스 |
 
 작성된 챕터만 목차에 있습니다. 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

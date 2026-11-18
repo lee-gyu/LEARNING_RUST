@@ -13,7 +13,7 @@
 | --- | --- |
 | 사전 작업 | 3 / 3 |
 | Part 0. 시작하기 | 20 / 20 |
-| Part 1. 표준 라이브러리 | 4 / 14 |
+| Part 1. 표준 라이브러리 | 8 / 14 |
 | Part 2~11 | 0 / 75 |
 
 ## 사전 작업
@@ -62,10 +62,10 @@
 | ✅ | `ch2-option-result` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 패닉하는 예제 없음. README가 1077줄로 목표(600~900줄)보다 김. `collect` 타입 추론 실패(E0283)는 Part 0 ch13에 있어 `Result` 원소를 `Vec<T>`로 `collect`하는 E0277로 대체. 최근 안정화된 `map_or_default`(1.98)·`Result::flatten`(1.89)·`is_none_or`(1.82)·`take_if`(1.80) 포함. `unused_must_use`는 README 표로만 다룸 |
 | ✅ | `ch3-strings-fmt` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | `06`의 `{:p}` 주소는 실행마다 다름. `str::substr_range`(1.98)·`floor_char_boundary`(1.91)처럼 최근 안정화된 API를 써서 오래된 툴체인에서는 `02`·`05`가 컴파일되지 않음. `parse()` 타입 추론 실패(E0282)는 Part 0 ch2의 에러 예제로 연결. 서식 문자열 에러 4종은 README 표로만 실음. README 975줄 |
 | ✅ | `ch4-collections` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | `05`의 시간 측정 두 줄만 실행마다 다름. 불안정 정렬 결과(`02`), `as_slices`(`05`), 힙 내부 순서(`08`), `capacity`(`01`)는 이 툴체인의 구현 결과라 툴체인을 올리면 다시 확인. `BinaryHeap`에 `Ord` 없는 타입을 넣는 에러는 README 본문에만 인용. `extract_if`·`get_disjoint_mut` 등 최근 안정화된 API 포함. README가 1060줄로 목표(700~1000줄)보다 김 |
-| ⬜ | `ch5-iterators` | | | | |
-| ⬜ | `ch6-core-traits` | | | | |
-| ⬜ | `ch7-smart-pointers-memory` | | | | |
-| ⬜ | `ch8-errors-panic` | | | | |
+| ✅ | `ch5-iterators` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 패닉하는 예제 없음. `type_name` 출력(`01`·`03`·`07`)은 툴체인에 따라, `size_of_val` 값(`03`)은 플랫폼에 따라 달라질 수 있음. `std::iter::chain`(1.91)·`repeat_n`(1.82)·`is_sorted`(1.82) 등 최근 안정화된 API 사용. `sum` 추론 실패(E0283)와 `FromIterator` 없는 타입으로 `collect`(E0277)는 앞 챕터와 겹쳐 README 표로만 실음. 에러 예제 두 개는 E0599가 함께 나옴. README 1000줄(출력 블록은 핵심 구역만) |
+| ✅ | `ch6-core-traits` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 패닉하는 예제 없음. 해시 값과 주소는 출력하지 않고 같은지만 출력. `PartialEq` 없는 `==`(E0369)는 Part 0 ch11에 있어 뺌. `derive(Eq)`·`derive(Ord)` 누락 에러와 clippy가 잡는 실수 8가지는 README 표로만 실음. Rustlings 연습은 현재 이름(`conversions1`~`5`)으로 안내. `Infallible`은 1.100.0에서 `!`의 별칭이라 실제 동작대로 설명. README 941줄 |
+| ✅ | `ch7-smart-pointers-memory` | 예제 8 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. 패닉하는 예제와 unsafe 코드 없음. 크기·오프셋은 64비트·1.100.0 기준이고, `01`의 필드 오프셋과 `02`의 3·4번 구역(문서가 보장하지 않는 니치)은 툴체인을 올리면 다시 확인. `static`에 두는 예는 `Cell` 대신 `OnceCell`로 만듦. E0716·E0499는 README 본문에만 인용. README 1006줄(`01`·`02`·`04`의 출력 블록은 일부 생략) |
+| ✅ | `ch8-errors-panic` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-18 | 1.100.0에서 작성·검증. `06`·`07`은 일부러 패닉하지만 안에서 붙잡아 종료 코드 0(표준 에러에 실행마다 다른 스레드 ID가 나옴). `08`은 `RUST_LIB_BACKTRACE` 값에 따라 출력이 달라 실행 명령에 환경 변수를 명시. `payload_as_str`(1.91)·`PanicHookInfo`(1.81) 사용. `Display` 없는 `impl Error`(E0277)는 Part 0 ch19와 겹쳐 README 표로만 실음. README 934줄 |
 | ⬜ | `ch9-io-fs-path` | | | | |
 | ⬜ | `ch10-env-process-time` | | | | |
 | ⬜ | `ch11-threads-sync` | | | | |
@@ -73,6 +73,7 @@
 | ⬜ | `ch13-async-primitives` | | | | |
 | ⬜ | `ch14-ffi-any-misc` | | | | |
 
+- Part 1 ch1~ch8 확인(2026-11-18, rustc 1.100.0): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 경고 없이 통과했고, `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. ch5~ch8은 1.100.0에서 작성·검증했습니다. Part 1 합계는 예제 64 / 에러 39 / 프로젝트 0입니다.
 - 툴체인 1.100.0 확인(2026-11-18): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했습니다. `compile_fail` 파일 106개가 모두 파일 이름의 에러 코드로 실패하고, Part 1 예제 32개의 출력은 1.98.1 때와 같습니다(실행마다 다른 줄 제외). Part 0 예제의 출력, `projects/` 아래 독립 프로젝트, README에 인용한 에러 메시지 문구는 다시 확인하지 않았습니다.
 - Clippy 1.100.0은 매크로가 펼친 코드에 `vec_init_then_push`를 내지 않습니다. Part 0 ch19 `08_macro_rules`의 `#[expect]` 두 개가 충족되지 않아 지우고 README 설명을 고쳤습니다.
 
@@ -101,6 +102,11 @@
 - `HashMap` 키에 `Eq`/`Hash`가 없을 때의 에러 코드는 쓰는 모양에 따라 다릅니다. 변수에 타입을 적으면 `insert`에서 E0599, 타입이 `insert` 호출에서 추론되면 E0277이 나옵니다. clippy `map_entry`는 `contains_key` + `insert` + `get_mut` 모양을 잡지 않습니다.
 - `f64`의 `floor`/`round`/`sqrt` 등은 1.98.1에서 `std` 쪽 `impl` 블록에만 있습니다(`core`에는 `abs` 등 일부만). 산술 연산이 만든 NaN의 부호는 비결정적이라 NaN이 들어간 `total_cmp` 출력은 예제에 쓰지 않습니다. 프렐류드의 `Debug`는 derive 매크로뿐이라 `use` 없이 `impl Debug for X`를 쓰면 E0404입니다.
 - `#[expect(lint)]`는 기본으로 꺼진 lint(예: nursery 그룹의 `clippy::or_fun_call`)도 그 범위에서 켜서 충족시킵니다. `#[expect]`가 통과한다고 해서 기본 설정에서 나는 경고라는 뜻이 아니므로, "clippy가 잡는다"고 쓰기 전에 속성을 지우고 경고가 실제로 나는지 확인합니다. 기본 수준은 `clippy-driver -W help`로 볼 수 있습니다.
+- 변환·비교·해시 관련 clippy 기본 수준: `derive_ord_xor_partial_ord`와 `derived_hash_with_manual_eq`는 deny, `non_canonical_partial_ord_impl`·`non_canonical_clone_impl`·`from_over_into`·`unnecessary_fallible_conversions`·`manual_clamp`·`derivable_impls`·`new_without_default`는 warn입니다. `ptr_arg`는 `&Cow<_>` 매개변수에도, `cast_nan_to_int`는 `f64::NAN as i32`에, `cmp_owned`는 `String::from("x") == "x"`에, `useless_vec`는 `sort`만 하는 `vec![..]`에 걸립니다. `question_mark`는 `Err(e) => return Err(From::from(e))` 모양에는 걸리지 않습니다.
+- `RefCell` 예제 주의: 한 `println!` 안에 `try_borrow_mut()`과 `borrow()`를 함께 쓰면 임시 가드가 문장 끝까지 살아 있어 패닉합니다. `const`에 `Cell`을 두면 rustc `const_item_interior_mutations` 경고가 납니다. 디버그 빌드에서 `Box::new([0u8; 16 MiB])`는 스택 오버플로로 끝나므로 `vec!`에서 `into_boxed_slice`로 만듭니다.
+- 패닉 예제 주의: `panic!("{}", "상수")`처럼 서식 인자가 상수뿐이면 페이로드가 `String`이 아니라 `&str`입니다. 기본 훅의 `note: run with RUST_BACKTRACE=1` 줄은 처음 한 번만 나옵니다. Clippy 1.100.0은 `[(&str, fn() -> i32); 4]` 같은 타입에 `type_complexity`를 냅니다.
+- zsh는 `$var`를 단어로 나누지 않습니다. `env $combo cmd`처럼 변수 하나에 환경 변수 할당 여러 개를 담아 넘기면 잘못된 결과가 나오므로 `${=var}`를 씁니다.
+- 반복자 관련으로 clippy가 기본으로 잡는 것: `unnecessary_fold`, `filter_next`, `map_flatten`, `iter_cloned_collect`, `while_let_on_iterator`. `impl Iterator`를 돌려받아 `.rev()`를 붙이면 E0599가 아니라 E0277입니다. `type_name`은 `core::iter::adapters::map::Map`처럼 정의된 위치를 출력하므로 문서의 `std::iter::Map`과 경로가 다릅니다.
 - 스레드 출력 순서를 고정하려면 스레드 안에서 출력하지 말고 결과를 돌려받아 `main`에서 출력합니다. 공유된 `Mutex`를 여러 스레드에서 디버그 형식으로 출력하면 `"<locked>"`가 섞여 출력이 비결정적이 됩니다.
 
 ## 후속 조치
@@ -113,10 +119,15 @@
 - ch11: 에디션 2024의 문서 테스트 병합(`all doctests ran in …; merged doctests compilation took …` 줄)은 Part 2 `ch5-rust-2024-ecosystem`에서, `cargo test 이름`이 문서 테스트를 건너뛰는 동작은 Part 3 `ch9-testing-ci`에서 다시 다룹니다.
 - ch18: `while let Some(top) = stack.pop() && top > 2`는 조건이 거짓이 되는 순간에도 원소 하나를 이미 꺼냅니다. Part 2 `ch4-rust-2024-language`에서 let 체인의 함정으로 다룰 만합니다.
 - ch19: unsafe 예제는 Miri로 확인하지 못했습니다. Part 10을 시작해 nightly와 Miri를 준비하면 `ch19-advanced-features`의 `01`, `02` 예제를 `cargo +nightly miri run`으로 다시 확인합니다.
+- Part 0 ch19: README 2.14절의 "`!`를 타입으로 직접 적을 수 있는 곳은 함수의 반환 타입뿐이고 `let x: ! = panic!();`은 E0658"이라는 설명이 1.100.0에서는 맞지 않습니다. never 타입이 안정화되어 `let x: ! = …`과 `Vec<!>`가 컴파일됩니다(1.98.1에서는 E0658). 해당 문단을 고칩니다.
+- Part 0 ch17: README 2.8절의 "`Box<dyn Error>`는 안에 무엇이 들었는지 타입으로 알 수 없다"는 설명은 다운캐스트로 실행 중에 물어볼 수 있다는 점에서 조금 부정확합니다. Part 1 ch8 2.5절이 보충했고, ch17 원문을 고칠지는 정합니다.
+- Part 2 `ch4-rust-2024-language`에 넘길 것: Part 1 ch7에서 확인한 Edition 2024 임시값 범위 — `if let` 조건식에서 만든 `Ref` 가드는 then 블록 끝에서 버려지고(2021에서는 `else` 끝까지), `match`와 `while let`은 본문 끝까지 살아 있습니다.
+- Part 10 `ch2-data-layout`에 넘길 것: `Packet { u8, u32, u8 }`은 기본 표현에서 8바이트, `#[repr(C)]`에서 12바이트이고, `Option<Cell<bool>>`은 2바이트입니다(1.100.0에서 확인).
 - Part 1 ch1: README가 "툴체인은 1.98.1, 온라인 문서는 1.100.0"인 상황을 문서 버전이 어긋나는 예로 들고 `bool::toggle`이 E0599라고 설명합니다. 툴체인을 1.100.0으로 올린 뒤에는 `toggle`이 컴파일되므로, 이 예와 로컬 문서 버전 표기(`std 1.98.1`)를 현재 툴체인에 맞게 고칩니다.
 - 전체: 챕터 README 머리말의 "확인한 툴체인: rustc 1.98.1"은 작성 당시 기준입니다. 1.100.0에서 예제 출력과 에러 메시지까지 다시 확인한 챕터부터 표기를 바꿉니다.
 - Part 0 ch8: README 2.5절과 `05_vec_drop` 예제 설명이 "벡터가 drop되면 요소가 0번부터 차례로 drop된다"고 단정합니다. `Vec` 문서의 Guarantees 절은 요소의 drop 순서를 보장하지 않는다고 적고 있으므로(현재 구현은 앞에서부터), "현재 구현의 동작이며 보장되지 않음"이라는 단서를 붙일지 정합니다.
 - Part 1 ch2·ch4: README가 목표 분량을 넘었습니다(1077줄, 1060줄). 예제 출력과 에러 인용이 대부분이며, 줄일지는 읽어 보고 정합니다.
+- Part 1 ch1~ch8: 네 챕터씩 동시에 작성해서, 같은 묶음의 챕터(ch1~ch4끼리, ch5~ch8끼리)와 뒤 챕터는 링크 없이 코드 서식의 이름으로만 가리킵니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 0 전체: 챕터를 동시에 작성했기 때문에, README가 그때 아직 없던 챕터를 링크 없이 코드 서식의 이름(`ch10-generics-traits-lifetimes`)으로만 가리키는 곳이 있습니다. 내용에는 문제가 없고, 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 0 전체: 예제 수(챕터당 4~13개)와 README 분량(600~1280줄)이 `tutor` 문서의 기준(보통 3~6개)보다 많은 챕터가 있습니다. 줄일지는 읽어 보고 정합니다.
 
@@ -214,6 +225,18 @@
 | union / intersection / difference / symmetric difference | 합집합 / 교집합 / 차집합 / 대칭 차집합 |
 | subset / superset / amortized / expected cost | 부분집합 / 상위집합 / 분할 상환 / 기대 비용 |
 | allocator / seed / cursor | 할당기 / 시드 / 커서 |
+| conversion / fallible / infallible / lossless | 변환 / 실패할 수 있는 / 실패하지 않는 / 손실 없는 |
+| partial order / equivalence relation / logic error | 부분 순서 / 동치 관계 / 논리 오류 |
+| hasher / `BuildHasher` / prefix-free | 해셔 / 해셔 공장 / 경계가 섞이지 않게(prefix-free) |
+| clone-on-write / reflexive impl / discriminant | 쓰기 시 복제 / 반사 구현 / 판별값 |
+| alignment / padding / layout / representation | 메모리 정렬 / 패딩 / 메모리 배치 / 표현(기본 표현, 표현 지정) |
+| niche / tag / thin pointer / zero-sized type | 니치 / 태그 / 얇은 포인터 / 크기가 0인 타입 |
+| handle (`Vec`·`String`의 포인터·용량·길이) / placeholder value | 손잡이 / 자리 표시 값 |
+| guard (`Ref`/`RefMut`) / reentrancy / scrutinee | 대여 가드 / 재진입 / 조건식 |
+| panic hook / payload / unwind safety / unwind boundary | 패닉 훅 / 페이로드 / 되감기 안전성 / 되감기 경계 |
+| `source` chain / downcast / wrap / error report | `source` 체인 / 다운캐스트 / 감싸다 / 에러 보고서 |
+| borrowed / owned (`Cow`, `Borrow`의 문맥) | 빌린 / 소유한 ("빌림과 소유") |
+| fold / helper trait (`DoubleEndedIterator` 등) / iterator struct (`Map`, `Drain` 등) | 접기 / 보조 트레이트 / 반복자 구조체 |
 | associated constant / inherent impl / extern prelude | 연관 상수 / 고유 구현 / 외부 프렐류드 |
 | checked / saturating 연산 / Euclidean division / endian | 검사 연산 / 포화 연산 / 유클리드 나눗셈 / 엔디언 |
 | since (문서의 버전 표시) / nightly-only experimental API / badge | 안정화 버전 / nightly 전용 실험 API / 표시 |

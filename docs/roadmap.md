@@ -160,10 +160,10 @@ publish.workspace = true
 | ✅ | `ch2-option-result` | `Option`/`Result` 콤비네이터, 상호 변환, `?`와의 관계 | `map`/`and_then`/`unwrap_or_else`/`ok_or`, `transpose`, 수집(`collect`) | `std::option`, `std::result` |
 | ✅ | `ch3-strings-fmt` | `String`/`&str`/`char`, 서식 문법, `Display`/`Debug`, `FromStr` | 문자열 검색·분할·변환, 서식 지정자, `Display` 구현, 파싱 | `std::string`, `std::str`, `std::char`, `std::fmt` |
 | ✅ | `ch4-collections` | `Vec`, `VecDeque`, `HashMap`/`BTreeMap`, `HashSet`/`BTreeSet`, `BinaryHeap`, 선택 기준 | 컬렉션별 주요 연산, entry API, 정렬·이진 탐색, 우선순위 큐 | `std::collections`, `std::vec`, `std::slice` |
-| ⬜ | `ch5-iterators` | `Iterator`/`IntoIterator`/`FromIterator`, 어댑터와 소비자, 반복자 구현 | 어댑터 모음, `fold`/`scan`/`zip`/`chain`/`peekable`, 직접 만든 반복자 | `std::iter` |
-| ⬜ | `ch6-core-traits` | 변환(`From`/`Into`/`TryFrom`/`AsRef`), 연산자, 비교, 해시, `Default`, `Clone`/`Copy`, `Borrow`/`Cow` | 트레이트별 구현 예제, `Cow`로 불필요한 복사 줄이기 | `std::convert`, `std::ops`, `std::cmp`, `std::hash`, `std::default`, `std::borrow`, `std::marker` |
-| ⬜ | `ch7-smart-pointers-memory` | `Box`, `Rc`/`Weak`, `Cell`/`RefCell`/`OnceCell`, `std::mem` 함수 | `mem::swap`/`take`/`replace`, 내부 가변성 패턴, 크기·정렬 확인 | `std::boxed`, `std::rc`, `std::cell`, `std::mem` |
-| ⬜ | `ch8-errors-panic` | `Error` 트레이트, 에러 타입 설계, `source` 체인, `Box<dyn Error>`, 패닉 훅 | 사용자 정의 에러, 에러 변환(`From`), `catch_unwind`, 백트레이스 | `std::error`, `std::panic`, `std::backtrace` |
+| ✅ | `ch5-iterators` | `Iterator`/`IntoIterator`/`FromIterator`, 어댑터와 소비자, 반복자 구현 | 어댑터 모음, `fold`/`scan`/`zip`/`chain`/`peekable`, 직접 만든 반복자 | `std::iter` |
+| ✅ | `ch6-core-traits` | 변환(`From`/`Into`/`TryFrom`/`AsRef`), 연산자, 비교, 해시, `Default`, `Clone`/`Copy`, `Borrow`/`Cow` | 트레이트별 구현 예제, `Cow`로 불필요한 복사 줄이기 | `std::convert`, `std::ops`, `std::cmp`, `std::hash`, `std::default`, `std::borrow`, `std::marker` |
+| ✅ | `ch7-smart-pointers-memory` | `Box`, `Rc`/`Weak`, `Cell`/`RefCell`/`OnceCell`, `std::mem` 함수 | `mem::swap`/`take`/`replace`, 내부 가변성 패턴, 크기·정렬 확인 | `std::boxed`, `std::rc`, `std::cell`, `std::mem` |
+| ✅ | `ch8-errors-panic` | `Error` 트레이트, 에러 타입 설계, `source` 체인, `Box<dyn Error>`, 패닉 훅 | 사용자 정의 에러, 에러 변환(`From`), `catch_unwind`, 백트레이스 | `std::error`, `std::panic`, `std::backtrace` |
 | ⬜ | `ch9-io-fs-path` | `Read`/`Write`/`BufRead`/`Seek`, 표준 입출력, 파일·디렉터리, `Path`/`PathBuf` | 줄 단위 읽기, 버퍼링 쓰기, 디렉터리 순회, 경로 조작 | `std::io`, `std::fs`, `std::path` |
 | ⬜ | `ch10-env-process-time` | 인자·환경 변수, 자식 프로세스, 종료 코드, `Instant`/`Duration`/`SystemTime` | `Command` 실행·파이프, 실행 시간 측정 | `std::env`, `std::process`, `std::time` |
 | ⬜ | `ch11-threads-sync` | 스레드와 스코프 스레드, `Mutex`/`RwLock`/`Condvar`, `Arc`, `OnceLock`/`LazyLock`, 채널, 원자 타입 | 스코프 스레드, 생산자-소비자, 전역 지연 초기화, `AtomicUsize` 카운터 | `std::thread`, `std::sync`, `std::sync::mpsc`, `std::sync::atomic` |
@@ -334,7 +334,7 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | --- | --- |
 | 사전 작업 | 3 / 3 |
 | Part 0. 시작하기 | 20 / 20 |
-| Part 1. 표준 라이브러리 | 4 / 14 |
+| Part 1. 표준 라이브러리 | 8 / 14 |
 | Part 2. 에디션 | 0 / 6 |
 | Part 3. Cargo | 0 / 11 |
 | Part 4. rustdoc | 0 / 4 |
@@ -345,4 +345,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 9. 레퍼런스 | 0 / 10 |
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
-| **합계** | **24 / 109 챕터** |
+| **합계** | **28 / 109 챕터** |

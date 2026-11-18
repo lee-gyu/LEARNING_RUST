@@ -34,6 +34,6 @@ rustc --edition 2024 compile_fail/<파일>.rs
 | 파트 | 디렉터리 | 기준 문서 |
 | --- | --- | --- |
 | Part 0. 시작하기 | [part0-getting-started/](part0-getting-started/) | The Book, Rust By Example, Rustlings |
-| Part 1. 표준 라이브러리 | [part1-standard-lib/](part1-standard-lib/) | The standard library (ch1~ch4 작성) |
+| Part 1. 표준 라이브러리 | [part1-standard-lib/](part1-standard-lib/) | The standard library (ch1~ch8 작성) |
 
 나머지 파트(Part 2~11)는 [로드맵](docs/roadmap.md)의 계획에 따라 순서대로 추가됩니다.
