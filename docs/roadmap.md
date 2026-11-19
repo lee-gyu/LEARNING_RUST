@@ -370,16 +370,16 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
 | ✅ | `ch10-standard-traits` | 공개 타입에 구현할 표준 트레이트 고르기(`Clone`, `Copy`, `Default`, `PartialEq`/`Eq`, `PartialOrd`/`Ord`, `Hash`, `Debug`/`Display`), derive할 수 없거나 하면 안 되는 경우, 직접 구현할 때의 일관성 규칙, 연산자 오버로드 | derive 가능 조건, `Copy`를 붙이면 안 되는 타입, `Eq`와 `Hash`가 어긋날 때 `HashMap`의 오동작, 부동소수점과 `PartialEq`, 트레이트 체크리스트를 적용한 타입 | Item 10 (`std-traits`) |
-| ⬜ | `ch11-drop-raii` | RAII와 가드 타입, `Drop`의 제약(`&mut self`, 실패를 돌려줄 수 없음), `drop(x)`로 일찍 해제하기 | 조기 반환에서 해제를 빠뜨리는 수동 관리와 가드 비교, 직접 만든 가드, drop 순서 | Item 11 (`raii`) |
-| ⬜ | `ch12-generics-vs-trait-objects` | 단형성화와 동적 디스패치의 비용(코드 크기, 속도, 컴파일 시간), 여러 트레이트 바운드, dyn 호환, 이종 컬렉션, 선택 기준 | 같은 함수의 제네릭판과 `dyn`판, 이종 컬렉션, dyn 호환이 아닌 트레이트와 `where Self: Sized` | Item 12 (`generics`) |
-| ⬜ | `ch13-default-implementations` | 필수 메서드는 적게, 기본 구현은 넉넉하게. 기본 구현 재정의, 기본 메서드 추가가 호환 변경인 이유 | 필수 메서드 하나에 기본 메서드 여럿인 트레이트, 재정의로 더 빠른 구현 제공 | Item 13 (`default-impl`) |
+| ✅ | `ch11-drop-raii` | RAII와 가드 타입, `Drop`의 제약(`&mut self`, 실패를 돌려줄 수 없음), `drop(x)`로 일찍 해제하기 | 조기 반환에서 해제를 빠뜨리는 수동 관리와 가드 비교, 직접 만든 가드, drop 순서 | Item 11 (`raii`) |
+| ✅ | `ch12-generics-vs-trait-objects` | 단형성화와 동적 디스패치의 비용(코드 크기, 속도, 컴파일 시간), 여러 트레이트 바운드, dyn 호환, 이종 컬렉션, 선택 기준 | 같은 함수의 제네릭판과 `dyn`판, 이종 컬렉션, dyn 호환이 아닌 트레이트와 `where Self: Sized` | Item 12 (`generics`) |
+| ✅ | `ch13-default-implementations` | 필수 메서드는 적게, 기본 구현은 넉넉하게. 기본 구현 재정의, 기본 메서드 추가가 호환 변경인 이유 | 필수 메서드 하나에 기본 메서드 여럿인 트레이트, 재정의로 더 빠른 구현 제공 | Item 13 (`default-impl`) |
 
 #### Concepts — ch14~ch20
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch14-lifetimes` | 스택과 라이프타임, 라이프타임의 범위(마지막 사용까지), 여러 라이프타임 매개변수, 생략 규칙, `'static`, 힙에 있는 값의 라이프타임, 자료구조 안의 라이프타임, 익명 라이프타임 `'_` | 스택 프레임과 댕글링 참조, 마지막 사용 뒤에 풀리는 대여, 라이프타임 매개변수가 둘 필요한 함수, `&'static`과 `T: 'static`의 차이, 참조를 담은 구조체, `'_` | Item 14 (`lifetimes`) |
-| ⬜ | `ch15-borrow-checker` | 대여 규칙과 소유자가 할 수 있는 일, 대여 검사기 에러를 푸는 방법(지역 리팩터링, 자료구조 설계, 스마트 포인터), 자기 참조 자료구조 | 대여 범위 줄이기, `mem::take`/`replace`와 `Option::take`, 참조 대신 인덱스, `Rc<RefCell<T>>`, 자기 참조 시도와 대안 | Item 15 (`borrows`) |
+| ✅ | `ch14-lifetimes` | 스택과 라이프타임, 라이프타임의 범위(마지막 사용까지), 여러 라이프타임 매개변수, 생략 규칙, `'static`, 힙에 있는 값의 라이프타임, 자료구조 안의 라이프타임, 익명 라이프타임 `'_` | 스택 프레임과 댕글링 참조, 마지막 사용 뒤에 풀리는 대여, 라이프타임 매개변수가 둘 필요한 함수, `&'static`과 `T: 'static`의 차이, 참조를 담은 구조체, `'_` | Item 14 (`lifetimes`) |
+| ✅ | `ch15-borrow-checker` | 대여 규칙과 소유자가 할 수 있는 일, 대여 검사기 에러를 푸는 방법(지역 리팩터링, 자료구조 설계, 스마트 포인터), 자기 참조 자료구조 | 대여 범위 줄이기, `mem::take`/`replace`와 `Option::take`, 참조 대신 인덱스, `Rc<RefCell<T>>`, 자기 참조 시도와 대안 | Item 15 (`borrows`) |
 | ⬜ | `ch16-avoid-unsafe` | unsafe를 쓰기 전에 표준 라이브러리와 검증된 크레이트에서 안전한 대안 찾기, 꼭 써야 할 때의 지침(작게 감싸기, 안전성 주석, Miri, 테스트) | 직접 쓴 unsafe를 표준 라이브러리의 안전한 API로 바꾸기, 안전한 래퍼와 `// SAFETY:` 주석 | Item 16 (`unsafe`) |
 | ⬜ | `ch17-shared-state-parallelism` | Rust가 막는 것(데이터 경쟁, `Send`/`Sync`)과 막지 못하는 것(교착 상태), 잠금 범위와 순서, 공유 상태 대신 채널 | 데이터 경쟁 시도가 컴파일되지 않는 모습, 잠금 순서가 엇갈린 교착 상태와 해결, 채널로 다시 설계 | Item 17 (`deadlock`) |
 | ⬜ | `ch18-dont-panic` | 패닉이 숨어 있는 곳, 라이브러리가 패닉 대신 `Result`를 돌려줘야 하는 이유, `catch_unwind`의 한계, 패닉을 막는 도구 | 패닉하는 API를 `Result` API로, 숨은 패닉 지점(인덱싱, 산술, `RefCell`), `unwrap`을 금지하는 lint 설정 | Item 18 (`panic`) |
@@ -436,4 +436,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **40 / 109 챕터** |
-| 부록 A. Effective Rust (합계와 별도) | 10 / 35 |
+| 부록 A. Effective Rust (합계와 별도) | 15 / 35 |

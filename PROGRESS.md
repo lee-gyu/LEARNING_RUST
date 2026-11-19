@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-19 (부록 A ch1~ch10 추가)
+- 마지막 갱신: 2026-11-19 (부록 A ch1~ch15 추가)
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -16,7 +16,7 @@
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
 | Part 3~11 | 0 / 69 |
-| 부록 A. Effective Rust (본편 합계와 별도) | 10 / 35 |
+| 부록 A. Effective Rust (본편 합계와 별도) | 15 / 35 |
 
 ## 사전 작업
 
@@ -99,7 +99,7 @@
 
 ## 부록 A. Effective Rust — `appd-a/`
 
-[Effective Rust](https://effective-rust.com/)의 Item 1개를 챕터 1개로 정리합니다(챕터 번호 = Item 번호, 패키지 이름 `er-ch{N}-{slug}`). 계획은 [로드맵 3절의 부록 A](docs/roadmap.md#3-파트별-챕터-계획)를 따릅니다. ch11~ch35의 행은 그 묶음을 시작할 때 추가합니다.
+[Effective Rust](https://effective-rust.com/)의 Item 1개를 챕터 1개로 정리합니다(챕터 번호 = Item 번호, 패키지 이름 `er-ch{N}-{slug}`). 계획은 [로드맵 3절의 부록 A](docs/roadmap.md#3-파트별-챕터-계획)를 따릅니다. ch16~ch35의 행은 그 범위를 시작할 때 추가합니다.
 
 | 상태 | 챕터 | 산출물 | 검증 | 완료일 | 비고 |
 | --- | --- | --- | --- | --- | --- |
@@ -113,9 +113,15 @@
 | ✅ | `ch8-references-pointers` | 예제 6 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-19 | 스마트 포인터 고르기를 지침 둘(소유자 수·스레드 / 내부 가변성·순환)로 나눔. **지침 1(`&Vec<T>` 대신 `&[T]`)과 지침 4(`Borrow`의 비교·해시 약속)는 책의 Item 8에 명시된 내용이 아니라 std 문서와 clippy `ptr_arg`를 근거로 더한 것**(README 2.8절에 밝힘). 패닉하는 예제·외부 크레이트·unsafe 없음(원시 포인터는 주소 비교에만 사용). 주소와 해시 값은 출력하지 않고 비교 결과만 출력 — 예제마다 25번 실행해 출력이 같음을 확인. 크기는 64비트 기준. `HashMap::get`에 `Borrow` 없는 키를 넘기면 지침의 E0277이 아니라 E0308. 책과 달라진 점: 용어 "fat pointer" → 넓은 포인터, `ptr::addr_eq`(1.76) 안정화, `size_of`가 프렐류드에 있음. 연습 3의 `BTreeMap` 결과는 이 툴체인의 구현 결과. README 692줄 |
 | ✅ | `ch9-iterator-transforms` | 예제 6 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종을 6개로 나눔. 패닉하는 예제와 외부 크레이트 없음(`itertools`의 `partition_result`는 이름만 소개). 시간 측정은 하지 않고 ch20으로 미룸. clippy가 잡는 비권장 코드는 `#[expect(…, reason)]`로 표시(`needless_range_loop`·`unnecessary_fold`·`manual_find`·`explicit_counter_loop`). `05`는 `for_each` 안의 `return`이 경고 없이 `continue`처럼 동작해 틀린 결과를 내는 것을 일부러 보임. 책과 달라진 점: 책이 소개하는 `try_find`는 1.100.0에서도 nightly 전용(E0658). 책에 없는 지침: 2.3절(`impl IntoIterator`로 받기), 2.4절의 `partition`·`try_fold` 선택 기준(README "책과 달라진 점"에 밝힘). README 770줄 |
 | ✅ | `ch10-standard-traits` | 예제 8 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 5종을 8개로 늘림(`Default`, `Debug`/`Display`, 연산자 오버로딩에 예제를 하나씩). 패닉하는 예제와 외부 크레이트 없음. `03`은 출력이 실행마다 같도록 시드를 고정한 해셔를 씀(기본 해셔에서는 어긋난 키의 조회 결과가 실행마다 다름) — `01`·`03`·`04`·`08`을 25번씩 실행해 출력이 같음을 확인. clippy `derived_hash_with_manual_eq`(deny)·`new_without_default`와 rustc `missing_debug_implementations`·`missing_copy_implementations`는 `#[expect]`로 표시. E0204·E0184는 Part 1 ch6과 겹쳐 README 표로만 실음. 책과 실제 동작이 다른 곳은 없음. 책에 없는 지침: 제네릭 타입의 derive 바운드, `total_cmp`와 정수 키, `Default` 판단 전체, 표현이 여럿일 때의 이름 붙은 메서드, `+=`와 `+`의 일치, 고아 규칙과 `Send`/`Sync` 확인(README 2.10절에 근거와 함께 밝힘). README 786줄 |
+| ✅ | `ch11-drop-raii` | 예제 4 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 외부 크레이트와 unsafe 없음. `01`은 패닉 경로를 보이려고 일부러 세 번 패닉하지만 `catch_unwind`로 안에서 붙잡아 종료 코드 0(표준 에러에 실행마다 다른 스레드 번호가 든 패닉 메시지가 나옴). 표준 출력은 예제마다 25번 실행해 같음을 확인. 교착 상태는 일으키지 않고 스코프 스레드의 `try_lock`으로 관찰. `03`의 clone판은 일부러 메모를 두 번 올리는 틀린 결과를 냄. 1.100.0에서 안정화된 `std::mem::DropGuard`를 사용(오래된 툴체인에서는 `01`이 컴파일되지 않음). E0040은 Part 0 ch14와 겹쳐 링크로 대체. 책과 달라진 점: `DropGuard` 안정화, `Drop` 문서에 nightly 전용 `pin_drop`이 함께 보임, E0040의 `help:`가 줄 단위 diff로 바뀜. 책에 없는 지침: `Drop`이 필요 없는 경우와 그 비용, 이름 없이 버린 가드와 `#[must_use]`, `Drop`을 안전망으로 두는 설계, 지침 4(drop 순서) 전체(README 2.6절에 밝힘). 누수는 한 문단만 두고 Part 10 `ch7-obrm`으로 미룸. README 587줄 |
+| ✅ | `ch12-generics-vs-trait-objects` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종에 `02_thin_generic_shell`(얇은 제네릭 껍데기)과 `03_combined_bounds`(바운드 조합과 업캐스트)를 더함. 패닉하는 예제·외부 크레이트·unsafe 없음. 단형성화는 `type_name`과 디버그 빌드의 `nm -C` 심볼 수로 보임 — 심볼 수는 macOS aarch64·1.100.0·디버그 빌드 기준이고 릴리스 빌드에서는 인라인돼 셀 수 없음(Linux·Windows 미확인). 위임 메시지가 제안한 "제네릭 함수 안의 `static`은 인스턴스마다 따로"는 사실이 아니어서(하나뿐) 쓰지 않고 함정으로 적음. `sized_method_on_dyn` 에러 예제는 에러 코드가 없어 메시지로 확인. 책과 달라진 점: 업캐스트(1.86) 안정화, 책의 "object safety"는 dyn 호환, `impl Trait` 매개변수의 터보피시는 E0107. 책에 없는 지침: 지침 2(얇은 껍데기) 전체, 지침 4의 열거형 선택지, 지침 5의 제네릭 메서드 `where Self: Sized`·`?Sized` 함수(README 2.7절에 밝힘). README 614줄 |
+| ✅ | `ch13-default-implementations` | 예제 3 / 에러 2 / 프로젝트 0 | 통과 | 2026-11-19 | 작은 Item이라 예제 3개. 패닉하는 예제·외부 크레이트·unsafe 없음. 일의 양은 시간이 아니라 호출 횟수로 비교. 기본 메서드 추가의 호환성은 한 문단과 에러 예제(E0034)로만 다루고 규칙 전체는 `ch21-semver`로 미룸. E0046은 README 본문과 표에만 인용. 책과 달라진 점: `Iterator`의 기본 메서드는 1.100.0 로컬 문서 기준 75개(책은 50개 이상), 책 각주의 "고유 메서드가 이긴다"는 수신자 모양이 같을 때만 성립(`&self` 트레이트 메서드가 `&mut self` 고유 메서드보다 먼저 잡힘 — 직접 확인). `ExactSizeIterator::is_empty`는 여전히 nightly 전용. 책에 없는 지침: 재정의는 기본 구현과 같은 답을 내야 한다는 약속과 비교 검사, 슈퍼트레이트 대신 메서드에만 바운드를 붙이는 기준, 4.3절의 `Read` 설명(README 2.6절에 밝힘). README 439줄 |
+| ✅ | `ch14-lifetimes` | 예제 7 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 큰 Item. 외부 크레이트·unsafe·패닉하는 예제 없음. 이해가 목적인 소절은 "잘못된 짐작으로 쓴 코드 → 맞는 모형" 틀로 씀. `05`·`06`은 `Box::leak`으로 일부러 메모리를 누수시킴(안전한 코드, 주석과 출력에 밝힘). 스레드 결과는 `main`에서 출력해 실행마다 같음(`01`·`02`·`05`·`06`을 25번씩 확인). 주소는 출력하지 않음. rustc `mismatched_lifetime_syntaxes`는 `#[expect]`로 표시. 책과 달라진 점: 반환 타입 경로에 숨은 라이프타임을 `mismatched_lifetime_syntaxes`(1.89부터 기본 경고)가 잡음, 2024 에디션에서 블록 마지막 표현식의 임시값이 일찍 drop됨, 임시값 수명 연장이 `Some(&temp)`까지 넓어짐, E0106에 소유한 값을 돌려주라는 도움말 추가, `String::leak`(1.72). 책에 없는 지침: `&'static T`와 `T: 'static`의 구분, 2024 에디션의 RPIT 캡처, 뷰 타입과 소유 타입을 고르는 기준(README 2.9절에 밝힘). README 756줄 |
+| ✅ | `ch15-borrow-checker` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 큰 Item. 외부 크레이트·unsafe·패닉하는 예제 없음(`RefCell`의 대여 실패는 `try_borrow_mut`으로 관찰). 비권장 코드는 "에러를 없애려고 쓴 임시방편"(통째 복제, 사본이 어긋나는 복제판, 삭제 뒤 어긋나는 인덱스, 방이 `Rc`를 쥐어 탈퇴자가 남는 판)으로 구성해 틀린 결과를 출력으로 보임. 책의 "shared reference"는 본편 표기대로 "불변 참조"로 씀. 라이프타임·임시값 바인드는 ch14, `Drop` 가드와 E0509는 ch11 링크로 넘김. `slotmap`·`ouroboros`·`self_cell`·`yoke`는 이름과 버전만 소개(crates.io에서 확인). 책과 달라진 점: E0505·E0507에 복제하라는 `help:`가 붙음, `get_disjoint_mut`(1.86) 안정화, 조건부로 `&mut`를 돌려주는 함수는 1.100.0에서도 E0499(책은 다루지 않음). 책에 없는 지침: 조건부 `&mut` 반환의 해결, `take` 계열 고르는 표, 지침 4(나눠 빌리기) 전체, 세대 ID, `RefCell` 대신 데이터로 돌려주기(README 2.10절에 밝힘). README 888줄 |
 
-- 산출물 합계(ch1~ch10): 예제 57 / 에러 32 / 프로젝트 0. 외부 크레이트는 ch4의 `thiserror`·`anyhow`, ch7의 `derive_builder`뿐입니다(dev-dependency).
+- 산출물 합계(ch1~ch15): 예제 84 / 에러 50 / 프로젝트 0(ch1~ch10이 57 / 32, ch11~ch15가 27 / 18). 외부 크레이트는 ch4의 `thiserror`·`anyhow`, ch7의 `derive_builder`뿐입니다(dev-dependency).
 - ch1~ch10 확인(2026-11-19, rustc 1.100.0): 챕터를 쓴 에이전트의 검증과 별도로 메인 세션이 챕터마다 `cargo fmt --check`, `cargo build --examples`, `cargo clippy --examples -- -D warnings`, 예제 실행(57개 모두 종료 코드 0, 출력이 README와 일치), `compile_fail` 32개의 에러 코드, README 상대 링크를 다시 확인했습니다. 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했고, `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. 모든 검증은 macOS(aarch64)에서만 했습니다.
+- ch11~ch15 확인(2026-11-19, rustc 1.100.0): ch1~ch10과 같은 방법으로 챕터마다 다시 확인했습니다(예제 27개 모두 종료 코드 0이고 출력이 README와 일치, `compile_fail` 18개의 에러 코드, README 상대 링크). 실행마다 달라질 수 있는 예제는 25번씩 실행해 표준 출력이 같음을 확인했습니다. 저장소 루트의 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`와 `web/`의 사이트 빌드가 깨진 링크 경고 없이 통과했습니다. 이 범위부터는 위임하기 전에 책의 해당 Item이 권하는 내용을 먼저 확인해 위임 메시지에 적고, 더한 판단은 "책에 없는 지침"으로 표시하게 했습니다(ch11~ch15 모두 해당 항목이 있음).
 - 책과의 대조(2026-11-19): 챕터마다 책의 해당 Item 페이지에서 코드에 쓰인 타입·함수 이름을 뽑아 챕터에 같은 이름이 없는지 확인했고, "책과 달라진 점"에 적힌 현재 툴체인 쪽 동작은 메인 세션이 다시 실행해 확인했습니다. 책에 없는 지침은 챕터 README의 "책과 달라진 점"에 "책에 없는 지침"으로 밝혔습니다(ch2·ch4는 해당 없음). 이 대조는 책 페이지를 요약 모델로 읽은 결과입니다.
 - 사전 작업(2026-11-19): 루트 `Cargo.toml`의 `members`에 `"appd-*/ch*"` 추가, 사이트 스크립트(`web/scripts/sync-content.mjs`)와 배포 워크플로가 `appd-*` 디렉터리를 읽도록 수정, 로드맵에 부록 A 절 추가.
 
@@ -176,6 +182,12 @@
 - 포인터 관련(부록 ch8): clippy `ptr_arg`는 본문이 `capacity()`나 `push`를 쓰는 `&Vec`/`&mut Vec` 매개변수와 `&Rc<T>`에는 경고하지 않습니다. `vec_box`·`box_collection`·`redundant_allocation`은 `let` 문의 타입 표기에는 경고하지 않고 필드와 시그니처에만 경고합니다. `size_of_val(&참조변수)`는 `size_of_ref`에 걸립니다. `HashMap<K, _>::get("문자열")`은 `K: Borrow<str>`가 없으면 E0277이 아니라 E0308입니다. 넓은 원시 포인터의 `==`는 rustc `ambiguous_wide_pointer_comparisons` 경고가 납니다(`ptr::addr_eq` 사용). `Eq`와 `Hash`가 어긋난 키의 조회 결과는 기본 해셔에서 실행마다 다르므로, 예제 출력에 쓰려면 `BuildHasherDefault<DefaultHasher>`로 시드를 고정합니다. rust-src가 없어도 표준 라이브러리 소스는 로컬 문서의 `share/doc/rust/html/src/`에서 볼 수 있습니다.
 - 반복 관련(부록 ch9): clippy 기본 warn은 `needless_range_loop`·`unnecessary_fold`·`manual_find`·`explicit_counter_loop`·`manual_try_fold`·`map_flatten`이고, `needless_for_each`·`needless_collect`·`explicit_iter_loop`는 꺼져 있습니다. `needless_range_loop`는 인덱스로 이웃 원소나 다른 배열의 다른 위치를 읽으면 경고하지 않습니다. `for_each` 안의 `return`은 경고 없이 `continue`처럼 동작하고, `break`/`continue`는 E0267입니다. `try_find`·`try_collect`·`map_windows`는 1.100.0에서 nightly 전용(E0658)입니다.
 - 표준 트레이트 관련(부록 ch10): 예제 바이너리라도 `pub mod` 안의 `pub` 타입에는 rustc `missing_debug_implementations`·`missing_copy_implementations`(기본 allow)와 clippy `new_without_default`가 걸립니다. `#[default]` 없는 열거형의 `derive(Default)`는 E0665, `derive(Eq)`를 `f64` 필드 둘에 붙이면 E0277이 첫 필드에서만 나고 `Hash`는 필드마다 납니다. clippy `eq_op`(deny)는 `x == x`를 잡습니다. `should_implement_trait`·`inherent_to_string`·`suspicious_arithmetic_impl`·`suspicious_op_assign_impl`은 warn, `derive_partial_eq_without_eq`는 allow입니다.
+- 제네릭·트레이트 객체 관련(부록 ch12): **제네릭 함수 안의 `static`은 타입 인자마다 따로가 아니라 하나뿐입니다**(단형성화를 보이는 용도로 쓸 수 없음). 단형성화는 `type_name`과 디버그 빌드의 `nm -C <실행 파일> | grep <함수 이름>`으로 봅니다(1.100.0은 v0 맹글링, 릴리스 빌드는 인라인돼 셀 수 없음). 제네릭 함수 안의 클로저는 바깥 타입 매개변수마다 다른 타입이 되어 그 클로저를 받는 `filter_map`·`collect` 등도 다시 단형성화됩니다. `dyn A + B`는 E0225(`dyn A + Send + Sync`는 됨), `trait X: Clone`을 `dyn`으로 쓰면 E0038, `where Self: Sized` 메서드를 트레이트 객체로 부르면 에러 코드 없는 에러, `impl Trait` 매개변수에 터보피시를 쓰면 E0107, 값으로 받는 `self` 메서드를 `Box<dyn T>`에서 부르면 E0161입니다.
+- 기본 구현 관련(부록 ch13): 1.100.0의 `io::Read`는 `read`와 nightly 전용 `read_buf`가 서로를 기본 구현으로 부르고, `impl Read for X {}`는 `E0046 missing one of: read_buf, read`입니다. 사용자 트레이트에서 서로 부르는 두 기본 메서드를 둘 다 구현하지 않아도 rustc와 clippy는 경고하지 않습니다(실행하면 무한 재귀). 메서드 탐색에서 `&self` 트레이트 메서드는 `&mut self` 고유 메서드보다 먼저 잡힙니다. `ExactSizeIterator::is_empty`를 재정의하면 E0658입니다. clippy `manual_range_contains`는 리터럴 경계에만 경고합니다.
+- `Drop`·가드 관련(부록 ch11): `std::mem::DropGuard`가 1.100.0에서 안정화됐습니다(`new`·`dismiss`, `new`에 `#[must_use]`). `impl Drop for X {}`는 E0046, `Drop` 타입에서 필드를 옮겨 꺼내면 E0509(help는 `&self.field`와 `.clone()`을 제안), `Drop`을 구현한 가드는 스코프 끝까지 대여를 붙잡아 E0502가 납니다. rustc 기본 수준: `let_underscore_lock`은 deny(`unwrap` 없는 `let _ = m.lock();`도 걸림), `let_underscore_drop`은 allow, `dropping_references`는 warn. clippy `significant_drop_tightening`·`significant_drop_in_scrutinee`·`mem_forget`은 allow, `drop_non_drop`은 warn. 가드를 `Option`/`Result`에 감싸 돌려주면 타입의 `#[must_use]`가 경고를 내지 않으므로 메서드에 붙입니다. `unused_must_use`의 help가 제안하는 `let _ = …`은 가드에서는 바로 버려지는 함정입니다. 기본 패닉 훅 메시지에는 실행마다 다른 스레드 번호가 나옵니다.
+- 라이프타임 관련(부록 ch14): rustc `mismatched_lifetime_syntaxes`(1.89부터 기본 warn)는 반환 타입 경로에 숨은 라이프타임(`fn f(s: &str) -> View`)을 잡고 `'_`를 제안합니다. 입력에만 숨은 경우는 `elided_lifetimes_in_paths`(allow)만 잡습니다. clippy `needless_lifetimes`(warn)는 `fn f<'a>(s: &'a str) -> &'a str`만 잡고, 구조체를 돌려주는 모양은 pedantic `elidable_lifetime_names`만 잡습니다. 임시값 수명 연장은 `Some(&temp)` 같은 튜플 구조체 생성자 안까지 됩니다(1.89). `const fn` 호출 결과는 상수 승격되지 않습니다(`&u32::max(1, 2)`를 `&'static`으로 돌려주면 E0515). `&str` 매개변수를 `thread::spawn`에 넘기면 E0521, 입력 참조 없는 함수의 E0106은 소유한 값을 돌려주라는 help가 붙지만 그대로 따르면 E0308입니다. E0505의 help(`&x.clone()`)를 따르면 E0716이 날 수 있습니다. 2024 에디션에서 `fn f(&self) -> impl Iterator<Item = &'a str>`는 `&self`까지 캡처하므로 `+ use<'a>`가 필요할 수 있습니다.
+- 대여 검사기 관련(부록 ch15): 조건부로 `&mut`를 돌려주는 함수(찾으면 돌려주고 없으면 넣기)는 1.100.0에서도 E0499입니다(인덱스나 entry API로 풂). 대여가 살아 있는 동안 소유자가 덮어쓰면 E0506, 읽으면 E0503, 옮기면 E0505입니다. E0505·E0507에는 복제하라는 help가 붙고(`Clone`이 없으면 note로), E0507의 "빌리라"는 제안을 따르면 E0308이 날 수 있습니다. 고치는 메서드의 인자 안에서 빌린 값을 마지막으로 쓰는 코드는 컴파일됩니다(2단계 대여). `for` 안에서 `&mut self` 메서드를 부른 E0499에는 인덱스 반복문을 쓰라는 도움말이 붙습니다. clippy `redundant_clone`은 allow(nursery), `mem_replace_option_with_some`·`mem_replace_option_with_none`·`mem_replace_with_default`는 warn입니다. 복제본을 돌며 고치는 `for mut x in self.v.clone()`은 clippy가 잡지 않습니다. `get_disjoint_mut`은 1.86에서 안정화됐습니다.
+- 한 에이전트가 예제를 `touch`한 뒤 `cargo build`/`clippy`가 너무 빨리 끝나 재검사 여부가 불분명했다고 보고했습니다(원인 미확인). 의심스러우면 `cargo clean -p <패키지>` 뒤에 다시 확인합니다.
 - 이 환경의 안전 검사는 `rm -rf "$변수/…"` 꼴의 삭제를 막습니다. 리터럴 경로를 적어 지웁니다.
 
 ## 후속 조치
@@ -216,6 +228,10 @@
 - 부록 A 전체: 위임 메시지의 "추가 요청"에 넣은 판단 기준이 그대로 챕터의 지침이 되어, ch1·ch3·ch5~ch10에 책에 없는 지침이 들어갔습니다(각 README에 밝힘). ch11 이후를 위임할 때는 먼저 책의 해당 Item이 무엇을 권하는지 확인하고, 더할 판단 기준은 "책에 없는 지침"으로 표시하게 합니다. 이미 들어간 지침을 둘지 뺄지는 정합니다.
 - 부록 A ch7 → `ch21-semver`: 공개 구조체에 필드를 추가하면 사용자의 구조체 리터럴이 깨지는 문제. → `ch22-minimize-visibility`: 필드를 비공개로 두는 이유. → Part 8 `ch5-static-guarantees`: 타입 상태 빌더. ch8 → `ch14-lifetimes`·`ch15-borrow-checker`: 슬라이스 보관과 라이프타임, 인덱스로 가리키기. ch9 → `ch20-avoid-over-optimizing`: 성능 측정, `ch15-borrow-checker`: 두 클로저가 같은 상태를 고칠 때의 구조 변경. ch10 → `ch21-semver`: 트레이트 구현을 더하거나 뗄 때의 호환성과 `derive(Ord)`의 필드 순서, `ch17-shared-state-parallelism`: `unsafe impl Send/Sync`.
 - 부록 A ch10: README가 `ch9-iterator-transforms`를 링크 없이 이름으로만 가리킵니다(동시에 작성). 상대 링크로 바꿀 수 있습니다(선택 사항).
+
+- 부록 A ch11~ch15: 동시에 작성해 서로를 이름으로만 가리키는 곳이 있습니다(ch13 → `ch12-generics-vs-trait-objects`, ch8·ch9·ch14 → `ch15-borrow-checker`, ch2·ch5·ch8·ch9 → `ch12-…`). 35개가 모두 생긴 뒤 상대 링크로 바꿉니다.
+- 부록 A ch11 → `ch17-shared-state-parallelism`: 잠금 범위를 너무 좁혀 한 번에 끝나야 할 일을 쪼개는 문제, 잠금 순서와 교착 상태. → `ch18-dont-panic`·Part 10 `ch8-unwinding`: 이중 패닉, `catch_unwind`. → Part 10 `ch7-obrm`: 소멸자가 실행되지 않는 경우. ch12 → `ch19-avoid-reflection`: 업캐스트의 쓰임과 다운캐스트, `ch20-avoid-over-optimizing`: 릴리스 빌드에서 얇은 껍데기가 줄이는 크기의 측정, `ch21-semver`: 공개 트레이트에 dyn 호환이 아닌 메서드를 더하는 문제. ch13 → `ch21-semver`: 호환되지 않는 변경의 전체 규칙. ch14 → `ch17-…`: 스레드와 `'static`, Part 10: 변성·HRTB·drop 검사. ch15 → `ch16-avoid-unsafe`: 자기 참조를 `unsafe`로 구현하는 일과 원시 포인터, `ch17-…`: `Arc<Mutex<T>>`, `ch18-…`: `RefCell` 패닉, `ch22-minimize-visibility`: 비공개 필드로 불변식 지키기.
+- 부록 A ch15: README가 소개하는 크레이트 버전(`slotmap` 1.1.1, `ouroboros` 0.18.5, `self_cell` 1.3.0, `yoke` 0.8.4)은 2026-11-19의 crates.io 기준입니다.
 
 ## 용어 메모
 
@@ -386,3 +402,12 @@
 | accumulator / side effect / early exit / bounds check | 누적 변수 / 부수 효과 / 탈출 조건 / 경계 검사 |
 | checklist (공개 타입의 트레이트 판단표) / normalize / (Copy의) copy | 체크리스트 / 정규화 / 사본 |
 | 트레이트 구현 사이에 맞아야 하는 성질(`Eq`와 `Hash` 등) | "서로 맞아야 한다", "같은 기준"으로 풀어 씀("일관성"은 coherence에만 씀) |
+| heterogeneous collection / combination trait / open·closed set | 이종 컬렉션(처음 한 번 풀어 씀) / 조합 트레이트 / 열린 집합·닫힌 집합 |
+| thin generic shell / inner function / symbol / mangling | 얇은 껍데기 / 안쪽 함수 / 심볼 / 맹글링 |
+| required method / provided method / implementor / user (of a trait) | 필수 메서드 / 기본 메서드 / 구현하는 쪽 / 쓰는 쪽 |
+| RAII / guard (일반 개념) / release method / safety net / double panic | RAII(처음 한 번 "자원 획득은 초기화"로 풀어 씀) / 가드 / 해제 메서드 / 안전망 / 이중 패닉 |
+| chain of ownership / view type / non-lexical lifetimes / anonymous lifetime / constant promotion | 소유 사슬 / 뷰 타입 / 마지막 사용에서 끝나는 대여(NLL) / 익명 라이프타임 / 상수 승격 |
+| `&'static T` / `T: 'static` | 영원히 유효한 참조 / 짧은 대여를 품지 않은 타입 |
+| shared reference (`&T`) | 불변 참조(본편 표기. 책의 "shared reference"는 처음 한 번만 병기) |
+| two-phase borrow / disjoint borrow / generation (index) | 2단계 대여 / 나눠 빌리기 / 세대 ID·세대 번호 |
+| `take`·`replace`로 `&mut` 뒤의 값을 꺼내는 일 | 바꿔 끼우기 |

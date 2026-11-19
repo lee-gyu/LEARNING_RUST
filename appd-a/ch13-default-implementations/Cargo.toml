@@ -1,0 +1,5 @@
+[package]
+name = "er-ch13-default-implementations"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

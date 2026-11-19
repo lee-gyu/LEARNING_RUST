@@ -246,6 +246,26 @@ name = "er-ch10-standard-traits"
 version = "0.0.0"
 
 [[package]]
+name = "er-ch11-drop-raii"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch12-generics-vs-trait-objects"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch13-default-implementations"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch14-lifetimes"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch15-borrow-checker"
+version = "0.0.0"
+
+[[package]]
 name = "er-ch2-express-common-behavior"
 version = "0.0.0"
 

@@ -47,5 +47,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | 챕터 | Item | 주제 |
 | --- | --- | --- |
 | [ch10-standard-traits](ch10-standard-traits/) | Item 10 | 공개 타입의 트레이트 체크리스트: derive가 타입의 뜻과 맞는지, `Copy`를 붙일 타입, `PartialEq`와 `Hash`를 같은 기준으로, `f64` 필드와 `total_cmp`, `Default`·`Debug`·`Display` 판단, 연산자 오버로딩의 통념 |
+| [ch11-drop-raii](ch11-drop-raii/) | Item 11 | 자원을 가진 타입의 `Drop`과 가드(수동 짝과 비교), 가드의 범위를 블록과 `drop`으로 좁히기, 실패할 수 있는 해제는 `Result`를 돌려주는 메서드로, drop 순서와 가드 설계 |
+| [ch12-generics-vs-trait-objects](ch12-generics-vs-trait-objects/) | Item 12 | 기본은 제네릭, 단형성화 비용과 얇은 제네릭 껍데기, 바운드 여럿과 조합 트레이트·업캐스트, 이종 컬렉션(열린 집합은 트레이트 객체, 닫힌 집합은 열거형), dyn 호환 설계와 `where Self: Sized` |
+| [ch13-default-implementations](ch13-default-implementations/) | Item 13 | 필수 메서드는 최소로 두고 편의 메서드는 기본 구현으로, 더 나은 방법을 아는 구현의 재정의와 그 약속, 메서드에만 붙이는 바운드, 기본 메서드를 나중에 더할 때의 호환성 |
+
+### Concepts (책 3장, Item 14~20)
+
+| 챕터 | Item | 주제 |
+| --- | --- | --- |
+| [ch14-lifetimes](ch14-lifetimes/) | Item 14 | 스택 프레임과 소유 사슬, 값·참조(NLL)·임시값의 라이프타임, 라이프타임 매개변수를 출처대로 묶거나 나누기, 생략 규칙 읽기와 `'_`, `'static` 참조의 출처와 `T: 'static`, 뷰 타입과 소유 타입 고르기 |
+| [ch15-borrow-checker](ch15-borrow-checker/) | Item 15 | 대여 검사기 에러를 싼 것부터 푸는 순서: 대여 범위 줄이기, 체인 쪼개기와 `Cow`, `take`·`replace`로 바꿔 끼우기, 나눠 빌리기, 한 곳이 소유하고 인덱스로 가리키기(세대 ID), `Rc<RefCell<T>>`와 `Weak`, 자기 참조 구조체의 대안 |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

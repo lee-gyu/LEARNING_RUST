@@ -1,0 +1,5 @@
+[package]
+name = "er-ch12-generics-vs-trait-objects"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
