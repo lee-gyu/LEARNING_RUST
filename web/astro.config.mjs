@@ -15,6 +15,7 @@ export default defineConfig({
 		watchSources(),
 		starlight({
 			title: 'LEARNING_RUST',
+			favicon: 'https://lee-gyu.github.io/favicon.ico',
 			locales: { root: { label: '한국어', lang: 'ko' } },
 			social: [{ icon: 'github', label: 'GitHub', href: repoUrl }],
 			sidebar,
