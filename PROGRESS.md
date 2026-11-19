@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-19 (부록 A ch1~ch15 추가)
+- 마지막 갱신: 2026-11-19 (부록 A ch1~ch20 추가)
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -16,7 +16,7 @@
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
 | Part 3~11 | 0 / 69 |
-| 부록 A. Effective Rust (본편 합계와 별도) | 19 / 35 |
+| 부록 A. Effective Rust (본편 합계와 별도) | 20 / 35 |
 
 ## 사전 작업
 
@@ -99,7 +99,7 @@
 
 ## 부록 A. Effective Rust — `appd-a/`
 
-[Effective Rust](https://effective-rust.com/)의 Item 1개를 챕터 1개로 정리합니다(챕터 번호 = Item 번호, 패키지 이름 `er-ch{N}-{slug}`). 계획은 [로드맵 3절의 부록 A](docs/roadmap.md#3-파트별-챕터-계획)를 따릅니다. ch21~ch35의 행은 그 범위를 시작할 때 추가합니다.
+[Effective Rust](https://effective-rust.com/)의 Item 1개를 챕터 1개로 정리합니다(챕터 번호 = Item 번호, 패키지 이름 `er-ch{N}-{slug}`). 계획은 [로드맵 3절의 부록 A](docs/roadmap.md#3-파트별-챕터-계획)를 따릅니다. ch27~ch35의 행은 그 범위를 시작할 때 추가합니다.
 
 | 상태 | 챕터 | 산출물 | 검증 | 완료일 | 비고 |
 | --- | --- | --- | --- | --- | --- |
@@ -118,15 +118,22 @@
 | ✅ | `ch13-default-implementations` | 예제 3 / 에러 2 / 프로젝트 0 | 통과 | 2026-11-19 | 작은 Item이라 예제 3개. 패닉하는 예제·외부 크레이트·unsafe 없음. 일의 양은 시간이 아니라 호출 횟수로 비교. 기본 메서드 추가의 호환성은 한 문단과 에러 예제(E0034)로만 다루고 규칙 전체는 `ch21-semver`로 미룸. E0046은 README 본문과 표에만 인용. 책과 달라진 점: `Iterator`의 기본 메서드는 1.100.0 로컬 문서 기준 75개(책은 50개 이상), 책 각주의 "고유 메서드가 이긴다"는 수신자 모양이 같을 때만 성립(`&self` 트레이트 메서드가 `&mut self` 고유 메서드보다 먼저 잡힘 — 직접 확인). `ExactSizeIterator::is_empty`는 여전히 nightly 전용. 책에 없는 지침: 재정의는 기본 구현과 같은 답을 내야 한다는 약속과 비교 검사, 슈퍼트레이트 대신 메서드에만 바운드를 붙이는 기준, 4.3절의 `Read` 설명(README 2.6절에 밝힘). README 439줄 |
 | ✅ | `ch14-lifetimes` | 예제 7 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 큰 Item. 외부 크레이트·unsafe·패닉하는 예제 없음. 이해가 목적인 소절은 "잘못된 짐작으로 쓴 코드 → 맞는 모형" 틀로 씀. `05`·`06`은 `Box::leak`으로 일부러 메모리를 누수시킴(안전한 코드, 주석과 출력에 밝힘). 스레드 결과는 `main`에서 출력해 실행마다 같음(`01`·`02`·`05`·`06`을 25번씩 확인). 주소는 출력하지 않음. rustc `mismatched_lifetime_syntaxes`는 `#[expect]`로 표시. 책과 달라진 점: 반환 타입 경로에 숨은 라이프타임을 `mismatched_lifetime_syntaxes`(1.89부터 기본 경고)가 잡음, 2024 에디션에서 블록 마지막 표현식의 임시값이 일찍 drop됨, 임시값 수명 연장이 `Some(&temp)`까지 넓어짐, E0106에 소유한 값을 돌려주라는 도움말 추가, `String::leak`(1.72). 책에 없는 지침: `&'static T`와 `T: 'static`의 구분, 2024 에디션의 RPIT 캡처, 뷰 타입과 소유 타입을 고르는 기준(README 2.9절에 밝힘). README 756줄 |
 | ✅ | `ch15-borrow-checker` | 예제 8 / 에러 5 / 프로젝트 0 | 통과 | 2026-11-19 | 큰 Item. 외부 크레이트·unsafe·패닉하는 예제 없음(`RefCell`의 대여 실패는 `try_borrow_mut`으로 관찰). 비권장 코드는 "에러를 없애려고 쓴 임시방편"(통째 복제, 사본이 어긋나는 복제판, 삭제 뒤 어긋나는 인덱스, 방이 `Rc`를 쥐어 탈퇴자가 남는 판)으로 구성해 틀린 결과를 출력으로 보임. 책의 "shared reference"는 본편 표기대로 "불변 참조"로 씀. 라이프타임·임시값 바인드는 ch14, `Drop` 가드와 E0509는 ch11 링크로 넘김. `slotmap`·`ouroboros`·`self_cell`·`yoke`는 이름과 버전만 소개(crates.io에서 확인). 책과 달라진 점: E0505·E0507에 복제하라는 `help:`가 붙음, `get_disjoint_mut`(1.86) 안정화, 조건부로 `&mut`를 돌려주는 함수는 1.100.0에서도 E0499(책은 다루지 않음). 책에 없는 지침: 조건부 `&mut` 반환의 해결, `take` 계열 고르는 표, 지침 4(나눠 빌리기) 전체, 세대 ID, `RefCell` 대신 데이터로 돌려주기(README 2.10절에 밝힘). README 888줄 |
-| ⬜ | `ch16-avoid-unsafe` | | | | |
+| ✅ | `ch16-avoid-unsafe` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 외부 크레이트와 패닉하는 예제 없음. **unsafe 코드는 Miri로 검증하지 못함**(nightly 미설치) — 메인 세션이 unsafe 블록 17개를 읽어 안전성 주석의 전제 조건이 코드로 확인되는지 검토했고, README 첫머리에 미검증이라고 밝힘. Miri 사용법은 설명만 실음. `03`의 한 구역은 일부러 메모리를 누수시킴(안전한 코드, 주석과 출력에 밝힘). `04`에는 `#[cfg(test)]` 테스트 5개가 있음(`cargo test -p er-ch16-avoid-unsafe --example 04_safe_wrapper`). 주소는 출력하지 않고, 예제마다 25번 실행해 출력이 같음을 확인. 책과 달라진 점: 책이 권하는 `once_cell`의 기능은 표준 라이브러리의 `OnceLock`(1.70)·`LazyLock`(1.80)으로 들어옴, 2024 에디션에서는 `unsafe fn` 본문의 unsafe 연산에도 블록이 필요(`unsafe_op_in_unsafe_fn`이 기본 경고, 2021에서는 경고 없음), `first_chunk`(1.77)·`as_chunks`(1.88)·`array_windows`(1.94) 같은 안전한 API가 늘어남. 소개한 크레이트 버전(`bytemuck` 1.25.2, `zerocopy` 0.8.63, `once_cell` 1.21.4)은 2026-11-19의 crates.io 기준. 책에 없는 지침은 README 2.8절에 밝힘. README 713줄 |
 | ✅ | `ch17-shared-state-parallelism` | 예제 5 / 에러 2 / 프로젝트 0 | 통과 | 2026-11-19 | 외부 크레이트·unsafe·패닉하는 예제 없음. **`01`·`03`의 비권장 판은 실제로 교착 상태가 됨** — 멈춘 스레드는 `main`이 제한 시간으로 관찰한 뒤 프로세스 종료와 함께 사라지고 예제는 종료 코드 0(`01`은 약 1.4초, `03`은 약 0.6초 걸림). `02`는 일부러 두 표가 어긋나는 틀린 결과를 냄. 예제마다 25번, 동시에 8개씩도 실행해 출력이 같음을 확인. 시점 맞추기는 `Barrier` 대신 제한 시간이 있는 `Condvar` 기다림을 씀(`Barrier`는 잠금 하나 판에서 그 자체로 교착 상태를 만듦). 본편에 있는 `Send`/`Sync` 에러는 표에서 링크만. ThreadSanitizer는 nightly가 필요해 실행하지 못함. `no_deadlocks` 1.3.2·`parking_lot` 0.13.0은 이름과 버전만 소개. 책과 달라진 점: 상태 타입이 `Clone`이면 E0382에 복제하라는 help가 붙음(따르면 공유 상태가 갈라짐), 2024 에디션에서 `if let` 조건식의 가드가 `else` 전에 풀림. 책에 없는 지침: `RwLock`·원자 타입 선택, 잠금을 쥔 채 기다리지 않기, 채널판의 비용, 순위를 검사하는 `RankedMutex`(README 2.6절에 밝힘). README 667줄 |
 | ✅ | `ch18-dont-panic` | 예제 4 / 에러 0 / 프로젝트 2 | 통과 | 2026-11-19 | 외부 크레이트와 unsafe 없음. 모든 `examples/`는 종료 코드 0 — `01`·`04`는 일부러 패닉하지만 안에서 붙잡으며 표준 에러에 실행마다 다른 스레드 번호가 든 메시지가 나옴(`02`·`03`은 패닉 훅을 바꿔 표준 에러가 비어 있음). 표준 출력은 25번 실행해 같음. `04`는 `catch_unwind` 뒤 상태가 어긋나는 틀린 결과를 일부러 보임. **`projects/panic_strategy`는 일부러 중단됨**: 기본 실행은 종료 코드 0, `cargo run --profile abort`·`-- extern-c`·`-- drop-panic`은 종료 상태 134(macOS zsh 기준, 메인 세션이 다시 실행해 확인). `projects/panic_free_lib`는 clippy restriction 린트를 `[lints.clippy]`와 `clippy.toml`로 켠 라이브러리(단위 테스트 3 + 문서 테스트 1). `compile_fail/`은 후보가 모두 본편과 겹쳐 만들지 않고 4절을 실행 중 패닉 표로 구성. `no-panic` 0.1.37은 이름만 소개(실행하지 않음). 책과 달라진 점: `extern "C"` 함수 밖으로 나가는 패닉은 1.81부터 중단됨, 책이 패닉판의 예로 든 `from_utf8_unchecked`는 패닉이 아니라 미정의 동작(unsafe fn)이라 다른 예로 바꿈, `[lints]`·`#[expect]`·`strict_*` 등 책 이후의 도구. 책에 없는 지침: `#[track_caller]`와 `expect` 메시지 관례, 책이 들지 않은 숨은 패닉 지점, "실패할 수 있는 일을 먼저", clippy restriction 린트 설정(README 2.7절에 밝힘). README 746줄 |
 | ✅ | `ch19-avoid-reflection` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 외부 크레이트·unsafe·패닉하는 예제 없음. 비권장 판(`type_name` 문자열 분기, 다운캐스트 사슬)은 새 타입을 더했을 때 틀린 합계를 내는 것을 출력으로 보임. `type_name` 출력은 이 툴체인의 결과이며 문서가 보장하지 않는다고 밝힘. `TypeId` 값과 주소는 출력하지 않음. clippy `type_id_on_box`는 `#[expect]`로 표시. 책과 달라진 점: 업캐스트는 1.86.0에서 안정화(책은 1.76 예정), `trait T: Any`의 `&dyn T`를 `&dyn Any`로 업캐스트해 다운캐스트할 수 있어 `as_any` 우회가 필요 없음, `type_name_of_val`(1.76) 안정화, `TypeId::of`가 `const fn`(1.91), `try_as_dyn` 등은 nightly 전용. 책에 없는 지침: 열거형판, 선택적 메서드와 기능 조회 메서드, `Any`가 정당한 경우 목록, `as_any` 대신 업캐스트, 접근 함수 표(README 2.7절에 밝힘). README 625줄 |
 | ✅ | `ch20-avoid-over-optimizing` | 예제 4 / 에러 2 / 프로젝트 0 | 통과 | 2026-11-19 | 외부 크레이트·unsafe·패닉하는 예제 없음. 복사는 시간이 아니라 횟수와 바이트로 먼저 셈. **`04`의 경과 시간 세 줄(소유한 판·빌린 판·경계판)은 실행마다 다름** — README에는 이 환경에서 디버그·릴리스로 한 번씩 실행한 결과를 싣고 그렇게 밝힘(메인 세션이 다시 재도 같은 범위였고, 나머지 줄은 8번 실행해 같음). 차이가 작은 빌린 판과 경계판은 실행마다 순서가 바뀜. 반복문이 통째로 지워지는 함정은 이 챕터의 코드에서 재현되지 않아 본편의 관찰로 연결. 앞 챕터가 미룬 측정(ch9 체인 대 반복문, ch12 제네릭 대 `dyn`)은 연습 문제로 처리. 스레드로 넘기기·함수에서 돌려주기 에러는 ch14와 겹쳐 README 표로만 실음. 책과 달라진 점: `Rc::unwrap_or_clone`(1.76) 안정화, 컬렉션에 참조를 모으다 난 E0597에 note와 help가 붙음, 분리 캡처 때문에 빌리지 않은 필드만 쓰는 클로저는 2021 에디션부터 스레드로 넘길 수 있음. 책에 없는 지침: 판단의 순서 표와 세기 단계, 타입별 `clone()` 비용 표, 측정 방법과 경계판(README 2.6절에 밝힘). README 549줄 |
+| ⬜ | `ch21-semver` | | | | |
+| ⬜ | `ch22-minimize-visibility` | | | | |
+| ⬜ | `ch23-avoid-wildcard-imports` | | | | |
+| ⬜ | `ch24-re-export-dependencies` | | | | |
+| ⬜ | `ch25-dependency-graph` | | | | |
+| ⬜ | `ch26-feature-creep` | | | | |
 
-- 산출물 합계(ch1~ch15): 예제 84 / 에러 50 / 프로젝트 0(ch1~ch10이 57 / 32, ch11~ch15가 27 / 18). 외부 크레이트는 ch4의 `thiserror`·`anyhow`, ch7의 `derive_builder`뿐입니다(dev-dependency).
+- 산출물 합계(ch1~ch20): 예제 107 / 에러 60 / 프로젝트 2(ch1~ch10이 57 / 32 / 0, ch11~ch15가 27 / 18 / 0, ch16~ch20이 23 / 10 / 2). 외부 크레이트는 ch4의 `thiserror`·`anyhow`, ch7의 `derive_builder`뿐입니다(dev-dependency).
 - ch1~ch10 확인(2026-11-19, rustc 1.100.0): 챕터를 쓴 에이전트의 검증과 별도로 메인 세션이 챕터마다 `cargo fmt --check`, `cargo build --examples`, `cargo clippy --examples -- -D warnings`, 예제 실행(57개 모두 종료 코드 0, 출력이 README와 일치), `compile_fail` 32개의 에러 코드, README 상대 링크를 다시 확인했습니다. 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했고, `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. 모든 검증은 macOS(aarch64)에서만 했습니다.
 - ch11~ch15 확인(2026-11-19, rustc 1.100.0): ch1~ch10과 같은 방법으로 챕터마다 다시 확인했습니다(예제 27개 모두 종료 코드 0이고 출력이 README와 일치, `compile_fail` 18개의 에러 코드, README 상대 링크). 실행마다 달라질 수 있는 예제는 25번씩 실행해 표준 출력이 같음을 확인했습니다. 저장소 루트의 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`와 `web/`의 사이트 빌드가 깨진 링크 경고 없이 통과했습니다. 이 범위부터는 위임하기 전에 책의 해당 Item이 권하는 내용을 먼저 확인해 위임 메시지에 적고, 더한 판단은 "책에 없는 지침"으로 표시하게 했습니다(ch11~ch15 모두 해당 항목이 있음).
+- ch16~ch20 확인(2026-11-19, rustc 1.100.0): 앞 범위와 같은 방법으로 챕터마다 다시 확인했습니다(예제 23개 모두 종료 코드 0이고 출력이 README와 일치, `compile_fail` 10개의 에러 코드, ch16 `04`의 테스트 5개, ch18의 독립 프로젝트 2개의 `cargo fmt --check`·`cargo clippy --all-targets -- -D warnings`·`cargo test`와 일부러 중단되는 실행의 종료 상태, README 상대 링크). 실행마다 달라질 수 있는 예제는 25번씩 실행해 표준 출력이 같음을 확인했고, ch20 `04`는 경과 시간 줄을 빼고 비교했습니다. ch16의 unsafe 코드는 Miri 없이 메인 세션이 블록마다 읽어 검토했습니다(후속 조치 참고). 다섯 패키지의 `cargo fmt --check`, `cargo build --examples`, `cargo clippy --examples -- -D warnings`와 `web/`의 사이트 빌드가 깨진 링크 경고 없이 통과했습니다. 저장소 전체(`--workspace`) 검사는 ch21~ch26을 마친 뒤 함께 돌립니다.
 - 책과의 대조(2026-11-19): 챕터마다 책의 해당 Item 페이지에서 코드에 쓰인 타입·함수 이름을 뽑아 챕터에 같은 이름이 없는지 확인했고, "책과 달라진 점"에 적힌 현재 툴체인 쪽 동작은 메인 세션이 다시 실행해 확인했습니다. 책에 없는 지침은 챕터 README의 "책과 달라진 점"에 "책에 없는 지침"으로 밝혔습니다(ch2·ch4는 해당 없음). 이 대조는 책 페이지를 요약 모델로 읽은 결과입니다.
 - 사전 작업(2026-11-19): 루트 `Cargo.toml`의 `members`에 `"appd-*/ch*"` 추가, 사이트 스크립트(`web/scripts/sync-content.mjs`)와 배포 워크플로가 `appd-*` 디렉터리를 읽도록 수정, 로드맵에 부록 A 절 추가.
 
@@ -197,6 +204,7 @@
 - 패닉 예제(부록 ch18): `extern "C"` 함수 밖으로 나가는 패닉은 1.81부터 중단되고(`panic in a function that cannot unwind`), 이 중단과 이중 패닉의 중단은 `RUST_BACKTRACE=0`이어도 백트레이스를 출력합니다. `panic = "abort"`인 프로그램의 종료 상태는 macOS에서 134입니다. 사용자 정의 프로필(`[profile.abort] inherits = "dev"`, `cargo run --profile abort`)은 독립 프로젝트에서만 동작합니다. `Index::index`는 트레이트 선언에 `#[track_caller]`가 있어 직접 만든 구현도 패닉 위치가 부른 줄이 됩니다. clippy restriction 린트: `indexing_slicing`은 상수 인덱스와 `str` 슬라이싱을 잡지 않고(`string_slice`가 잡음), `arithmetic_side_effects`는 0이 아닌 상수로 나누는 연산에는 경고하지 않습니다. `clippy.toml`의 `allow-unwrap-in-tests` 등으로 테스트 코드를 허용할 수 있습니다. `String::from_utf8_unchecked`는 패닉판이 아니라 `unsafe fn`입니다.
 - `Any` 관련(부록 ch19): `downcast_ref`/`is`는 `dyn Any`의 고유 메서드라 `trait T: Any`여도 `&dyn T`에서 바로 부르면 E0599입니다. 먼저 `&dyn Any`로 업캐스트합니다(1.86부터 가능, `as_any` 우회가 필요 없음). 제네릭 함수 안의 `TypeId::of::<T>()`는 E0310, 관계없는 트레이트 객체로의 `as` 캐스트는 E0605입니다. `type_name_of_val`은 1.76, `TypeId::of`의 `const fn`은 1.91부터이고 `try_as_dyn`은 nightly 전용입니다. else-if 다운캐스트 사슬의 마지막 갈래가 `Some(..)`/`None`이면 clippy `manual_map`에 걸립니다.
 - 측정 예제(부록 ch20): 시간 측정은 다른 에이전트가 동시에 빌드하면 크게 흔들리고, 차이가 작은 두 판은 실행마다 순서가 바뀝니다. 출력에 "어느 쪽이 빠르다"를 단정하는 줄을 두지 않고, 실행마다 달라지는 줄을 시간 줄로만 한정합니다(검증할 때는 그 줄을 빼고 비교). clippy `clone_on_ref_ptr`(restriction)·`redundant_clone`(nursery)은 꺼져 있습니다. 빌린 값을 스레드로 넘기는 에러를 재현할 때 클로저가 빌리지 않은 필드 하나만 쓰면 분리 캡처 때문에 2021 에디션부터 컴파일됩니다. 빌린 값을 구조체 필드에 보관하다 난 E0597에는 도움말이 없고 컬렉션에 모으면 note와 help가 붙습니다. `Rc::unwrap_or_clone`은 1.76부터입니다.
+- unsafe 예제(부록 ch16): Miri 없이 쓸 때는 블록마다 `// SAFETY:` 주석이 대는 전제 조건을 바로 위 코드가 확인하는 모양으로만 쓰고, 메인 세션이 블록을 하나씩 읽어 검토합니다. 2024 에디션에서는 `unsafe fn` 안에서도 unsafe 연산에 블록이 필요합니다(`unsafe_op_in_unsafe_fn`, 2021 에디션에서는 경고가 없음). `#![forbid(unsafe_code)]` 아래에서 `#[allow(unsafe_code)]`를 쓰면 E0453입니다. clippy `undocumented_unsafe_blocks`·`multiple_unsafe_ops_per_block`은 restriction이라 꺼져 있습니다. 안전한 래퍼를 보이는 예제는 불변식을 지키는 코드를 모두 한 모듈 안에 둡니다(모듈 밖의 함수를 부르면 그 함수도 검토 범위에 듦).
 - rustup 1.29는 설치되지 않은 툴체인을 이름으로 가리키는 명령을 실행하면 그 툴체인을 자동으로 내려받습니다. 조회처럼 보이는 `rustup component list --toolchain nightly`도 nightly(약 1.4GB)를 설치합니다(2026-11-19에 실제로 일어나 제거함). 설치 여부는 `rustup toolchain list`로만 확인하고, `--toolchain`·`rustup run`·`cargo +<이름>`은 목록에 있는 툴체인에만 씁니다.
 - 이 환경의 안전 검사는 `rm -rf "$변수/…"` 꼴의 삭제를 막습니다. 리터럴 경로를 적어 지웁니다.
 
@@ -242,6 +250,10 @@
 - 부록 A ch11~ch15: 동시에 작성해 서로를 이름으로만 가리키는 곳이 있습니다(ch13 → `ch12-generics-vs-trait-objects`, ch8·ch9·ch14 → `ch15-borrow-checker`, ch2·ch5·ch8·ch9 → `ch12-…`). 35개가 모두 생긴 뒤 상대 링크로 바꿉니다.
 - 부록 A ch11 → `ch17-shared-state-parallelism`: 잠금 범위를 너무 좁혀 한 번에 끝나야 할 일을 쪼개는 문제, 잠금 순서와 교착 상태. → `ch18-dont-panic`·Part 10 `ch8-unwinding`: 이중 패닉, `catch_unwind`. → Part 10 `ch7-obrm`: 소멸자가 실행되지 않는 경우. ch12 → `ch19-avoid-reflection`: 업캐스트의 쓰임과 다운캐스트, `ch20-avoid-over-optimizing`: 릴리스 빌드에서 얇은 껍데기가 줄이는 크기의 측정, `ch21-semver`: 공개 트레이트에 dyn 호환이 아닌 메서드를 더하는 문제. ch13 → `ch21-semver`: 호환되지 않는 변경의 전체 규칙. ch14 → `ch17-…`: 스레드와 `'static`, Part 10: 변성·HRTB·drop 검사. ch15 → `ch16-avoid-unsafe`: 자기 참조를 `unsafe`로 구현하는 일과 원시 포인터, `ch17-…`: `Arc<Mutex<T>>`, `ch18-…`: `RefCell` 패닉, `ch22-minimize-visibility`: 비공개 필드로 불변식 지키기.
 - 부록 A ch15: README가 소개하는 크레이트 버전(`slotmap` 1.1.1, `ouroboros` 0.18.5, `self_cell` 1.3.0, `yoke` 0.8.4)은 2026-11-19의 crates.io 기준입니다.
+
+- 부록 A ch16: unsafe 코드를 Miri로 확인하지 못했습니다. nightly와 Miri를 준비하면 `cargo +nightly miri run -p er-ch16-avoid-unsafe --example <이름>`(예제 5개)과 `cargo +nightly miri test -p er-ch16-avoid-unsafe --example 04_safe_wrapper`로 다시 확인하고, README 첫머리의 미검증 고지를 고칩니다. 소개한 크레이트 버전(`bytemuck` 1.25.2, `zerocopy` 0.8.63, `once_cell` 1.21.4)은 2026-11-19의 crates.io 기준입니다.
+- 부록 A ch16~ch20: 동시에 작성해 서로를 이름으로만 가리키는 곳이 있습니다(ch16 → `ch17-shared-state-parallelism`·`ch20-avoid-over-optimizing`, ch17 → `ch16-avoid-unsafe`·`ch18-dont-panic`, ch18 → `ch17-…`·`ch20-…`, ch20 → `ch17-…`). 35개가 모두 생긴 뒤 상대 링크로 바꿉니다.
+- 부록 A ch16 → `ch25-dependency-graph`: 의존성을 고르는 기준(유지 상태, RustSec 권고 확인). → `ch29-listen-to-clippy`: 린트 수준을 고르는 기준. → `ch30-beyond-unit-tests`·`ch31-tooling-ecosystem`: 퍼즈 테스트 같은 도구. → `ch34-ffi-boundaries`·`ch35-bindgen`: FFI 경계의 unsafe. ch17 → `ch32-continuous-integration`, `ch34-ffi-boundaries`, Part 10 `ch9-concurrency`. ch18 → `ch29-listen-to-clippy`(패닉을 막는 린트의 프로젝트 단위 설정), `ch30-beyond-unit-tests`, `ch32-continuous-integration`, `ch34-ffi-boundaries`(FFI 경계를 넘는 패닉), Part 3 `ch6-profiles-build-performance`(`panic` 프로필 설정), Part 9 `ch9-memory-panic-linkage`, Part 10 `ch8-unwinding`. ch19 → `ch21-semver`(지원할 툴체인 버전을 정하는 일), `ch28-macros-judiciously`(derive 매크로), Part 9 `ch2-macros`. ch20 → `ch30-beyond-unit-tests`(벤치마크 도구), `ch33-no-std`, Part 3 `ch6-profiles-build-performance`.
 
 ## 용어 메모
 
@@ -428,3 +440,5 @@
 | reflection / RTTI / downcast chain / capability query method / optional method | 리플렉션 / 실행 중 타입 정보(RTTI) / 다운캐스트 사슬 / 기능 조회 메서드 / 선택적 메서드 |
 | zero-copy / premature optimization / benchmark / hot path / median | 복사 없는(zero-copy) / 섣부른 최적화 / 벤치마크 / 뜨거운 경로 / 가운데 값 |
 | count (결정적인 횟수·바이트) / measure (경과 시간) | 세다 / 재다 |
+| soundness / sound / unsound | 건전성 / 건전한 / 건전하지 않은 |
+| safety comment (`// SAFETY:`) / precondition / safe wrapper / safety invariant | 안전성 주석 / 전제 조건 / 안전한 래퍼 / 안전성 불변식 |
