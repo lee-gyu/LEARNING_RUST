@@ -1,0 +1,13 @@
+# 일부러 컴파일에 실패하는 패키지입니다.
+# 기대하는 에러: E0004 1개, E0639 2개, E0638 1개 (src/main.rs의 머리말 참고)
+[package]
+name = "broken_shop"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+parcel = { path = "../parcel", version = "1.1" }
+
+# 바깥 워크스페이스에 들지 않는 독립 패키지로 둡니다.
+[workspace]

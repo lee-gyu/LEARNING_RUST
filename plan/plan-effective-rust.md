@@ -321,7 +321,7 @@ nightly와 Miri는 Part 10·11의 준비물이기도 하고, `PROGRESS.md` 후�
 | ✅ | 1 | Types | 9 | `/writing-guide appd-a ch1~ch9` | 추가 도구 없이 가능 |
 | ✅ | 2 | Traits | 4 | `… ch10~ch13` | 추가 도구 없이 가능 |
 | ✅ | 3 | Concepts | 7 | `… ch14~ch20` | 2026-11-19 완료. nightly를 설치하지 않아 ch16의 unsafe 코드는 Miri로 확인하지 못함(`PROGRESS.md` 후속 조치) |
-| 🔄 | 4 | Dependencies | 6 | `… ch21~ch26` | ch24·ch25는 ch21 뒤에. 대부분 `projects/` 실습. 추가 도구(`cargo-semver-checks`, `cargo-deny` 등)는 설치하지 않고 소개만 |
+| ✅ | 4 | Dependencies | 6 | `… ch21~ch26` | 2026-11-19 완료. 추가 도구(`cargo-semver-checks`, `cargo-deny` 등)는 설치하지 않고 소개만 함(`PROGRESS.md` 후속 조치) |
 | ⬜ | 5 | Tooling | 6 | `… ch27~ch32` | ch31은 ch27~ch30 뒤에, ch32는 마지막에(앞 챕터의 도구를 모음) |
 | ⬜ | 6 | Beyond Standard Rust | 3 | `… ch33~ch35` | ch35는 ch34 검증 뒤에 |
 | ⬜ | 7 | 마무리 | — | 메인 세션이 직접 | 8절 |

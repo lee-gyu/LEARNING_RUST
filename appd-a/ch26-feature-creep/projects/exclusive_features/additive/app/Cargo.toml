@@ -1,0 +1,10 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# broken/app과 똑같이 report와 invoice에 의존하고, datefmt의 기능은 직접 요청하지 않습니다.
+[dependencies]
+report = { path = "../report" }
+invoice = { path = "../invoice" }

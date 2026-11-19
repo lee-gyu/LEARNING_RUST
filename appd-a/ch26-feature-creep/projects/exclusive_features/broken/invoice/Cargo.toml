@@ -1,0 +1,11 @@
+[package]
+name = "invoice"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# iso와 korean을 함께 켤 수 없다는 것을 알고, 기본 기능(iso)을 끈 뒤 korean만 켭니다.
+# 하지만 default-features = false는 "나는 요청하지 않는다"는 뜻일 뿐입니다. 그래프의 다른
+# 크레이트가 기본 기능을 요청하면 datefmt는 결국 iso도 켠 채 빌드됩니다.
+[dependencies]
+datefmt = { path = "../datefmt", default-features = false, features = ["korean"] }

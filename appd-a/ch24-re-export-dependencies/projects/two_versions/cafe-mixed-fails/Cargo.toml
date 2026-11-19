@@ -1,0 +1,14 @@
+# 일부러 빌드에 실패하는 패키지입니다(E0308, E0277, 종료 코드 101). 챕터 README 4.1절과 4.2절을 보세요.
+# 앱이 의존하는 money 0.4의 값과 트레이트 구현을, money 0.3을 기대하는 receipt 1.0.0에 넘깁니다.
+[package]
+name = "cafe-mixed-fails"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+money = "0.4"
+receipt = { path = "../receipt-1.0.0" }
+
+# 상위 디렉터리의 워크스페이스와 분리합니다.
+[workspace]

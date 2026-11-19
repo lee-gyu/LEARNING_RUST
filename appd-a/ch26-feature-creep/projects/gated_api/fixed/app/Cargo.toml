@@ -1,0 +1,10 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# broken/app과 똑같이, 자기 용도로 notice의 attachments 기능을 켭니다.
+[dependencies]
+alerts = { path = "../alerts" }
+notice = { path = "../notice", features = ["attachments"] }

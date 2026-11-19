@@ -1,0 +1,9 @@
+[package]
+name = "notice"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[features]
+# 첨부 파일을 지원합니다. 켜면 메서드와 트레이트가 더해질 뿐, 이미 있던 공개 API는 그대로입니다.
+attachments = []

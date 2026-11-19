@@ -1,0 +1,22 @@
+[package]
+name = "er-ch26-feature-creep"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+# 예제 02~04가 쓰는 기능입니다. 기본으로는 아무 기능도 켜지 않습니다.
+#   cargo run -p er-ch26-feature-creep --example 02_additive_features --features fast-hash
+[features]
+fast-hash = []
+
+# 예제 03이 쓰는 사용자 정의 cfg 이름 `expensive_checks`를 알려 둡니다. 적지 않으면
+# `#[cfg(expensive_checks)]`마다 unexpected_cfgs 경고가 납니다. 값은 RUSTFLAGS로 넘깁니다.
+#   RUSTFLAGS='--cfg expensive_checks' cargo run -p er-ch26-feature-creep --example 03_unexpected_cfgs
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(expensive_checks)'] }
+
+# 기능이 켜졌을 때만 빌드하는 예제입니다. 기능 없이 `cargo build --examples`를 실행하면
+# 이 예제는 건너뜁니다.
+[[example]]
+name = "04_required_features"
+required-features = ["fast-hash"]

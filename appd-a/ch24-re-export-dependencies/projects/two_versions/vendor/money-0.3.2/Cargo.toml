@@ -1,0 +1,5 @@
+# 연습용 레지스트리(vendor/)에 게시된 것으로 치는 money 0.3.2입니다. 챕터 README 2.1절을 보세요.
+[package]
+name = "money"
+version = "0.3.2"
+edition = "2024"

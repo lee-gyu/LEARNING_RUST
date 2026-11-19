@@ -1,0 +1,14 @@
+# 일부러 빌드가 실패하는 워크스페이스입니다(ch26 README 2.3절).
+#
+# 서로 함께 켤 수 없는 기능 `iso`와 `korean`을 가진 datefmt를, report와 invoice가 각각 다른
+# 기능으로 씁니다. 두 크레이트는 따로 빌드하면 문제가 없지만, 둘을 함께 쓰는 app에서는 기능
+# 통합 때문에 datefmt가 두 기능을 모두 켠 채 한 번 빌드되어 실패합니다.
+#
+#   cargo test -p report             # 통과 (datefmt 기능: default, iso)
+#   cargo test -p invoice            # 통과 (datefmt 기능: korean)
+#   cargo build -p app               # 실패: compile_error!와 E0428
+#
+# 저장소 루트의 워크스페이스와 분리하려고 이 디렉터리를 따로 워크스페이스 루트로 둡니다.
+[workspace]
+members = ["datefmt", "report", "invoice", "app"]
+resolver = "3"

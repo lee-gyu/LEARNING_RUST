@@ -1,0 +1,15 @@
+# 중복 버전이 있는 판입니다(ch25 README 2.3절). 이 디렉터리에서 cargo tree -d를 실행해 보세요.
+[package]
+name = "planner"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 크레이트 이름의 -는 코드에서 _가 됩니다(tiny_date::Date).
+tiny-date = "2"
+remind-kit = "0.4" # 0.4.2는 안에서 tiny-date 1.x를 씁니다.
+cal-grid = "0.9"   # 0.9.1도 안에서 tiny-date 1.x를 씁니다.
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

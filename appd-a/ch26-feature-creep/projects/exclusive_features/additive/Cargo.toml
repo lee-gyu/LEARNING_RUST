@@ -1,0 +1,12 @@
+# broken/과 같은 구성(datefmt를 report와 invoice가 쓰고, app이 둘 다 씀)을
+# 더하기만 하는 기능으로 다시 설계한 워크스페이스입니다(ch26 README 2.3절).
+#
+#   cargo run -p app                              # 두 줄 모두 출력
+#   cargo tree -p app -f "{p} {f}"                # 통합된 기능 집합 보기
+#   cargo test --workspace --no-default-features  # 모든 조합에서 통과
+#   cargo test --workspace --all-features
+#
+# 저장소 루트의 워크스페이스와 분리하려고 이 디렉터리를 따로 워크스페이스 루트로 둡니다.
+[workspace]
+members = ["weekday", "datefmt", "report", "invoice", "app"]
+resolver = "3"

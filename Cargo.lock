@@ -290,6 +290,30 @@ name = "er-ch20-avoid-over-optimizing"
 version = "0.0.0"
 
 [[package]]
+name = "er-ch21-semver"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch22-minimize-visibility"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch23-avoid-wildcard-imports"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch24-re-export-dependencies"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch25-dependency-graph"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch26-feature-creep"
+version = "0.0.0"
+
+[[package]]
 name = "er-ch3-option-result-transforms"
 version = "0.0.0"
 

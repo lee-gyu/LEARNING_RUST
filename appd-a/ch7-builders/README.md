@@ -61,7 +61,7 @@ let swapped = Request::new(
     두 리터럴이 같은 값을 되풀이한 필드 5개: url, timeout, connect_timeout, max_redirects, gzip
 ```
 
-필드가 하나 늘면 이런 리터럴이 모두 E0063(``missing field `...` in initializer``)으로 컴파일되지 않습니다(Part 0 ch5 2.1절). 크레이트 안에서만 쓰는 타입이라면 컴파일러가 고칠 곳을 빠짐없이 알려 주는 셈이니 오히려 장점이지만, 공개 라이브러리라면 사용자의 코드를 깨는 변경이 됩니다(`ch21-semver`).
+필드가 하나 늘면 이런 리터럴이 모두 E0063(``missing field `...` in initializer``)으로 컴파일되지 않습니다(Part 0 ch5 2.1절). 크레이트 안에서만 쓰는 타입이라면 컴파일러가 고칠 곳을 빠짐없이 알려 주는 셈이니 오히려 장점이지만, 공개 라이브러리라면 사용자의 코드를 깨는 변경이 됩니다([ch21](../ch21-semver/README.md)).
 
 **따르지 않아도 되는 경우.** 인자가 두세 개이고 타입이 서로 달라서 바꿔 넣으면 컴파일되지 않는다면 위치 인자 생성자가 가장 간결합니다. 표준 라이브러리의 `Duration::new(secs: u64, nanos: u32)`나 예제 02의 `Request::new(method, url, options)`가 그런 경우입니다.
 
@@ -116,7 +116,7 @@ let create = Request::new(Method::Post, url, Options {
 2. **모든 필드가 공개다.** 비공개 필드가 하나라도 있으면 모듈 밖에서는 `..Default::default()`도 쓸 수 없습니다. 적지 않은 필드를 기준 값에서 옮겨 오는 일도 바깥에서 하는 것이기 때문입니다(4.1절, E0451).
 3. **필드 사이에 지킬 규칙이 없다.** 3번 구역에서 `연결 60s > 전체 10s`인 요청과 본문이 있는 GET 요청이 모두 아무 말 없이 만들어집니다. 필드가 공개라서 검사할 자리가 없습니다.
 
-검사를 `Request::new`에 넣어 `Result`를 돌려주게 할 수는 있습니다. 하지만 그러면 2.4절의 빌더를 옵션 구조체 모양으로 만든 셈이고, `Options`의 필드는 여전히 공개라서 내부 표현을 바꿀 수 없습니다. 필드를 비공개로 두는 이유는 `ch22-minimize-visibility`에서 다룹니다.
+검사를 `Request::new`에 넣어 `Result`를 돌려주게 할 수는 있습니다. 하지만 그러면 2.4절의 빌더를 옵션 구조체 모양으로 만든 셈이고, `Options`의 필드는 여전히 공개라서 내부 표현을 바꿀 수 없습니다. 필드를 비공개로 두는 이유는 [ch22](../ch22-minimize-visibility/README.md)에서 다룹니다.
 
 필드에 기본값을 직접 적는 문법(`struct Request { timeout: Duration = …, }`과 `Request { url, .. }`)이 있으면 "기본값이 없는 필드는 반드시 적게" 할 수 있지만, 1.100.0에서는 불안정 기능이라 ``error[E0658]: default values on fields are experimental``입니다.
 
@@ -336,7 +336,7 @@ fn validate(&self) -> Result<(), String> {
 
 예제 05의 검증 함수는 `self.timeout.unwrap_or(DEFAULT_TIMEOUT)`처럼 기본값을 직접 채워 넣고 비교합니다. 그래서 기본값을 상수로 빼 두고 `default = "DEFAULT_TIMEOUT"`과 검증 함수가 같은 상수를 쓰게 했습니다.
 
-**따르지 않아도 되는 경우.** 빌더가 한두 개뿐이거나 필수 값을 컴파일 시점에 확인하고 싶다면 손으로 씁니다. `derive_builder`는 절차적 매크로라서 빌드할 때 `derive_builder_macro`, `derive_builder_core`, `darling`, `syn`, `quote`, `proc-macro2` 등이 함께 컴파일됩니다(`cargo tree`로 확인). 의존성을 들일지의 판단은 `ch25-dependency-graph`에서, 매크로를 직접 쓰는 일은 `ch28-macros-judiciously`에서 다룹니다.
+**따르지 않아도 되는 경우.** 빌더가 한두 개뿐이거나 필수 값을 컴파일 시점에 확인하고 싶다면 손으로 씁니다. `derive_builder`는 절차적 매크로라서 빌드할 때 `derive_builder_macro`, `derive_builder_core`, `darling`, `syn`, `quote`, `proc-macro2` 등이 함께 컴파일됩니다(`cargo tree`로 확인). 의존성을 들일지의 판단은 [ch25](../ch25-dependency-graph/README.md)에서, 매크로를 직접 쓰는 일은 `ch28-macros-judiciously`에서 다룹니다.
 
 ### 2.7 고르는 순서
 

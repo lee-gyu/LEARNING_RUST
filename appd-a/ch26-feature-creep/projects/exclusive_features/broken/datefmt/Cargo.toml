@@ -1,0 +1,12 @@
+[package]
+name = "datefmt"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 비권장: 날짜를 어떤 모양으로 쓸지를 기능으로 "고르게" 했습니다.
+# 두 기능은 같은 함수 `render`의 서로 다른 판을 켜므로 함께 켤 수 없습니다.
+[features]
+default = ["iso"]
+iso = []    # render → "2026-11-19"
+korean = [] # render → "2026년 11월 19일"

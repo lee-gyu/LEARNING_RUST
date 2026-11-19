@@ -1,0 +1,14 @@
+# parcel을 쓰는 사용자 쪽 패키지입니다. 아래 버전 요구 사항을 바꿔 가며 Cargo가 고르는 버전을 봅니다.
+# 요구 사항을 바꾼 뒤에는 Cargo.lock을 지우고 실행합니다(README 3절).
+[package]
+name = "shop"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# "1.4"는 "1.4.x"가 아니라 ">=1.4.0, <2.0.0"입니다(캐럿 요구 사항).
+parcel = "1.4"
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

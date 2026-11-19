@@ -1,0 +1,14 @@
+# 중복 버전을 없앤 판입니다(ch25 README 2.3절). before와 비교해 보세요.
+[package]
+name = "planner"
+version = "0.2.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tiny-date = "2"
+remind-kit = "0.4.3" # 0.4.3부터 tiny-date 2.x를 씁니다. 호환 범위 안이라 cargo update로 올라옵니다.
+cal-grid = "0.10"    # 0.10.0부터 tiny-date 2.x를 씁니다. 호환 범위 밖이라 요구 사항을 고쳐야 합니다.
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

@@ -1,0 +1,15 @@
+# 일부러 의존성 해석에 실패하는 판입니다(ch25 README 2.3절).
+# chime-sys 0.2와 0.3은 호환되지 않는 두 버전이라 보통이면 함께 들어올 수 있지만,
+# 둘 다 links = "chime"을 선언했으므로 Cargo가 한 그래프에 넣기를 거부합니다.
+[package]
+name = "planner"
+version = "0.3.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+chime-sys = "0.3"
+ring-tone = "1" # 1.0.0은 chime-sys "0.2"를 요구합니다.
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

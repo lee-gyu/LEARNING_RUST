@@ -1,0 +1,11 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 자기 용도로 첨부 파일이 필요해서 notice의 attachments 기능을 켭니다.
+# 이 한 줄 때문에 같은 빌드에 있는 alerts가 깨집니다.
+[dependencies]
+alerts = { path = "../alerts" }
+notice = { path = "../notice", features = ["attachments"] }

@@ -1,0 +1,14 @@
+# receipt를 고칠 수 없는 앱 작성자의 대처입니다. cafe-mixed-fails와 같은 일을 하되,
+# receipt와 주고받는 값은 money 0.3으로 만듭니다.
+[package]
+name = "cafe-renamed"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+money = "0.4"
+# 같은 패키지 money를 0.3으로 한 번 더, money03이라는 이름으로 의존합니다(의존성 이름 바꾸기).
+# Cargo는 이것을 receipt의 money = "0.3"과 같은 0.3.2 하나로 합치므로 receipt가 기대하는 타입과 같아집니다.
+money03 = { package = "money", version = "0.3" }
+receipt = { path = "../receipt-1.0.0" }

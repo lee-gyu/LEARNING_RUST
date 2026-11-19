@@ -1,0 +1,17 @@
+[package]
+name = "datefmt"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 선택적 의존성: korean 기능이 켜질 때만 빌드됩니다.
+weekday = { path = "../weekday", optional = true }
+
+# 권장: 기능은 함수를 더하기만 합니다. 어떤 조합으로 켜도 있던 함수는 그대로입니다.
+# ISO 서식은 의존성이 필요 없으므로 기능으로 가리지 않고 늘 둡니다.
+[features]
+default = ["korean"]
+# korean 기능이 함수 `korean`과 의존성 weekday를 더합니다. "dep:weekday"라고 적었으므로
+# 의존성 이름과 같은 암묵적 기능 `weekday`는 생기지 않습니다(--features weekday는 에러).
+korean = ["dep:weekday"]

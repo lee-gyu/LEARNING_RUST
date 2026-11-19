@@ -1,0 +1,7 @@
+# 라이브러리 parcel과 그것을 쓰는 shop의 워크스페이스입니다.
+# #[non_exhaustive]는 정의한 크레이트 밖에서만 효과가 있으므로 두 크레이트로 나눴습니다.
+# broken_shop은 일부러 컴파일에 실패하는 패키지라 워크스페이스에서 뺐습니다(자기 [workspace]를 가짐).
+[workspace]
+members = ["parcel", "shop"]
+exclude = ["broken_shop"]
+resolver = "3"

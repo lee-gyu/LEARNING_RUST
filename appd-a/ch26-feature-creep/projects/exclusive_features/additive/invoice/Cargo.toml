@@ -1,0 +1,9 @@
+[package]
+name = "invoice"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 쓰는 기능(korean)은 기본 기능에 들어 있더라도 직접 적습니다.
+[dependencies]
+datefmt = { path = "../datefmt", features = ["korean"] }

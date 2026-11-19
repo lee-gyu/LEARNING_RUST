@@ -1,0 +1,8 @@
+# 이 프로젝트 안에서는 crates.io 대신 vendor/ 디렉터리를 레지스트리로 씁니다(연습용 레지스트리).
+# vendor/에는 money 0.3.2와 0.4.0이 들어 있어서, 네트워크 없이 "호환되지 않는 두 버전이 게시된 크레이트"를
+# 흉내 낼 수 있습니다. 상대 경로는 이 .cargo 디렉터리를 담은 디렉터리(projects/two_versions)를 기준으로 합니다.
+[source.crates-io]
+replace-with = "practice-registry"
+
+[source.practice-registry]
+directory = "vendor"

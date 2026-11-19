@@ -1,0 +1,11 @@
+# 저장소 루트의 워크스페이스와 따로 동작하는 작은 가상 워크스페이스입니다.
+# 멤버는 빌드에 성공하는 세 조합(사용자 코드 × templog 스냅숏)입니다.
+[workspace]
+members = ["glob-on-v1-0", "explicit-on-v1-0", "explicit-on-v1-1"]
+# templog 스냅숏 두 개는 패키지 이름이 같습니다(둘 다 `templog`). 멤버의 path 의존성은
+# 자동으로 멤버가 되는데, 한 워크스페이스에 같은 이름의 패키지가 둘이면
+# "two packages named `templog` in this workspace" 에러가 나므로 멤버에서 뺍니다.
+# 일부러 컴파일에 실패하는 glob-on-v1-1-fails도 여기에 넣지 않습니다(자기 [workspace]가 있음).
+exclude = ["templog-1.0.0", "templog-1.1.0"]
+# 가상 매니페스트는 에디션으로 리졸버 버전을 정할 수 없으므로 직접 적습니다.
+resolver = "3"

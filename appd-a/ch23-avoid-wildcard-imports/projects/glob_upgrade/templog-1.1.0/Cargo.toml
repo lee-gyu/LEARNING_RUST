@@ -1,0 +1,11 @@
+# 이 저장소에서 지어낸 온도 기록 라이브러리 templog의 1.1.0 스냅숏입니다.
+# 1.0.0에 공개 항목(Alert, Stats)을 더하기만 했으므로 시맨틱 버저닝으로는 마이너 변경입니다.
+[package]
+name = "templog"
+version = "1.1.0"
+edition = "2024"
+publish = false
+
+# 이 디렉터리에서 cargo를 직접 실행할 때(빌드, clippy, fmt 확인) 바깥 워크스페이스를
+# 찾아 올라가지 않도록 자기 워크스페이스를 둡니다.
+[workspace]

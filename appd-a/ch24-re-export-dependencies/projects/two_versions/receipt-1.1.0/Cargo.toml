@@ -1,0 +1,12 @@
+# 라이브러리 receipt의 1.1.0 스냅숏입니다. 1.0.0에 `pub use money;` 한 줄을 더했습니다(공개 항목 추가 = 마이너).
+# receipt-1.0.0과 패키지 이름이 같아 한 워크스페이스의 멤버가 될 수 없으므로 자기 [workspace]를 가집니다.
+[package]
+name = "receipt"
+version = "1.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+money = "0.3"
+
+[workspace]

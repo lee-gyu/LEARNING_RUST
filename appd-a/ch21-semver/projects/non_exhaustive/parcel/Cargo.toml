@@ -1,0 +1,9 @@
+# 가상의 택배 라이브러리 parcel 1.1.0입니다.
+[package]
+name = "parcel"
+version = "1.1.0"
+edition = "2024"
+# 최소 지원 Rust 버전(MSRV). 1.85는 2024 에디션을 쓸 수 있는 가장 낮은 버전입니다.
+# clippy의 incompatible_msrv 린트가 이 값보다 나중에 안정화된 표준 라이브러리 API를 잡아 줍니다(README 2.7절).
+rust-version = "1.85"
+publish = false

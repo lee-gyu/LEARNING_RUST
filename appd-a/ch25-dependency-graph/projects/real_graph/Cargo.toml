@@ -1,0 +1,15 @@
+# crates.io의 실제 크레이트 셋에 의존하는 작은 애플리케이션입니다(ch25 README 2.4~2.6절).
+# 함께 둔 Cargo.lock은 2026-11-19에 만든 것입니다. 지우거나 cargo update를 실행하면 그날의 crates.io를 다시 보고 고릅니다.
+[package]
+name = "ticket_desk"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+anyhow = "1"            # ch4: 애플리케이션의 에러 타입
+derive_builder = "0.20" # ch7: 빌더를 만드는 derive 매크로
+thiserror = "2"         # ch4: 에러 타입의 반복 코드를 줄이는 derive 매크로
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

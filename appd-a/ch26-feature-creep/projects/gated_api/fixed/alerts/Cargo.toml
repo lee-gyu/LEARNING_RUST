@@ -1,0 +1,9 @@
+[package]
+name = "alerts"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 첨부 파일이 필요 없으므로 notice의 기능을 켜지 않습니다(broken/과 같음).
+[dependencies]
+notice = { path = "../notice" }

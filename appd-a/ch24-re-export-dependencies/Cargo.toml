@@ -1,0 +1,5 @@
+[package]
+name = "er-ch24-re-export-dependencies"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

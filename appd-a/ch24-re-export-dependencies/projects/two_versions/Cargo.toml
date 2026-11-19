@@ -1,0 +1,10 @@
+# 의존 크레이트 money의 호환되지 않는 두 버전(0.3.2, 0.4.0)이 한 프로그램에 함께 들어오는 상황을 재현합니다.
+# money는 .cargo/config.toml이 가리키는 연습용 레지스트리(vendor/)에서 오고,
+# 라이브러리 receipt의 두 릴리스(1.0.0, 1.1.0)는 path 의존성 스냅숏입니다. 챕터 README 3절을 보세요.
+[workspace]
+resolver = "3"
+# 빌드에 성공하는 카페 앱 셋만 멤버입니다.
+members = ["cafe-separate", "cafe-renamed", "cafe-re-exported"]
+# receipt 스냅숏 둘은 패키지 이름이 같아 함께 멤버가 될 수 없고, cafe-mixed-fails는 일부러 실패하므로 뺍니다.
+# 셋은 각자 빈 [workspace]를 가집니다.
+exclude = ["receipt-1.0.0", "receipt-1.1.0", "cafe-mixed-fails"]

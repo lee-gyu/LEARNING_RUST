@@ -1,0 +1,16 @@
+# 일부러 의존성 해석에 실패하는 판입니다(ch25 README 2.2절).
+# after와 같은데 tiny-date를 =2.0.0으로 고정했습니다. remind-kit 0.4.3은 tiny-date "2.1"을 요구하므로
+# 두 요구 사항을 함께 만족하는 버전이 없습니다. cargo build를 실행하면 failed to select a version으로 멈춥니다.
+[package]
+name = "planner"
+version = "0.2.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tiny-date = "=2.0.0" # 비권장: 버전 고정
+remind-kit = "0.4.3"
+cal-grid = "0.10"
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

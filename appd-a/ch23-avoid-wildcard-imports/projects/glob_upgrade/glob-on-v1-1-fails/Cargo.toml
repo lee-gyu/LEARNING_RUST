@@ -1,0 +1,20 @@
+# 글롭 판 사용자 코드(shared/glob_import.rs) × templog 1.1.0 → 일부러 실패(E0034)
+[package]
+name = "glob-on-v1-1-fails"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 소스는 패키지 밖의 shared/에 있고, 다른 패키지와 같은 파일을 함께 씁니다.
+[[bin]]
+name = "glob-on-v1-1-fails"
+path = "../shared/glob_import.rs"
+
+[dependencies]
+# path 의존성: crates.io 대신 디스크의 디렉터리에서 크레이트를 가져옵니다.
+# 어느 스냅숏을 가리키는지만 패키지마다 다르고, 코드에서는 모두 `templog`로 씁니다.
+templog = { path = "../templog-1.1.0" }
+
+# 빌드가 실패하는 패키지라서 바깥 워크스페이스(../Cargo.toml)의 멤버로 두지 않습니다.
+# 이 디렉터리에서 cargo를 실행할 때 바깥 워크스페이스를 찾지 않도록 자기 워크스페이스를 둡니다.
+[workspace]

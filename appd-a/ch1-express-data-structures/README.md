@@ -164,7 +164,7 @@ count(TEXT, WORD, Case::Insensitive, Scope::WholeWord) // 3
 
 clippy에는 `bool` 매개변수가 많은 함수를 잡는 `fn_params_excessive_bools`가 있지만, pedantic 그룹이라 기본으로 꺼져 있고 켜도 `bool`이 3개를 넘을 때만 경고합니다. 이 예제의 `count_flags`처럼 두 개인 경우는 사람이 판단해야 합니다.
 
-공개 라이브러리의 열거형에 배리언트를 추가하면 사용자 코드의 `match`도 E0004로 깨지므로 호환되지 않는 변경이 됩니다. 이 문제와 `#[non_exhaustive]` 속성은 `ch21`(Item 21)에서 다룹니다.
+공개 라이브러리의 열거형에 배리언트를 추가하면 사용자 코드의 `match`도 E0004로 깨지므로 호환되지 않는 변경이 됩니다. 이 문제와 `#[non_exhaustive]` 속성은 [ch21](../ch21-semver/README.md)(Item 21)에서 다룹니다.
 
 → [`examples/03_bool_args_to_enum.rs`](examples/03_bool_args_to_enum.rs)
 
@@ -677,6 +677,6 @@ fn average(scores: &[u32]) -> f64 {
   - [`u16`](https://doc.rust-lang.org/std/primitive.u16.html), [`i64`](https://doc.rust-lang.org/std/primitive.i64.html): 정수 타입의 범위와 `try_from` 등의 구현
   - [`char::from_u32`](https://doc.rust-lang.org/std/primitive.char.html#method.from_u32): `u32`에서 `char`로 가는 변환이 `Option`을 돌려주는 이유
   - [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), [`Result`](https://doc.rust-lang.org/std/result/enum.Result.html)
-- 레퍼런스: [The `non_exhaustive` attribute](https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute) — 공개 열거형에 배리언트를 추가할 수 있게 하는 속성(`ch21`에서 다룸)
+- 레퍼런스: [The `non_exhaustive` attribute](https://doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute) — 공개 열거형에 배리언트를 추가할 수 있게 하는 속성([ch21](../ch21-semver/README.md)에서 다룸)
 - 위키백과: [Algebraic data type](https://en.wikipedia.org/wiki/Algebraic_data_type) — 곱 타입과 합 타입
 - 에러 설명: `rustc --explain E0308`, `rustc --explain E0004`

@@ -63,4 +63,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch19-avoid-reflection](ch19-avoid-reflection/) | Item 19 | `type_name`은 진단에만, 타입별 처리는 다운캐스트 사슬 대신 트레이트 메서드로, "이 기능도 있나?"는 트레이트로 묻기, 다운캐스트가 필요하면 `Any` 슈퍼트레이트와 업캐스트, 필드를 훑는 코드는 derive에 |
 | [ch20-avoid-over-optimizing](ch20-avoid-over-optimizing/) | Item 20 | 상태로 보관하는 타입은 데이터를 소유하기, 보이는 복사를 지우기 전에 세기, 큰 데이터는 라이프타임 대신 `Rc`/`Arc`로 공유 소유, 바꾸기 전에 재고 측정이 가리키는 곳만 바꾸기 |
 
+### Dependencies (책 4장, Item 21~26)
+
+| 챕터 | Item | 주제 |
+| --- | --- | --- |
+| [ch21-semver](ch21-semver/) | Item 21 | 버전 번호의 약속과 0.x 규칙, 요구 사항은 캐럿으로(`version_requirements`로 Cargo의 선택 확인), 더하기처럼 보여도 깨는 변경(포괄 구현, 제네릭 기본 메서드, 바운드 조이기, 구현 떼기), `derive(Ord)` 순서 같은 동작 변경, `#[non_exhaustive]`는 처음부터(`non_exhaustive`), deprecated로 예고한 뒤 지우고 타입으로 드러내기, MSRV와 `rust-version` |
+| [ch22-minimize-visibility](ch22-minimize-visibility/) | Item 22 | 공개 범위는 약속의 범위, 가시성 단계를 쓰는 곳까지만 열기(`pub(super)`·`pub(in …)`·`pub(crate)`), 필드는 비공개로 두고 메서드로 열어 내부 표현 바꾸기, 핸들의 필드 감추기, 하위 모듈은 감추고 `pub use`로 공개 경로 정하기, `dead_code`·`unreachable_pub`·`private_interfaces`로 점검 |
+| [ch23-avoid-wildcard-imports](ch23-avoid-wildcard-imports/) | Item 23 | 글롭으로 들어온 이름이 지는 경우와 이기는 경우(같은 스코프, 함수 본문, 프렐류드), 새 트레이트가 부르는 E0034와 조용한 호출 전환, 통제하지 않는 크레이트는 명시적으로 가져오기, 써도 되는 글롭(테스트의 `use super::*`, `pub use`, 프렐류드), 글롭을 남길 때의 `=` 버전 고정(`glob_upgrade`) |
+| [ch24-re-export-dependencies](ch24-re-export-dependencies/) | Item 24 | 같은 크레이트의 두 버전이 한 그래프에 들어오면 이름이 같아도 다른 타입, API에 타입이 드러나는 의존성은 `pub use`로 재내보내기(타입만 또는 크레이트 전체), 라이브러리를 고칠 수 없을 때의 앱 쪽 대처(`package` 이름 바꾸기), 드러내기 전에 뉴타입으로 감출 수 있는지 따지기(`two_versions`) |
+| [ch25-dependency-graph](ch25-dependency-graph/) | Item 25 | Cargo가 버전을 고르는 규칙, 버전 고정 대신 캐럿 요구 사항과 `Cargo.lock`, 중복 버전을 `cargo tree -d`·`-i`로 찾아 줄이기(`planner`), `Cargo.lock`을 커밋하고 `cargo update`로 정해 둔 때에 올리기, 점검 도구(`cargo::unused_dependencies`, `cargo-deny` 설정 예시), 의존성을 들이기 전에 비용 따지기(`real_graph`) |
+| [ch26-feature-creep](ch26-feature-creep/) | Item 26 | `cfg` 속성과 `cfg!`·`cfg_select!`, 기능은 더하기만(기능 통합으로 깨지는 배타적인 기능 `exclusive_features`), 공개 필드와 트레이트 메서드를 기능으로 가리지 않기(`gated_api`), 기능 이름의 오타를 잡는 `unexpected_cfgs`와 `check-cfg`, 기능을 늘리기 전에 조합 수 세기 |
+
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

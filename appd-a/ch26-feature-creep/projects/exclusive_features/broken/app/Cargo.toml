@@ -1,0 +1,11 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# app은 datefmt의 기능을 하나도 직접 요청하지 않습니다. 그래도 report(default → iso)와
+# invoice(korean)의 요청이 합쳐져 datefmt는 iso와 korean을 모두 켠 채 빌드됩니다.
+[dependencies]
+report = { path = "../report" }
+invoice = { path = "../invoice" }

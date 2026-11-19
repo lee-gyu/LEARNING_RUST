@@ -1,0 +1,11 @@
+# broken/과 같은 구성(app이 notice의 attachments를 켜고, alerts는 그 기능을 모름)에서
+# 공개 API를 기능으로 가리지 않게 다시 설계한 워크스페이스입니다(ch26 README 2.4절).
+#
+#   cargo run -p app                              # 두 줄 출력
+#   cargo test --workspace --no-default-features  # 모든 조합에서 통과
+#   cargo test --workspace --all-features
+#
+# 저장소 루트의 워크스페이스와 분리하려고 이 디렉터리를 따로 워크스페이스 루트로 둡니다.
+[workspace]
+members = ["notice", "alerts", "app"]
+resolver = "3"

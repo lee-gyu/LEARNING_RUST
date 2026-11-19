@@ -1,0 +1,10 @@
+# parcel을 쓰는 사용자 쪽 패키지입니다.
+[package]
+name = "shop"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# path 의존성에 version을 함께 적으면 Cargo가 ../parcel의 버전(1.1.0)이 "1.1"에 맞는지 검사합니다.
+parcel = { path = "../parcel", version = "1.1" }

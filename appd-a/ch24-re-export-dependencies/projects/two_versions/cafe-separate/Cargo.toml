@@ -1,0 +1,11 @@
+# receipt 1.0.0(money 0.3에 의존)과 money 0.4에 함께 의존하는 카페 앱입니다.
+# money 값을 receipt에 넘기지 않으므로 두 버전이 공존해도 빌드됩니다.
+[package]
+name = "cafe-separate"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+money = "0.4"
+receipt = { path = "../receipt-1.0.0" }

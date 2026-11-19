@@ -1,0 +1,13 @@
+# 일부러 빌드가 실패하는 워크스페이스입니다(ch26 README 2.4절).
+#
+# notice는 공개 필드와 트레이트 메서드를 `attachments` 기능으로 가렸습니다. alerts는 그 기능을
+# 모르는 채로 notice를 쓰고, 혼자서는 잘 빌드됩니다. app이 자기 용도로 `attachments`를 켜는
+# 순간, app이 고칠 수 없는 alerts 안에서 E0063과 E0046이 납니다.
+#
+#   cargo test -p alerts     # 통과 (notice 기능: 없음)
+#   cargo build -p app       # 실패: alerts에서 E0063, E0046
+#
+# 저장소 루트의 워크스페이스와 분리하려고 이 디렉터리를 따로 워크스페이스 루트로 둡니다.
+[workspace]
+members = ["notice", "alerts", "app"]
+resolver = "3"

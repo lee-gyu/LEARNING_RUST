@@ -1,0 +1,11 @@
+# money를 재내보내는 receipt 1.1.0을 쓰는 카페 앱입니다.
+# receipt와 주고받는 값은 receipt::money(0.3)로, 앱 자신의 일은 money(0.4)로 합니다.
+[package]
+name = "cafe-re-exported"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+money = "0.4"
+receipt = { path = "../receipt-1.1.0" }

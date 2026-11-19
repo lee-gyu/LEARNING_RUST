@@ -1,0 +1,9 @@
+[package]
+name = "notice"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[features]
+# 첨부 파일을 지원합니다. 켜면 공개 필드 하나와 트레이트 메서드 하나가 생깁니다(비권장).
+attachments = []

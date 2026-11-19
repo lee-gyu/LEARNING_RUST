@@ -1,0 +1,11 @@
+[package]
+name = "report"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# ISO 서식만 쓰므로 기본 기능(korean)을 끄고, weekday 의존성도 끌어오지 않습니다.
+# app처럼 다른 크레이트가 korean을 켜는 빌드에서는 함께 켜지지만, 기능이 더하기만 하므로
+# 이 크레이트가 쓰는 `iso`는 그대로입니다.
+[dependencies]
+datefmt = { path = "../datefmt", default-features = false }

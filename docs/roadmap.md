@@ -390,12 +390,12 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch21-semver` | 시맨틱 버저닝의 약속, 크레이트 작성자가 지킬 것(무엇이 비호환 변경인가), 사용자가 알 것(버전 요구 사항, `Cargo.lock`, MSRV) | 라이브러리와 사용자 크레이트 한 쌍으로 호환 변경과 미묘한 비호환 변경 재현(`projects/`) | Item 21 (`semver`) |
-| ⬜ | `ch22-minimize-visibility` | 가시성 단계(`pub`, `pub(crate)`, `pub(super)`, `pub(in …)`), 공개한 것은 되돌리기 어려움, 비공개 필드와 접근자 | 모듈 안에서 가시성 단계 비교, 비공개 필드 덕분에 내부 표현을 바꿔도 사용자 코드가 그대로인 예 | Item 22 (`visibility`) |
-| ⬜ | `ch23-avoid-wildcard-imports` | 와일드카드 가져오기가 의존성 업데이트에서 이름 충돌을 일으키는 원리, 허용되는 예외(프렐류드, 테스트의 `use super::*`) | 의존 크레이트에 이름이 추가되면 깨지는 사용자 코드(`projects/`), 예외 사례 | Item 23 (`wildcard`) |
-| ⬜ | `ch24-re-export-dependencies` | API에 드러난 의존성 타입과 버전 불일치, `pub use`로 의존성 재내보내기 | 같은 크레이트의 두 버전이 섞여 타입이 맞지 않는 상황과 재내보내기로 해결(`projects/`) | Item 24 (`re-export`) |
-| ⬜ | `ch25-dependency-graph` | 버전 지정 방식, 중복 버전, `cargo tree`와 `cargo update`, 의존성 점검 도구, 무엇에 의존할지 판단하는 기준 | `cargo tree -d`/`-i` 읽기, 중복 버전을 만들고 해소(`projects/`), 점검 도구 설정 | Item 25 (`dep-graph`) |
-| ⬜ | `ch26-feature-creep` | `cfg` 조건부 컴파일, 기능은 더하기만 해야 하는 이유(기능 통합), 공개 필드·트레이트 메서드를 기능으로 가리면 안 되는 이유, 조합 수와 CI | 가산적이지 않은 기능이 통합으로 깨지는 재현, 기능으로 가린 필드가 사용자 코드를 깨는 예(`projects/`) | Item 26 (`features`) |
+| ✅ | `ch21-semver` | 시맨틱 버저닝의 약속, 크레이트 작성자가 지킬 것(무엇이 비호환 변경인가), 사용자가 알 것(버전 요구 사항, `Cargo.lock`, MSRV) | 라이브러리와 사용자 크레이트 한 쌍으로 호환 변경과 미묘한 비호환 변경 재현(`projects/`) | Item 21 (`semver`) |
+| ✅ | `ch22-minimize-visibility` | 가시성 단계(`pub`, `pub(crate)`, `pub(super)`, `pub(in …)`), 공개한 것은 되돌리기 어려움, 비공개 필드와 접근자 | 모듈 안에서 가시성 단계 비교, 비공개 필드 덕분에 내부 표현을 바꿔도 사용자 코드가 그대로인 예 | Item 22 (`visibility`) |
+| ✅ | `ch23-avoid-wildcard-imports` | 와일드카드 가져오기가 의존성 업데이트에서 이름 충돌을 일으키는 원리, 허용되는 예외(프렐류드, 테스트의 `use super::*`) | 의존 크레이트에 이름이 추가되면 깨지는 사용자 코드(`projects/`), 예외 사례 | Item 23 (`wildcard`) |
+| ✅ | `ch24-re-export-dependencies` | API에 드러난 의존성 타입과 버전 불일치, `pub use`로 의존성 재내보내기 | 같은 크레이트의 두 버전이 섞여 타입이 맞지 않는 상황과 재내보내기로 해결(`projects/`) | Item 24 (`re-export`) |
+| ✅ | `ch25-dependency-graph` | 버전 지정 방식, 중복 버전, `cargo tree`와 `cargo update`, 의존성 점검 도구, 무엇에 의존할지 판단하는 기준 | `cargo tree -d`/`-i` 읽기, 중복 버전을 만들고 해소(`projects/`), 점검 도구 설정 | Item 25 (`dep-graph`) |
+| ✅ | `ch26-feature-creep` | `cfg` 조건부 컴파일, 기능은 더하기만 해야 하는 이유(기능 통합), 공개 필드·트레이트 메서드를 기능으로 가리면 안 되는 이유, 조합 수와 CI | 가산적이지 않은 기능이 통합으로 깨지는 재현, 기능으로 가린 필드가 사용자 코드를 깨는 예(`projects/`) | Item 26 (`features`) |
 
 #### Tooling — ch27~ch32
 
@@ -436,4 +436,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **40 / 109 챕터** |
-| 부록 A. Effective Rust (합계와 별도) | 20 / 35 |
+| 부록 A. Effective Rust (합계와 별도) | 26 / 35 |
