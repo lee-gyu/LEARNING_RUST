@@ -1,0 +1,8 @@
+[package]
+name = "idgen_2021"
+version = "0.1.0"
+# 이 크레이트의 소스는 2021 에디션의 문법으로 읽힙니다.
+edition = "2021"
+publish = false
+
+[dependencies]

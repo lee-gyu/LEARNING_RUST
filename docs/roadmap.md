@@ -179,12 +179,12 @@ publish.workspace = true
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch1-editions-overview` | 에디션의 목적과 호환성 보장, `edition` 필드, 에디션 간 크레이트 혼용 | 에디션이 다른 두 크레이트를 함께 링크하는 프로젝트 | Edition Guide 1, 1.1 |
-| ⬜ | `ch2-rust-2015-2018` | 2015 기준선, 경로·모듈 시스템 변경, 익명 트레이트 매개변수, 새 키워드(`async`/`await`/`dyn`), raw 식별자 | 같은 코드의 2015판/2018판 비교 | Edition Guide 2, 3 |
-| ⬜ | `ch3-rust-2021` | prelude 추가, 기능 리졸버 v2, 배열 `IntoIterator`, 클로저 분리 캡처, 패닉 매크로 일관성, 예약 문법, C 문자열 리터럴 | 2018판/2021판 동작 차이 비교 | Edition Guide 4 |
-| ⬜ | `ch4-rust-2024-language` | RPIT 라이프타임 캡처, `if let`·꼬리 표현식 임시값 범위, let 체인, `unsafe extern`, unsafe 속성, `static mut` 참조 금지, never 타입 폴백, `gen` 키워드 | 2021판/2024판 동작 차이 비교 | Edition Guide 5.1 |
-| ⬜ | `ch5-rust-2024-ecosystem` | prelude 변경, `Box<[T]>` `IntoIterator`, 새로 unsafe가 된 함수, rust-version 인식 리졸버, rustdoc 통합 테스트, rustfmt 스타일 에디션 | 표준 라이브러리·Cargo·rustfmt 변경 확인 | Edition Guide 5.2~5.5 |
-| ⬜ | `ch6-migration-practice` | `cargo fix --edition`, 수동 수정이 필요한 경우, 고급 마이그레이션 | 2018 프로젝트를 2021 → 2024로 단계별 이전 | Edition Guide 1.2, 1.3 |
+| ✅ | `ch1-editions-overview` | 에디션의 목적과 호환성 보장, `edition` 필드, 에디션 간 크레이트 혼용 | 에디션이 다른 두 크레이트를 함께 링크하는 프로젝트 | Edition Guide 1, 1.1 |
+| ✅ | `ch2-rust-2015-2018` | 2015 기준선, 경로·모듈 시스템 변경, 익명 트레이트 매개변수, 새 키워드(`async`/`await`/`dyn`), raw 식별자 | 같은 코드의 2015판/2018판 비교 | Edition Guide 2, 3 |
+| ✅ | `ch3-rust-2021` | prelude 추가, 기능 리졸버 v2, 배열 `IntoIterator`, 클로저 분리 캡처, 패닉 매크로 일관성, 예약 문법, C 문자열 리터럴 | 2018판/2021판 동작 차이 비교 | Edition Guide 4 |
+| ✅ | `ch4-rust-2024-language` | RPIT 라이프타임 캡처, `if let`·꼬리 표현식 임시값 범위, let 체인, `unsafe extern`, unsafe 속성, `static mut` 참조 금지, never 타입 폴백, `gen` 키워드 | 2021판/2024판 동작 차이 비교 | Edition Guide 5.1 |
+| ✅ | `ch5-rust-2024-ecosystem` | prelude 변경, `Box<[T]>` `IntoIterator`, 새로 unsafe가 된 함수, rust-version 인식 리졸버, rustdoc 통합 테스트, rustfmt 스타일 에디션 | 표준 라이브러리·Cargo·rustfmt 변경 확인 | Edition Guide 5.2~5.5 |
+| ✅ | `ch6-migration-practice` | `cargo fix --edition`, 수동 수정이 필요한 경우, 고급 마이그레이션 | 2018 프로젝트를 2021 → 2024로 단계별 이전 | Edition Guide 1.2, 1.3 |
 
 ### Part 3. Cargo — `part3-cargo/`
 
@@ -335,7 +335,7 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | 사전 작업 | 3 / 3 |
 | Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 14 / 14 |
-| Part 2. 에디션 | 0 / 6 |
+| Part 2. 에디션 | 6 / 6 |
 | Part 3. Cargo | 0 / 11 |
 | Part 4. rustdoc | 0 / 4 |
 | Part 5. rustc | 0 / 7 |
@@ -345,4 +345,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 9. 레퍼런스 | 0 / 10 |
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
-| **합계** | **34 / 109 챕터** |
+| **합계** | **40 / 109 챕터** |

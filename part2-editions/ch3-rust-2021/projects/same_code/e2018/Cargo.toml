@@ -1,0 +1,13 @@
+[package]
+name = "e2018"
+version = "0.1.0"
+edition = "2018"
+
+# e2018과 e2021은 같은 소스 파일 하나를 실행 파일로 컴파일합니다.
+# 두 Cargo.toml은 패키지·실행 파일 이름과 edition만 다릅니다.
+[[bin]]
+name = "e2018"
+path = "../shared/main.rs"
+
+[dependencies]
+macros2018 = { path = "../macros2018" }

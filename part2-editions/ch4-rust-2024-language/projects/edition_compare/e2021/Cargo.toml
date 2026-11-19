@@ -1,0 +1,29 @@
+# shared/ 아래의 소스 파일을 2021 에디션으로 컴파일하는 패키지입니다.
+# e2024/Cargo.toml과 에디션, 실행 파일 이름 끝의 숫자만 다릅니다.
+# 실행 파일 이름 끝에 _2021을 붙인 것은 두 패키지의 실행 파일이 같은 target/ 디렉터리에서
+# 겹치지 않게 하려는 것입니다.
+[package]
+name = "e2021"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "if_let_scope_2021"
+path = "../shared/if_let_scope.rs"
+
+[[bin]]
+name = "tail_expr_scope_2021"
+path = "../shared/tail_expr_scope.rs"
+
+[[bin]]
+name = "macro_expr_2021"
+path = "../shared/macro_expr.rs"
+
+[[bin]]
+name = "never_fallback_2021"
+path = "../shared/never_fallback.rs"
+
+[[bin]]
+name = "new_syntax_2021"
+path = "../shared/new_syntax.rs"

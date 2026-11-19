@@ -1,0 +1,96 @@
+diff --git a/src/book.rs b/src/book.rs
+index a91a141..75dae69 100644
+--- a/src/book.rs
++++ b/src/book.rs
+@@ -100,7 +100,7 @@ impl Ledger {
+     pub fn push_line(&mut self, line: &str) -> u32 {
+         match self.add_line(line) {
+             Ok(id) => id,
+-            Err(_) => panic!("잘못된 줄: {line}"),
++            Err(_) => panic!("{}", "잘못된 줄: {line}"),
+         }
+     }
+ 
+@@ -135,12 +135,12 @@ impl Ledger {
+ 
+     /// 월말 정산 보고서. 만드는 동안 감사 기록에 "정산" 구간을 남깁니다.
+     #[allow(bare_trait_objects)]
+-    pub fn close_month(&self, style: &Style) -> String {
++    pub fn close_month(&self, style: &dyn Style) -> String {
+         let job = Job {
+             title: format!("{}건 정산", self.entries.len()),
+             _scope: self.audit.enter("정산"),
+         };
+-        let header = move || format!("== {} ==", job.title);
++        let header = move || { let _ = &job; format!("== {} ==", job.title) };
+         let body = report::render(self, style);
+         self.audit.note("보고서 완성");
+         format!("{}\n{}", header(), body)
+diff --git a/src/csv.rs b/src/csv.rs
+index 72553e7..b3c2b37 100644
+--- a/src/csv.rs
++++ b/src/csv.rs
+@@ -7,7 +7,7 @@ use crate::book::Ledger;
+ /// 항목마다 `카테고리,금액,메모` 한 줄씩 씁니다.
+ // 2018 에디션 시절의 `dyn` 없는 트레이트 객체입니다(경고를 막아 둠).
+ #[allow(bare_trait_objects)]
+-pub fn write_csv(book: &Ledger, out: &mut io::Write) -> io::Result<()> {
++pub fn write_csv(book: &Ledger, out: &mut dyn io::Write) -> io::Result<()> {
+     writeln!(out, "category,amount,memo")?;
+     for e in book.entries() {
+         writeln!(out, "{},{},{}", e.category, e.amount, e.memo)?;
+diff --git a/src/entry.rs b/src/entry.rs
+index 078838c..d056bd1 100644
+--- a/src/entry.rs
++++ b/src/entry.rs
+@@ -38,7 +38,7 @@ impl TryFrom<&str> for Category {
+     #[allow(array_into_iter, clippy::into_iter_on_ref)]
+     fn try_from(name: &str) -> Result<Category, String> {
+         CATEGORIES
+-            .into_iter()
++            .iter()
+             .find(|c| c.name() == name)
+             .copied()
+             .ok_or_else(|| format!("모르는 카테고리: {}", name))
+diff --git a/src/report.rs b/src/report.rs
+index 18855af..9f2331f 100644
+--- a/src/report.rs
++++ b/src/report.rs
+@@ -33,7 +33,7 @@ impl Style for Bar {
+ /// 이름으로 스타일을 고릅니다. 모르는 이름이면 `Plain`입니다.
+ // 2018 에디션 시절의 `dyn` 없는 트레이트 객체입니다(경고를 막아 둠).
+ #[allow(bare_trait_objects)]
+-pub fn style_for(name: &str) -> Box<Style> {
++pub fn style_for(name: &str) -> Box<dyn Style> {
+     match name {
+         "bar" => Box::new(Bar),
+         _ => Box::new(Plain),
+@@ -45,8 +45,8 @@ pub fn style_for(name: &str) -> Box<Style> {
+ #[allow(ellipsis_inclusive_range_patterns)]
+ pub fn grade(total: i64) -> &'static str {
+     match total {
+-        0...99_999 => "알뜰",
+-        100_000...499_999 => "보통",
++        0..=99_999 => "알뜰",
++        100_000..=499_999 => "보통",
+         _ if total < 0 => "환불 초과",
+         _ => "과소비",
+     }
+@@ -54,7 +54,7 @@ pub fn grade(total: i64) -> &'static str {
+ 
+ /// 카테고리별 합계와 비율, 총액을 보고서로 만듭니다.
+ #[allow(bare_trait_objects)]
+-pub fn render(book: &Ledger, style: &Style) -> String {
++pub fn render(book: &Ledger, style: &dyn Style) -> String {
+     let total = book.balance();
+     let mut lines = Vec::new();
+     for &c in CATEGORIES.iter() {
+@@ -66,7 +66,7 @@ pub fn render(book: &Ledger, style: &Style) -> String {
+         let share = if total == 0 {
+             None
+         } else {
+-            (sum * 100 / total).try_into().ok()
++            Percent::try_into(&(sum * 100 / total)).ok()
+         };
+         lines.push(style.line(c.name(), sum, share));
+     }

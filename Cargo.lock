@@ -799,6 +799,30 @@ name = "p1-ch9-io-fs-path"
 version = "0.0.0"
 
 [[package]]
+name = "p2-ch1-editions-overview"
+version = "0.0.0"
+
+[[package]]
+name = "p2-ch2-rust-2015-2018"
+version = "0.0.0"
+
+[[package]]
+name = "p2-ch3-rust-2021"
+version = "0.0.0"
+
+[[package]]
+name = "p2-ch4-rust-2024-language"
+version = "0.0.0"
+
+[[package]]
+name = "p2-ch5-rust-2024-ecosystem"
+version = "0.0.0"
+
+[[package]]
+name = "p2-ch6-migration-practice"
+version = "0.0.0"
+
+[[package]]
 name = "parking_lot"
 version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"

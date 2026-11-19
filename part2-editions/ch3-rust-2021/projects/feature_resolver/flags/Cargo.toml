@@ -1,0 +1,12 @@
+[package]
+name = "flags"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+# 기본으로는 꺼져 있는 기능 하나입니다.
+verbose = []
+
+# 이 디렉터리에서 따로 빌드·검사할 수 있도록 스스로 워크스페이스 루트가 됩니다.
+# app2018, app2021의 의존성으로 쓰일 때는 이 테이블이 무시됩니다.
+[workspace]

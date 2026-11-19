@@ -1,0 +1,17 @@
+[package]
+name = "app2018"
+version = "0.1.0"
+# 리졸버 버전을 적지 않았으므로 에디션이 정합니다. 2018은 "1", 2021은 "2"입니다.
+edition = "2018"
+
+[dependencies]
+# 일반 의존성으로는 기능을 켜지 않습니다.
+flags = { path = "../flags" }
+
+[dev-dependencies]
+# 테스트·예제를 빌드할 때만 쓰는 의존성으로는 verbose 기능을 켭니다.
+flags = { path = "../flags", features = ["verbose"] }
+
+# 저장소 루트의 워크스페이스와 분리하고, 이 패키지가 자기 워크스페이스의 루트가 되게 합니다.
+# 리졸버는 워크스페이스 전체에 하나이므로 app2018과 app2021을 서로 다른 워크스페이스로 둡니다.
+[workspace]

@@ -14,7 +14,8 @@
 | 사전 작업 | 3 / 3 |
 | Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 14 / 14 |
-| Part 2~11 | 0 / 75 |
+| Part 2. 에디션 | 6 / 6 |
+| Part 3~11 | 0 / 69 |
 
 ## 사전 작업
 
@@ -77,7 +78,21 @@
 - 툴체인 1.100.0 확인(2026-11-18): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했습니다. `compile_fail` 파일 106개가 모두 파일 이름의 에러 코드로 실패하고, Part 1 예제 32개의 출력은 1.98.1 때와 같습니다(실행마다 다른 줄 제외). Part 0 예제의 출력, `projects/` 아래 독립 프로젝트, README에 인용한 에러 메시지 문구는 다시 확인하지 않았습니다.
 - Clippy 1.100.0은 매크로가 펼친 코드에 `vec_init_then_push`를 내지 않습니다. Part 0 ch19 `08_macro_rules`의 `#[expect]` 두 개가 충족되지 않아 지우고 README 설명을 고쳤습니다.
 
-## Part 2~11
+## Part 2. 에디션 — `part2-editions/`
+
+| 상태 | 챕터 | 산출물 | 검증 | 완료일 | 비고 |
+| --- | --- | --- | --- | --- | --- |
+| ✅ | `ch1-editions-overview` | 예제 2 / 에러 4 / 프로젝트 1 | 통과 | 2026-11-19 | `projects/edition_mix`(2015·2021·2024 크레이트 3개 워크스페이스, 1.100.0에 안정화된 `bool::toggle`을 써서 rustc 1.100.0 이상 필요). `02`는 `rustc`를 자식 프로세스로 실행해 에디션별 O/X 표를 출력(버전 줄은 툴체인마다 다름). 에러 예제는 에디션에 따라 결과가 달라 파일 머리말에 에디션별 결과를 적음 — 이름 끝의 `_2015`·`_2021`은 그 에디션에서만 실패한다는 뜻. 로컬 Edition Guide의 `rust-next/`는 리다이렉트뿐이라 다음 에디션 내용은 싣지 못함. `edition = "future"`는 nightly가 없어 미확인. 에디션과 버전의 차이를 보이려고 이미 설치돼 있던 1.98.1을 비교에 사용(2.5절). README 719줄 |
+| ✅ | `ch2-rust-2015-2018` | 예제 3 / 에러 6 / 프로젝트 1 | 통과 | 2026-11-19 | `projects/scoreboard`(2015 라이브러리 `scorekit` + 같은 프로그램의 2015판·2018판, 두 판의 출력이 같음). `app2015`는 옛 관용구를 보이려고 린트 4개(`deprecated`·`anonymous_parameters`·`bare_trait_objects`·`ellipsis_inclusive_range_patterns`)를 `#[allow]`로 막음. Edition Guide와 달리 1.100.0에서는 2015에서도 `foo.rs` + `foo/bar.rs`가 되고 `extern crate` 없이도 식 안의 경로는 통함(막히는 것은 `use`와 매크로) — 실제 동작대로 설명. `tyvar_behind_raw_pointer`의 에러 코드는 E0282. `extern crate` 누락 에러는 단일 파일로 만들 수 없어 README 본문에만 인용. `cargo install`의 `--path` 요구는 실행하지 않아 미확인. README 902줄 |
+| ✅ | `ch3-rust-2021` | 예제 6 / 에러 6 / 프로젝트 2 | 통과 | 2026-11-19 | `projects/same_code`(같은 소스 파일을 2018·2021 두 패키지가 컴파일, 여섯 구역의 출력이 서로 다름)와 `projects/feature_resolver`(리졸버 1·2의 기능 통합 차이). 기능 리졸버 실습은 빌드 스크립트를 아직 배우지 않아 build-dependency 대신 dev-dependency로 재현. `same_code`의 공유 소스는 2018 동작을 보이느라 `array_into_iter`·`non_fmt_panics`·`clippy::into_iter_on_ref`를 `#![allow]`로 막음. 패닉은 모두 안에서 붙잡아 종료 코드 0. Edition Guide와 다른 실제 동작(raw 라이프타임을 띄우는 위치는 `'r #a`, 페이로드가 문자열이 아닌 패닉의 메시지 형식, `&self` 메서드와 `TryInto`가 겹치면 에러 없이 결과가 바뀜)은 실제대로 설명. E0783과 2018 전용 에러 두 가지는 README 표로만 실음. README 942줄 |
+| ✅ | `ch4-rust-2024-language` | 예제 7 / 에러 7 / 프로젝트 1 | 통과 | 2026-11-19 | `projects/edition_compare`(같은 소스 5개를 2021·2024 두 패키지가 컴파일, 실행 파일 10개). **never 타입 폴백은 1.100.0에서 에디션에 따른 차이가 아님** — 두 에디션 모두 폴백 타입이 `!`이고 에러 예제도 둘 다 E0277(1.98.1까지는 2021이 `()`), README 2.10절에 두 동작을 함께 적음. unsafe 코드는 예제 `05`·프로젝트 `new_syntax.rs`·에러 예제 하나에 있고 **Miri로는 검증하지 못함**(nightly 미설치). 교착 상태는 일으키지 않고 `try_write`·`try_borrow_mut`으로 관찰. `gen` 블록은 nightly가 없어 설명만. `link_section`은 플랫폼마다 형식이 달라 README 설명만(macOS 기준). 패턴의 `mut`/`ref`/`&` 제한·`static mut` 참조·빠진 프래그먼트 지정자의 에러는 README에만 인용. README가 1095줄로 목표(1000줄)보다 김 |
+| ✅ | `ch5-rust-2024-ecosystem` | 예제 4 / 에러 5 / 프로젝트 2 | 통과 | 2026-11-19 | `projects/ecosystem_compare`(같은 소스와 문서 테스트를 2021·2024 두 패키지로 비교, 문서 테스트 8개)와 `projects/msrv_resolver`(리졸버 3 실습). **`msrv_resolver`는 crates.io에서 `smol_str`을 내려받음** — 고른 버전(0.3.2)은 2026-11-19 기준이며 `Cargo.lock`이 고정. `03`은 자기 환경을 `main` 첫머리에서만 바꾸고(unsafe, `SAFETY` 주석) 자기 자신을 자식으로 다시 실행, 4번 구역(`pre_exec`)과 에러 예제 `before_exec`는 유닉스 전용. `04`는 `rustfmt`를 자식 프로세스로 실행. unsafe 코드는 **Miri로 검증하지 못함**. Edition Guide와 다른 실제 동작: 프렐류드의 `poll` 충돌은 E0061이거나 에러 없이 호출 대상만 바뀜, `set_var` 자동 수정 주석은 `FIXME`, 상속 `default-features` 거부는 1.85~1.98의 동작(1.99부터는 덮어씀), 문서 테스트는 병합돼도 테스트마다 별도 프로세스로 실행. Cargo 매니페스트 에러는 README 표로만 실음. README 860줄 |
+| ✅ | `ch6-migration-practice` | 예제 2 / 에러 3 / 프로젝트 1 | 통과 | 2026-11-19 | `projects/migration`(가계부 프로젝트의 단계별 스냅숏 `step0-2018`·`step1-2021`·`step2-2024`, 각각 통합 테스트 12개 + 문서 테스트 2개). `cargo fix --edition` 직후의 상태는 서식 검사를 통과하지 않아 스냅숏 대신 `diffs/*.diff` 두 개로 실음 — 스냅숏 사본에서 `cargo fix --edition --all-features`를 다시 돌려 두 diff와 같음을 확인. `step0-2018`은 옛 모양을 남기느라 린트 5개를 `#[allow]`로 막음. 세 스냅숏의 `cargo run` 출력은 2018·2021이 같고 2024는 임시값 범위 변경으로 두 줄의 순서가 다름(본문에서 설명). `cargo fix`는 저장소 밖 사본에서만 실행. Edition Guide와 다른 실제 동작: 옵션은 `--force-warn`(Guide의 `--force-warns`는 없는 옵션), 타깃별 `edition` 키는 deprecated, `set_var` 자동 수정 주석은 `FIXME`, `--edition-idioms`는 step0에서 0개를 고침, `if_let_rescope`는 가드에 `Deref`를 거쳐 메서드를 부르는 모양을 놓침. 미확인: 수정 실패 시 되돌림(back out) 메시지, `--target`으로 다른 플랫폼 코드 옮기기(타깃 미설치), nightly의 다음 에디션. unsafe 코드(`02`의 `set_var`/`remove_var`, 에러 예제 2개)는 **Miri로 검증하지 못함**. README 907줄 |
+
+- Part 2 전체 확인(2026-11-19, rustc 1.100.0): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 경고 없이 통과했고, `compile_fail` 파일 31개가 머리말에 적힌 에디션별 결과대로 실패·통과하며, `projects/` 아래 독립 프로젝트는 각 디렉터리에서 `cargo fmt --check`, `cargo clippy -- -D warnings`, 실행(테스트가 있으면 `cargo test`)을 확인했습니다. `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. Part 2 합계는 예제 24 / 에러 31 / 프로젝트 8입니다(ch3·ch5는 프로젝트 2개, ch6의 프로젝트는 스냅숏 3벌).
+- Part 2는 모두 1.100.0에서 작성·검증했습니다. 에디션에 따른 동작 차이는 툴체인이 올라가면 달라질 수 있습니다(예: never 타입 폴백은 1.100부터 모든 에디션에 적용). nightly가 필요한 내용(`gen` 블록, `edition = "future"`)은 확인하지 못했습니다.
+
+## Part 3~11
 
 아직 시작하지 않았습니다. 챕터 목록은 [로드맵 3절](docs/roadmap.md#3-파트별-챕터-계획)을 따르며, 파트를 시작할 때 이 문서에 표를 추가합니다.
 
@@ -116,6 +131,16 @@
 - 비동기 예제 주의: `Send`가 아닌 값을 await 너머로 들고 간 퓨처를 `Send`를 요구하는 곳에 넘기면 E0277이 아니라 에러 코드 없는 `future cannot be sent between threads safely`가 납니다. await 전에 `drop(rc)`를 불러도 같은 에러가 나므로 블록으로 스코프를 끝냅니다. 관련 clippy 기본 수준: `async_yields_async`는 deny, `manual_noop_waker`·`waker_clone_wake`·`let_underscore_future`·`redundant_async_block`·`manual_async_fn`은 warn, `unused_async`·`future_not_send`·`large_futures`는 꺼져 있습니다.
 - FFI·`Any` 예제 주의: `c_char`의 부호는 플랫폼마다 다릅니다(macOS aarch64에서는 `i8`). `Wrapping`·`Saturating`·`NonZero`의 디버그 형식은 감싼 모양 없이 안의 값만 출력합니다. `Wrapping<u8> + u8`은 E0277이지만 `+=`는 됩니다. `Box<dyn Any>`에 `type_id()`를 부르면 상자 자체의 타입 ID가 나오고 clippy `type_id_on_box`가 잡습니다. `getenv`로 읽을 결정적인 값이 필요하면 `cargo run`이 넣어 주는 `CARGO_PKG_NAME`을 씁니다.
 - 스레드 출력 순서를 고정하려면 스레드 안에서 출력하지 말고 결과를 돌려받아 `main`에서 출력합니다. 공유된 `Mutex`를 여러 스레드에서 디버그 형식으로 출력하면 `"<locked>"`가 섞여 출력이 비결정적이 됩니다.
+- 셸 환경에 `RUSTUP_TOOLCHAIN`이 옛 버전으로 고정돼 있으면 `mise.toml`의 설정과 달리 옛 툴체인이 잡힙니다. 작업 전에 `rustc --version`을 확인하고, 다르면 명령마다 `RUSTUP_TOOLCHAIN=<버전>`을 붙입니다.
+- Part 2의 에디션 비교 방식: `examples/`는 2024로만 컴파일하고, 다른 에디션으로 컴파일할 코드는 `projects/` 아래 독립 프로젝트에 둡니다. 에디션별 패키지가 `[[bin]] path = "../shared/x.rs"`로 패키지 밖의 같은 소스 파일을 공유해도 build·clippy·fmt가 동작합니다. 타깃별 `edition` 키는 1.100.0에서 deprecated 경고가 납니다. 워크스페이스의 두 패키지에 같은 이름의 bin이 있으면 `output filename collision` 경고가 나므로 이름에 에디션을 붙입니다. 가상 매니페스트에는 `resolver`를 직접 적습니다.
+- 여러 에디션으로 컴파일하는 공유 소스에서 에디션에 따라 나기도 하고 안 나기도 하는 경고는 `#[expect]`가 아니라 `#[allow]`로 막습니다(`#[expect]`는 경고가 안 나는 쪽에서 unfulfilled 경고가 납니다).
+- Part 2부터 `compile_fail/` 파일은 에디션에 따라 결과가 다를 수 있습니다. 파일 머리말에 에디션별 결과를 적고, 이름 끝의 `_2015`·`_2018`·`_2021`은 그 에디션(과 그 이전)에서만 실패한다는 뜻입니다. 검증할 때는 `rustc --edition`을 바꿔 가며 모두 컴파일합니다.
+- 에디션 관련 사실(1.100.0): never 타입 폴백 변경은 1.100부터 모든 에디션에 적용됩니다. `keyword_idents_2018`·`keyword_idents_2024`의 기본 수준은 allow입니다. `rustfmt`를 직접 실행하면 2015로 읽고, `cargo fmt`는 크레이트의 에디션을 넘깁니다. Cargo 프로젝트에서 에디션 호환성 린트 그룹을 켜 보려면 `cargo rustc -q -p <패키지> -- -W rust-2021-compatibility`를 씁니다. 서식 문자열 안에서는 `{r#gen}`이 에러이므로 `{gen}`으로 씁니다.
+- Part 2에서 clippy가 잡은 것: `iter_next_slice`(배열에 `.iter().next()`), `into_iter_on_ref`, `never_loop`(기본 deny, 한 번만 도는 `for`), `needless_lifetimes`. 기본 패닉 훅의 표준 에러 출력은 파이프로 받으면 빈 줄로 시작합니다.
+- 도구와 에디션(1.100.0): `cargo fmt`는 두 패키지가 함께 쓰는 소스 파일을 멤버 목록에서 먼저 나오는 패키지의 에디션으로 한 번만 서식합니다. 2024 에디션의 문서 테스트는 한 바이너리로 병합되지만, 중첩 `include_str!`를 쓰는 테스트가 있으면 메시지 없이 전부 따로 컴파일되고(`standalone_crate`를 붙이면 나머지가 다시 묶임) `-- --show-output`을 줘도 병합하지 않습니다. rustfmt의 한 줄 `if`/`else`는 한글 문자열의 폭(글자당 2칸) 때문에 폭 제한에 쉽게 걸립니다.
+- zsh에서는 `"$e:PASS"`처럼 변수 바로 뒤에 `:P`가 오면 경로 수식자로 해석됩니다. `"${e}:PASS"`로 씁니다.
+- `cargo fix` 주의: 추적하지 않는 파일(`Cargo.lock` 포함)이 있어도 작업 트리가 더럽다고 보고 멈춥니다. `cargo fix --edition`은 `--force-warn`으로 린트 그룹을 켜므로 `#[allow]`로 막은 코드도 고치지만, `-W`와 `#![warn(..)]`은 `#[allow]`에 집니다. `Fixed` 줄의 순서는 실행마다 다릅니다. 저장소 안에서는 실행하지 않고 저장소 밖 사본에서만 실행합니다.
+- zsh에서 `echo ===`는 `=` 확장 때문에 실패합니다(`echo '==='`로 씁니다). 테스트 출력의 스레드 ID와 테스트가 끝나는 순서는 실행마다 다릅니다.
 
 ## 후속 조치
 
@@ -123,16 +148,12 @@
 
 - ch2: 이 워크스페이스에서 `cargo doc -p rand`는 cargo 1.98.1 내부 패닉으로 끝납니다(`rand`가 dev-dependency뿐이라 생기는 문제로 보임). README에는 대안 `cargo doc -p p0-ch2-guessing-game --examples --open`을 안내했습니다. Part 3 `ch2-dependencies` 작성 때 다시 확인합니다.
 - ch9: 워크스페이스 멤버 패키지의 `[profile]`은 무시되고 경고가 납니다(`profiles for the non root package will be ignored`). 프로필은 루트 `Cargo.toml`에만 둘 수 있습니다. Part 3 `ch6-profiles-build-performance` 작성 때 반영합니다.
-- ch12: 2024 에디션에서는 `std::env::set_var`가 `unsafe`입니다(그냥 부르면 E0133). Part 2 `ch5-rust-2024-ecosystem`에서 다룹니다.
-- ch11: 에디션 2024의 문서 테스트 병합(`all doctests ran in …; merged doctests compilation took …` 줄)은 Part 2 `ch5-rust-2024-ecosystem`에서, `cargo test 이름`이 문서 테스트를 건너뛰는 동작은 Part 3 `ch9-testing-ci`에서 다시 다룹니다.
-- ch18: `while let Some(top) = stack.pop() && top > 2`는 조건이 거짓이 되는 순간에도 원소 하나를 이미 꺼냅니다. Part 2 `ch4-rust-2024-language`에서 let 체인의 함정으로 다룰 만합니다.
+- ch11: `cargo test 이름`이 문서 테스트를 건너뛰는 동작은 Part 3 `ch9-testing-ci`에서 다시 다룹니다.
 - ch19: unsafe 예제는 Miri로 확인하지 못했습니다. Part 10을 시작해 nightly와 Miri를 준비하면 `ch19-advanced-features`의 `01`, `02` 예제를 `cargo +nightly miri run`으로 다시 확인합니다.
-- Part 0 ch19: README 2.14절의 "`!`를 타입으로 직접 적을 수 있는 곳은 함수의 반환 타입뿐이고 `let x: ! = panic!();`은 E0658"이라는 설명이 1.100.0에서는 맞지 않습니다. never 타입이 안정화되어 `let x: ! = …`과 `Vec<!>`가 컴파일됩니다(1.98.1에서는 E0658). 해당 문단을 고칩니다.
+- Part 0 ch19: README 2.14절의 "`!`를 타입으로 직접 적을 수 있는 곳은 함수의 반환 타입뿐이고 `let x: ! = panic!();`은 E0658"이라는 설명이 1.100.0에서는 맞지 않습니다. never 타입이 안정화되어 `let x: ! = …`과 `Vec<!>`가 컴파일됩니다(1.98.1에서는 E0658). 해당 문단을 고칩니다. Part 2 ch4 2.10절이 1.100.0 기준의 never 타입과 폴백을 보충했습니다.
 - Part 1 ch14: Part 10에서 nightly와 Miri를 준비하면 `examples/04_calling_c.rs`의 unsafe 블록(29·35·41·76·79·103행)을 `cargo +nightly miri run`으로 확인합니다. Miri가 `strlen`·`getenv` 같은 외부 C 함수를 지원하는지도 그때 함께 확인합니다.
 - Part 10 `ch12-ffi-beneath-std`에 넘길 것: `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장.
-- Part 2를 쓸 때 참고: Rust By Example의 FFI 예제는 `extern { … }`(2021 이전 문법)를 씁니다. 2024 에디션에서는 `unsafe extern "C"`입니다.
 - Part 0 ch17: README 2.8절의 "`Box<dyn Error>`는 안에 무엇이 들었는지 타입으로 알 수 없다"는 설명은 다운캐스트로 실행 중에 물어볼 수 있다는 점에서 조금 부정확합니다. Part 1 ch8 2.5절이 보충했고, ch17 원문을 고칠지는 정합니다.
-- Part 2 `ch4-rust-2024-language`에 넘길 것: Part 1 ch7에서 확인한 Edition 2024 임시값 범위 — `if let` 조건식에서 만든 `Ref` 가드는 then 블록 끝에서 버려지고(2021에서는 `else` 끝까지), `match`와 `while let`은 본문 끝까지 살아 있습니다.
 - Part 10 `ch2-data-layout`에 넘길 것: `Packet { u8, u32, u8 }`은 기본 표현에서 8바이트, `#[repr(C)]`에서 12바이트이고, `Option<Cell<bool>>`은 2바이트입니다(1.100.0에서 확인).
 - Part 1 ch1: README가 "툴체인은 1.98.1, 온라인 문서는 1.100.0"인 상황을 문서 버전이 어긋나는 예로 들고 `bool::toggle`이 E0599라고 설명합니다. 툴체인을 1.100.0으로 올린 뒤에는 `toggle`이 컴파일되므로, 이 예와 로컬 문서 버전 표기(`std 1.98.1`)를 현재 툴체인에 맞게 고칩니다.
 - 전체: 챕터 README 머리말의 "확인한 툴체인: rustc 1.98.1"은 작성 당시 기준입니다. 1.100.0에서 예제 출력과 에러 메시지까지 다시 확인한 챕터부터 표기를 바꿉니다.
@@ -142,6 +163,12 @@
 - Part 1 전체: 여러 챕터를 동시에 작성해서, 같은 묶음의 챕터(ch1~ch4끼리, ch5~ch8끼리, ch9~ch14 일부)와 뒤 챕터는 링크 없이 코드 서식의 이름으로만 가리키는 곳이 있습니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 0 전체: 챕터를 동시에 작성했기 때문에, README가 그때 아직 없던 챕터를 링크 없이 코드 서식의 이름(`ch10-generics-traits-lifetimes`)으로만 가리키는 곳이 있습니다. 내용에는 문제가 없고, 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 0 전체: 예제 수(챕터당 4~13개)와 README 분량(600~1280줄)이 `tutor` 문서의 기준(보통 3~6개)보다 많은 챕터가 있습니다. 줄일지는 읽어 보고 정합니다.
+- Part 2에서 반영한 약속: let 체인의 `while let … pop() && …` 함정(Part 0 ch18), `if let` 임시값 범위의 2021/2024 차이(Part 1 ch7), `extern { … }` → `unsafe extern`(Part 1 ch14)은 Part 2 ch4가 다뤘습니다. `set_var`의 unsafe화(Part 0 ch12, Part 1 ch10·ch14)와 문서 테스트 병합(Part 0 ch11)은 Part 2 ch5가 다뤘습니다. Part 0 ch18 README 97행과 Part 1 ch7 README 431행은 Part 2 `ch4-rust-2024-language`를 링크 없이 이름으로만 가리키므로, 상대 링크로 바꿀 수 있습니다(선택 사항).
+- Part 2 ch4: Part 10에서 nightly와 Miri를 준비하면 `examples/05_unsafe_changes.rs`와 `projects/edition_compare/shared/new_syntax.rs`의 unsafe 블록을 `cargo +nightly miri run`으로 확인합니다.
+- Part 2 ch4: README가 1095줄로 목표(1000줄)를 넘었습니다. 14개 항목의 에러 인용이 대부분이며, 줄일지는 읽어 보고 정합니다.
+- Part 2 전체: ch1~ch4를 동시에 작성해서, 서로를 링크 없이 코드 서식의 이름으로만 가리키는 곳이 있습니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
+- Part 2 ch5: Part 10에서 Miri를 준비하면 `examples/03_env_unsafe.rs`와 `projects/ecosystem_compare/shared/main.rs`의 unsafe 블록을 확인합니다. `projects/msrv_resolver`의 결과(`smol_str` 0.3.2와 0.3.7)는 crates.io의 2026-11-19 상태에 기대므로, Part 3 `ch2-dependencies`를 쓸 때 다시 확인합니다.
+- Part 2 ch6: Part 10에서 Miri를 준비하면 `examples/02_fix_leftovers_2024.rs`의 unsafe 블록을 확인합니다. 린트 수준의 우선순위(`--force-warn`, `-W`, `#[allow]`)와 `[lints]` 테이블은 Part 5 `ch3-lints`로, 에디션과 무관한 `cargo fix`는 Part 6 `ch1-reading-diagnostics`로, 빌드 스크립트가 만든 코드의 마이그레이션은 Part 3 `ch8-build-scripts`로 미뤘습니다.
 
 ## 용어 메모
 
@@ -271,3 +298,25 @@
 | checked / saturating 연산 / Euclidean division / endian | 검사 연산 / 포화 연산 / 유클리드 나눗셈 / 엔디언 |
 | since (문서의 버전 표시) / nightly-only experimental API / badge | 안정화 버전 / nightly 전용 실험 API / 표시 |
 | API 문서의 절 이름 (Implementations, Methods from Deref, Trait Implementations 등) | 영어 그대로 |
+| backward compatibility / breaking change / migration | 하위 호환성 / 호환되지 않는 변경 / 마이그레이션 |
+| lint / lint group / lint level | 린트 / 린트 그룹 / 린트 수준 (Part 2부터. Part 0·1의 일부 챕터와 위 작업 방식 메모는 lint로 썼음) |
+| edition compatibility lint group (`rust-2021-compatibility`) / idiom lint group (`rust_2018_idioms`) | 에디션 호환성 린트 그룹 / 관용구 린트 그룹 |
+| strict / reserved / weak keyword / raw identifier | 엄격한 키워드 / 예약 키워드 / 약한 키워드 / raw 식별자 |
+| baseline (2015 에디션) / stability without stagnation | 기준선 / 정체 없는 안정성 |
+| virtual manifest / sysroot crate / inference variable | 가상 매니페스트 / sysroot 크레이트 / 추론 변수 |
+| reserved syntax / prefix / token tree | 예약 문법 / 접두사 / 토큰 트리 |
+| feature resolver / feature unification | 기능 리졸버(기능 리졸버 1/2) / 기능 통합 |
+| disjoint capture / dummy let (`let _ = &x;`) / method lookup | 분리 캡처 / 더미 let / 메서드 탐색 |
+| temporary scope / temporary lifetime extension | 임시값 범위 / 임시값 수명 연장 |
+| RPIT / opaque type / hidden type / precise capturing (`use<..>`) | 반환 위치의 `impl Trait`(RPIT) / 불투명 타입 / 숨은 타입 / 정밀 캡처 |
+| never type fallback / fallback type | never 타입 폴백 / 폴백 타입 |
+| fragment specifier / fully explicit pattern / symbol | 프래그먼트 지정자 / 완전히 명시한 패턴 / 심볼 |
+| deprecated | 처음 한 번 "더는 권장하지 않는(deprecated)"으로 풀어 쓰고 이후 deprecated |
+| future-compatibility warning / automatic fix / suggestion | 장래 호환성 경고 / 자동 수정 / 제안 |
+| 특정 에디션 | "2024 에디션" 꼴 (Part 2부터. 앞 파트의 "Edition 2024"와 같은 뜻) |
+| merged doctests / standalone | 문서 테스트 병합(묶음 컴파일, 묶음 바이너리) / 따로 컴파일 |
+| rust-version aware resolver / MSRV / yank | 리졸버 3(rust-version 인식 리졸버) / 최소 지원 Rust 버전(MSRV) / 게시 취소(yank) |
+| style edition / version sort / optional dependency | 스타일 에디션 / 버전 정렬 / 선택적 의존성 |
+| async-signal-safe | 비동기 시그널 안전 |
+| (마이그레이션) 자동 수정 뒤 정리 / 고치지 않고 경고만 보기 | 다듬기 / 미리 보기 |
+| idiom / working tree / staged | 관용구 / 작업 트리 / 스테이지에 올린 |

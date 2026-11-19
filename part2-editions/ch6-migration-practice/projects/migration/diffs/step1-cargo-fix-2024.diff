@@ -1,0 +1,107 @@
+diff --git a/src/book.rs b/src/book.rs
+index 7fa5dbe..587f926 100644
+--- a/src/book.rs
++++ b/src/book.rs
+@@ -12,7 +12,7 @@ pub struct IdGen {
+ }
+ 
+ impl IdGen {
+-    pub fn gen(&mut self) -> u32 {
++    pub fn r#gen(&mut self) -> u32 {
+         self.last += 1;
+         self.last
+     }
+@@ -86,7 +86,7 @@ impl Ledger {
+     pub fn add(&mut self, entry: Entry) -> u32 {
+         self.entries.push(entry);
+         *self.totals.lock().unwrap() = [None; 4];
+-        self.ids.gen()
++        self.ids.r#gen()
+     }
+ 
+     pub fn add_line(&mut self, line: &str) -> Result<u32, String> {
+@@ -103,22 +103,22 @@ impl Ledger {
+     }
+ 
+     /// 지금까지 붙인 번호들
+-    pub fn ids(&self) -> impl Iterator<Item = u32> {
++    pub fn ids(&self) -> impl Iterator<Item = u32> + use<> {
+         1..=self.ids.last
+     }
+ 
+     /// 카테고리별 합계. 한 번 계산한 값은 캐시에 둡니다.
+     pub fn total_of(&self, category: Category) -> i64 {
+         let slot = category as usize;
+-        let total = if let Some(cached) = self.totals.lock().unwrap()[slot] {
++        let total = match self.totals.lock().unwrap()[slot] { Some(cached) => {
+             cached
+-        } else {
++        } _ => {
+             self.entries
+                 .iter()
+                 .filter(|e| e.category == category)
+                 .map(|e| e.amount)
+                 .sum()
+-        };
++        }};
+         self.totals.lock().unwrap()[slot] = Some(total);
+         total
+     }
+diff --git a/src/lib.rs b/src/lib.rs
+index 9b9594b..c9ebb52 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -56,7 +56,7 @@ impl Budget {
+ }
+ 
+ /// C 프로그램에서 부르는 함수: 금액을 10원 단위로 반올림합니다.
+-#[no_mangle]
++#[unsafe(no_mangle)]
+ pub extern "C" fn ledger_round10(amount: i64) -> i64 {
+     (amount + 5).div_euclid(10) * 10
+ }
+@@ -64,7 +64,7 @@ pub extern "C" fn ledger_round10(amount: i64) -> i64 {
+ /// 줄 여러 개로 가계부를 만듭니다. 잘못된 줄이 있으면 그 이유를 메시지로 패닉합니다.
+ #[macro_export]
+ macro_rules! book {
+-    ($($line:expr),* $(,)?) => {{
++    ($($line:expr_2021),* $(,)?) => {{
+         let mut book = $crate::Ledger::new();
+         $(
+             if let Err(e) = book.add_line($line) {
+@@ -78,7 +78,7 @@ macro_rules! book {
+ /// 예산 한도: `budget!(30_000)`은 그 금액까지, `budget!(_)`은 한도 없음
+ #[macro_export]
+ macro_rules! budget {
+-    ($limit:expr) => {
++    ($limit:expr_2021) => {
+         $crate::Budget::Limit($limit)
+     };
+     (_) => {
+diff --git a/tests/ledger.rs b/tests/ledger.rs
+index 82385f7..01ea284 100644
+--- a/tests/ledger.rs
++++ b/tests/ledger.rs
+@@ -4,7 +4,7 @@
+ use ledger::{book, budget, report, Category, Config, Entry, Ledger};
+ 
+ // C 프로그램이 하듯 심벌 이름만으로 선언해서 부릅니다.
+-extern "C" {
++unsafe extern "C" {
+     fn ledger_round10(amount: i64) -> i64;
+ }
+ 
+@@ -99,9 +99,11 @@ fn budgets() {
+ 
+ #[test]
+ fn unit_from_env() {
+-    std::env::set_var("LEDGER_UNIT", "엔");
++    // FIXME: Audit that the environment access only happens in single-threaded code.
++    unsafe { std::env::set_var("LEDGER_UNIT", "엔") };
+     assert_eq!(Config::from_env().unit, "엔");
+-    std::env::remove_var("LEDGER_UNIT");
++    // FIXME: Audit that the environment access only happens in single-threaded code.
++    unsafe { std::env::remove_var("LEDGER_UNIT") };
+     assert_eq!(Config::from_env().unit, "원");
+ }
+ 

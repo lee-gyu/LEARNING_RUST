@@ -1,0 +1,12 @@
+[package]
+name = "app_2024"
+version = "0.1.0"
+# 이 크레이트의 소스만 2024 에디션으로 읽힙니다. 의존성의 에디션은 바뀌지 않습니다.
+edition = "2024"
+publish = false
+
+# 에디션이 다른 두 라이브러리를 경로로 가져옵니다. 의존성 목록에는 에디션을 적지 않습니다.
+# 에디션은 각 크레이트가 자기 Cargo.toml에서 정하기 때문입니다.
+[dependencies]
+jobs_2015 = { path = "../jobs_2015" }
+idgen_2021 = { path = "../idgen_2021" }

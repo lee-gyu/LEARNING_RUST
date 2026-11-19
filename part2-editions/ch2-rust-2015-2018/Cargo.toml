@@ -1,0 +1,5 @@
+[package]
+name = "p2-ch2-rust-2015-2018"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

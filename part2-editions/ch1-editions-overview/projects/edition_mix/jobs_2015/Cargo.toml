@@ -1,0 +1,11 @@
+[package]
+name = "jobs_2015"
+version = "0.1.0"
+# 이 크레이트의 소스는 2015 에디션의 문법으로 읽힙니다.
+edition = "2015"
+# 이 크레이트를 컴파일할 수 있는 가장 낮은 컴파일러 버전입니다. 1.100.0에 안정화된
+# bool::toggle을 쓰기 때문입니다. edition과 rust-version은 서로 다른 것을 정합니다.
+rust-version = "1.100"
+publish = false
+
+[dependencies]

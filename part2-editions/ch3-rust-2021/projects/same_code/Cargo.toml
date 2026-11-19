@@ -1,0 +1,7 @@
+# 저장소 루트의 워크스페이스와 따로 동작하는 작은 워크스페이스입니다.
+# 루트 패키지가 없는 가상 워크스페이스이고, 멤버마다 에디션이 다릅니다.
+[workspace]
+members = ["e2018", "e2021", "macros2018"]
+# 가상 워크스페이스는 에디션으로 리졸버 버전을 정할 수 없으므로 직접 적습니다.
+# 빼면 Cargo가 "virtual workspace defaulting to `resolver = "1"`" 경고를 냅니다.
+resolver = "2"
