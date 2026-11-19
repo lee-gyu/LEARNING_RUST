@@ -1,0 +1,5 @@
+[package]
+name = "er-ch20-avoid-over-optimizing"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

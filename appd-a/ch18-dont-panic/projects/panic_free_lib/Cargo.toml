@@ -1,0 +1,22 @@
+[package]
+name = "panic_free_lib"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]
+
+# 패닉할 수 있는 코드를 clippy가 잡게 합니다(cargo clippy를 실행할 때만 적용됩니다).
+# 아래 여덟 개는 restriction 그룹이라 기본으로 꺼져 있습니다.
+[lints.clippy]
+unwrap_used = "deny"             # .unwrap()
+expect_used = "deny"             # .expect(..)
+panic = "deny"                   # panic!
+unreachable = "deny"             # unreachable!
+todo = "deny"                    # todo!
+indexing_slicing = "deny"        # v[i], &v[a..b] (범위 안임을 컴파일러가 아는 상수 인덱스는 제외)
+string_slice = "deny"            # &s[a..b] (글자 경계가 아니면 패닉)
+arithmetic_side_effects = "deny" # 넘치거나 0으로 나눌 수 있는 + - * / %
+# pedantic 그룹. 패닉할 수 있는 pub fn에 문서의 # Panics 절이 없으면 알려 줍니다.
+missing_panics_doc = "warn"

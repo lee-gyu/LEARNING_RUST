@@ -1,0 +1,5 @@
+# 테스트는 실패하면 패닉해서 알리는 것이 맞으므로, 테스트 코드에서는 아래 린트를 끕니다.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true

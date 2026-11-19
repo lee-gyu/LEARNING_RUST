@@ -381,10 +381,10 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | ✅ | `ch14-lifetimes` | 스택과 라이프타임, 라이프타임의 범위(마지막 사용까지), 여러 라이프타임 매개변수, 생략 규칙, `'static`, 힙에 있는 값의 라이프타임, 자료구조 안의 라이프타임, 익명 라이프타임 `'_` | 스택 프레임과 댕글링 참조, 마지막 사용 뒤에 풀리는 대여, 라이프타임 매개변수가 둘 필요한 함수, `&'static`과 `T: 'static`의 차이, 참조를 담은 구조체, `'_` | Item 14 (`lifetimes`) |
 | ✅ | `ch15-borrow-checker` | 대여 규칙과 소유자가 할 수 있는 일, 대여 검사기 에러를 푸는 방법(지역 리팩터링, 자료구조 설계, 스마트 포인터), 자기 참조 자료구조 | 대여 범위 줄이기, `mem::take`/`replace`와 `Option::take`, 참조 대신 인덱스, `Rc<RefCell<T>>`, 자기 참조 시도와 대안 | Item 15 (`borrows`) |
 | ⬜ | `ch16-avoid-unsafe` | unsafe를 쓰기 전에 표준 라이브러리와 검증된 크레이트에서 안전한 대안 찾기, 꼭 써야 할 때의 지침(작게 감싸기, 안전성 주석, Miri, 테스트) | 직접 쓴 unsafe를 표준 라이브러리의 안전한 API로 바꾸기, 안전한 래퍼와 `// SAFETY:` 주석 | Item 16 (`unsafe`) |
-| ⬜ | `ch17-shared-state-parallelism` | Rust가 막는 것(데이터 경쟁, `Send`/`Sync`)과 막지 못하는 것(교착 상태), 잠금 범위와 순서, 공유 상태 대신 채널 | 데이터 경쟁 시도가 컴파일되지 않는 모습, 잠금 순서가 엇갈린 교착 상태와 해결, 채널로 다시 설계 | Item 17 (`deadlock`) |
-| ⬜ | `ch18-dont-panic` | 패닉이 숨어 있는 곳, 라이브러리가 패닉 대신 `Result`를 돌려줘야 하는 이유, `catch_unwind`의 한계, 패닉을 막는 도구 | 패닉하는 API를 `Result` API로, 숨은 패닉 지점(인덱싱, 산술, `RefCell`), `unwrap`을 금지하는 lint 설정 | Item 18 (`panic`) |
-| ⬜ | `ch19-avoid-reflection` | Rust에 리플렉션이 없는 이유, `type_name`과 `Any`/`TypeId`의 한계, 트레이트 객체 업캐스트 | `type_name`의 한계, `dyn Any` 다운캐스트와 대안(열거형, 트레이트 메서드), 업캐스트 | Item 19 (`reflection`) |
-| ⬜ | `ch20-avoid-over-optimizing` | 먼저 단순하게 쓰고 측정한 뒤 최적화하기, 자료구조와 할당, 복사 비용을 두려워하지 않기, 참조 대신 소유 타입이나 스마트 포인터로 설계 단순화 | 라이프타임이 번지는 구조체와 소유 타입 구조체 비교, `clone`과 `Rc`, 간단한 실행 시간 측정 | Item 20 (`optimize`) |
+| ✅ | `ch17-shared-state-parallelism` | Rust가 막는 것(데이터 경쟁, `Send`/`Sync`)과 막지 못하는 것(교착 상태), 잠금 범위와 순서, 공유 상태 대신 채널 | 데이터 경쟁 시도가 컴파일되지 않는 모습, 잠금 순서가 엇갈린 교착 상태와 해결, 채널로 다시 설계 | Item 17 (`deadlock`) |
+| ✅ | `ch18-dont-panic` | 패닉이 숨어 있는 곳, 라이브러리가 패닉 대신 `Result`를 돌려줘야 하는 이유, `catch_unwind`의 한계, 패닉을 막는 도구 | 패닉하는 API를 `Result` API로, 숨은 패닉 지점(인덱싱, 산술, `RefCell`), `unwrap`을 금지하는 lint 설정 | Item 18 (`panic`) |
+| ✅ | `ch19-avoid-reflection` | Rust에 리플렉션이 없는 이유, `type_name`과 `Any`/`TypeId`의 한계, 트레이트 객체 업캐스트 | `type_name`의 한계, `dyn Any` 다운캐스트와 대안(열거형, 트레이트 메서드), 업캐스트 | Item 19 (`reflection`) |
+| ✅ | `ch20-avoid-over-optimizing` | 먼저 단순하게 쓰고 측정한 뒤 최적화하기, 자료구조와 할당, 복사 비용을 두려워하지 않기, 참조 대신 소유 타입이나 스마트 포인터로 설계 단순화 | 라이프타임이 번지는 구조체와 소유 타입 구조체 비교, `clone`과 `Rc`, 간단한 실행 시간 측정 | Item 20 (`optimize`) |
 
 #### Dependencies — ch21~ch26
 
@@ -436,4 +436,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **40 / 109 챕터** |
-| 부록 A. Effective Rust (합계와 별도) | 15 / 35 |
+| 부록 A. Effective Rust (합계와 별도) | 19 / 35 |

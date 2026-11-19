@@ -266,7 +266,27 @@ name = "er-ch15-borrow-checker"
 version = "0.0.0"
 
 [[package]]
+name = "er-ch16-avoid-unsafe"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch17-shared-state-parallelism"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch18-dont-panic"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch19-avoid-reflection"
+version = "0.0.0"
+
+[[package]]
 name = "er-ch2-express-common-behavior"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch20-avoid-over-optimizing"
 version = "0.0.0"
 
 [[package]]

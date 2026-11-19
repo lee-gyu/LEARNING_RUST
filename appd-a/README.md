@@ -57,5 +57,9 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | --- | --- | --- |
 | [ch14-lifetimes](ch14-lifetimes/) | Item 14 | 스택 프레임과 소유 사슬, 값·참조(NLL)·임시값의 라이프타임, 라이프타임 매개변수를 출처대로 묶거나 나누기, 생략 규칙 읽기와 `'_`, `'static` 참조의 출처와 `T: 'static`, 뷰 타입과 소유 타입 고르기 |
 | [ch15-borrow-checker](ch15-borrow-checker/) | Item 15 | 대여 검사기 에러를 싼 것부터 푸는 순서: 대여 범위 줄이기, 체인 쪼개기와 `Cow`, `take`·`replace`로 바꿔 끼우기, 나눠 빌리기, 한 곳이 소유하고 인덱스로 가리키기(세대 ID), `Rc<RefCell<T>>`와 `Weak`, 자기 참조 구조체의 대안 |
+| [ch17-shared-state-parallelism](ch17-shared-state-parallelism/) | Item 17 | Rust가 막는 것과 막지 못하는 것, 함께 맞아야 하는 데이터는 잠금 하나로, 잠금은 도우미 메서드 안에서만(쥔 채 클로저를 부르거나 가드를 돌려주지 않기), 공유 상태 대신 채널, 잠금 순서는 마지막 수단 |
+| [ch18-dont-panic](ch18-dont-panic/) | Item 18 | 라이브러리는 패닉 대신 `Result`, 패닉판은 실패를 돌려주는 판과 짝으로, 숨은 패닉 지점을 검사 연산으로, `catch_unwind`를 예외 처리로 쓰지 않기(`panic_strategy`), 린트로 막기(`panic_free_lib`) |
+| [ch19-avoid-reflection](ch19-avoid-reflection/) | Item 19 | `type_name`은 진단에만, 타입별 처리는 다운캐스트 사슬 대신 트레이트 메서드로, "이 기능도 있나?"는 트레이트로 묻기, 다운캐스트가 필요하면 `Any` 슈퍼트레이트와 업캐스트, 필드를 훑는 코드는 derive에 |
+| [ch20-avoid-over-optimizing](ch20-avoid-over-optimizing/) | Item 20 | 상태로 보관하는 타입은 데이터를 소유하기, 보이는 복사를 지우기 전에 세기, 큰 데이터는 라이프타임 대신 `Rc`/`Arc`로 공유 소유, 바꾸기 전에 재고 측정이 가리키는 곳만 바꾸기 |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
