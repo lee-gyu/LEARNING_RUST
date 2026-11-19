@@ -363,13 +363,13 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | ✅ | `ch6-newtype-pattern` | 단위 혼동 막기, 의미가 드러나는 인자 타입, 고아 규칙 우회, 뉴타입의 한계(트레이트를 다시 구현해야 함) | 단위 뉴타입, 외부 타입에 외부 트레이트 구현, 위임 구현의 비용 | Item 6 (`newtype`) |
 | ✅ | `ch7-builders` | 필드가 많은 구조체의 초기화 문제, `Default`와 구조체 갱신 문법의 한계, 빌더 패턴(소비형과 `&mut`형), derive로 빌더 만들기 | 큰 구조체 직접 초기화, `Default` + `..`, 소비형 빌더, `&mut self` 빌더, `derive_builder`(선택) | Item 7 (`builders`) |
 | ✅ | `ch8-references-pointers` | 참조와 포인터의 차이, 포인터 트레이트(`Deref`, `AsRef`, `Borrow` 등), 넓은 포인터(슬라이스, 트레이트 객체), 스마트 포인터 고르기 | 포인터 크기 비교, 슬라이스를 받는 시그니처, vtable이 붙은 포인터, `AsRef`/`Borrow` 바운드, 스마트 포인터 선택표를 따라가는 예제 | Item 8 (`references`) |
-| ⬜ | `ch9-iterator-transforms` | 반복자 트레이트, 변환과 소비 메서드, `Result` 값 모으기, 반복문을 반복자 체인으로 바꾸기, 명시적 반복문이 더 나은 경우 | `for` 반복문을 단계별로 체인으로, `collect::<Result<_, _>>()`, 조기 탈출·복잡한 상태에서 반복문 유지 | Item 9 (`iterators`) |
+| ✅ | `ch9-iterator-transforms` | 반복자 트레이트, 변환과 소비 메서드, `Result` 값 모으기, 반복문을 반복자 체인으로 바꾸기, 명시적 반복문이 더 나은 경우 | `for` 반복문을 단계별로 체인으로, `collect::<Result<_, _>>()`, 조기 탈출·복잡한 상태에서 반복문 유지 | Item 9 (`iterators`) |
 
 #### Traits — ch10~ch13
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch10-standard-traits` | 공개 타입에 구현할 표준 트레이트 고르기(`Clone`, `Copy`, `Default`, `PartialEq`/`Eq`, `PartialOrd`/`Ord`, `Hash`, `Debug`/`Display`), derive할 수 없거나 하면 안 되는 경우, 직접 구현할 때의 일관성 규칙, 연산자 오버로드 | derive 가능 조건, `Copy`를 붙이면 안 되는 타입, `Eq`와 `Hash`가 어긋날 때 `HashMap`의 오동작, 부동소수점과 `PartialEq`, 트레이트 체크리스트를 적용한 타입 | Item 10 (`std-traits`) |
+| ✅ | `ch10-standard-traits` | 공개 타입에 구현할 표준 트레이트 고르기(`Clone`, `Copy`, `Default`, `PartialEq`/`Eq`, `PartialOrd`/`Ord`, `Hash`, `Debug`/`Display`), derive할 수 없거나 하면 안 되는 경우, 직접 구현할 때의 일관성 규칙, 연산자 오버로드 | derive 가능 조건, `Copy`를 붙이면 안 되는 타입, `Eq`와 `Hash`가 어긋날 때 `HashMap`의 오동작, 부동소수점과 `PartialEq`, 트레이트 체크리스트를 적용한 타입 | Item 10 (`std-traits`) |
 | ⬜ | `ch11-drop-raii` | RAII와 가드 타입, `Drop`의 제약(`&mut self`, 실패를 돌려줄 수 없음), `drop(x)`로 일찍 해제하기 | 조기 반환에서 해제를 빠뜨리는 수동 관리와 가드 비교, 직접 만든 가드, drop 순서 | Item 11 (`raii`) |
 | ⬜ | `ch12-generics-vs-trait-objects` | 단형성화와 동적 디스패치의 비용(코드 크기, 속도, 컴파일 시간), 여러 트레이트 바운드, dyn 호환, 이종 컬렉션, 선택 기준 | 같은 함수의 제네릭판과 `dyn`판, 이종 컬렉션, dyn 호환이 아닌 트레이트와 `where Self: Sized` | Item 12 (`generics`) |
 | ⬜ | `ch13-default-implementations` | 필수 메서드는 적게, 기본 구현은 넉넉하게. 기본 구현 재정의, 기본 메서드 추가가 호환 변경인 이유 | 필수 메서드 하나에 기본 메서드 여럿인 트레이트, 재정의로 더 빠른 구현 제공 | Item 13 (`default-impl`) |
@@ -436,4 +436,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **40 / 109 챕터** |
-| 부록 A. Effective Rust (합계와 별도) | 8 / 35 |
+| 부록 A. Effective Rust (합계와 별도) | 10 / 35 |

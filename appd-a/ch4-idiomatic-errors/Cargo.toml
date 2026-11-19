@@ -1,0 +1,9 @@
+[package]
+name = "er-ch4-idiomatic-errors"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+anyhow = "1.0.104"
+thiserror = "2.0.21"

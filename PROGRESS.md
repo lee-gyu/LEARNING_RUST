@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-19
+- 마지막 갱신: 2026-11-19 (부록 A ch1~ch10 추가)
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -16,7 +16,7 @@
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
 | Part 3~11 | 0 / 69 |
-| 부록 A. Effective Rust (본편 합계와 별도) | 8 / 35 |
+| 부록 A. Effective Rust (본편 합계와 별도) | 10 / 35 |
 
 ## 사전 작업
 
@@ -111,9 +111,12 @@
 | ✅ | `ch6-newtype-pattern` | 예제 6 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종에 ch1이 넘긴 내용(같은 타입 인자 구별, 생성자에서 범위 검증)과 열어 줄 연산 고르기(`Deref`로 통째로 열면 안 되는 이유)를 더함. 패닉하는 예제와 외부 크레이트 없음(`derive_more`는 이름만 소개). 책과 달라진 점: E0117의 `note:`가 늘어남. E0599의 `help:`가 제안하는 `.0.cos()`는 버그를 되살리는 제안이라고 설명. E0117 예제(`Display for Duration`)는 Part 0 ch19와 트레이트가 같고 타입과 동기가 다름. README 661줄. 책에 없는 지침: 2.3절(범위 검증 생성자), 2.4절(열어 줄 연산 고르기)(README "책과 달라진 점"에 밝힘) |
 | ✅ | `ch7-builders` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | dev-dependency `derive_builder` 0.20.2(루트 `Cargo.lock`에 `darling` 0.20.11 계열 함께 추가). 패닉하는 예제 없음, `build()`의 실패는 `Result`로 받아 출력. 책과 동작이 다른 곳은 없음. `&mut` 빌더를 임시값에서 시작한 E0716은 모든 에디션에서 같고, 체인을 블록의 마지막 표현식에 둔 모양만 2024 에디션에서 새로 E0716(직접 확인). E0063은 Part 0 ch5와 겹쳐 링크로 대체. `Command`는 실행하지 않고 설명의 근거로만 사용. 지침 5의 비권장 코드(기본값을 고려하지 않는 검증 함수)는 README에만 실음. README 662줄. 책에 없는 지침: 위치 인자 생성자의 문제, 비공개 필드, `build() -> Result` 검증(README "책과 달라진 점"에 밝힘) |
 | ✅ | `ch8-references-pointers` | 예제 6 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-19 | 스마트 포인터 고르기를 지침 둘(소유자 수·스레드 / 내부 가변성·순환)로 나눔. **지침 1(`&Vec<T>` 대신 `&[T]`)과 지침 4(`Borrow`의 비교·해시 약속)는 책의 Item 8에 명시된 내용이 아니라 std 문서와 clippy `ptr_arg`를 근거로 더한 것**(README 2.8절에 밝힘). 패닉하는 예제·외부 크레이트·unsafe 없음(원시 포인터는 주소 비교에만 사용). 주소와 해시 값은 출력하지 않고 비교 결과만 출력 — 예제마다 25번 실행해 출력이 같음을 확인. 크기는 64비트 기준. `HashMap::get`에 `Borrow` 없는 키를 넘기면 지침의 E0277이 아니라 E0308. 책과 달라진 점: 용어 "fat pointer" → 넓은 포인터, `ptr::addr_eq`(1.76) 안정화, `size_of`가 프렐류드에 있음. 연습 3의 `BTreeMap` 결과는 이 툴체인의 구현 결과. README 692줄 |
-| ⬜ | `ch9-iterator-transforms` | | | | |
-| ⬜ | `ch10-standard-traits` | | | | |
+| ✅ | `ch9-iterator-transforms` | 예제 6 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종을 6개로 나눔. 패닉하는 예제와 외부 크레이트 없음(`itertools`의 `partition_result`는 이름만 소개). 시간 측정은 하지 않고 ch20으로 미룸. clippy가 잡는 비권장 코드는 `#[expect(…, reason)]`로 표시(`needless_range_loop`·`unnecessary_fold`·`manual_find`·`explicit_counter_loop`). `05`는 `for_each` 안의 `return`이 경고 없이 `continue`처럼 동작해 틀린 결과를 내는 것을 일부러 보임. 책과 달라진 점: 책이 소개하는 `try_find`는 1.100.0에서도 nightly 전용(E0658). 책에 없는 지침: 2.3절(`impl IntoIterator`로 받기), 2.4절의 `partition`·`try_fold` 선택 기준(README "책과 달라진 점"에 밝힘). README 770줄 |
+| ✅ | `ch10-standard-traits` | 예제 8 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 5종을 8개로 늘림(`Default`, `Debug`/`Display`, 연산자 오버로딩에 예제를 하나씩). 패닉하는 예제와 외부 크레이트 없음. `03`은 출력이 실행마다 같도록 시드를 고정한 해셔를 씀(기본 해셔에서는 어긋난 키의 조회 결과가 실행마다 다름) — `01`·`03`·`04`·`08`을 25번씩 실행해 출력이 같음을 확인. clippy `derived_hash_with_manual_eq`(deny)·`new_without_default`와 rustc `missing_debug_implementations`·`missing_copy_implementations`는 `#[expect]`로 표시. E0204·E0184는 Part 1 ch6과 겹쳐 README 표로만 실음. 책과 실제 동작이 다른 곳은 없음. 책에 없는 지침: 제네릭 타입의 derive 바운드, `total_cmp`와 정수 키, `Default` 판단 전체, 표현이 여럿일 때의 이름 붙은 메서드, `+=`와 `+`의 일치, 고아 규칙과 `Send`/`Sync` 확인(README 2.10절에 근거와 함께 밝힘). README 786줄 |
 
+- 산출물 합계(ch1~ch10): 예제 57 / 에러 32 / 프로젝트 0. 외부 크레이트는 ch4의 `thiserror`·`anyhow`, ch7의 `derive_builder`뿐입니다(dev-dependency).
+- ch1~ch10 확인(2026-11-19, rustc 1.100.0): 챕터를 쓴 에이전트의 검증과 별도로 메인 세션이 챕터마다 `cargo fmt --check`, `cargo build --examples`, `cargo clippy --examples -- -D warnings`, 예제 실행(57개 모두 종료 코드 0, 출력이 README와 일치), `compile_fail` 32개의 에러 코드, README 상대 링크를 다시 확인했습니다. 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 통과했고, `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. 모든 검증은 macOS(aarch64)에서만 했습니다.
+- 책과의 대조(2026-11-19): 챕터마다 책의 해당 Item 페이지에서 코드에 쓰인 타입·함수 이름을 뽑아 챕터에 같은 이름이 없는지 확인했고, "책과 달라진 점"에 적힌 현재 툴체인 쪽 동작은 메인 세션이 다시 실행해 확인했습니다. 책에 없는 지침은 챕터 README의 "책과 달라진 점"에 "책에 없는 지침"으로 밝혔습니다(ch2·ch4는 해당 없음). 이 대조는 책 페이지를 요약 모델로 읽은 결과입니다.
 - 사전 작업(2026-11-19): 루트 `Cargo.toml`의 `members`에 `"appd-*/ch*"` 추가, 사이트 스크립트(`web/scripts/sync-content.mjs`)와 배포 워크플로가 `appd-*` 디렉터리를 읽도록 수정, 로드맵에 부록 A 절 추가.
 
 ## 작업 방식 메모
@@ -169,6 +172,10 @@
 - 에러 크레이트(부록 ch4, `thiserror` 2.0.21·`anyhow` 1.0.104): `thiserror`는 `Debug`를 만들지 않습니다(직접 derive). `anyhow`의 `{:?}`는 원인이 하나면 번호 없이, 둘 이상이면 `0:`, `1:` 번호를 붙입니다. `thiserror-impl`이 `syn` 3.x를 끌어옵니다. 챕터를 쓴 에이전트는 cargo 1.100.0이 쓰지 않는 의존성에 `unused_dependencies` 경고를 냈다고 보고했습니다(메인 세션은 확인하지 않음).
 - 변환 관련(부록 ch5): `as` 관련 clippy 린트(`cast_possible_truncation`·`cast_sign_loss`·`cast_possible_wrap`·`cast_lossless`)는 pedantic, `as_conversions`는 restriction이라 기본으로 꺼져 있고, `cast_nan_to_int`·`cast_abs_to_unsigned`·`unnecessary_fallible_conversions`·`from_over_into`는 경고합니다. `impl Into<u64>` 매개변수에 정수 리터럴을 넘기면 리터럴이 `i32`로 정해져 E0277입니다. `Into`만 구현한 타입에 `T::from(x)`를 부르면 대상 타입에 다른 `From` 구현이 없을 때는 E0308, 있으면 E0277입니다. `From`은 const 트레이트가 아니라 `const`에서 `u64::from`을 부르면 E0658입니다. 정수의 `truncate`·`widen`·`saturating_cast`는 1.100.0에서 nightly 전용(E0658)이고 `cast_signed`/`cast_unsigned`(1.87)는 안정화됐습니다.
 - 뉴타입 관련(부록 ch6): 비공개 필드를 가진 튜플 구조체를 모듈 밖에서 만들거나 구조 분해하면 E0603(이름 붙은 필드는 E0451)입니다. 뉴타입에 안쪽 타입의 메서드를 부른 E0599의 help는 `.0.method()`를 제안합니다. `Add` 구현이 다른 타입에 대해서만 있으면 E0369가 아니라 E0308이고, 아예 없으면 E0369입니다. `iter().sum::<NewType>()`은 E0277입니다. `write!(f, "{}", self.0)`로 `Display`를 위임하면 너비 같은 서식 지정이 사라지므로 `fmt::Display::fmt(&self.0, f)`로 위임합니다.
+- 빌더 관련(부록 ch7, `derive_builder` 0.20.2): clippy `too_many_arguments`는 인자 8개부터 warn입니다. `&mut` 빌더를 임시값에서 시작해 변수에 담는 E0716은 모든 에디션에서 같고, 체인을 블록의 마지막 표현식에 둔 모양(`{ B::new().x() }.build()`)만 2024 에디션에서 새로 E0716입니다. 소비형 빌더의 E0382는 세터 인자에 `format!`이 있으면 `Clone`을 구현하라는(따르면 안 되는) 제안으로 바뀝니다. `derive_builder`의 기본은 `&mut` 패턴이고, 검증 함수에서는 기본값에 맡긴 필드가 `None`입니다. `type_name_of_val`에 `&mut T`를 그대로 넘기면 `&T`로 강제 변환돼 `&mut`이 보이지 않습니다. 필드 기본값 문법(`struct S { t: u32 = 30 }`)은 1.100.0에서 E0658입니다.
+- 포인터 관련(부록 ch8): clippy `ptr_arg`는 본문이 `capacity()`나 `push`를 쓰는 `&Vec`/`&mut Vec` 매개변수와 `&Rc<T>`에는 경고하지 않습니다. `vec_box`·`box_collection`·`redundant_allocation`은 `let` 문의 타입 표기에는 경고하지 않고 필드와 시그니처에만 경고합니다. `size_of_val(&참조변수)`는 `size_of_ref`에 걸립니다. `HashMap<K, _>::get("문자열")`은 `K: Borrow<str>`가 없으면 E0277이 아니라 E0308입니다. 넓은 원시 포인터의 `==`는 rustc `ambiguous_wide_pointer_comparisons` 경고가 납니다(`ptr::addr_eq` 사용). `Eq`와 `Hash`가 어긋난 키의 조회 결과는 기본 해셔에서 실행마다 다르므로, 예제 출력에 쓰려면 `BuildHasherDefault<DefaultHasher>`로 시드를 고정합니다. rust-src가 없어도 표준 라이브러리 소스는 로컬 문서의 `share/doc/rust/html/src/`에서 볼 수 있습니다.
+- 반복 관련(부록 ch9): clippy 기본 warn은 `needless_range_loop`·`unnecessary_fold`·`manual_find`·`explicit_counter_loop`·`manual_try_fold`·`map_flatten`이고, `needless_for_each`·`needless_collect`·`explicit_iter_loop`는 꺼져 있습니다. `needless_range_loop`는 인덱스로 이웃 원소나 다른 배열의 다른 위치를 읽으면 경고하지 않습니다. `for_each` 안의 `return`은 경고 없이 `continue`처럼 동작하고, `break`/`continue`는 E0267입니다. `try_find`·`try_collect`·`map_windows`는 1.100.0에서 nightly 전용(E0658)입니다.
+- 표준 트레이트 관련(부록 ch10): 예제 바이너리라도 `pub mod` 안의 `pub` 타입에는 rustc `missing_debug_implementations`·`missing_copy_implementations`(기본 allow)와 clippy `new_without_default`가 걸립니다. `#[default]` 없는 열거형의 `derive(Default)`는 E0665, `derive(Eq)`를 `f64` 필드 둘에 붙이면 E0277이 첫 필드에서만 나고 `Hash`는 필드마다 납니다. clippy `eq_op`(deny)는 `x == x`를 잡습니다. `should_implement_trait`·`inherent_to_string`·`suspicious_arithmetic_impl`·`suspicious_op_assign_impl`은 warn, `derive_partial_eq_without_eq`는 allow입니다.
 - 이 환경의 안전 검사는 `rm -rf "$변수/…"` 꼴의 삭제를 막습니다. 리터럴 경로를 적어 지웁니다.
 
 ## 후속 조치
@@ -205,6 +212,10 @@
 - 부록 A ch1 → `ch21-semver`: 공개 열거형에 배리언트를 추가하는 호환성 문제와 `#[non_exhaustive]`. ch2 → `ch21-semver`: 공개 함수의 바운드를 조이면 부르는 쪽이 깨진다는 점. ch3 → `ch18-dont-panic`: `unwrap`/`expect`.
 
 - 부록 A ch5 → `ch12-generics-vs-trait-objects`: "제네릭 부분은 `into()` 한 줄, 실제 일은 제네릭이 아닌 함수"로 단형성화 비용을 줄이는 모양, `where Self: Sized`로 제네릭 메서드를 dyn 호환 트레이트에 남기기. → `ch19-avoid-reflection`: 업캐스트의 쓰임. → `ch29-listen-to-clippy`: pedantic cast 린트를 프로젝트 단위로 켜기. ch6 → `ch34-ffi-boundaries`·Part 10 `ch2-data-layout`: `#[repr(transparent)]`.
+
+- 부록 A 전체: 위임 메시지의 "추가 요청"에 넣은 판단 기준이 그대로 챕터의 지침이 되어, ch1·ch3·ch5~ch10에 책에 없는 지침이 들어갔습니다(각 README에 밝힘). ch11 이후를 위임할 때는 먼저 책의 해당 Item이 무엇을 권하는지 확인하고, 더할 판단 기준은 "책에 없는 지침"으로 표시하게 합니다. 이미 들어간 지침을 둘지 뺄지는 정합니다.
+- 부록 A ch7 → `ch21-semver`: 공개 구조체에 필드를 추가하면 사용자의 구조체 리터럴이 깨지는 문제. → `ch22-minimize-visibility`: 필드를 비공개로 두는 이유. → Part 8 `ch5-static-guarantees`: 타입 상태 빌더. ch8 → `ch14-lifetimes`·`ch15-borrow-checker`: 슬라이스 보관과 라이프타임, 인덱스로 가리키기. ch9 → `ch20-avoid-over-optimizing`: 성능 측정, `ch15-borrow-checker`: 두 클로저가 같은 상태를 고칠 때의 구조 변경. ch10 → `ch21-semver`: 트레이트 구현을 더하거나 뗄 때의 호환성과 `derive(Ord)`의 필드 순서, `ch17-shared-state-parallelism`: `unsafe impl Send/Sync`.
+- 부록 A ch10: README가 `ch9-iterator-transforms`를 링크 없이 이름으로만 가리킵니다(동시에 작성). 상대 링크로 바꿀 수 있습니다(선택 사항).
 
 ## 용어 메모
 
@@ -369,3 +380,9 @@
 | nested error / minimal error / type erasure | 중첩 에러 / 최소 에러 / 종류를 지우다 |
 | coercion site / sign extension | 강제 변환 자리 / 부호 확장 |
 | unit newtype / validated newtype / delegating impl / accessor | 단위 뉴타입 / 검증 뉴타입 / 위임 구현 / 읽기용 접근자 |
+| setter / options struct / typestate builder | 세터 / 옵션 구조체(필수 값을 뺀 선택 값 묶음 + `Default`) / 타입 상태 빌더 |
+| consuming builder / non-consuming builder | 소비형 빌더 / `&mut` 빌더 |
+| vtable / (wide pointer) metadata | vtable(처음 한 번 "메서드 포인터 표"로 풀어 씀) / 메타데이터 |
+| accumulator / side effect / early exit / bounds check | 누적 변수 / 부수 효과 / 탈출 조건 / 경계 검사 |
+| checklist (공개 타입의 트레이트 판단표) / normalize / (Copy의) copy | 체크리스트 / 정규화 / 사본 |
+| 트레이트 구현 사이에 맞아야 하는 성질(`Eq`와 `Hash` 등) | "서로 맞아야 한다", "같은 기준"으로 풀어 씀("일관성"은 coherence에만 씀) |

@@ -6,6 +6,7 @@
 - 규모: 사전 작업 9건, 챕터 35개(Item 1개 = 챕터 1개), 마무리 1회
 - 선수 과정: Part 0, Part 1 (둘 다 완료). 본편의 나머지 파트와는 순서가 무관합니다.
 - 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료
+- 2026-11-19 변경: 사용자 결정으로 부록 디렉터리 이름을 `appd-a/`로 정했습니다(처음 계획은 `appendix-effective-rust/`). 챕터 구조는 본편과 같습니다(디렉터리 + `README.md` + `examples/`).
 
 ## 1. 개요
 
@@ -48,7 +49,7 @@ Preface, 각 장의 머리말, Afterword는 챕터로 만들지 않고 부록 RE
 | ch4, ch33 | `Error` 트레이트를 `core::error::Error`로도 쓸 수 있습니다. 책은 `std` 전용으로 설명합니다. |
 | ch14, ch15 | 책의 에러 메시지는 1.70 기준입니다. 2024 에디션의 임시값 범위 규칙과 let 체인이 대여 범위 예제에 영향을 주는지 봅니다. |
 | ch16 | 책이 권하는 `once_cell` 크레이트의 기능 상당수가 표준 라이브러리(`OnceLock`, `LazyLock`)에 들어왔습니다. |
-| ch19 | 책은 트레이트 객체 업캐스팅을 "앞으로 들어올 기능"으로 설명합니다. 현재 툴체인에서 동작하는지 확인하고 그 결과대로 씁니다. |
+| ch19 | 책은 트레이트 객체 업캐스트를 "앞으로 들어올 기능"으로 설명합니다. 현재 툴체인에서 동작하는지 확인하고 그 결과대로 씁니다. |
 | ch21, ch25 | 리졸버 3의 `rust-version` 인식 동작처럼 책 이후에 생긴 Cargo 기능을 반영합니다. |
 | ch26 | `cfg` 이름과 값의 오타를 잡는 `unexpected_cfgs` lint가 생겼습니다. |
 | ch29 | `#[expect]` 속성과 `Cargo.toml`의 `[lints]` 테이블은 책 이후에 생겼습니다. |
@@ -62,7 +63,7 @@ Preface, 각 장의 머리말, Afterword는 챕터로 만들지 않고 부록 RE
 
 ```
 LEARNING_RUST/
-├── appendix-effective-rust/
+├── appd-a/
 │   ├── README.md                       # 부록 개요, 출처와 라이선스, 챕터 목차(책의 장별로 묶음)
 │   ├── ch1-express-data-structures/    # Item 1
 │   │   ├── README.md
@@ -76,12 +77,12 @@ LEARNING_RUST/
 
 | 대상 | 규칙 | 예시 |
 | --- | --- | --- |
-| 부록 디렉터리 | `appendix-{slug}` | `appendix-effective-rust` |
+| 부록 디렉터리 | `appd-{문자}` | `appd-a` |
 | 챕터 디렉터리 | `ch{N}-{slug}`, **N은 Item 번호** | `ch14-lifetimes` |
 | 패키지 이름 | `er-ch{N}-{slug}` | `er-ch14-lifetimes` |
 | 다른 Item을 가리킬 때 | `ch14`(Item 14) | 본편 챕터는 `Part 1 ch8` |
 
-챕터 번호와 Item 번호가 같으므로 책의 "Item 14 참고"를 그대로 `ch14`로 옮길 수 있습니다. 부록을 더 추가하게 되면 `appendix-{slug}/` 디렉터리와 새 패키지 접두사를 하나 더 만듭니다.
+챕터 번호와 Item 번호가 같으므로 책의 "Item 14 참고"를 그대로 `ch14`로 옮길 수 있습니다. 부록을 더 추가하게 되면 `appd-{문자}/` 디렉터리와 새 패키지 접두사를 하나 더 만듭니다.
 
 ### 2.2 README 구성
 
@@ -106,15 +107,15 @@ LEARNING_RUST/
 
 | 상태 | 번호 | 작업 | 확인 방법 |
 | --- | --- | --- | --- |
-| ⬜ | P1 | 툴체인 확인. mise를 거치지 않은 셸에서는 rustup 기본값 1.98.1이 잡힙니다(2026-11-19 확인). tutor에게 넘길 셸에서 1.100.0이 나오는지 봅니다. | `rustc --version`, `mise exec -- rustc --version` |
-| ⬜ | P2 | 루트 `Cargo.toml`: `members = ["part*/ch*", "appendix-*/ch*"]` | 부록 디렉터리가 아직 없는 상태에서 `cargo metadata --no-deps`가 성공하는지 |
-| ⬜ | P3 | `docs/roadmap.md`에 부록 추가: 1절 표 아래에 부록 행, 2.2절에 이 문서 2.1절의 이름 규칙, 3절 끝에 "부록. Effective Rust" 절(이 문서 4절의 표), 4절 진행 현황에 `부록. Effective Rust 0 / 35` 행. 본편 합계(109)는 그대로 두고 부록은 따로 셉니다. | 사이트의 `/roadmap/` 페이지 |
-| ⬜ | P4 | `PROGRESS.md`: 요약 표에 부록 행, "부록. Effective Rust" 표(열은 Part 0 표와 동일) 추가 | — |
-| ⬜ | P5 | `web/scripts/sync-content.mjs`: `partDirs()`가 `^part(\d+)-`만 찾습니다. 번호순 파트 뒤에 `appendix-*` 디렉터리를 이름순으로 잇도록 고치고, 파일 머리 주석의 경로 표도 고칩니다. | `cd web && pnpm build` 후 사이드바에 부록 그룹 |
-| ⬜ | P6 | `.github/workflows/deploy.yml`: `paths`에 `'appendix-*/**'` 추가 | — |
-| ⬜ | P7 | `.claude/skills/writing-guide/SKILL.md`: 부록 범위 표기(`/writing-guide appendix-effective-rust ch1~ch9`), 디렉터리 준비 스크립트의 패키지 접두사(`p{n}-` → `er-`), 이 문서 6절을 위임 메시지에 넣는다는 안내를 추가 | 스킬을 ch1 하나로 시험 실행 |
-| ⬜ | P8 | `appendix-effective-rust/README.md` 작성: 개요(책 소개, 본편과의 관계, 읽는 순서), 출처와 라이선스, 학습 방법, 책의 장별 챕터 목차(완료된 챕터만 행으로 추가) | — |
-| ⬜ | P9 | 환경 준비물 승인(5절). 승인하지 않은 도구가 필요한 부분은 "설명만 쓰고 검증하지 못했다고 밝힌다"는 조건으로 위임합니다. | — |
+| ✅ | P1 | 툴체인 확인. mise를 거치지 않은 셸에서는 rustup 기본값 1.98.1이 잡힙니다(2026-11-19 확인). tutor에게 넘길 셸에서 1.100.0이 나오는지 봅니다. | `rustc --version`, `mise exec -- rustc --version` |
+| ✅ | P2 | 루트 `Cargo.toml`: `members = ["part*/ch*", "appd-*/ch*"]` | 확인 결과: 글롭에 맞는 디렉터리가 하나도 없으면 `cargo metadata`가 실패합니다. 첫 챕터 디렉터리(자리표시 예제 포함)를 만든 뒤에 추가했습니다. |
+| ✅ | P3 | `docs/roadmap.md`에 부록 추가: 1절 표 아래에 부록 행, 2.2절에 이 문서 2.1절의 이름 규칙, 3절 끝에 "부록. Effective Rust" 절(이 문서 4절의 표), 4절 진행 현황에 `부록. Effective Rust 0 / 35` 행. 본편 합계(109)는 그대로 두고 부록은 따로 셉니다. | 사이트의 `/roadmap/` 페이지 |
+| ✅ | P4 | `PROGRESS.md`: 요약 표에 부록 행, "부록. Effective Rust" 표(열은 Part 0 표와 동일) 추가 | — |
+| ✅ | P5 | `web/scripts/sync-content.mjs`: `partDirs()`가 `^part(\d+)-`만 찾습니다. 번호순 파트 뒤에 `appd-*` 디렉터리를 이름순으로 잇도록 고치고, 파일 머리 주석의 경로 표도 고칩니다. | `cd web && pnpm build` 후 사이드바에 부록 그룹 |
+| ✅ | P6 | `.github/workflows/deploy.yml`: `paths`에 `'appd-*/**'` 추가 | — |
+| ✅ | P7 | `.claude/skills/writing-guide/SKILL.md`: 부록 범위 표기(`/writing-guide appd-a ch1~ch9`), 디렉터리 준비 스크립트의 패키지 접두사(`p{n}-` → `er-`), 이 문서 6절을 위임 메시지에 넣는다는 안내를 추가 | 스킬을 ch1 하나로 시험 실행 |
+| ✅ | P8 | `appd-a/README.md` 작성: 개요(책 소개, 본편과의 관계, 읽는 순서), 출처와 라이선스, 학습 방법, 책의 장별 챕터 목차(완료된 챕터만 행으로 추가) | — |
+| ⬜ | P9 | 환경 준비물 승인(5절). ch1~ch10은 추가 도구가 필요 없어 승인 없이 진행했습니다(외부 크레이트는 ch4의 `thiserror`·`anyhow`뿐). ch16 이후를 시작하기 전에 승인받습니다. 승인하지 않은 도구가 필요한 부분은 "설명만 쓰고 검증하지 못했다고 밝힌다"는 조건으로 위임합니다. | — |
 
 루트 `README.md`의 "구성" 표에는 첫 챕터가 완료될 때 부록 행을 추가합니다.
 
@@ -179,7 +180,7 @@ P3을 마친 뒤에는 **챕터 상태의 기준이 `docs/roadmap.md`와 `PROGRE
 | ⬜ | `ch16-avoid-unsafe` | unsafe를 쓰기 전에 표준 라이브러리와 검증된 크레이트에서 안전한 대안 찾기, 꼭 써야 할 때의 지침(작게 감싸기, 안전성 주석, Miri, 테스트) | 직접 쓴 unsafe를 표준 라이브러리의 안전한 API로 바꾸기, 안전한 래퍼와 `// SAFETY:` 주석 | Item 16 (`unsafe`) |
 | ⬜ | `ch17-shared-state-parallelism` | Rust가 막는 것(데이터 경쟁, `Send`/`Sync`)과 막지 못하는 것(교착 상태), 잠금 범위와 순서, 공유 상태 대신 채널 | 데이터 경쟁 시도가 컴파일되지 않는 모습, 잠금 순서가 엇갈린 교착 상태와 해결, 채널로 다시 설계 | Item 17 (`deadlock`) |
 | ⬜ | `ch18-dont-panic` | 패닉이 숨어 있는 곳, 라이브러리가 패닉 대신 `Result`를 돌려줘야 하는 이유, `catch_unwind`의 한계, 패닉을 막는 도구 | 패닉하는 API를 `Result` API로, 숨은 패닉 지점(인덱싱, 산술, `RefCell`), `unwrap`을 금지하는 lint 설정 | Item 18 (`panic`) |
-| ⬜ | `ch19-avoid-reflection` | Rust에 리플렉션이 없는 이유, `type_name`과 `Any`/`TypeId`의 한계, 트레이트 객체 업캐스팅 | `type_name`의 한계, `dyn Any` 다운캐스트와 대안(열거형, 트레이트 메서드), 업캐스팅 | Item 19 (`reflection`) |
+| ⬜ | `ch19-avoid-reflection` | Rust에 리플렉션이 없는 이유, `type_name`과 `Any`/`TypeId`의 한계, 트레이트 객체 업캐스트 | `type_name`의 한계, `dyn Any` 다운캐스트와 대안(열거형, 트레이트 메서드), 업캐스트 | Item 19 (`reflection`) |
 | ⬜ | `ch20-avoid-over-optimizing` | 먼저 단순하게 쓰고 측정한 뒤 최적화하기, 자료구조와 할당, 복사 비용을 두려워하지 않기, 참조 대신 소유 타입이나 스마트 포인터로 설계 단순화 | 라이프타임이 번지는 구조체와 소유 타입 구조체 비교, `clone`과 `Rc`, 간단한 실행 시간 측정 | Item 20 (`optimize`) |
 
 작성 메모
@@ -191,7 +192,7 @@ P3을 마친 뒤에는 **챕터 상태의 기준이 `docs/roadmap.md`와 `PROGRE
 | ch16 | Part 0 ch19 | 책에 코드가 없는 Item이라 예제를 새로 설계. Miri는 nightly 필요(5절). 없으면 설명만 쓰고 미검증이라고 밝힘. unsafe 규칙 자체는 Part 10으로 미룸 |
 | ch17 | Part 0 ch15, Part 1 ch11 | 교착 상태 예제는 `try_lock`이나 제한 시간으로 관찰하고 스스로 끝나야 함. 스레드 출력 순서는 작업 방식 메모대로 처리. C++ 비교는 줄임 |
 | ch18 | Part 0 ch9, Part 1 ch8(`catch_unwind`, 패닉 훅) | `panic = "abort"`는 워크스페이스 멤버의 `[profile]`이 무시되므로 `projects/`에서만 실습(`PROGRESS.md` 후속 조치) |
-| ch19 | Part 1 ch14(`Any`) | 업캐스팅은 1.4절 참고 |
+| ch19 | Part 1 ch14(`Any`) | 업캐스트는 1.4절 참고 |
 | ch20 | Part 1 ch6(`Cow`)·ch7 | 시간 측정값은 실행마다 다름. 릴리스 빌드에서 반복문이 통째로 사라질 수 있음(작업 방식 메모) |
 
 ### 4.4 Dependencies — ch21~ch26
@@ -295,6 +296,8 @@ nightly와 Miri는 Part 10·11의 준비물이기도 하고, `PROGRESS.md` 후�
 - README: 첫머리에 원제와 링크, 패키지 이름. 핵심 개념은 지침마다
   "문제 상황 → 비권장 코드 → 권장 코드 → 따르지 않아도 되는 경우" 순서.
   핵심 개념 끝에 "기억할 것" 3~6줄. 책과 실제 동작이 다르면 "책과 달라진 점" 소절.
+- 출처 표기: 책의 Item 본문이 명시적으로 권하지 않는데 호출 메시지·std 문서·clippy를 근거로 더한 지침이 있으면
+  "책과 달라진 점"에 "책에 없는 지침" 항목으로 어느 지침이 그런지와 근거를 밝히고 보고에도 적습니다.
 - 예제: 파일 하나가 지침 하나. 같은 파일에서 비권장 형태와 권장 형태를 함께 실행해 비교합니다.
   컴파일되지 않는 비권장 코드만 compile_fail/에 둡니다.
 - 버전: 책은 2018 에디션, rustc 1.70 기준입니다. 저장소 툴체인에서 확인한 것만 쓰고,
@@ -312,9 +315,9 @@ nightly와 Miri는 Part 10·11의 준비물이기도 하고, `PROGRESS.md` 후�
 
 | 상태 | 묶음 | 범위 | 챕터 수 | 실행 | 비고 |
 | --- | --- | --- | --- | --- | --- |
-| ⬜ | 0 | 사전 작업 P1~P9 | — | 메인 세션이 직접 | Part 2 작성이 끝난 뒤 |
-| ⬜ | 1 | Types | 9 | `/writing-guide appendix-effective-rust ch1~ch9` | 추가 도구 없이 가능 |
-| ⬜ | 2 | Traits | 4 | `… ch10~ch13` | 추가 도구 없이 가능 |
+| ✅ | 0 | 사전 작업 P1~P8 | — | 메인 세션이 직접 | P9(환경 준비물 승인)는 묶음 3 전에 |
+| ✅ | 1 | Types | 9 | `/writing-guide appd-a ch1~ch9` | 추가 도구 없이 가능 |
+| 🔄 | 2 | Traits | 4 | `… ch10~ch13` | 추가 도구 없이 가능. ch10은 완료(2026-11-19), ch11~ch13이 남음 |
 | ⬜ | 3 | Concepts | 7 | `… ch14~ch20` | ch16은 Miri 승인 여부에 따라 범위가 달라짐 |
 | ⬜ | 4 | Dependencies | 6 | `… ch21~ch26` | ch24는 ch21 뒤에. 대부분 `projects/` 실습 |
 | ⬜ | 5 | Tooling | 6 | `… ch27~ch32` | ch31은 ch27~ch30 뒤에, ch32는 마지막에(앞 챕터의 도구를 모음) |
@@ -348,7 +351,7 @@ nightly와 Miri는 Part 10·11의 준비물이기도 하고, `PROGRESS.md` 후�
 | 항목 | 정한 값 | 다른 선택지 |
 | --- | --- | --- |
 | 챕터 단위 | Item 1개 = 챕터 1개(35개), 챕터 번호 = Item 번호 | 작은 Item을 합쳐 25개 안팎으로 줄이기(번호 대응이 깨짐) |
-| 디렉터리와 패키지 | `appendix-effective-rust/`, `er-ch{N}-{slug}` | `part12-…`로 본편에 편입(요청과 다름) |
+| 디렉터리와 패키지 | `appd-a/`, `er-ch{N}-{slug}` | `part12-…`로 본편에 편입(요청과 다름) |
 | 진척 집계 | 본편 109와 별도로 `부록 0 / 35` | 합계에 포함해 144 |
 | 분량 | 예제 4~6개, README 300~700줄 | 본편 수준(예제 8개 안팎, 600~1200줄) |
 

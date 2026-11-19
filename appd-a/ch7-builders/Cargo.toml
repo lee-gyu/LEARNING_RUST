@@ -1,0 +1,8 @@
+[package]
+name = "er-ch7-builders"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+derive_builder = "0.20.2"
