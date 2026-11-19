@@ -1,6 +1,6 @@
 ---
 name: writing-guide
-description: docs/roadmap.md의 파트·챕터 범위를 받아 tutor 서브 에이전트에게 챕터별로 위임해 설명 문서와 실습 예제를 작성하고, 결과 검증·진척 관리(PROGRESS.md)·챕터 간 일관성 정리까지 수행합니다. 예 - `/writing-guide part1 전체`, `/writing-guide part2 ch1~ch3`
+description: docs/roadmap.md의 파트·챕터 범위를 받아 tutor 서브 에이전트에게 챕터별로 위임해 설명 문서와 실습 예제를 작성하고, 결과 검증·진척 관리(PROGRESS.md)·챕터 간 일관성 정리까지 수행합니다. 예 - `/writing-guide part1 전체`, `/writing-guide part2 ch1~ch3`, `/writing-guide appd-a ch1~ch9`
 argument-hint: "<파트> [챕터 범위]"
 ---
 
@@ -154,6 +154,18 @@ rustc --edition 2024 --out-dir <임시 디렉터리> <챕터>/compile_fail/<파�
 - 챕터 사이를 훑습니다: 용어 메모와 다른 표기, 기준 문서의 장이 아닌데 "N장"으로 쓴 곳, 뒤 챕터가 "앞에서 배웠다"고 한 내용이 실제로 앞 챕터에 있는지.
 - 챕터별 빌드 디렉터리(`target/p*-ch*`)를 지웁니다.
 - 커밋은 사용자가 요청할 때만 합니다.
+
+## 부록(`appd-*`)을 쓸 때
+
+부록은 본편(Part 0~11)과 별도인 파트이며 위 절차를 그대로 따릅니다. 다른 점만 적습니다.
+
+- 범위 표기: `/writing-guide appd-a ch1~ch9`. 부록 A(Effective Rust)의 챕터 계획은 `docs/roadmap.md` 3절의 "부록 A"에, 챕터별 작성 메모(본편 연결, 주의·준비물)와 실행 순서는 `plan/plan-effective-rust.md` 4절과 7절에 있습니다.
+- 디렉터리는 `appd-a/ch{N}-{slug}`(N은 책의 Item 번호), 패키지 이름은 `er-ch{N}-{slug}`입니다. 3절의 준비 스크립트에서 `part=appd-a`로 두고 패키지 이름을 `er-$ch`로 씁니다.
+- 워크스페이스의 `"appd-*/ch*"` 글롭은 맞는 디렉터리가 하나도 없으면 cargo가 실패합니다. 부록의 첫 챕터 디렉터리를 만든 뒤에 `members`에 추가합니다.
+- 위임 메시지에 `plan/plan-effective-rust.md` 6절의 "부록 공통" 요청을 넣습니다. `tutor.md`는 독자를 Rust 입문자로 가정하므로, 독자가 Part 0·1을 마친 사람이라는 점과 저작권 조건(번역·발췌·코드 인용 금지)은 꼭 넣습니다. 챕터별 추가 요청은 계획서 4절 작성 메모와 1.4절 표에서 옮깁니다.
+- 진척은 본편 합계(109)와 따로 셉니다. `PROGRESS.md`와 로드맵 4절의 부록 행, 부록 README의 목차(책의 장별로 묶음)를 갱신합니다.
+- 위임 메시지의 "추가 요청"에 책에 없는 판단 기준을 넣으면 그대로 챕터의 지침이 됩니다. 책에 없는 지침은 README의 "책과 달라진 점"에 "책에 없는 지침"으로 밝히게 하고, 검증할 때 지침 목록을 책의 해당 Item과 대조합니다.
+- 검증할 때 README에 책 본문을 옮긴 문단이나 책의 코드와 같은 예제가 없는지 훑어보고, "책과 달라진 점"에 적힌 내용은 메인 세션이 한 번 더 실행해 확인합니다.
 
 ## 사용자에게 알릴 것
 

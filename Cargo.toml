@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["part*/ch*"]
+members = ["part*/ch*", "appd-*/ch*"]
 
 [workspace.package]
 edition = "2024"

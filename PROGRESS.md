@@ -16,6 +16,7 @@
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
 | Part 3~11 | 0 / 69 |
+| 부록 A. Effective Rust (본편 합계와 별도) | 8 / 35 |
 
 ## 사전 작업
 
@@ -96,10 +97,29 @@
 
 아직 시작하지 않았습니다. 챕터 목록은 [로드맵 3절](docs/roadmap.md#3-파트별-챕터-계획)을 따르며, 파트를 시작할 때 이 문서에 표를 추가합니다.
 
+## 부록 A. Effective Rust — `appd-a/`
+
+[Effective Rust](https://effective-rust.com/)의 Item 1개를 챕터 1개로 정리합니다(챕터 번호 = Item 번호, 패키지 이름 `er-ch{N}-{slug}`). 계획은 [로드맵 3절의 부록 A](docs/roadmap.md#3-파트별-챕터-계획)를 따릅니다. ch11~ch35의 행은 그 묶음을 시작할 때 추가합니다.
+
+| 상태 | 챕터 | 산출물 | 검증 | 완료일 | 비고 |
+| --- | --- | --- | --- | --- | --- |
+| ✅ | `ch1-express-data-structures` | 예제 6 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3개를 6개로 늘림(정수 타입 고르기, 이름 붙인 필드, 에러 코드 대신 `Result` 추가). 패닉하는 예제와 외부 크레이트 없음. 책과 달라진 점은 컴파일러 출력의 표시 방식뿐(E0308의 `swap these arguments`, E0004의 `note`). 타입 크기는 macOS aarch64·1.100.0 기준이며 보장되지 않는다고 밝힘. README 682줄. 책에 없는 지침: 2.1절(범위에 맞는 정수 타입 고르기)(README "책과 달라진 점"에 밝힘) |
+| ✅ | `ch2-express-common-behavior` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 4개에 `03_trait_over_concrete`(구체 타입 대신 트레이트로 받기)를 더함. 패닉하는 예제와 외부 크레이트 없음. 책과 달라진 점: 책의 "object safety"는 dyn 호환, 함수 포인터의 `==` 비교에는 `unpredictable_function_pointer_comparisons` 경고가 남(`ptr::fn_addr_eq` 안내). 마커 트레이트 바운드 위반(E0277)은 README 본문에만 인용. README 565줄 |
+| ✅ | `ch3-option-result-transforms` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종에 `02_option_or_result`(반환 타입 고르기)와 `05_where_to_stop`(`if let`·`match`가 나은 곳)을 더함. 패닉하는 예제와 외부 크레이트 없음. clippy가 잡는 비권장 코드 6곳은 `#[expect(…, reason)]`로 표시(`manual_map`·`collapsible_if`·`question_mark`·`single_match`·`option_map_unit_fn`, rustc `unused_must_use`). 책과 달라진 점: E0507에 `help:`가 붙지만 `?`·`unwrap_or`에는 `clone()`만 제안, 2024 에디션에서는 `collapsible_if`가 let 체인을 제안. `unwrap`/`expect`는 다루지 않고 ch18로 미룸. README 695줄. 책에 없는 지침: 2.5절(`if let`·`match`가 나은 곳)(README "책과 달라진 점"에 밝힘) |
+| ✅ | `ch4-idiomatic-errors` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | dev-dependency `thiserror` 2.0.21·`anyhow` 1.0.104(루트 `Cargo.lock`에 `syn` 3.0.10 등 함께 추가). 일부러 낸 `Err`는 `main` 안에서 처리해 모든 예제가 종료 코드 0. 책과 달라진 점: `Error`는 1.81.0부터 `core::error::Error`로도 쓸 수 있음, 책의 "object safety"는 dyn 호환, `thiserror` 2는 `std` 기능을 끄면 `no_std`에서도 빌드됨(직접 확인). `Display` 없는 `impl Error`와 포괄 `From` 충돌(E0119)은 Part 1 ch8과 겹쳐 링크로 대체. `anyhow`의 `context`는 Part 7 `ch2-implementation-errors`로 미룸. 타입 크기는 64비트 기준. README 692줄 |
+| ✅ | `ch5-type-conversions` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종을 5개로 나눔(`TryFrom` 대 대체값으로 덮는 `From`, 좁히기와 넓히기를 따로). 패닉하는 예제와 외부 크레이트 없음. `as` 관련 clippy 린트는 pedantic·restriction이라 기본으로 꺼져 있다고 실제대로 설명. 책과 달라진 점: `Infallible`은 `!`의 별칭, 트레이트 객체 업캐스트(1.86)가 강제 변환에 추가됨, `cast_signed`/`cast_unsigned`(1.87) 안정화, E0277 도움말 목록이 다름. `Into`만 구현한 타입에 `T::from`을 부르면 대상에 다른 `From`이 없을 때 E0277이 아니라 E0308. 크기는 64비트 기준. README 635줄. 책에 없는 지침: 지침 3의 `try_from` 권고(README "책과 달라진 점"에 밝힘) |
+| ✅ | `ch6-newtype-pattern` | 예제 6 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | 계획의 예제 3종에 ch1이 넘긴 내용(같은 타입 인자 구별, 생성자에서 범위 검증)과 열어 줄 연산 고르기(`Deref`로 통째로 열면 안 되는 이유)를 더함. 패닉하는 예제와 외부 크레이트 없음(`derive_more`는 이름만 소개). 책과 달라진 점: E0117의 `note:`가 늘어남. E0599의 `help:`가 제안하는 `.0.cos()`는 버그를 되살리는 제안이라고 설명. E0117 예제(`Display for Duration`)는 Part 0 ch19와 트레이트가 같고 타입과 동기가 다름. README 661줄. 책에 없는 지침: 2.3절(범위 검증 생성자), 2.4절(열어 줄 연산 고르기)(README "책과 달라진 점"에 밝힘) |
+| ✅ | `ch7-builders` | 예제 5 / 에러 3 / 프로젝트 0 | 통과 | 2026-11-19 | dev-dependency `derive_builder` 0.20.2(루트 `Cargo.lock`에 `darling` 0.20.11 계열 함께 추가). 패닉하는 예제 없음, `build()`의 실패는 `Result`로 받아 출력. 책과 동작이 다른 곳은 없음. `&mut` 빌더를 임시값에서 시작한 E0716은 모든 에디션에서 같고, 체인을 블록의 마지막 표현식에 둔 모양만 2024 에디션에서 새로 E0716(직접 확인). E0063은 Part 0 ch5와 겹쳐 링크로 대체. `Command`는 실행하지 않고 설명의 근거로만 사용. 지침 5의 비권장 코드(기본값을 고려하지 않는 검증 함수)는 README에만 실음. README 662줄. 책에 없는 지침: 위치 인자 생성자의 문제, 비공개 필드, `build() -> Result` 검증(README "책과 달라진 점"에 밝힘) |
+| ✅ | `ch8-references-pointers` | 예제 6 / 에러 4 / 프로젝트 0 | 통과 | 2026-11-19 | 스마트 포인터 고르기를 지침 둘(소유자 수·스레드 / 내부 가변성·순환)로 나눔. **지침 1(`&Vec<T>` 대신 `&[T]`)과 지침 4(`Borrow`의 비교·해시 약속)는 책의 Item 8에 명시된 내용이 아니라 std 문서와 clippy `ptr_arg`를 근거로 더한 것**(README 2.8절에 밝힘). 패닉하는 예제·외부 크레이트·unsafe 없음(원시 포인터는 주소 비교에만 사용). 주소와 해시 값은 출력하지 않고 비교 결과만 출력 — 예제마다 25번 실행해 출력이 같음을 확인. 크기는 64비트 기준. `HashMap::get`에 `Borrow` 없는 키를 넘기면 지침의 E0277이 아니라 E0308. 책과 달라진 점: 용어 "fat pointer" → 넓은 포인터, `ptr::addr_eq`(1.76) 안정화, `size_of`가 프렐류드에 있음. 연습 3의 `BTreeMap` 결과는 이 툴체인의 구현 결과. README 692줄 |
+| ⬜ | `ch9-iterator-transforms` | | | | |
+| ⬜ | `ch10-standard-traits` | | | | |
+
+- 사전 작업(2026-11-19): 루트 `Cargo.toml`의 `members`에 `"appd-*/ch*"` 추가, 사이트 스크립트(`web/scripts/sync-content.mjs`)와 배포 워크플로가 `appd-*` 디렉터리를 읽도록 수정, 로드맵에 부록 A 절 추가.
+
 ## 작업 방식 메모
 
 - 챕터는 `tutor` 서브 에이전트(`.claude/agents/tutor.md`)가 하나씩 작성하고, 메인 세션이 보고를 받아 이 문서·로드맵·파트 README를 갱신합니다.
-- 워크스페이스 `members = ["part*/ch*"]` 때문에 `Cargo.toml`이 없거나 빌드 타깃이 하나도 없는 챕터 디렉터리가 있으면 **모든 챕터의 cargo 명령이 실패**합니다. 여러 챕터를 동시에 작성할 때는 메인 세션이 `Cargo.toml`과 자리표시 예제(`examples/00_placeholder.rs`)를 갖춘 디렉터리를 먼저 만들어 둡니다. 에이전트마다 `CARGO_TARGET_DIR`을 따로 줘서 빌드 디렉터리도 나눕니다.
+- 워크스페이스 `members = ["part*/ch*", "appd-*/ch*"]` 때문에 `Cargo.toml`이 없거나 빌드 타깃이 하나도 없는 챕터 디렉터리가 있으면 **모든 챕터의 cargo 명령이 실패**합니다. 여러 챕터를 동시에 작성할 때는 메인 세션이 `Cargo.toml`과 자리표시 예제(`examples/00_placeholder.rs`)를 갖춘 디렉터리를 먼저 만들어 둡니다. 에이전트마다 `CARGO_TARGET_DIR`을 따로 줘서 빌드 디렉터리도 나눕니다.
 - 챕터 README와 소스 파일은 `web/scripts/sync-content.mjs`가 사이트 페이지로 변환합니다. 상대 링크가 가리키는 파일이 없으면 `[sync-content] … 링크 대상이 없습니다` 경고가 나오므로, 챕터를 추가한 뒤 `web/`에서 `pnpm build`로 확인합니다.
 - 저장소 루트나 파트 디렉터리에서 `cargo new`를 실행하면 Cargo가 루트 `Cargo.toml`의 `members`에 새 경로를 조용히 추가합니다. `projects/` 아래 독립 프로젝트는 저장소 밖 임시 디렉터리에서 만든 뒤 복사하고 빈 `[workspace]` 테이블을 추가합니다.
 - 예제 작성 시 clippy 주의: 서식 지정 없는 문자열 리터럴 인자는 `clippy::print_literal`, `3.141592` 같은 원주율 근삿값은 `clippy::approx_constant`(기본 deny)에 걸립니다. `x: x`처럼 쓴 필드는 `clippy::redundant_field_names`에 걸립니다.
@@ -142,6 +162,15 @@
 - `cargo fix` 주의: 추적하지 않는 파일(`Cargo.lock` 포함)이 있어도 작업 트리가 더럽다고 보고 멈춥니다. `cargo fix --edition`은 `--force-warn`으로 린트 그룹을 켜므로 `#[allow]`로 막은 코드도 고치지만, `-W`와 `#![warn(..)]`은 `#[allow]`에 집니다. `Fixed` 줄의 순서는 실행마다 다릅니다. 저장소 안에서는 실행하지 않고 저장소 밖 사본에서만 실행합니다.
 - zsh에서 `echo ===`는 `=` 확장 때문에 실패합니다(`echo '==='`로 씁니다). 테스트 출력의 스레드 ID와 테스트가 끝나는 순서는 실행마다 다릅니다.
 
+- 부록(`appd-*`) 주의: 워크스페이스의 `"appd-*/ch*"` 글롭은 맞는 디렉터리가 하나도 없으면 cargo가 `failed to load manifest for workspace member`로 실패합니다. 첫 챕터 디렉터리를 만든 뒤에 `members`에 넣습니다. 부록 챕터의 패키지 이름은 `er-ch{N}-{slug}`입니다.
+- 받는 쪽 바운드와 에러 코드(부록 ch2): `Fn` 바운드에 맞지 않는 클로저는 쓰는 위치에 따라 코드가 다릅니다. 변수에 담아 넘기면 E0525, 인자 자리에 바로 쓰면 바꾸는 클로저는 E0596, 옮기는 클로저는 E0507입니다. `?Sized`가 빠진 제네릭에 `&dyn T`를 넘기면 E0277이고, 첫 번째 help(`.as_ref()`를 지우라는 것)를 따르면 E0308이 납니다. 함수 포인터의 `==` 비교는 rustc `unpredictable_function_pointer_comparisons` 경고가 납니다(`std::ptr::fn_addr_eq` 사용).
+- 타입 설계 관련 clippy 기본 수준(부록 ch1): `fn_params_excessive_bools`·`struct_excessive_bools`·`cast_possible_truncation`·`cast_sign_loss`는 pedantic이라 꺼져 있습니다. `i64 as u16`은 기본 설정에서 경고가 없습니다. 1.100.0의 `TryFromIntError` 표시 문구는 `number too large to fit in target type` / `number too small to fit in target type`입니다. rustfmt는 한글이 든 긴 `println!`을 여러 줄로 펼치므로 출력용 도우미 함수로 줄입니다.
+- `Option`/`Result` 리팩터링 관련(부록 ch3): clippy `question_mark`는 `Err(e) => return Err(e.into())`를 잡지만, 배리언트로 감싸는 갈래·`None => return Err(..)`·`Err(_) => return None`은 잡지 않습니다. 겹친 `if let`은 `collapsible_if`가 let 체인으로 합치라고 제안하고, `match o { Some(v) => v, None => 0 }`은 `manual_unwrap_or_default`가 잡습니다. 수동 `and_then` 모양과 가드가 있는 `match`는 잡지 않습니다. 빌린 `Option`을 옮기는 E0507의 help는 `map`에는 `as_ref()`/`as_mut()`/`clone()`을, `?`와 `unwrap_or`에는 `clone()`만 제안합니다. `?` 앞의 `map_err(|e| e.into())`는 E0283(또는 E0282), 클로저 안의 `continue`는 E0267입니다. 식 문장(`f();`)에 붙인 `#[expect(unused_must_use)]`는 동작합니다.
+- 에러 크레이트(부록 ch4, `thiserror` 2.0.21·`anyhow` 1.0.104): `thiserror`는 `Debug`를 만들지 않습니다(직접 derive). `anyhow`의 `{:?}`는 원인이 하나면 번호 없이, 둘 이상이면 `0:`, `1:` 번호를 붙입니다. `thiserror-impl`이 `syn` 3.x를 끌어옵니다. 챕터를 쓴 에이전트는 cargo 1.100.0이 쓰지 않는 의존성에 `unused_dependencies` 경고를 냈다고 보고했습니다(메인 세션은 확인하지 않음).
+- 변환 관련(부록 ch5): `as` 관련 clippy 린트(`cast_possible_truncation`·`cast_sign_loss`·`cast_possible_wrap`·`cast_lossless`)는 pedantic, `as_conversions`는 restriction이라 기본으로 꺼져 있고, `cast_nan_to_int`·`cast_abs_to_unsigned`·`unnecessary_fallible_conversions`·`from_over_into`는 경고합니다. `impl Into<u64>` 매개변수에 정수 리터럴을 넘기면 리터럴이 `i32`로 정해져 E0277입니다. `Into`만 구현한 타입에 `T::from(x)`를 부르면 대상 타입에 다른 `From` 구현이 없을 때는 E0308, 있으면 E0277입니다. `From`은 const 트레이트가 아니라 `const`에서 `u64::from`을 부르면 E0658입니다. 정수의 `truncate`·`widen`·`saturating_cast`는 1.100.0에서 nightly 전용(E0658)이고 `cast_signed`/`cast_unsigned`(1.87)는 안정화됐습니다.
+- 뉴타입 관련(부록 ch6): 비공개 필드를 가진 튜플 구조체를 모듈 밖에서 만들거나 구조 분해하면 E0603(이름 붙은 필드는 E0451)입니다. 뉴타입에 안쪽 타입의 메서드를 부른 E0599의 help는 `.0.method()`를 제안합니다. `Add` 구현이 다른 타입에 대해서만 있으면 E0369가 아니라 E0308이고, 아예 없으면 E0369입니다. `iter().sum::<NewType>()`은 E0277입니다. `write!(f, "{}", self.0)`로 `Display`를 위임하면 너비 같은 서식 지정이 사라지므로 `fmt::Display::fmt(&self.0, f)`로 위임합니다.
+- 이 환경의 안전 검사는 `rm -rf "$변수/…"` 꼴의 삭제를 막습니다. 리터럴 경로를 적어 지웁니다.
+
 ## 후속 조치
 
 챕터 작성 중 발견한, 다른 파일에 반영해야 할 사항을 적습니다.
@@ -169,6 +198,13 @@
 - Part 2 전체: ch1~ch4를 동시에 작성해서, 서로를 링크 없이 코드 서식의 이름으로만 가리키는 곳이 있습니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
 - Part 2 ch5: Part 10에서 Miri를 준비하면 `examples/03_env_unsafe.rs`와 `projects/ecosystem_compare/shared/main.rs`의 unsafe 블록을 확인합니다. `projects/msrv_resolver`의 결과(`smol_str` 0.3.2와 0.3.7)는 crates.io의 2026-11-19 상태에 기대므로, Part 3 `ch2-dependencies`를 쓸 때 다시 확인합니다.
 - Part 2 ch6: Part 10에서 Miri를 준비하면 `examples/02_fix_leftovers_2024.rs`의 unsafe 블록을 확인합니다. 린트 수준의 우선순위(`--force-warn`, `-W`, `#[allow]`)와 `[lints]` 테이블은 Part 5 `ch3-lints`로, 에디션과 무관한 `cargo fix`는 Part 6 `ch1-reading-diagnostics`로, 빌드 스크립트가 만든 코드의 마이그레이션은 Part 3 `ch8-build-scripts`로 미뤘습니다.
+
+- 부록 A ch1~ch10: 동시에 작성해서 부록 챕터끼리는 링크 없이 코드 서식의 이름으로만 가리키는 곳이 있습니다. 35개가 모두 생긴 뒤 상대 링크로 바꿉니다(`ch5-type-conversions`는 Part 10에도 같은 이름이 있으므로 기계적으로 바꾸지 않습니다).
+- Part 1 ch8: README 2.4절 끝이 "반복을 줄여 주는 크레이트는 Part 7 `ch2-implementation-errors`에서 다룬다"고 적고 있습니다. `thiserror`·`anyhow`의 기본은 부록 A ch4가 다루므로 함께 가리키도록 고칠지 정합니다.
+- 부록 A ch4 → `ch33-no-std`: `#![no_std]` 라이브러리에서 `thiserror`를 `default-features = false`로 쓰는 것, `core::error::Error`(1.81.0)를 이어받습니다. → Part 7 `ch2-implementation-errors`: `anyhow`의 `context`와 종료 코드.
+- 부록 A ch1 → `ch21-semver`: 공개 열거형에 배리언트를 추가하는 호환성 문제와 `#[non_exhaustive]`. ch2 → `ch21-semver`: 공개 함수의 바운드를 조이면 부르는 쪽이 깨진다는 점. ch3 → `ch18-dont-panic`: `unwrap`/`expect`.
+
+- 부록 A ch5 → `ch12-generics-vs-trait-objects`: "제네릭 부분은 `into()` 한 줄, 실제 일은 제네릭이 아닌 함수"로 단형성화 비용을 줄이는 모양, `where Self: Sized`로 제네릭 메서드를 dyn 호환 트레이트에 남기기. → `ch19-avoid-reflection`: 업캐스트의 쓰임. → `ch29-listen-to-clippy`: pedantic cast 린트를 프로젝트 단위로 켜기. ch6 → `ch34-ffi-boundaries`·Part 10 `ch2-data-layout`: `#[repr(transparent)]`.
 
 ## 용어 메모
 
@@ -320,3 +356,16 @@
 | async-signal-safe | 비동기 시그널 안전 |
 | (마이그레이션) 자동 수정 뒤 정리 / 고치지 않고 경고만 보기 | 다듬기 / 미리 보기 |
 | idiom / working tree / staged | 관용구 / 작업 트리 / 스테이지에 올린 |
+| (부록 A) Item / guideline / idiom | Item(영어 그대로, "Item 4") / 지침 / 관용구 |
+| (부록 A) README의 고정 표현 | 비권장 코드 / 권장 코드 / 지침을 따르지 않아도 되는 경우 / 기억할 것 / 책과 달라진 점 |
+| (부록 A) 같은 코드의 여러 버전 / 변환 메서드를 이어 쓴 것 | "~판"(`match`판, 손으로 쓴 판, `thiserror` 판) / 체인 |
+| caller / callee (시그니처 설계의 문맥) | 부르는 쪽 / 받는 쪽 (에러를 돌려받는 문맥에서는 본편처럼 "호출한 쪽"도 씀) |
+| function body / method receiver / fn item | 본문 / 수신자 / 함수 아이템 |
+| loosest bound / idempotent | 가장 느슨한 바운드 / 멱등 |
+| widening / narrowing conversion / boundary | 넓히는 변환 / 좁히는 변환 / 경계(바깥 입력을 안쪽 타입으로 바꾸는 지점) |
+| product type / sum type / algebraic data type | 곱 타입 / 합 타입 / 대수적 데이터 타입 |
+| sentinel value / invalid state / red flag | 센티널 값 / 무효한 상태 / 경고 신호 |
+| transform (`Option`/`Result`의 메서드) | 변환 메서드 |
+| nested error / minimal error / type erasure | 중첩 에러 / 최소 에러 / 종류를 지우다 |
+| coercion site / sign extension | 강제 변환 자리 / 부호 확장 |
+| unit newtype / validated newtype / delegating impl / accessor | 단위 뉴타입 / 검증 뉴타입 / 위임 구현 / 읽기용 접근자 |

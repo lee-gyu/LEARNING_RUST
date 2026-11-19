@@ -10,6 +10,7 @@
 //   partN-x/chM-y/README.md        → /partN-x/chM-y/
 //   partN-x/chM-y/examples/a.rs    → /partN-x/chM-y/examples/a-rs/   (코드 페이지)
 //   partN-x/chM-y/examples/        → /partN-x/chM-y/examples/        (파일 목록 페이지)
+//   appd-x/…                       → /appd-x/…                       (부록. 파트와 같은 구조이며 번호순 파트 뒤에 놓입니다)
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -210,8 +211,14 @@ function walk(absDir, rel, chapter) {
 	return found;
 }
 
+/** 번호순 파트 뒤에 부록(appd-a, appd-b, …)을 이름순으로 잇습니다. */
 function partDirs() {
-	return numbered(REPO_DIR, /^part(\d+)-/);
+	const appendices = fs
+		.readdirSync(REPO_DIR, { withFileTypes: true })
+		.filter((entry) => entry.isDirectory() && /^appd-/.test(entry.name))
+		.map((entry) => entry.name)
+		.sort();
+	return [...numbered(REPO_DIR, /^part(\d+)-/), ...appendices];
 }
 
 /** 이름이 pattern에 맞는 하위 디렉터리를 번호 순서로 돌려줍니다(ch2가 ch10보다 앞). */

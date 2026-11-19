@@ -3,7 +3,7 @@
 [rust-lang.org/learn](https://rust-lang.org/learn/)에 정리된 공식 학습 자료를 순서대로 따라가며, 챕터마다 **설명 문서(README.md)** 와 **실습 예제(.rs)** 를 작성하기 위한 전체 계획입니다.
 
 - 기준 툴체인: Rust 1.100 (stable), Edition 2024 — `mise.toml`의 `rust = "latest"`
-- 전체 규모: 12개 파트, 109개 챕터
+- 전체 규모: 12개 파트, 109개 챕터. 본편과 별도로 부록 A(35개 챕터)가 있습니다.
 - 작업 단위: **챕터 1개 = 작업 1회**. 완료하면 이 문서의 상태 칸을 ⬜ → ✅ 로 바꿉니다.
 
 ## 1. 전체 구성
@@ -25,7 +25,13 @@
 | | Part 10 | `part10-nomicon/` | [The Rustonomicon](https://doc.rust-lang.org/nomicon/index.html) | 12 |
 | | Part 11 | `part11-unstable/` | [The Unstable Book](https://doc.rust-lang.org/nightly/unstable-book/index.html) | 4 |
 
-**학습 순서**: Part 0 → 11 순서대로 진행합니다. Part 0은 이후 모든 파트의 선수 과정이며, Part 7·8(응용 분야)은 서로 독립적이라 순서를 바꿔도 됩니다. Part 10은 Part 9의 ch7·ch10을, Part 11은 nightly 툴체인을 전제로 합니다.
+본편과 별도로, 공식 학습 자료 밖의 책을 같은 방식으로 정리하는 **부록**이 있습니다. 부록의 챕터는 본편의 합계(109)에 넣지 않고 따로 셉니다.
+
+| 부록 | 디렉터리 | 기준 문서 | 챕터 수 |
+| --- | --- | --- | --- |
+| 부록 A | `appd-a/` | [Effective Rust](https://effective-rust.com/) (David Drysdale, O'Reilly 2024) | 35 |
+
+**학습 순서**: Part 0 → 11 순서대로 진행합니다. Part 0은 이후 모든 파트의 선수 과정이며, Part 7·8(응용 분야)은 서로 독립적이라 순서를 바꿔도 됩니다. Part 10은 Part 9의 ch7·ch10을, Part 11은 nightly 툴체인을 전제로 합니다. 부록 A는 Part 0과 Part 1만 전제로 하며, 본편의 나머지 파트와는 순서가 무관합니다.
 
 ## 2. 저장소 구조와 규칙
 
@@ -33,7 +39,7 @@
 
 ```
 LEARNING_RUST/
-├── Cargo.toml                      # 워크스페이스 루트 (members = ["part*/ch*"])
+├── Cargo.toml                      # 워크스페이스 루트 (members = ["part*/ch*", "appd-*/ch*"])
 ├── docs/roadmap.md                 # 이 문서
 ├── part0-getting-started/
 │   ├── README.md                   # 파트 개요 + 챕터 목차
@@ -48,7 +54,10 @@ LEARNING_RUST/
 │   └── ch2-guessing-game/
 ├── part1-standard-lib/
 │   └── ch1-...
-└── ...
+├── ...
+└── appd-a/                         # 부록 A. 구조는 파트와 같습니다
+    ├── README.md
+    └── ch1-express-data-structures/
 ```
 
 ### 2.2 이름 규칙
@@ -61,6 +70,11 @@ LEARNING_RUST/
 | 예제 파일 | `examples/{NN}_{snake_case}.rs` | `examples/02_borrowing.rs` |
 | 컴파일 에러 예제 | `compile_fail/{snake_case}.rs` | `compile_fail/e0382_use_after_move.rs` |
 | 독립 프로젝트 | `projects/{name}/` | `projects/minigrep/` |
+| 부록 디렉터리 | `appd-{문자}` | `appd-a` |
+| 부록 A의 챕터 디렉터리 | `ch{N}-{slug}`, N은 책의 Item 번호 | `ch14-lifetimes` |
+| 부록 A의 패키지 이름 | `er-ch{N}-{slug}` | `er-ch14-lifetimes` |
+
+부록 챕터를 가리킬 때는 `ch14`(Item 14)처럼 쓰고, 본편 챕터는 `Part 1 ch8`처럼 파트를 붙여 구분합니다.
 
 ### 2.3 예제 작성 규칙
 
@@ -111,7 +125,7 @@ publish.workspace = true
 
 | 상태 | 작업 |
 | --- | --- |
-| ✅ | 루트 `Cargo.toml` 작성 (`[workspace]`, `resolver = "3"`, `members = ["part*/ch*"]`, `[workspace.package]`에 `edition = "2024"`, `publish = false`) |
+| ✅ | 루트 `Cargo.toml` 작성 (`[workspace]`, `resolver = "3"`, `members = ["part*/ch*"]`(부록을 시작하며 `"appd-*/ch*"` 추가), `[workspace.package]`에 `edition = "2024"`, `publish = false`) |
 | ✅ | `.gitignore` 작성 (`target/`) |
 | ✅ | 루트 `README.md` 작성 (저장소 소개, 로드맵 링크, 실행 방법) |
 
@@ -326,6 +340,82 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | ⬜ | `ch3-language-features` | 대표 언어 기능 4~6개 (작성 시점에 선정) | 기능별 예제 | Language features |
 | ⬜ | `ch4-library-features` | 대표 라이브러리 기능 4~6개 (작성 시점에 선정) | 기능별 예제 | Library features |
 
+### 부록 A. Effective Rust — `appd-a/`
+
+[Effective Rust](https://effective-rust.com/)(David Drysdale, O'Reilly 2024)의 35개 Item을 Item 1개 = 챕터 1개로 정리합니다. 챕터 번호는 책의 Item 번호와 같습니다. 본편이 "무엇이 있고 어떻게 쓰는가"를 다룬다면, 부록은 "여러 방법 중 무엇을 왜 고르는가"를 다룹니다. 챕터의 중심은 비권장 코드와 권장 코드의 비교, 그리고 지침을 따르지 않아도 되는 경우입니다.
+
+- 선수 과정: Part 0, Part 1. 문법과 API 사용법은 본편 챕터로 링크하고 반복하지 않습니다.
+- 저작권: 온라인판은 CC BY-NC-ND 4.0입니다. 본문을 번역·발췌하지 않고 책의 코드도 옮기지 않습니다. 설명과 예제는 새로 설계하고, Item 원제만 영어 그대로 인용해 링크합니다.
+- 버전: 책은 2018 에디션, rustc 1.70 기준입니다. 실제 동작과 다른 곳은 챕터 README의 "책과 달라진 점"에 적습니다.
+- README는 2.4절의 여섯 항목을 유지하되, 핵심 개념을 지침마다 "문제 상황 → 비권장 코드 → 권장 코드 → 지침을 따르지 않아도 되는 경우" 순서로 풀고 "기억할 것"으로 마칩니다.
+- 준비: ch4는 `thiserror`·`anyhow`, ch28은 `syn`·`quote`, ch30은 `criterion`, ch34는 `cc`, ch35는 `bindgen`(libclang)을 씁니다. ch16(Miri)·ch25·ch28·ch30의 일부는 nightly 툴체인이나 추가 도구가 필요합니다.
+- 기준 문서 절의 주소는 `https://effective-rust.com/{이름}.html`입니다.
+
+#### Types — ch1~ch9
+
+| 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
+| --- | --- | --- | --- | --- |
+| ✅ | `ch1-express-data-structures` | 기본 타입과 암묵적 변환이 없는 이유, 집합 타입, 열거형으로 무효한 상태를 표현할 수 없게 만들기, `Option`/`Result`로 부재와 실패 표현 | `bool` 인자를 열거형으로, 필드 조합을 데이터를 가진 열거형으로, 센티널 값(-1, 빈 문자열)을 `Option`으로 | Item 1 (`use-types`) |
+| ✅ | `ch2-express-common-behavior` | 함수와 메서드, 함수 포인터, 클로저와 `Fn`/`FnMut`/`FnOnce`, 트레이트 바운드와 트레이트 객체, 매개변수로 무엇을 받을지 고르는 기준 | 함수 포인터와 클로저 받기 비교, 가장 느슨한 `Fn*` 바운드 고르기, 마커 트레이트, 트레이트 객체로 받기 | Item 2 (`use-types-2`) |
+| ✅ | `ch3-option-result-transforms` | `match` 대신 `if let`·`?`·변환 메서드, 에러 타입 맞추기(`map_err`, `From`), `Option`↔`Result`, `as_ref`, 변환 메서드 고르는 순서 | 명시적 `match`를 단계별로 변환 메서드로 바꾸기, `?`와 에러 변환, 참조를 유지하는 변환 | Item 3 (`transform`) |
+| ✅ | `ch4-idiomatic-errors` | `Error` 트레이트의 요구 사항, 최소 에러 타입, 중첩 에러 열거형, 트레이트 객체 에러의 득실, 라이브러리와 애플리케이션의 선택 기준 | `String` 에러의 한계와 뉴타입, 중첩 에러 열거형과 `From`, `Box<dyn Error>`, `thiserror`판, `anyhow`판 | Item 4 (`errors`) |
+| ✅ | `ch5-type-conversions` | 사용자 정의 변환(`From`/`Into`/`TryFrom`), `as` 캐스트의 위험, 컴파일러가 해 주는 강제 변환 | `From`을 구현하고 `Into` 바운드로 받기, `as`의 잘림과 `try_from`, 강제 변환이 일어나는 자리 모음 | Item 5 (`casts`) |
+| ✅ | `ch6-newtype-pattern` | 단위 혼동 막기, 의미가 드러나는 인자 타입, 고아 규칙 우회, 뉴타입의 한계(트레이트를 다시 구현해야 함) | 단위 뉴타입, 외부 타입에 외부 트레이트 구현, 위임 구현의 비용 | Item 6 (`newtype`) |
+| ✅ | `ch7-builders` | 필드가 많은 구조체의 초기화 문제, `Default`와 구조체 갱신 문법의 한계, 빌더 패턴(소비형과 `&mut`형), derive로 빌더 만들기 | 큰 구조체 직접 초기화, `Default` + `..`, 소비형 빌더, `&mut self` 빌더, `derive_builder`(선택) | Item 7 (`builders`) |
+| ✅ | `ch8-references-pointers` | 참조와 포인터의 차이, 포인터 트레이트(`Deref`, `AsRef`, `Borrow` 등), 넓은 포인터(슬라이스, 트레이트 객체), 스마트 포인터 고르기 | 포인터 크기 비교, 슬라이스를 받는 시그니처, vtable이 붙은 포인터, `AsRef`/`Borrow` 바운드, 스마트 포인터 선택표를 따라가는 예제 | Item 8 (`references`) |
+| ⬜ | `ch9-iterator-transforms` | 반복자 트레이트, 변환과 소비 메서드, `Result` 값 모으기, 반복문을 반복자 체인으로 바꾸기, 명시적 반복문이 더 나은 경우 | `for` 반복문을 단계별로 체인으로, `collect::<Result<_, _>>()`, 조기 탈출·복잡한 상태에서 반복문 유지 | Item 9 (`iterators`) |
+
+#### Traits — ch10~ch13
+
+| 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
+| --- | --- | --- | --- | --- |
+| ⬜ | `ch10-standard-traits` | 공개 타입에 구현할 표준 트레이트 고르기(`Clone`, `Copy`, `Default`, `PartialEq`/`Eq`, `PartialOrd`/`Ord`, `Hash`, `Debug`/`Display`), derive할 수 없거나 하면 안 되는 경우, 직접 구현할 때의 일관성 규칙, 연산자 오버로드 | derive 가능 조건, `Copy`를 붙이면 안 되는 타입, `Eq`와 `Hash`가 어긋날 때 `HashMap`의 오동작, 부동소수점과 `PartialEq`, 트레이트 체크리스트를 적용한 타입 | Item 10 (`std-traits`) |
+| ⬜ | `ch11-drop-raii` | RAII와 가드 타입, `Drop`의 제약(`&mut self`, 실패를 돌려줄 수 없음), `drop(x)`로 일찍 해제하기 | 조기 반환에서 해제를 빠뜨리는 수동 관리와 가드 비교, 직접 만든 가드, drop 순서 | Item 11 (`raii`) |
+| ⬜ | `ch12-generics-vs-trait-objects` | 단형성화와 동적 디스패치의 비용(코드 크기, 속도, 컴파일 시간), 여러 트레이트 바운드, dyn 호환, 이종 컬렉션, 선택 기준 | 같은 함수의 제네릭판과 `dyn`판, 이종 컬렉션, dyn 호환이 아닌 트레이트와 `where Self: Sized` | Item 12 (`generics`) |
+| ⬜ | `ch13-default-implementations` | 필수 메서드는 적게, 기본 구현은 넉넉하게. 기본 구현 재정의, 기본 메서드 추가가 호환 변경인 이유 | 필수 메서드 하나에 기본 메서드 여럿인 트레이트, 재정의로 더 빠른 구현 제공 | Item 13 (`default-impl`) |
+
+#### Concepts — ch14~ch20
+
+| 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
+| --- | --- | --- | --- | --- |
+| ⬜ | `ch14-lifetimes` | 스택과 라이프타임, 라이프타임의 범위(마지막 사용까지), 여러 라이프타임 매개변수, 생략 규칙, `'static`, 힙에 있는 값의 라이프타임, 자료구조 안의 라이프타임, 익명 라이프타임 `'_` | 스택 프레임과 댕글링 참조, 마지막 사용 뒤에 풀리는 대여, 라이프타임 매개변수가 둘 필요한 함수, `&'static`과 `T: 'static`의 차이, 참조를 담은 구조체, `'_` | Item 14 (`lifetimes`) |
+| ⬜ | `ch15-borrow-checker` | 대여 규칙과 소유자가 할 수 있는 일, 대여 검사기 에러를 푸는 방법(지역 리팩터링, 자료구조 설계, 스마트 포인터), 자기 참조 자료구조 | 대여 범위 줄이기, `mem::take`/`replace`와 `Option::take`, 참조 대신 인덱스, `Rc<RefCell<T>>`, 자기 참조 시도와 대안 | Item 15 (`borrows`) |
+| ⬜ | `ch16-avoid-unsafe` | unsafe를 쓰기 전에 표준 라이브러리와 검증된 크레이트에서 안전한 대안 찾기, 꼭 써야 할 때의 지침(작게 감싸기, 안전성 주석, Miri, 테스트) | 직접 쓴 unsafe를 표준 라이브러리의 안전한 API로 바꾸기, 안전한 래퍼와 `// SAFETY:` 주석 | Item 16 (`unsafe`) |
+| ⬜ | `ch17-shared-state-parallelism` | Rust가 막는 것(데이터 경쟁, `Send`/`Sync`)과 막지 못하는 것(교착 상태), 잠금 범위와 순서, 공유 상태 대신 채널 | 데이터 경쟁 시도가 컴파일되지 않는 모습, 잠금 순서가 엇갈린 교착 상태와 해결, 채널로 다시 설계 | Item 17 (`deadlock`) |
+| ⬜ | `ch18-dont-panic` | 패닉이 숨어 있는 곳, 라이브러리가 패닉 대신 `Result`를 돌려줘야 하는 이유, `catch_unwind`의 한계, 패닉을 막는 도구 | 패닉하는 API를 `Result` API로, 숨은 패닉 지점(인덱싱, 산술, `RefCell`), `unwrap`을 금지하는 lint 설정 | Item 18 (`panic`) |
+| ⬜ | `ch19-avoid-reflection` | Rust에 리플렉션이 없는 이유, `type_name`과 `Any`/`TypeId`의 한계, 트레이트 객체 업캐스트 | `type_name`의 한계, `dyn Any` 다운캐스트와 대안(열거형, 트레이트 메서드), 업캐스트 | Item 19 (`reflection`) |
+| ⬜ | `ch20-avoid-over-optimizing` | 먼저 단순하게 쓰고 측정한 뒤 최적화하기, 자료구조와 할당, 복사 비용을 두려워하지 않기, 참조 대신 소유 타입이나 스마트 포인터로 설계 단순화 | 라이프타임이 번지는 구조체와 소유 타입 구조체 비교, `clone`과 `Rc`, 간단한 실행 시간 측정 | Item 20 (`optimize`) |
+
+#### Dependencies — ch21~ch26
+
+| 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
+| --- | --- | --- | --- | --- |
+| ⬜ | `ch21-semver` | 시맨틱 버저닝의 약속, 크레이트 작성자가 지킬 것(무엇이 비호환 변경인가), 사용자가 알 것(버전 요구 사항, `Cargo.lock`, MSRV) | 라이브러리와 사용자 크레이트 한 쌍으로 호환 변경과 미묘한 비호환 변경 재현(`projects/`) | Item 21 (`semver`) |
+| ⬜ | `ch22-minimize-visibility` | 가시성 단계(`pub`, `pub(crate)`, `pub(super)`, `pub(in …)`), 공개한 것은 되돌리기 어려움, 비공개 필드와 접근자 | 모듈 안에서 가시성 단계 비교, 비공개 필드 덕분에 내부 표현을 바꿔도 사용자 코드가 그대로인 예 | Item 22 (`visibility`) |
+| ⬜ | `ch23-avoid-wildcard-imports` | 와일드카드 가져오기가 의존성 업데이트에서 이름 충돌을 일으키는 원리, 허용되는 예외(프렐류드, 테스트의 `use super::*`) | 의존 크레이트에 이름이 추가되면 깨지는 사용자 코드(`projects/`), 예외 사례 | Item 23 (`wildcard`) |
+| ⬜ | `ch24-re-export-dependencies` | API에 드러난 의존성 타입과 버전 불일치, `pub use`로 의존성 재내보내기 | 같은 크레이트의 두 버전이 섞여 타입이 맞지 않는 상황과 재내보내기로 해결(`projects/`) | Item 24 (`re-export`) |
+| ⬜ | `ch25-dependency-graph` | 버전 지정 방식, 중복 버전, `cargo tree`와 `cargo update`, 의존성 점검 도구, 무엇에 의존할지 판단하는 기준 | `cargo tree -d`/`-i` 읽기, 중복 버전을 만들고 해소(`projects/`), 점검 도구 설정 | Item 25 (`dep-graph`) |
+| ⬜ | `ch26-feature-creep` | `cfg` 조건부 컴파일, 기능은 더하기만 해야 하는 이유(기능 통합), 공개 필드·트레이트 메서드를 기능으로 가리면 안 되는 이유, 조합 수와 CI | 가산적이지 않은 기능이 통합으로 깨지는 재현, 기능으로 가린 필드가 사용자 코드를 깨는 예(`projects/`) | Item 26 (`features`) |
+
+#### Tooling — ch27~ch32
+
+| 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
+| --- | --- | --- | --- | --- |
+| ⬜ | `ch27-document-public-interfaces` | 문서 주석에 쓸 것과 쓰지 말 것, `# Panics`·`# Errors`·`# Safety` 절, 항목 링크, 크레이트·모듈 문서, 문서 누락을 잡는 lint | 같은 라이브러리의 부실한 문서판과 고친 판(`projects/`), `missing_docs`와 깨진 링크 검출 | Item 27 (`documentation`) |
+| ⬜ | `ch28-macros-judiciously` | 선언적 매크로와 절차적 매크로 3종, 매크로가 필요한 경우와 함수·제네릭으로 충분한 경우, 매크로의 단점 | 반복 코드를 `macro_rules!`로, 인자가 여러 번 평가되는 함정, 제네릭 함수로 대체, 간단한 derive 매크로(`projects/`) | Item 28 (`macros`) |
+| ⬜ | `ch29-listen-to-clippy` | Clippy 경고를 고치는 이유, lint 그룹, 예외를 이유와 함께 표시하기, 프로젝트 단위 설정 | 경고가 나는 코드와 고친 코드, `#[expect(…, reason = "…")]`, `[lints]` 설정(`projects/`) | Item 29 (`clippy`) |
+| ⬜ | `ch30-beyond-unit-tests` | 단위·통합·문서 테스트의 역할, 예제 프로그램, 벤치마크, 퍼즈 테스트, 테스트 조언 | 라이브러리 하나에 테스트 종류를 모두 갖추기(`projects/`): 단위, 통합, 문서 테스트, example, 벤치마크, 퍼즈 타깃(선택) | Item 30 (`testing`) |
+| ⬜ | `ch31-tooling-ecosystem` | Cargo 기본 도구, `cargo metadata`를 바탕으로 한 도구들, 책 전체에 나온 도구 지도 | `cargo metadata` 출력 읽기, `cargo tree`, 도구별 용도와 사용 챕터를 묶은 표 | Item 31 (`use-tools`) |
+| ⬜ | `ch32-continuous-integration` | CI에 넣을 단계(빌드, 테스트, 서식, lint, 문서, 기능 조합, MSRV, 의존성 점검), 원칙(로컬에서 재현, 경고는 실패, 도구 버전 고정) | 로컬에서 같은 검사를 돌리는 스크립트와 GitHub Actions 워크플로 예시(`projects/`) | Item 32 (`ci`) |
+
+#### Beyond Standard Rust — ch33~ch35
+
+| 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
+| --- | --- | --- | --- | --- |
+| ⬜ | `ch33-no-std` | `core`·`alloc`·`std`의 구분, 라이브러리를 `no_std` 호환으로 쓰기, `std` 기능 패턴, 실패할 수 있는 할당 | `no_std` 라이브러리와 `std` 기능(`projects/`), 호스트에서 테스트, `try_reserve` | Item 33 (`no-std`) |
+| ⬜ | `ch34-ffi-boundaries` | Rust에서 C 함수 부르기(링크, 이름 맹글링, 타입 대응), C 데이터 다루기(`repr(C)`), 경계에서의 소유권과 라이프타임, C에서 Rust 부르기, 안전한 래퍼 | `build.rs`로 C 코드를 컴파일해 호출, `repr(C)` 구조체 주고받기, 불투명 포인터와 생성·해제 함수 쌍, C에서 부르는 Rust 함수(`projects/`) | Item 34 (`ffi`) |
+| ⬜ | `ch35-bindgen` | 손으로 쓴 선언이 어긋날 때의 위험, 헤더에서 선언 생성하기, `-sys` 크레이트 관례, C++ 연동 도구 소개 | ch34의 C 라이브러리를 손으로 쓴 선언과 생성한 선언으로 비교(`projects/`) | Item 35 (`bindgen`) |
+
 ---
 
 ## 4. 진행 현황
@@ -346,3 +436,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **40 / 109 챕터** |
+| 부록 A. Effective Rust (합계와 별도) | 8 / 35 |
