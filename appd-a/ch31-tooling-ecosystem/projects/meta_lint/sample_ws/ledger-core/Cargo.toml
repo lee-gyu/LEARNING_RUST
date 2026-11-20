@@ -1,0 +1,7 @@
+# 게시할 수 있고, 게시에 필요한 license를 갖춘 패키지입니다.
+[package]
+name = "ledger-core"
+version.workspace = true
+edition.workspace = true
+description = "가계부 항목과 잔액 계산"
+license = "MIT OR Apache-2.0"

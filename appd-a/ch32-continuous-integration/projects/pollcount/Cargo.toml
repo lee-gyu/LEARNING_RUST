@@ -1,0 +1,24 @@
+[package]
+name = "pollcount"
+version = "0.1.0"
+edition = "2024"
+# MSRV: 현재 stable(1.100)과 그 앞 두 버전을 지원한다는 정책입니다.
+# ci.sh의 msrv 단계가 이 버전의 툴체인(MSRV_TOOLCHAIN)으로 실제로 빌드해 확인합니다.
+rust-version = "1.98"
+description = "항목 개수를 세고 많은 순으로 보여 주는 작은 라이브러리 (ch32 CI 실습용)"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[features]
+default = ["csv"]
+# 집계를 CSV 문자열로 내보냅니다.
+csv = []
+# 집계를 JSON 문자열로 내보냅니다.
+json = []
+
+# docs.rs는 이 설정대로 모든 기능을 켜고 문서를 만듭니다. ci.sh의 docs 단계도 같게 맞춥니다.
+[package.metadata.docs.rs]
+all-features = true
+
+# 루트 워크스페이스와 분리합니다.
+[workspace]

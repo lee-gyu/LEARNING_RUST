@@ -52,7 +52,7 @@ fn check_sku_str(code: &str) -> Result<(), String> { /* ... */ }
 
 그럼 `String`에 `Error`를 구현하면 될까요? `Error`도 `String`도 내 크레이트의 것이 아니므로 고아 규칙(orphan rule, [Part 0 ch10](../../part0-getting-started/ch10-generics-traits-lifetimes/README.md) 2.7절)에 걸립니다. `type SkuError = String;`처럼 별칭을 붙여도 새 타입이 생기지 않으므로 결과는 같습니다(4.1절).
 
-**권장 코드.** `String`을 내 타입으로 한 번 감싼 뉴타입을 만들고 `Debug`, `Display`, `Error`를 구현합니다. 뉴타입 패턴 자체는 [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.12절에서 배웠고, 이 부록에서는 `ch6-newtype-pattern`에서 다시 다룹니다.
+**권장 코드.** `String`을 내 타입으로 한 번 감싼 뉴타입을 만들고 `Debug`, `Display`, `Error`를 구현합니다. 뉴타입 패턴 자체는 [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.12절에서 배웠고, 이 부록에서는 [`ch6-newtype-pattern`](../ch6-newtype-pattern/README.md)에서 다시 다룹니다.
 
 ```rust
 #[derive(Debug)]
@@ -305,11 +305,11 @@ fn plan_shipment(lines: &[&[u8]], daily_limit: u32) -> anyhow::Result<u32> {
 | 필요한 것 | 종류별 대응, 안정된 공개 API | 모든 의존성의 에러를 한 타입으로, 읽기 좋은 보고서 |
 | 고를 것 | 에러 열거형(손으로 또는 `thiserror`) | `anyhow::Result` + 필요할 때 `downcast_ref` |
 
-**따르지 않아도 되는 경우.** 애플리케이션 안에서도 특정 실패에 대응하는 내부 모듈은 라이브러리처럼 구체 타입을 씁니다. 애플리케이션은 "라이브러리 여러 개와 그것을 묶는 위층"으로 보면 됩니다. `anyhow`의 문맥 붙이기(`context`)와 종료 코드 정하기 등 명령줄 프로그램에서의 사용법은 Part 7 `ch2-implementation-errors`에서, 패닉과 `Result` 중 무엇을 고를지는 `ch18-dont-panic`에서 다룹니다.
+**따르지 않아도 되는 경우.** 애플리케이션 안에서도 특정 실패에 대응하는 내부 모듈은 라이브러리처럼 구체 타입을 씁니다. 애플리케이션은 "라이브러리 여러 개와 그것을 묶는 위층"으로 보면 됩니다. `anyhow`의 문맥 붙이기(`context`)와 종료 코드 정하기 등 명령줄 프로그램에서의 사용법은 Part 7 `ch2-implementation-errors`에서, 패닉과 `Result` 중 무엇을 고를지는 [`ch18-dont-panic`](../ch18-dont-panic/README.md)에서 다룹니다.
 
 ### 2.7 책과 달라진 점
 
-- **`Error`는 `core`에도 있습니다.** 책은 `Error`가 `std`에만 있어 `no_std` 환경에서 쓸 수 없고, `core`로 옮기는 작업은 아직 안정화되지 않았다고 설명합니다. 현재는 `core::error::Error`가 1.81.0에서 안정화되었고(로컬 문서의 안정화 버전 표시로 확인), `std::error::Error`는 그것을 다시 내보낸 것입니다. 예제 01의 1번 구역에서 `type_name::<dyn std::error::Error>()`가 `dyn core::error::Error`를 출력합니다. `#![no_std]` 라이브러리에서 `thiserror`를 `default-features = false`로 넣고 `derive(thiserror::Error)`를 쓴 코드가 이 툴체인에서 빌드되는 것도 확인했습니다. `no_std`에서의 에러는 `ch33-no-std`에서 다룹니다.
+- **`Error`는 `core`에도 있습니다.** 책은 `Error`가 `std`에만 있어 `no_std` 환경에서 쓸 수 없고, `core`로 옮기는 작업은 아직 안정화되지 않았다고 설명합니다. 현재는 `core::error::Error`가 1.81.0에서 안정화되었고(로컬 문서의 안정화 버전 표시로 확인), `std::error::Error`는 그것을 다시 내보낸 것입니다. 예제 01의 1번 구역에서 `type_name::<dyn std::error::Error>()`가 `dyn core::error::Error`를 출력합니다. `#![no_std]` 라이브러리에서 `thiserror`를 `default-features = false`로 넣고 `derive(thiserror::Error)`를 쓴 코드가 이 툴체인에서 빌드되는 것도 확인했습니다. `no_std`에서의 에러는 [`ch33-no-std`](../ch33-no-std/README.md)에서 다룹니다.
 - **object safety는 이제 "dyn 호환"입니다.** 책이 트레이트 객체의 제약을 부르는 이름이 바뀌었습니다. 컴파일러 메시지도 `the trait ... is not dyn compatible`이라고 씁니다([Part 0 ch17](../../part0-getting-started/ch17-trait-objects-oop/README.md) 2.9절).
 - **크레이트 판.** 책은 `thiserror`와 `anyhow`의 판을 적지 않았습니다. 이 챕터는 `thiserror` 2.0.21과 `anyhow` 1.0.104로 확인했습니다. `thiserror` 2는 기본으로 켜진 `std` 기능을 끄면 `no_std`에서도 쓸 수 있습니다(위 항목). `anyhow`는 별도 기능 없이 stable 툴체인에서 표준 라이브러리의 백트레이스를 담습니다(2.6절).
 

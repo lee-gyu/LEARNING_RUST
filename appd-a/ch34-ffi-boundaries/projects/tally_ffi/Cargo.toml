@@ -1,0 +1,15 @@
+[package]
+name = "tally"
+version = "0.1.0"
+edition = "2024"
+publish = false
+# 이 패키지가 네이티브 라이브러리 libtally를 링크한다고 Cargo에 알립니다.
+# links를 적으면 빌드 스크립트가 있어야 하고, 같은 links 값을 가진 패키지는
+# 의존성 그래프에 하나만 들어올 수 있습니다(ch25).
+links = "tally"
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]
+
+[build-dependencies]
+cc = "1.11.2"

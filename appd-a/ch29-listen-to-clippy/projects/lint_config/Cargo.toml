@@ -1,0 +1,38 @@
+# 린트를 프로젝트 단위로 설정한 워크스페이스입니다(저장소 루트 워크스페이스와는 별개).
+#
+#   before/lib.rs   설정을 켜기 전에 쓴 코드. 아래 두 패키지가 이 파일 하나를 함께 씁니다.
+#     before-default  [lints] 없음 → 기본 설정의 Clippy로 봄 (경고 0개)
+#     before-strict   [lints] workspace = true → 아래 설정으로 봄 (일부러 경고가 남음)
+#   after/          같은 라이브러리를 아래 설정에 맞춰 고친 판 (경고 0개)
+#
+# `cargo clippy`를 -p 없이 실행하면 default-members(경고 0개인 둘)만 검사합니다.
+# 경고를 보려면: cargo clippy -p before-strict
+[workspace]
+members = ["before-default", "before-strict", "after"]
+default-members = ["before-default", "after"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 멤버가 `[lints] workspace = true`로 물려받는 설정입니다.
+# rustc 린트는 [workspace.lints.rust], Clippy 린트는 [workspace.lints.clippy]에 적습니다.
+[workspace.lints.rust]
+unsafe_code = "forbid"   # 이 프로젝트에는 unsafe가 필요 없음. 아래에서 다시 허락할 수도 없음
+unreachable_pub = "warn" # 크레이트 밖에서 닿지 않는 pub (ch22)
+
+[workspace.lints.clippy]
+# 기본 그룹(correctness는 deny, 나머지는 warn)은 적지 않아도 켜져 있습니다.
+
+# pedantic은 그룹째 켜고, 이 프로젝트에 맞지 않는 것만 끕니다.
+# 그룹의 priority를 개별 린트보다 낮게(-1) 줘야 개별 설정이 그룹을 이깁니다.
+pedantic = { level = "warn", priority = -1 }
+must_use_candidate = "allow"  # 값을 돌려주는 pub fn마다 #[must_use]를 권함. 이 프로젝트에는 잡음
+
+# restriction은 그룹째 켜지 않고, 필요한 것만 하나씩 고릅니다.
+unwrap_used = "warn"                     # 라이브러리 코드의 .unwrap() (테스트는 clippy.toml에서 풀어 줌)
+allow_attributes = "warn"                # #[allow] 대신 #[expect]를 쓰게 함
+allow_attributes_without_reason = "warn" # allow·expect에 reason을 적게 함
+print_stdout = "warn"                    # 라이브러리가 표준 출력에 쓰지 않게 함

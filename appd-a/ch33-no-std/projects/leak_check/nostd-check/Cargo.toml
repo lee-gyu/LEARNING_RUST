@@ -1,0 +1,19 @@
+[package]
+name = "nostd-check"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 테스트 하네스는 std를 연결하므로 이 크레이트는 테스트하지 않고 빌드만 합니다(벤치마크도 테스트 하네스로 빌드됨).
+[lib]
+test = false
+doctest = false
+bench = false
+
+[dependencies]
+# 검사할 크레이트를 std 기능 없이 가져옵니다.
+sensor = { path = "../sensor", default-features = false }
+tinyhex = { path = "../../tinyhex", default-features = false }
+
+# leak_check 워크스페이스와 분리합니다.
+[workspace]

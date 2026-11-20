@@ -1,0 +1,17 @@
+[package]
+name = "tabular_derive"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 절차적 매크로 크레이트입니다. 컴파일러가 컴파일 도중에 불러 쓰며, 매크로 말고 다른 항목은 내보낼 수 없습니다.
+[lib]
+proc-macro = true
+
+[dependencies]
+# proc-macro2: 매크로 바깥(테스트 등)에서도 쓸 수 있는 TokenStream. quote!가 만드는 타입입니다.
+# quote: quote! { ... }로 쓴 코드를 토큰으로 바꿉니다.
+# syn: 토큰을 DeriveInput 같은 구문 트리로 해석합니다.
+proc-macro2 = "1.0.107"
+quote = "1.0.47"
+syn = "3.0.10"

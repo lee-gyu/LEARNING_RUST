@@ -1,0 +1,18 @@
+[package]
+name = "tally-sys"
+version = "0.1.0"
+edition = "2024"
+publish = false
+# -sys 관례: 네이티브 라이브러리 libtally를 링크하는 패키지는 그래프에 이것 하나뿐이어야 합니다.
+# 빌드 스크립트가 cargo::metadata로 출력한 값은 이 패키지에 직접 의존하는 패키지의
+# 빌드 스크립트에 DEP_TALLY_<키> 환경 변수로 전해집니다.
+links = "tally"
+
+[features]
+# 켜면 빌드할 때마다 C 헤더에서 선언을 새로 생성합니다(libclang이 필요합니다).
+# 끄면(기본) 저장소에 커밋해 둔 src/committed_bindings.rs를 씁니다(libclang이 필요 없습니다).
+bindgen = ["dep:bindgen"]
+
+[build-dependencies]
+bindgen = { version = "0.73.2", optional = true }
+cc = "1.11.2"

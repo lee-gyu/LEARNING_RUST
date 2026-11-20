@@ -1,0 +1,7 @@
+# 이 디렉터리에서 실행하는 cargo·rustc의 툴체인을 고정합니다(ch32 README 2.3절).
+# rustup은 여기 적힌 툴체인·구성 요소가 없으면 내려받으므로, 올릴 때는 이 줄을 바꾸는
+# 변경을 따로 만들어 CI를 통과시킵니다.
+# 셸에 RUSTUP_TOOLCHAIN 환경 변수가 있으면 그쪽이 이 파일보다 우선합니다.
+[toolchain]
+channel = "1.100.0"
+components = ["clippy", "rustfmt"]

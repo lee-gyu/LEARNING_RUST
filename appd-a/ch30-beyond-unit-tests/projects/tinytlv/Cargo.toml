@@ -1,0 +1,22 @@
+[package]
+name = "tinytlv"
+version = "0.1.0"
+edition = "2024"
+description = "태그-길이-값(TLV) 형식의 작은 이진 레코드 코덱 (ch30 실습용)"
+publish = false
+
+# 라이브러리의 단위 테스트 하네스가 `cargo bench`에서 함께 실행되지 않게 합니다.
+# 그대로 두면 `cargo bench -- --save-baseline x`처럼 criterion에 주는 옵션을 그 하네스가 받아
+# `Unrecognized option` 에러로 멈춥니다.
+[lib]
+bench = false
+
+[dev-dependencies]
+criterion = "0.8.2"
+
+[[bench]]
+name = "codec"
+harness = false
+
+# 루트 워크스페이스와 분리합니다.
+[workspace]

@@ -299,7 +299,7 @@ fn field(&self, name: &str) -> Option<String> {
 
 **권장 코드 1: 모든 필드를 보여 주는 일은 derive에.** `#[derive(Debug)]`는 컴파일할 때 구조체 정의를 읽어 `Debug` 구현을 만듭니다. `Debug` 문서는 derive한 구현이 구조체 이름과 필드마다 이름과 디버그 형식의 값을 출력한다고 설명하고, 같은 출력을 내는 손으로 쓴 구현(`f.debug_struct("..").field("x", &self.x)...`)을 함께 보여 줍니다. 필드를 더하면 다음 컴파일에서 구현도 바뀌므로 2번 구역의 출력에는 `certificate`가 저절로 들어 있습니다. 실행 중에 필드를 찾는 일은 없습니다.
 
-책이 리플렉션의 대안으로 드는 것이 이것입니다. 매크로, 특히 derive 매크로는 타입을 컴파일할 때 이해하는 코드를 만들어 주므로, 실행 중에 내용을 해석하는 것보다 효율적이고 타입 검사도 받습니다. `Clone`, `PartialEq` 같은 표준 derive도 필드마다 일하는 코드를 같은 방식으로 만들고, 직렬화처럼 필드를 훑어야 하는 다른 일도 생태계에서는 derive로 풉니다(대표적인 크레이트가 `serde`입니다). [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.20절의 `hello_macro`가 derive를 붙인 타입의 이름을 컴파일할 때 `stringify!`로 문자열로 넣은 것도 같은 원리입니다. derive 매크로를 직접 만드는 일은 `ch28-macros-judiciously`와 Part 9 `ch2-macros`에서 다룹니다.
+책이 리플렉션의 대안으로 드는 것이 이것입니다. 매크로, 특히 derive 매크로는 타입을 컴파일할 때 이해하는 코드를 만들어 주므로, 실행 중에 내용을 해석하는 것보다 효율적이고 타입 검사도 받습니다. `Clone`, `PartialEq` 같은 표준 derive도 필드마다 일하는 코드를 같은 방식으로 만들고, 직렬화처럼 필드를 훑어야 하는 다른 일도 생태계에서는 derive로 풉니다(대표적인 크레이트가 `serde`입니다). [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.20절의 `hello_macro`가 derive를 붙인 타입의 이름을 컴파일할 때 `stringify!`로 문자열로 넣은 것도 같은 원리입니다. derive 매크로를 직접 만드는 일은 [`ch28-macros-judiciously`](../ch28-macros-judiciously/README.md)와 Part 9 `ch2-macros`에서 다룹니다.
 
 다만 `Debug` 출력도 사람이 읽는 용도입니다. 문서는 derive한 `Debug`의 형식이 안정적이지 않아 Rust 버전에 따라 바뀔 수 있다고 적으므로, `type_name`처럼 파싱하지 않습니다.
 

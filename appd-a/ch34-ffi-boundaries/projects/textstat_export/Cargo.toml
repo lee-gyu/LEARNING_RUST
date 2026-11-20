@@ -1,0 +1,11 @@
+[package]
+name = "textstat-export"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]
+
+[build-dependencies]
+cc = "1.11.2"

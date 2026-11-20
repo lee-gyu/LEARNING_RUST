@@ -1,0 +1,8 @@
+[package]
+name = "kvconf"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 루트 워크스페이스와 분리합니다. 이 디렉터리 안에서 빌드합니다.
+[workspace]

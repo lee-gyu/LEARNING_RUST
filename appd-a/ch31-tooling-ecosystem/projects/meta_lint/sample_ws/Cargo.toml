@@ -1,0 +1,11 @@
+# meta_lint와 챕터 예제 02가 읽는 작은 워크스페이스입니다.
+# 패키지 셋 가운데 ledger-report가 게시 규칙 두 가지를 어깁니다(README 2.3절).
+# 빈 [workspace]가 아니라 멤버를 적은 자체 워크스페이스이므로, cargo가 바깥의
+# meta_lint나 저장소 루트 워크스페이스까지 올라가지 않습니다.
+[workspace]
+resolver = "3"
+members = ["ledger-core", "ledger-report", "ledger-cli"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"

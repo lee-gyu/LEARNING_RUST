@@ -1,0 +1,10 @@
+[package]
+name = "tabular"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# derive 매크로 크레이트에 의존하고 그 매크로를 재내보냅니다(src/lib.rs의 pub use).
+# 쓰는 쪽은 tabular 하나만 의존하면 트레이트와 derive를 모두 얻습니다.
+[dependencies]
+tabular_derive = { path = "../tabular_derive" }

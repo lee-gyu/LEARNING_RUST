@@ -1,0 +1,5 @@
+[package]
+name = "er-ch33-no-std"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

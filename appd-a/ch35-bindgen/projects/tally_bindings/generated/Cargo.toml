@@ -1,0 +1,5 @@
+# 생성한 선언을 쓰는 두 층: tally-sys(선언만)와 tally(안전한 래퍼).
+# 저장소 루트의 워크스페이스와 분리된 별도 워크스페이스입니다.
+[workspace]
+members = ["tally-sys", "tally"]
+resolver = "3"

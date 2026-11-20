@@ -197,7 +197,7 @@ let reps: u32 = reps.trim().parse()?; // ParseIntError → SetError::BadReps
 let weight: f64 = weight.trim().parse()?; // ParseFloatError → SetError::BadWeight
 ```
 
-세 판의 결과는 모든 입력에서 같습니다(예제 03의 1번 구역). 둘 중 무엇을 고를지는 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md) 2.4절의 표를 따릅니다. 원인 타입 하나가 배리언트 하나에 대응하고 어디서 났는지가 중요하지 않으면 `From`을, 그렇지 않으면 `map_err`를 씁니다. 에러 타입을 어떻게 설계할지는 `ch4-idiomatic-errors`, `From`/`Into` 변환을 언제 구현할지는 `ch5-type-conversions`에서 다룹니다.
+세 판의 결과는 모든 입력에서 같습니다(예제 03의 1번 구역). 둘 중 무엇을 고를지는 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md) 2.4절의 표를 따릅니다. 원인 타입 하나가 배리언트 하나에 대응하고 어디서 났는지가 중요하지 않으면 `From`을, 그렇지 않으면 `map_err`를 씁니다. 에러 타입을 어떻게 설계할지는 [`ch4-idiomatic-errors`](../ch4-idiomatic-errors/README.md), `From`/`Into` 변환을 언제 구현할지는 [`ch5-type-conversions`](../ch5-type-conversions/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우: `From`이 아니라 `map_err`를 써야 할 때.** `From::from`은 에러 값 하나만 받으므로 "몇 번째 줄이었는가" 같은 맥락을 알 수 없습니다. 그런 맥락은 그 값을 아는 자리에서 `map_err`의 클로저로 붙입니다.
 

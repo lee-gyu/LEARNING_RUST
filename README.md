@@ -36,7 +36,6 @@ rustc --edition 2024 compile_fail/<파일>.rs
 | Part 0. 시작하기 | [part0-getting-started/](part0-getting-started/) | The Book, Rust By Example, Rustlings |
 | Part 1. 표준 라이브러리 | [part1-standard-lib/](part1-standard-lib/) | The standard library |
 | Part 2. 에디션 | [part2-editions/](part2-editions/) | Edition Guide |
-
 | 부록 A. Effective Rust | [appd-a/](appd-a/) | Effective Rust (David Drysdale) |
 
 나머지 파트(Part 3~11)는 [로드맵](docs/roadmap.md)의 계획에 따라 순서대로 추가됩니다. 부록은 본편과 별도로, Part 0과 Part 1을 마친 뒤 언제든 읽을 수 있습니다.

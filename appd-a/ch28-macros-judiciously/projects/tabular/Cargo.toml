@@ -1,0 +1,15 @@
+# 구조체를 표로 출력하는 작은 라이브러리와 derive 매크로, 그것을 쓰는 바이너리를 묶은 워크스페이스입니다.
+#
+# - tabular        : Columns 트레이트, render 함수, 선언적 매크로 row!, derive 매크로 재내보내기
+# - tabular_derive : #[derive(Columns)]를 처리하는 절차적 매크로 크레이트
+# - app            : 손으로 쓴 Columns 구현과 derive를 비교하는 바이너리
+#
+# user_fails는 tabular의 매크로를 "다른 크레이트"에서 불러 일부러 컴파일에 실패하는 패키지입니다.
+# 이 워크스페이스의 빌드를 깨지 않도록 멤버에서 빼고(exclude), 자기 Cargo.toml에 빈 [workspace]를 두었습니다.
+#
+# 이 디렉터리에도 [workspace]가 있으므로 Cargo는 이 아래 크레이트를 저장소 루트의 워크스페이스가 아니라
+# 이 워크스페이스의 멤버로 다룹니다.
+[workspace]
+resolver = "3"
+members = ["tabular", "tabular_derive", "app"]
+exclude = ["user_fails"]

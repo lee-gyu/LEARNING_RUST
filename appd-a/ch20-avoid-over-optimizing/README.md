@@ -153,7 +153,7 @@ fn notices(sales: &[Sale]) -> Vec<Notice> {
 
 - **횟수 × 크기가 클 때.** 큰 데이터를 여러 곳에 통째로 복제하고 있다면 세는 단계에서 바로 드러납니다. 2.4절의 공유 소유로 갑니다.
 - **작은 복사라도 횟수가 입력에 비례해 아주 많을 때.** 줄마다 하는 복사처럼 뜨거운 경로에 있다면 재 볼 만합니다(2.5절). 횟수가 입력 크기의 제곱으로 느는 복사(반복문 안에서 목록 전체를 복제하는 코드)는 재지 않아도 세는 것만으로 고칠 이유가 됩니다.
-- **할당 자체를 피해야 하는 환경.** 책은 할당을 피하는 코드가 `no_std`(표준 라이브러리 없이 도는 환경) 지원을 쉽게 하지만, 힙이 있는 `alloc` 환경을 목표로 하는 편이 쓰기 편함과 균형이 맞을 수 있다고 봅니다. `ch33-no-std`에서 다룹니다.
+- **할당 자체를 피해야 하는 환경.** 책은 할당을 피하는 코드가 `no_std`(표준 라이브러리 없이 도는 환경) 지원을 쉽게 하지만, 힙이 있는 `alloc` 환경을 목표로 하는 편이 쓰기 편함과 균형이 맞을 수 있다고 봅니다. [`ch33-no-std`](../ch33-no-std/README.md)에서 다룹니다.
 
 ### 2.4 지침 3: 여러 곳이 함께 갖는 큰 데이터는 라이프타임 대신 공유 소유로 나눈다
 
@@ -193,7 +193,7 @@ fn open_hall() -> Hall // 카탈로그를 안에서 불러와 홀째로 돌려�
 
 책은 스마트 포인터를 쓰는 것이 마지막 수단이나 패배가 아니며, 라이프타임이 서로 얽힌 설계보다 더 단순하고 유지하기 쉬운 설계일 수 있다고 강조합니다. 위 표가 그 이유입니다.
 
-**고칠 수 있는 데이터라면.** 경매 중에 출품이 취소되는 것처럼 함께 보는 데이터가 바뀐다면, 복제판은 사본 20개를 모두 찾아 고쳐야 하고 하나라도 빠뜨리면 화면끼리 어긋납니다. `Rc`는 안의 값을 고칠 수 없으므로 내부 가변성과 함께 씁니다. 한 스레드에서는 `Rc<RefCell<T>>`, 스레드를 넘으면 `Arc<Mutex<T>>`입니다. 사본이 어긋나는 모습과 `Rc<RefCell<T>>`판의 비용(실행 중 대여 실패)은 [ch15](../ch15-borrow-checker/README.md) 2.7~2.8절에서, 고칠 칸에만 내부 가변성을 두는 방법은 ch8 2.7절에서 다뤘습니다(연습 4). `Rc`는 `Send`가 아니므로 스레드를 넘는 공유는 `Arc`로 합니다(ch8 2.6절). `Mutex`와 잠금은 `ch17-shared-state-parallelism`에서 다룹니다.
+**고칠 수 있는 데이터라면.** 경매 중에 출품이 취소되는 것처럼 함께 보는 데이터가 바뀐다면, 복제판은 사본 20개를 모두 찾아 고쳐야 하고 하나라도 빠뜨리면 화면끼리 어긋납니다. `Rc`는 안의 값을 고칠 수 없으므로 내부 가변성과 함께 씁니다. 한 스레드에서는 `Rc<RefCell<T>>`, 스레드를 넘으면 `Arc<Mutex<T>>`입니다. 사본이 어긋나는 모습과 `Rc<RefCell<T>>`판의 비용(실행 중 대여 실패)은 [ch15](../ch15-borrow-checker/README.md) 2.7~2.8절에서, 고칠 칸에만 내부 가변성을 두는 방법은 ch8 2.7절에서 다뤘습니다(연습 4). `Rc`는 `Send`가 아니므로 스레드를 넘는 공유는 `Arc`로 합니다(ch8 2.6절). `Mutex`와 잠금은 [`ch17-shared-state-parallelism`](../ch17-shared-state-parallelism/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.**
 
@@ -266,7 +266,7 @@ impl Auction {
 - **실행마다 다른 값.** 같은 릴리스 빌드를 15번 실행했을 때 소유한 판은 2.84~4.19ms였습니다. 4.19ms와 3.73ms가 나온 두 실행에서는 같은 실행의 다른 두 판도 함께 길어졌습니다(빌린 판 2.22ms, 2.07ms). 각 판을 여러 번 재서 가장 짧은 값을 골라도 컴퓨터 전체가 바쁘면 모두 느려지므로, 비교할 판들은 같은 실행 안에서 함께 재고 여러 번 실행해 봅니다. 빌린 판과 경계판처럼 차이가 이 흔들림보다 작은 두 판은 "어느 쪽이 빠르다"고 말할 수 없습니다. 예제가 순위를 출력하지 않는 이유입니다.
 - **지워진 계산.** 결과를 쓰지 않는 계산은 최적화로 사라질 수 있습니다. Part 0 ch13에서는 `black_box`를 빠뜨린 측정이 `0ns`로 나왔고, Part 1 ch10 2.12절에서는 입력을 감싸도 반복문이 다른 계산으로 바뀌어 40ns 안팎이 나왔습니다. 이 챕터를 쓰면서 줄마다 `split_bid`를 부르고 결과를 버리는 반복문을 `black_box` 없이 재 보았을 때는 빌린 판과 비슷한 시간이 나와 지워지지 않았지만, 그것은 문자열을 나누고 숫자를 파싱하는 이 코드의 사정일 뿐 보장이 아닙니다. 줄당 시간이 1ns보다 작게 나오는 것처럼 믿기 어려운 값이 나오면 먼저 무엇을 재고 있는지 의심합니다.
 
-통계로 측정값을 다루는 벤치마크 도구(`criterion`)와 벤치마크를 테스트처럼 관리하는 방법은 `ch30-beyond-unit-tests`에서, 릴리스 빌드의 최적화 수준 같은 프로필 설정은 Part 3 `ch6-profiles-build-performance`에서 다룹니다.
+통계로 측정값을 다루는 벤치마크 도구(`criterion`)와 벤치마크를 테스트처럼 관리하는 방법은 [`ch30-beyond-unit-tests`](../ch30-beyond-unit-tests/README.md)에서, 릴리스 빌드의 최적화 수준 같은 프로필 설정은 Part 3 `ch6-profiles-build-performance`에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 2.3절의 제곱으로 느는 복사처럼 세는 것만으로 분명한 낭비는 재지 않고 고칩니다. 처음부터 성능 요구가 정해진 코드(예: 프레임마다 정해진 시간 안에 끝나야 하는 코드)라면 설계 단계에서부터 측정을 함께 둡니다.
 
@@ -540,7 +540,7 @@ error[E0597]: `line` does not live long enough
 
 ## 6. 참고 자료
 
-- 기준 문서: [Item 20: Avoid the temptation to over-optimize](https://effective-rust.com/optimize.html). 이 챕터는 이 Item이 다루는 범위를 따르되, 설명과 예제는 새로 구성했습니다. 책은 벤치마크를 Item 30(`ch30-beyond-unit-tests`)으로, `Copy`의 기준을 Item 10([ch10](../ch10-standard-traits/README.md))으로, `no_std`를 Item 33(`ch33-no-std`)으로 넘깁니다.
+- 기준 문서: [Item 20: Avoid the temptation to over-optimize](https://effective-rust.com/optimize.html). 이 챕터는 이 Item이 다루는 범위를 따르되, 설명과 예제는 새로 구성했습니다. 책은 벤치마크를 Item 30([`ch30-beyond-unit-tests`](../ch30-beyond-unit-tests/README.md))으로, `Copy`의 기준을 Item 10([ch10](../ch10-standard-traits/README.md))으로, `no_std`를 Item 33([`ch33-no-std`](../ch33-no-std/README.md))으로 넘깁니다.
 - 표준 라이브러리 문서
   - [`std::hint::black_box`](https://doc.rust-lang.org/std/hint/fn.black_box.html): 벤치마크에 쓰라는 안내와 "최선의 노력"이라는 한계(1.66.0에서 안정화)
   - [`Rc::unwrap_or_clone`](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.unwrap_or_clone)(1.76.0), [`Rc::ptr_eq`](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.ptr_eq), [`Arc`](https://doc.rust-lang.org/std/sync/struct.Arc.html)

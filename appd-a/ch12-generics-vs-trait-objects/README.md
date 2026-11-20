@@ -101,7 +101,7 @@ t 01_generic_vs_dyn::due_note_dyn
 - **호출 속도.** `dyn`판의 호출은 넓은 포인터에서 vtable 주소를 읽고, vtable에서 함수 주소를 읽어 부르므로 포인터를 두 번 따라갑니다. 컴파일러가 부를 함수를 모르니 본문을 호출 자리에 펼쳐 넣는 인라인도 대개 할 수 없습니다. 제네릭판은 직접 호출이라 조금 빠릅니다.
 - **컴파일 시간.** 제네릭은 만들 함수가 많아져 컴파일과 링크가 오래 걸리는 경향이 있습니다.
 
-책의 결론은 이 차이가 대부분의 프로그램에서 크지 않으므로 **측정으로 문제가 확인되기 전에는 성능을 근거로 고르지 않는다**는 것입니다. 실행 시간 측정은 `ch20-avoid-over-optimizing`에서 다룹니다. 성능 말고도 제네릭이 기본인 이유가 있습니다. 바운드를 `+`로 자유롭게 조합할 수 있고(2.4절), 트레이트에 dyn 호환 조건이 붙지 않으며(2.6절), 본문이 구체 타입을 알기 때문에 `T::default()`처럼 타입에 딸린 연관 함수도 부를 수 있습니다.
+책의 결론은 이 차이가 대부분의 프로그램에서 크지 않으므로 **측정으로 문제가 확인되기 전에는 성능을 근거로 고르지 않는다**는 것입니다. 실행 시간 측정은 [`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md)에서 다룹니다. 성능 말고도 제네릭이 기본인 이유가 있습니다. 바운드를 `+`로 자유롭게 조합할 수 있고(2.4절), 트레이트에 dyn 호환 조건이 붙지 않으며(2.6절), 본문이 구체 타입을 알기 때문에 `T::default()`처럼 타입에 딸린 연관 함수도 부를 수 있습니다.
 
 단형성화되는 것은 함수의 코드입니다. 제네릭 함수 안에 `static` 변수를 두어도 타입마다 따로 생기지 않고 하나뿐입니다. `fn bump<T>(_: T) -> u32` 안의 `static` 카운터를 `u8`, `&str`, `u8` 순서로 부르면 1, 2, 3이 나옵니다(이 툴체인에서 확인). 그래서 `static`으로 "인스턴스마다 따로 센다"는 관찰은 할 수 없습니다.
 
@@ -210,7 +210,7 @@ fn audit_line_dyn(item: &dyn AuditItem) -> String {
 
 **슈퍼트레이트는 상속이 아닙니다.** `trait AuditItem: Loanable + Debug`는 "`AuditItem`을 구현하려면 `Loanable`과 `Debug`도 구현해야 한다"는 조건입니다. `AuditItem`이 `Loanable`의 한 종류라는 뜻도, 구현을 물려준다는 뜻도 아닙니다. 예제의 `Book`과 `Dvd`에는 `impl AuditItem`이 한 줄도 없습니다. 포괄 구현이 "두 트레이트를 구현했다"는 사실만 보고 붙여 준 것입니다.
 
-**업캐스트.** `&dyn AuditItem`을 `Loanable`만 필요한 `fn due_days(item: &dyn Loanable)`에 넘기면, 1.86.0부터는 슈퍼트레이트의 트레이트 객체로 바꾸는 강제 변환이 일어납니다. 3번 구역은 `&dyn AuditItem` → `&dyn Loanable`과 `Box<dyn AuditItem>` → `Box<dyn Loanable>`을 보여 줍니다. 책을 쓸 때(1.70)는 이 변환이 안 되어서, 제네릭 코드에서는 되는 일이 트레이트 객체에서는 안 된다는 것이 책의 지적이었습니다(2.7절). 업캐스트의 쓰임은 `ch19-avoid-reflection`에서 다룹니다.
+**업캐스트.** `&dyn AuditItem`을 `Loanable`만 필요한 `fn due_days(item: &dyn Loanable)`에 넘기면, 1.86.0부터는 슈퍼트레이트의 트레이트 객체로 바꾸는 강제 변환이 일어납니다. 3번 구역은 `&dyn AuditItem` → `&dyn Loanable`과 `Box<dyn AuditItem>` → `Box<dyn Loanable>`을 보여 줍니다. 책을 쓸 때(1.70)는 이 변환이 안 되어서, 제네릭 코드에서는 되는 일이 트레이트 객체에서는 안 된다는 것이 책의 지적이었습니다(2.7절). 업캐스트의 쓰임은 [`ch19-avoid-reflection`](../ch19-avoid-reflection/README.md)에서 다룹니다.
 
 **조합이 늘어나면.** 제네릭판은 함수마다 필요한 바운드를 적으면 됩니다. 예제 03 1번 구역의 `snapshot<T: Loanable + Clone>`은 대출 시점의 사본을 남깁니다. `dyn`판은 조합마다 트레이트와 포괄 구현을 하나씩 더 만들어야 하고, 어떤 조합은 아예 만들 수 없습니다. `Clone`은 `Sized`를 슈퍼트레이트로 가지므로 `trait SnapshotItem: Loanable + Clone`은 dyn 호환이 아닙니다(4.2절). 자동 트레이트는 예외라서 `&(dyn Loanable + Send + Sync)`처럼 조합 트레이트 없이 붙일 수 있습니다.
 
@@ -249,7 +249,7 @@ let returns: Shelf<Media> = Shelf { items: vec![Media::Book(..), Media::Dvd(..)]
 
 트레이트 객체의 강점은 **열린 집합**입니다. 2번 구역의 `games::BoardGame`은 카트 코드가 모르는 모듈에서 `Loanable`을 구현했을 뿐인데 같은 카트에 들어갑니다. 책이 트레이트 객체의 전통적인 쓰임으로 드는 경우가 이것입니다.
 
-종류가 **닫혀 있고** 모두 내 크레이트 안에 있다면 열거형이 세 번째 선택지입니다. 3번 구역의 `Media`는 `Loanable`을 구현하므로 1번의 제네릭 `Shelf<T>`를 그대로 씁니다. 열거형은 구체 타입 하나라서 섞인 값을 제네릭 코드에 넘길 수 있는 것입니다. 값은 `Vec` 버퍼 안에 그대로 있고, `match`로 DVD에만 있는 연령 제한을 꺼낼 수 있습니다. 트레이트 객체로 같은 정보를 보려면 트레이트에 메서드를 더하거나 다운캐스트(`ch19-avoid-reflection`)를 해야 합니다. 열거형과 트레이트 객체의 비교는 Part 0 ch17 2.10절에, 열거형으로 상태를 표현하는 지침은 [ch1](../ch1-express-data-structures/README.md)에 있습니다.
+종류가 **닫혀 있고** 모두 내 크레이트 안에 있다면 열거형이 세 번째 선택지입니다. 3번 구역의 `Media`는 `Loanable`을 구현하므로 1번의 제네릭 `Shelf<T>`를 그대로 씁니다. 열거형은 구체 타입 하나라서 섞인 값을 제네릭 코드에 넘길 수 있는 것입니다. 값은 `Vec` 버퍼 안에 그대로 있고, `match`로 DVD에만 있는 연령 제한을 꺼낼 수 있습니다. 트레이트 객체로 같은 정보를 보려면 트레이트에 메서드를 더하거나 다운캐스트([`ch19-avoid-reflection`](../ch19-avoid-reflection/README.md))를 해야 합니다. 열거형과 트레이트 객체의 비교는 Part 0 ch17 2.10절에, 열거형으로 상태를 표현하는 지침은 [ch1](../ch1-express-data-structures/README.md)에 있습니다.
 
 이종 컬렉션의 원소를 소유할지 빌릴지도 정합니다. 값이 다른 곳에 이미 있고 잠깐 모아 보기만 한다면 예제 03의 `[&dyn AuditItem; 2]`처럼 빌린 트레이트 객체로 담아 할당을 피합니다. 컬렉션이 값을 소유해야 하면 `Box<dyn Trait>`입니다(Part 0 ch17 2.7절, [ch8](../ch8-references-pointers/README.md) 2.3절).
 
@@ -325,7 +325,7 @@ dyn 호환을 깨는 것을 정리하면 다음과 같습니다. 이 툴체인�
 
 수신자에는 `Self`를 써도 됩니다. `&self`, `&mut self`, `self: Box<Self>`, `self: Rc<Self>`, `self: Arc<Self>`, `self: Pin<&mut Self>`를 가진 메서드는 모두 트레이트 객체로 부를 수 있었습니다. 값으로 받는 `self` 메서드가 있어도 트레이트는 dyn 호환이지만, 그 메서드를 `Box<dyn Notifier>`에서 부르면 E0161(``cannot move a value of type `dyn Notifier` ``)입니다. 크기를 모르는 값을 옮길 수 없기 때문입니다. The Reference도 값으로 받는 `self`는 `Self: Sized`를 함께 뜻한다고 설명합니다.
 
-**지침을 따르지 않아도 되는 경우.** 제네릭 바운드로만 쓰고 트레이트 객체로 쓸 일이 없는 트레이트라면 dyn 호환을 신경 쓸 필요가 없고, 모든 메서드에 `where Self: Sized`를 붙이면 읽을 것만 늘어납니다. 다만 공개 트레이트는 사용자가 트레이트 객체로 쓰기 시작할 수 있고, 나중에 dyn 호환이 아닌 메서드를 더하면 그 사용자의 코드가 깨집니다. 공개 API를 바꿀 때의 호환성은 [ch21](../ch21-semver/README.md)에서, 트레이트에 기본 구현을 두는 지침은 `ch13-default-implementations`에서 다룹니다.
+**지침을 따르지 않아도 되는 경우.** 제네릭 바운드로만 쓰고 트레이트 객체로 쓸 일이 없는 트레이트라면 dyn 호환을 신경 쓸 필요가 없고, 모든 메서드에 `where Self: Sized`를 붙이면 읽을 것만 늘어납니다. 다만 공개 트레이트는 사용자가 트레이트 객체로 쓰기 시작할 수 있고, 나중에 dyn 호환이 아닌 메서드를 더하면 그 사용자의 코드가 깨집니다. 공개 API를 바꿀 때의 호환성은 [ch21](../ch21-semver/README.md)에서, 트레이트에 기본 구현을 두는 지침은 [`ch13-default-implementations`](../ch13-default-implementations/README.md)에서 다룹니다.
 
 ### 2.7 책과 달라진 점
 

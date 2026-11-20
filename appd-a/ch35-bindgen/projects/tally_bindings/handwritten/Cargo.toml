@@ -1,0 +1,20 @@
+[package]
+name = "tally"
+version = "0.1.0"
+edition = "2024"
+publish = false
+# ch34의 projects/tally_ffi와 같은 패키지입니다(손으로 쓴 선언 + 안전한 래퍼).
+# 같은 links 값을 가진 패키지는 한 워크스페이스에 둘 수 없으므로(Cargo가 의존성 해석 단계에서
+# 거부합니다), generated/의 tally-sys와 나란히 두지 않고 별도 워크스페이스로 둡니다.
+links = "tally"
+
+# 데모 프로그램은 generated/tally와 같은 소스 파일을 씁니다.
+[[bin]]
+name = "drift-demo"
+path = "../demo/drift.rs"
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]
+
+[build-dependencies]
+cc = "1.11.2"

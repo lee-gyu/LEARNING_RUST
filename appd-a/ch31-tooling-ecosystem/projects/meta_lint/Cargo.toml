@@ -1,0 +1,13 @@
+[package]
+name = "meta-lint"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 2026-11-20에 `cargo add cargo_metadata`로 받은 버전입니다.
+cargo_metadata = "0.23.1"
+
+# 저장소 루트 워크스페이스와 분리합니다. sample_ws/는 자체 워크스페이스라서
+# 이 워크스페이스의 멤버가 아닙니다.
+[workspace]

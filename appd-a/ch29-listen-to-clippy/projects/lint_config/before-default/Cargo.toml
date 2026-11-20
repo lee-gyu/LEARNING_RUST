@@ -1,0 +1,13 @@
+# before/lib.rs를 기본 설정의 Clippy로 보는 패키지입니다.
+[package]
+name = "before-default"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+path = "../before/lib.rs"
+
+# [workspace.lints]는 저절로 물려받지 않습니다. 빈 [lints] 표는 "물려받지 않는다"는 뜻을
+# 밝힙니다. 이 표가 아예 없으면 Cargo가 cargo::missing_lints_inheritance 경고를 냅니다.
+[lints]

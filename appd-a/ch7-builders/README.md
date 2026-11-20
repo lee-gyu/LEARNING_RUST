@@ -120,7 +120,7 @@ let create = Request::new(Method::Post, url, Options {
 
 필드에 기본값을 직접 적는 문법(`struct Request { timeout: Duration = …, }`과 `Request { url, .. }`)이 있으면 "기본값이 없는 필드는 반드시 적게" 할 수 있지만, 1.100.0에서는 불안정 기능이라 ``error[E0658]: default values on fields are experimental``입니다.
 
-**따르지 않아도 되는 경우.** 테스트 코드에서 몇 필드만 관심 있는 값을 만들 때는 기본값의 뜻을 따질 필요가 없으므로 `..Default::default()`를 편하게 써도 됩니다. 공개 타입에 `Default`를 구현할지 자체의 판단은 `ch10-standard-traits`에서 다룹니다.
+**따르지 않아도 되는 경우.** 테스트 코드에서 몇 필드만 관심 있는 값을 만들 때는 기본값의 뜻을 따질 필요가 없으므로 `..Default::default()`를 편하게 써도 됩니다. 공개 타입에 `Default`를 구현할지 자체의 판단은 [`ch10-standard-traits`](../ch10-standard-traits/README.md)에서 다룹니다.
 
 ### 2.4 지침 3: 필수 값·비공개 필드·필드 사이 규칙이 있으면 빌더를 만든다
 
@@ -167,7 +167,7 @@ let request = Request::builder(Method::Post, api) // RequestBuilder::new를 부�
 - **필수 값은 빌더 생성자의 인자로 받습니다.** 기본값이 없는 메서드와 주소를 빠뜨리면 E0061(``this function takes 2 arguments but 1 argument was supplied``)로 컴파일되지 않습니다. 필수 값을 세터로 받으면 "아직 정하지 않았음"을 실행 중에야 알릴 수 있습니다(2.6절의 derive 판).
 - **선택 값은 이름이 있는 메서드로 받습니다.** 메서드 이름이 부르는 쪽 코드에 남으므로 2.2절의 순서 실수가 생기지 않고, 부르지 않은 값은 기본값이 됩니다. 메서드는 대입 이상의 일도 할 수 있습니다. `header`는 부를 때마다 한 줄씩 덧붙입니다.
 - **규칙은 `build()`에서 한 번 검사합니다.** 세터마다 검사하면 `timeout(10s)`과 `connect_timeout(60s)`를 부르는 순서에 따라 결과가 달라집니다. 필드 사이의 규칙은 모든 값이 정해진 시점에만 판단할 수 있습니다.
-- **`build()`는 그런 규칙이 있을 때 `Result`를 돌려줍니다.** 규칙이 없고 필수 값을 생성자로 받았다면 실패할 일이 없으므로 `Request`를 바로 돌려줍니다(예제 04의 `build`). 에러 타입은 [ch4](../ch4-idiomatic-errors/README.md)의 지침대로 열거형에 `Error`를 구현했습니다. 규칙을 어겼다고 패닉하지 않는 이유는 `ch18-dont-panic`에서 다룹니다.
+- **`build()`는 그런 규칙이 있을 때 `Result`를 돌려줍니다.** 규칙이 없고 필수 값을 생성자로 받았다면 실패할 일이 없으므로 `Request`를 바로 돌려줍니다(예제 04의 `build`). 에러 타입은 [ch4](../ch4-idiomatic-errors/README.md)의 지침대로 열거형에 `Error`를 구현했습니다. 규칙을 어겼다고 패닉하지 않는 이유는 [`ch18-dont-panic`](../ch18-dont-panic/README.md)에서 다룹니다.
 - **`Request`의 필드는 비공개입니다.** 모듈 밖에서 구조체 리터럴로 만들면 E0451([Part 0 ch7](../../part0-getting-started/ch7-modules/README.md) 2.6절)이므로 `Request`를 만드는 길은 `build()` 하나뿐입니다. 그래서 모든 `Request` 값은 규칙을 통과한 값입니다. [Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md) 2.12절의 검증 타입과 같은 원리를 필드가 많은 타입에 적용한 것입니다.
 
 **표준 라이브러리의 근거.** `std::thread::Builder`가 같은 모양의 소비형 빌더입니다. 시그니처는 로컬 std 문서에서 확인했습니다.
@@ -336,7 +336,7 @@ fn validate(&self) -> Result<(), String> {
 
 예제 05의 검증 함수는 `self.timeout.unwrap_or(DEFAULT_TIMEOUT)`처럼 기본값을 직접 채워 넣고 비교합니다. 그래서 기본값을 상수로 빼 두고 `default = "DEFAULT_TIMEOUT"`과 검증 함수가 같은 상수를 쓰게 했습니다.
 
-**따르지 않아도 되는 경우.** 빌더가 한두 개뿐이거나 필수 값을 컴파일 시점에 확인하고 싶다면 손으로 씁니다. `derive_builder`는 절차적 매크로라서 빌드할 때 `derive_builder_macro`, `derive_builder_core`, `darling`, `syn`, `quote`, `proc-macro2` 등이 함께 컴파일됩니다(`cargo tree`로 확인). 의존성을 들일지의 판단은 [ch25](../ch25-dependency-graph/README.md)에서, 매크로를 직접 쓰는 일은 `ch28-macros-judiciously`에서 다룹니다.
+**따르지 않아도 되는 경우.** 빌더가 한두 개뿐이거나 필수 값을 컴파일 시점에 확인하고 싶다면 손으로 씁니다. `derive_builder`는 절차적 매크로라서 빌드할 때 `derive_builder_macro`, `derive_builder_core`, `darling`, `syn`, `quote`, `proc-macro2` 등이 함께 컴파일됩니다(`cargo tree`로 확인). 의존성을 들일지의 판단은 [ch25](../ch25-dependency-graph/README.md)에서, 매크로를 직접 쓰는 일은 [`ch28-macros-judiciously`](../ch28-macros-judiciously/README.md)에서 다룹니다.
 
 ### 2.7 고르는 순서
 

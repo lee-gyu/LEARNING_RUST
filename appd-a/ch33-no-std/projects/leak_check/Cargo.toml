@@ -1,0 +1,6 @@
+# no_std 라이브러리(sensor)와 그것이 쓰는 std 라이브러리(stdful)의 워크스페이스입니다.
+# 검사용 크레이트 nostd-check는 일부러 이 워크스페이스에서 뺐습니다(README 2.5절).
+[workspace]
+resolver = "3"
+members = ["stdful", "sensor"]
+exclude = ["nostd-check"]

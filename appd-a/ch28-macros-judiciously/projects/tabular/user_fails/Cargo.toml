@@ -1,0 +1,15 @@
+# 일부러 컴파일에 실패하는 패키지입니다(이름 끝의 -fails).
+# tabular의 매크로를 다른 크레이트에서 불렀을 때 $crate 없이 쓴 매크로가 어떻게 깨지는지 보여 줍니다.
+#
+# 실행(이 디렉터리에서): cargo build   → 종료 코드 101, 에러 3개(E0425 둘, E0603 하나)
+[package]
+name = "user-fails"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tabular = { path = "../tabular" }
+
+# 바깥 워크스페이스(projects/tabular)의 멤버가 아니라 혼자 워크스페이스 루트가 되게 합니다.
+[workspace]

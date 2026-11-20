@@ -1,0 +1,9 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# tabular_derive를 직접 적지 않습니다. tabular가 재내보낸 derive를 씁니다.
+[dependencies]
+tabular = { path = "../tabular" }

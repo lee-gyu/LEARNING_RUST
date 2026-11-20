@@ -290,7 +290,7 @@ warning: current MSRV (Minimum Supported Rust Version) is `1.85.0` but this item
 
 1.85에서도 되는 `split_at_mut` 같은 API로 바꾸거나, `get_disjoint_mut`이 꼭 필요하면 `rust-version`을 올리고 그것을 변경 기록에 적습니다.
 
-[ch19](../ch19-avoid-reflection/README.md) 2.5절이 "1.86.0보다 오래된 툴체인도 지원해야 하면 `as_any` 모양을 유지한다"고 한 판단이 바로 이 MSRV를 정하는 일입니다. 린트는 표준 라이브러리 API만 보므로 언어 기능이나 의존성의 MSRV까지 확인하려면 그 버전의 툴체인으로 실제로 빌드해 봐야 합니다. CI에서 MSRV 툴체인으로 빌드하고 라이선스를 점검하는 방법은 `ch32-continuous-integration`과 [ch25](../ch25-dependency-graph/README.md)에서 다룹니다.
+[ch19](../ch19-avoid-reflection/README.md) 2.5절이 "1.86.0보다 오래된 툴체인도 지원해야 하면 `as_any` 모양을 유지한다"고 한 판단이 바로 이 MSRV를 정하는 일입니다. 린트는 표준 라이브러리 API만 보므로 언어 기능이나 의존성의 MSRV까지 확인하려면 그 버전의 툴체인으로 실제로 빌드해 봐야 합니다. CI에서 MSRV 툴체인으로 빌드하고 라이선스를 점검하는 방법은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)과 [ch25](../ch25-dependency-graph/README.md)에서 다룹니다.
 
 ### 2.8 책과 달라진 점
 

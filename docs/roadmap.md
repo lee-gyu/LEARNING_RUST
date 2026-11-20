@@ -401,20 +401,20 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch27-document-public-interfaces` | 문서 주석에 쓸 것과 쓰지 말 것, `# Panics`·`# Errors`·`# Safety` 절, 항목 링크, 크레이트·모듈 문서, 문서 누락을 잡는 lint | 같은 라이브러리의 부실한 문서판과 고친 판(`projects/`), `missing_docs`와 깨진 링크 검출 | Item 27 (`documentation`) |
-| ⬜ | `ch28-macros-judiciously` | 선언적 매크로와 절차적 매크로 3종, 매크로가 필요한 경우와 함수·제네릭으로 충분한 경우, 매크로의 단점 | 반복 코드를 `macro_rules!`로, 인자가 여러 번 평가되는 함정, 제네릭 함수로 대체, 간단한 derive 매크로(`projects/`) | Item 28 (`macros`) |
-| ⬜ | `ch29-listen-to-clippy` | Clippy 경고를 고치는 이유, lint 그룹, 예외를 이유와 함께 표시하기, 프로젝트 단위 설정 | 경고가 나는 코드와 고친 코드, `#[expect(…, reason = "…")]`, `[lints]` 설정(`projects/`) | Item 29 (`clippy`) |
-| ⬜ | `ch30-beyond-unit-tests` | 단위·통합·문서 테스트의 역할, 예제 프로그램, 벤치마크, 퍼즈 테스트, 테스트 조언 | 라이브러리 하나에 테스트 종류를 모두 갖추기(`projects/`): 단위, 통합, 문서 테스트, example, 벤치마크, 퍼즈 타깃(선택) | Item 30 (`testing`) |
-| ⬜ | `ch31-tooling-ecosystem` | Cargo 기본 도구, `cargo metadata`를 바탕으로 한 도구들, 책 전체에 나온 도구 지도 | `cargo metadata` 출력 읽기, `cargo tree`, 도구별 용도와 사용 챕터를 묶은 표 | Item 31 (`use-tools`) |
-| ⬜ | `ch32-continuous-integration` | CI에 넣을 단계(빌드, 테스트, 서식, lint, 문서, 기능 조합, MSRV, 의존성 점검), 원칙(로컬에서 재현, 경고는 실패, 도구 버전 고정) | 로컬에서 같은 검사를 돌리는 스크립트와 GitHub Actions 워크플로 예시(`projects/`) | Item 32 (`ci`) |
+| ✅ | `ch27-document-public-interfaces` | 문서 주석에 쓸 것과 쓰지 말 것, `# Panics`·`# Errors`·`# Safety` 절, 항목 링크, 크레이트·모듈 문서, 문서 누락을 잡는 lint | 같은 라이브러리의 부실한 문서판과 고친 판(`projects/`), `missing_docs`와 깨진 링크 검출 | Item 27 (`documentation`) |
+| ✅ | `ch28-macros-judiciously` | 선언적 매크로와 절차적 매크로 3종, 매크로가 필요한 경우와 함수·제네릭으로 충분한 경우, 매크로의 단점 | 반복 코드를 `macro_rules!`로, 인자가 여러 번 평가되는 함정, 제네릭 함수로 대체, 간단한 derive 매크로(`projects/`) | Item 28 (`macros`) |
+| ✅ | `ch29-listen-to-clippy` | Clippy 경고를 고치는 이유, lint 그룹, 예외를 이유와 함께 표시하기, 프로젝트 단위 설정 | 경고가 나는 코드와 고친 코드, `#[expect(…, reason = "…")]`, `[lints]` 설정(`projects/`) | Item 29 (`clippy`) |
+| ✅ | `ch30-beyond-unit-tests` | 단위·통합·문서 테스트의 역할, 예제 프로그램, 벤치마크, 퍼즈 테스트, 테스트 조언 | 라이브러리 하나에 테스트 종류를 모두 갖추기(`projects/`): 단위, 통합, 문서 테스트, example, 벤치마크, 퍼즈 타깃(선택) | Item 30 (`testing`) |
+| ✅ | `ch31-tooling-ecosystem` | Cargo 기본 도구, `cargo metadata`를 바탕으로 한 도구들, 책 전체에 나온 도구 지도 | `cargo metadata` 출력 읽기, `cargo tree`, 도구별 용도와 사용 챕터를 묶은 표 | Item 31 (`use-tools`) |
+| ✅ | `ch32-continuous-integration` | CI에 넣을 단계(빌드, 테스트, 서식, lint, 문서, 기능 조합, MSRV, 의존성 점검), 원칙(로컬에서 재현, 경고는 실패, 도구 버전 고정) | 로컬에서 같은 검사를 돌리는 스크립트와 GitHub Actions 워크플로 예시(`projects/`) | Item 32 (`ci`) |
 
 #### Beyond Standard Rust — ch33~ch35
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 기준 문서 절 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch33-no-std` | `core`·`alloc`·`std`의 구분, 라이브러리를 `no_std` 호환으로 쓰기, `std` 기능 패턴, 실패할 수 있는 할당 | `no_std` 라이브러리와 `std` 기능(`projects/`), 호스트에서 테스트, `try_reserve` | Item 33 (`no-std`) |
-| ⬜ | `ch34-ffi-boundaries` | Rust에서 C 함수 부르기(링크, 이름 맹글링, 타입 대응), C 데이터 다루기(`repr(C)`), 경계에서의 소유권과 라이프타임, C에서 Rust 부르기, 안전한 래퍼 | `build.rs`로 C 코드를 컴파일해 호출, `repr(C)` 구조체 주고받기, 불투명 포인터와 생성·해제 함수 쌍, C에서 부르는 Rust 함수(`projects/`) | Item 34 (`ffi`) |
-| ⬜ | `ch35-bindgen` | 손으로 쓴 선언이 어긋날 때의 위험, 헤더에서 선언 생성하기, `-sys` 크레이트 관례, C++ 연동 도구 소개 | ch34의 C 라이브러리를 손으로 쓴 선언과 생성한 선언으로 비교(`projects/`) | Item 35 (`bindgen`) |
+| ✅ | `ch33-no-std` | `core`·`alloc`·`std`의 구분, 라이브러리를 `no_std` 호환으로 쓰기, `std` 기능 패턴, 실패할 수 있는 할당 | `no_std` 라이브러리와 `std` 기능(`projects/`), 호스트에서 테스트, `try_reserve` | Item 33 (`no-std`) |
+| ✅ | `ch34-ffi-boundaries` | Rust에서 C 함수 부르기(링크, 이름 맹글링, 타입 대응), C 데이터 다루기(`repr(C)`), 경계에서의 소유권과 라이프타임, C에서 Rust 부르기, 안전한 래퍼 | `build.rs`로 C 코드를 컴파일해 호출, `repr(C)` 구조체 주고받기, 불투명 포인터와 생성·해제 함수 쌍, C에서 부르는 Rust 함수(`projects/`) | Item 34 (`ffi`) |
+| ✅ | `ch35-bindgen` | 손으로 쓴 선언이 어긋날 때의 위험, 헤더에서 선언 생성하기, `-sys` 크레이트 관례, C++ 연동 도구 소개 | ch34의 C 라이브러리를 손으로 쓴 선언과 생성한 선언으로 비교(`projects/`) | Item 35 (`bindgen`) |
 
 ---
 
@@ -436,4 +436,4 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **40 / 109 챕터** |
-| 부록 A. Effective Rust (합계와 별도) | 26 / 35 |
+| 부록 A. Effective Rust (합계와 별도) | 35 / 35 |

@@ -70,9 +70,9 @@ ramp_height(12.0, slope.to_radians()) // 0.63m (3도), 1.05m (5도)
 
 이제 `ramp_height(12.0, slope)`는 ``expected `Radians`, found `Degrees` ``(E0308)로 컴파일되지 않습니다(4.1절). 비권장 판의 실수가 테스트나 리뷰에 기대지 않고 빌드 단계에서 걸립니다. 변환은 바깥(도면)에서 값이 들어오는 **경계(boundary)** 에서 `to_radians()`로 한 번 하고, 그 뒤로는 `Radians`로 다닙니다. [ch1](../ch1-express-data-structures/README.md) 2.1절의 "변환은 경계에서"와 같은 생각입니다.
 
-실행 중 비용은 없습니다. Part 0 ch19 2.12절에서 본 것처럼 뉴타입의 크기는 안쪽 타입과 같습니다. 크기뿐 아니라 메모리 배치까지 안쪽 타입과 같다고 보장해야 할 때(C와 주고받을 때 등) 붙이는 `#[repr(transparent)]`는 `ch34-ffi-boundaries`와 Part 10 `ch2-data-layout`에서 다룹니다.
+실행 중 비용은 없습니다. Part 0 ch19 2.12절에서 본 것처럼 뉴타입의 크기는 안쪽 타입과 같습니다. 크기뿐 아니라 메모리 배치까지 안쪽 타입과 같다고 보장해야 할 때(C와 주고받을 때 등) 붙이는 `#[repr(transparent)]`는 [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)와 Part 10 `ch2-data-layout`에서 다룹니다.
 
-두 단위 사이에 `impl From<Degrees> for Radians`를 구현해 두면, 같은 E0308에 ``help: call `Into::into` on this expression to convert `Degrees` into `Radians` ``라는 도움말이 붙습니다(구현이 없으면 이 도움말도 없습니다). 변환을 `From`으로 열지, 이름 있는 메서드로 열지는 `ch5-type-conversions`에서 다룹니다.
+두 단위 사이에 `impl From<Degrees> for Radians`를 구현해 두면, 같은 E0308에 ``help: call `Into::into` on this expression to convert `Degrees` into `Radians` ``라는 도움말이 붙습니다(구현이 없으면 이 도움말도 없습니다). 변환을 `From`으로 열지, 이름 있는 메서드로 열지는 [`ch5-type-conversions`](../ch5-type-conversions/README.md)에서 다룹니다.
 
 **따르지 않아도 되는 경우.**
 
@@ -136,7 +136,7 @@ help: swap these arguments
 **따르지 않아도 되는 경우.**
 
 - 인자가 하나뿐이고 함수 이름이 뜻을 말해 줄 때(`set_nonblocking(true)`)는 그대로 둡니다(ch1 2.3절).
-- 인자가 여럿이면 이름 붙은 필드의 구조체 하나로 묶는 것도 방법입니다. `Query { per_page: 5, page: 2 }`는 필드 이름으로 맞추므로 적는 순서가 결과를 바꾸지 않습니다. 필드가 많아 만드는 일 자체가 번거로워지면 빌더 패턴(`ch7-builders`)을 씁니다.
+- 인자가 여럿이면 이름 붙은 필드의 구조체 하나로 묶는 것도 방법입니다. `Query { per_page: 5, page: 2 }`는 필드 이름으로 맞추므로 적는 순서가 결과를 바꾸지 않습니다. 필드가 많아 만드는 일 자체가 번거로워지면 빌더 패턴([`ch7-builders`](../ch7-builders/README.md))을 씁니다.
 - 바로 옆에서 한두 번 부르는 비공개 도우미 함수라면 타입을 만드는 비용이 막아 줄 실수보다 큽니다.
 
 ### 2.3 범위가 정해진 값은 생성자에서 검증한다
@@ -178,7 +178,7 @@ Part 0 ch9의 세 가지 장치가 그대로 쓰입니다. 비공개 필드, 검
 
 검사는 경계에서 한 번만 합니다. 예제의 `main`은 서버에서 받은 `u8`을 `Percent::new`로 바꾸면서 150을 거부하고, 그 뒤의 `progress_bar`와 `remaining`은 검사하지 않습니다. `remaining`의 `100 - self.0`은 불변식("값은 100 이하") 덕분에 넘치지 않으므로 `checked_sub`도 필요 없습니다. 시그니처의 `Percent`가 "검사가 끝난 값"이라는 증명 역할을 합니다.
 
-`new`가 `Option`을 돌려주는 것은 실패 이유가 "범위를 벗어남" 하나뿐이기 때문입니다(ch1 2.6절). 이유를 담은 에러 타입을 설계하는 방법은 `ch4-idiomatic-errors`, 같은 검사를 `TryFrom<u8>`으로 여는 방법은 `ch5-type-conversions`에서 다룹니다.
+`new`가 `Option`을 돌려주는 것은 실패 이유가 "범위를 벗어남" 하나뿐이기 때문입니다(ch1 2.6절). 이유를 담은 에러 타입을 설계하는 방법은 [`ch4-idiomatic-errors`](../ch4-idiomatic-errors/README.md), 같은 검사를 `TryFrom<u8>`으로 여는 방법은 [`ch5-type-conversions`](../ch5-type-conversions/README.md)에서 다룹니다.
 
 검증 뉴타입에 derive를 붙일 때는 **값을 새로 만드는 derive**를 조심합니다. `derive(Default)`는 필드마다 `default()`를 불러 생성자를 거치지 않고 값을 만듭니다. `Percent`라면 `Percent(0)`이라 문제없지만, 1 이상이어야 하는 쪽당 개수에 붙이면 무효한 값 `PerPage(0)`이 생깁니다. 반대로 `Clone`, `PartialEq`, `Ord`처럼 있는 값을 복제하거나 비교하기만 하는 derive는 불변식을 깨지 않습니다.
 
@@ -239,7 +239,7 @@ let (dx, dy) = (10.0 * rad.cos(), 10.0 * rad.sin()); // (-7.07, 7.07)
 
 구현하지 않은 조합이 어떤 에러가 되는지도 알아 두면 좋습니다. `Add` 구현이 아예 없는 타입끼리 더하면 `` error[E0369]: cannot add `Radians` to `Radians` ``이고, `Add<Degrees>`만 있는 `Degrees`에 `Radians`를 더하면 오른쪽 타입이 틀렸다는 E0308이 됩니다(4.1절).
 
-표준 라이브러리의 `Instant`와 `Duration`이 이 기준을 잘 보여 줍니다. 시각 + 시간 간격 = 시각(`Instant + Duration`), 시각 − 시각 = 시간 간격(`Instant - Instant`)은 구현되어 있지만, 시각 + 시각은 뜻이 없으므로 구현되어 있지 않습니다. `Instant + Instant`는 ``expected `Duration`, found `Instant` ``(E0308)입니다. 연산자 구현 문법은 [Part 1 ch6](../../part1-standard-lib/ch6-core-traits/README.md) 2.8절, 공개 타입에 어떤 표준 트레이트를 붙일지는 `ch10-standard-traits`에서 다룹니다.
+표준 라이브러리의 `Instant`와 `Duration`이 이 기준을 잘 보여 줍니다. 시각 + 시간 간격 = 시각(`Instant + Duration`), 시각 − 시각 = 시간 간격(`Instant - Instant`)은 구현되어 있지만, 시각 + 시각은 뜻이 없으므로 구현되어 있지 않습니다. `Instant + Instant`는 ``expected `Duration`, found `Instant` ``(E0308)입니다. 연산자 구현 문법은 [Part 1 ch6](../../part1-standard-lib/ch6-core-traits/README.md) 2.8절, 공개 타입에 어떤 표준 트레이트를 붙일지는 [`ch10-standard-traits`](../ch10-standard-traits/README.md)에서 다룹니다.
 
 **따르지 않아도 되는 경우.** 뉴타입의 목적이 구별이 아니라 트레이트 구현 하나를 얹는 것뿐이라면(2.5절) 안쪽 메서드를 열어도 목적을 해치지 않습니다. 그때도 `Deref`보다는 2.6절의 `as_str()` 같은 읽기용 메서드 하나가 무엇을 여는지 분명합니다.
 
@@ -335,7 +335,7 @@ let total: Qty = lines.iter().map(|(_, q)| *q).sum();
 | `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, `Hash`, `PartialOrd`, `Ord`, `Default` | 안쪽 타입이 구현했다면 derive 한 줄 | `#[derive(..)]` |
 | `Display` | 손으로 위임. `f`를 그대로 넘김 | `fmt::Display::fmt(&self.0, f)` |
 | 연산자(`Add` 등), `Sum` | 손으로, 뜻이 있는 것만(2.4절) | `impl Add`, `impl Sum` |
-| `From`, `TryFrom`, `FromStr`, `AsRef`, `Borrow` | 손으로(`ch5-type-conversions`, Part 1 ch6) | - |
+| `From`, `TryFrom`, `FromStr`, `AsRef`, `Borrow` | 손으로([`ch5-type-conversions`](../ch5-type-conversions/README.md), Part 1 ch6) | - |
 | 고유 메서드(`len`, `starts_with` 등) | 하나씩 위임하거나 읽기용 접근자 하나 | `as_str()` |
 
 derive가 되는 트레이트는 비용이 거의 없고, 비용은 `Display`, 연산자, 변환 트레이트, 고유 메서드에서 생깁니다. 이 반복을 줄여 주는 derive 크레이트도 있습니다. 예를 들어 [`derive_more`](https://crates.io/crates/derive_more)("Adds #[derive(x)] macros for more traits")는 `Display`, `Add`, `Sum`, `From` 같은 트레이트를 derive로 구현해 줍니다. 쓰려는 derive마다 Cargo 기능을 켜야 하므로 문서를 확인하고 씁니다. 이 저장소의 예제는 외부 크레이트 없이 손으로 씁니다.

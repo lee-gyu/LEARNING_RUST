@@ -85,7 +85,7 @@ impl TryFrom<u8> for Weekday {
 }
 ```
 
-실패할 수 있다는 사실이 반환 타입 `Result`에 드러나고, 실패를 어떻게 다룰지는 부르는 쪽이 정합니다. 틀린 번호만 알리고 넘어갈 수도, `collect::<Result<Vec<_>, _>>()`로 목록 전체를 거부할 수도 있습니다(예제 01의 2번 구역). 에러 값에 받은 번호를 담아 두면 무엇이 틀렸는지도 보여 줄 수 있습니다. 에러 타입의 설계는 `ch4-idiomatic-errors`, `Result`를 다루는 메서드는 `ch3-option-result-transforms`에서 다룹니다.
+실패할 수 있다는 사실이 반환 타입 `Result`에 드러나고, 실패를 어떻게 다룰지는 부르는 쪽이 정합니다. 틀린 번호만 알리고 넘어갈 수도, `collect::<Result<Vec<_>, _>>()`로 목록 전체를 거부할 수도 있습니다(예제 01의 2번 구역). 에러 값에 받은 번호를 담아 두면 무엇이 틀렸는지도 보여 줄 수 있습니다. 에러 타입의 설계는 [`ch4-idiomatic-errors`](../ch4-idiomatic-errors/README.md), `Result`를 다루는 메서드는 [`ch3-option-result-transforms`](../ch3-option-result-transforms/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.**
 
@@ -139,7 +139,7 @@ fn fill(color: impl Into<Rgb>) -> String {
 
 구현은 `From`, 바운드는 `Into`입니다. 방향이 반대처럼 보이지만 이유는 같습니다. 둘 다 **받아들이는 범위가 가장 넓은 쪽**입니다. `From`을 구현하면 `From`과 `Into`가 함께 생깁니다. `Into` 바운드는 `From`을 구현한 타입, `Into`만 구현한 옛 타입, 반사 구현 덕분에 `Rgb` 자신까지 받습니다([`02_from_impl_into_bound.rs`](examples/02_from_impl_into_bound.rs)의 2번 구역). `From` 문서도 "구현할 때는 `From`, 제네릭 함수의 바운드에는 `Into`"를 권합니다.
 
-`fill`의 본문이 `fill_exact(color.into())` 한 줄인 데에도 이유가 있습니다. 제네릭 함수는 부르는 타입마다 따로 컴파일되므로(단형성화), 제네릭 부분은 변환 한 줄로 줄이고 실제 일은 제네릭이 아닌 함수에 맡기면 복제되는 코드가 작아집니다. 제네릭과 코드 크기의 관계는 `ch12-generics-vs-trait-objects`에서 다룹니다.
+`fill`의 본문이 `fill_exact(color.into())` 한 줄인 데에도 이유가 있습니다. 제네릭 함수는 부르는 타입마다 따로 컴파일되므로(단형성화), 제네릭 부분은 변환 한 줄로 줄이고 실제 일은 제네릭이 아닌 함수에 맡기면 복제되는 코드가 작아집니다. 제네릭과 코드 크기의 관계는 [`ch12-generics-vs-trait-objects`](../ch12-generics-vs-trait-objects/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우(`Into` 바운드 대신 구체 타입으로 받을 때).**
 
@@ -201,7 +201,7 @@ warning: casting `i64` to `u32` may truncate the value
 warning: casting `i64` to `u32` may lose the sign of the value
 ```
 
-같은 명령은 4번 구역의 `as`(진행률 계산, `const`)에도 경고합니다. `clamp(0.0, 100.0)`으로 범위를 맞춘 뒤의 `as u8`에도 `cast_sign_loss`가 나옵니다. 린트는 맞게 쓴 `as`를 구별하지 못하고, 이것이 이 린트들이 기본으로 꺼져 있는 이유입니다. 프로젝트에서 켠다면 맞게 쓴 자리마다 `#[expect(clippy::cast_possible_truncation, reason = "…")]`로 이유를 남깁니다. 린트 수준을 프로젝트 단위로 정하는 방법은 `ch29-listen-to-clippy`에서 다룹니다.
+같은 명령은 4번 구역의 `as`(진행률 계산, `const`)에도 경고합니다. `clamp(0.0, 100.0)`으로 범위를 맞춘 뒤의 `as u8`에도 `cast_sign_loss`가 나옵니다. 린트는 맞게 쓴 `as`를 구별하지 못하고, 이것이 이 린트들이 기본으로 꺼져 있는 이유입니다. 프로젝트에서 켠다면 맞게 쓴 자리마다 `#[expect(clippy::cast_possible_truncation, reason = "…")]`로 이유를 남깁니다. 린트 수준을 프로젝트 단위로 정하는 방법은 [`ch29-listen-to-clippy`](../ch29-listen-to-clippy/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우(`as`가 맞는 자리).**
 
@@ -271,7 +271,7 @@ pedantic 그룹의 `cast_lossless`를 켜면 이런 `as`를 찾아 ``casts from 
 | `&T` → `*const T`, `&mut T` → `*mut T` | 원시 포인터([Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.2절) |
 | `!` → 모든 타입 | `return`이나 `panic!`이 있는 `match` 갈래 |
 
-공통점은 **참조와 포인터의 모양만 바뀐다**는 것입니다. 가리키는 값을 새로 만들거나 고치지 않으므로 실패할 일이 없고 비용도 거의 없습니다(트레이트 객체가 될 때 vtable 포인터가 붙는 정도입니다). 그래서 컴파일러가 묻지 않고 해 줄 수 있습니다. 정수 사이의 변환이 이 목록에 없는 것도 같은 이유입니다. 값이 바뀔 수 있는 변환은 코드에 적게 합니다(ch1 2.1절). 사용자 정의 타입이 강제 변환에 끼는 길은 `Deref`를 구현하는 것과 트레이트를 구현해 트레이트 객체가 되는 것, 두 가지뿐입니다. 어떤 타입에 `Deref`를 구현해야 하는지는 `ch8-references-pointers`에서 다룹니다.
+공통점은 **참조와 포인터의 모양만 바뀐다**는 것입니다. 가리키는 값을 새로 만들거나 고치지 않으므로 실패할 일이 없고 비용도 거의 없습니다(트레이트 객체가 될 때 vtable 포인터가 붙는 정도입니다). 그래서 컴파일러가 묻지 않고 해 줄 수 있습니다. 정수 사이의 변환이 이 목록에 없는 것도 같은 이유입니다. 값이 바뀔 수 있는 변환은 코드에 적게 합니다(ch1 2.1절). 사용자 정의 타입이 강제 변환에 끼는 길은 `Deref`를 구현하는 것과 트레이트를 구현해 트레이트 객체가 되는 것, 두 가지뿐입니다. 어떤 타입에 `Deref`를 구현해야 하는지는 [`ch8-references-pointers`](../ch8-references-pointers/README.md)에서 다룹니다.
 
 **문제 상황.** 캐시에 넣을 값이 차지하는 바이트 수를 재는 함수를, 어떤 값이든 받도록 제네릭으로 만들었습니다.
 
@@ -308,7 +308,7 @@ measure(long.as_str())  // (39, "str")
 책은 2018 에디션, rustc 1.70을 기준으로 합니다. rustc 1.100.0에서 확인한 차이는 다음과 같습니다.
 
 - **`Infallible`은 이제 `!`의 별칭입니다.** 책은 실패하지 않는 `TryFrom`의 에러 타입 `Infallible`이 언젠가 never 타입 `!`로 바뀔 수 있다고 적었습니다. 1.100.0에서 never 타입이 안정화되어 `std::convert::Infallible`의 정의는 `pub type Infallible = !;`이고, `type_name::<Infallible>()`도 `!`를 출력합니다. 문서는 오래된 Rust를 지원할 필요가 없다면 `!`를 직접 쓰라고 안내합니다.
-- **강제 변환에 업캐스트가 더해졌습니다.** 책의 강제 변환 목록에는 없지만, 1.86.0부터 `&dyn Clickable`을 슈퍼트레이트의 `&dyn Widget`으로 바꾸는 강제 변환이 안정화되었습니다(2.6절). 업캐스트의 쓰임은 `ch19-avoid-reflection`에서 다룹니다.
+- **강제 변환에 업캐스트가 더해졌습니다.** 책의 강제 변환 목록에는 없지만, 1.86.0부터 `&dyn Clickable`을 슈퍼트레이트의 `&dyn Widget`으로 바꾸는 강제 변환이 안정화되었습니다(2.6절). 업캐스트의 쓰임은 [`ch19-avoid-reflection`](../ch19-avoid-reflection/README.md)에서 다룹니다.
 - **부호만 바꾸는 메서드가 생겼습니다.** 책의 기준 버전(1.70)에는 없던 `cast_signed()`/`cast_unsigned()`가 1.87.0에 안정화되어, 같은 크기의 정수 사이에서 부호만 바꾸는 `as`를 이름 있는 메서드로 바꿀 수 있습니다(2.4절). 1.100.0 문서에는 `truncate`, `widen`, `saturating_cast` 같은 정수 변환 메서드도 보이지만 모두 nightly 전용 실험 API라서, stable에서 `x.truncate()`를 부르면 ``error[E0658]: use of unstable library feature `integer_widen_truncate` ``입니다. 크기를 줄이면서 잘림을 원할 때 stable에서 가장 직접적인 방법은 지금도 `as`입니다.
 - **E0277의 도움말 목록이 다릅니다.** `u16::from(x_u32)`에 대해 책은 `u16`이 구현한 `From`으로 `NonZeroU16`, `bool`, `u8`을 보여 주지만, 1.100.0은 `` `From<bool>` ``, `` `From<u8>` ``, `` `From<std::ascii::Char>` ``를 표준 라이브러리 소스 위치와 함께 보여 줍니다(`std::ascii::Char`는 불안정 타입입니다). 에러 코드와 첫 줄(``the trait bound `u16: From<u32>` is not satisfied``)은 같습니다.
 - **책에 없는 지침.** 지침 3이 권하는 `try_from`은 책의 Item 5가 `as`의 대안으로 명시한 것이 아닙니다(2026-11-19에 온라인판에서 확인). 책은 `as`보다 `from`/`into`를 쓰라고 권하고 `as`가 손실 있는 변환을 허용한다는 점까지 설명합니다. `from`이 없는 좁히는 방향에 `try_from`을 쓰라는 부분은 이 챕터가 더했습니다.
@@ -620,7 +620,7 @@ let text = greet(nicks.get("kim")); // E0308
 <details>
 <summary>힌트</summary>
 
-처음 선언은 E0038(``because method `fill` has generic type parameters``)입니다. 트레이트 메서드는 `fn fill(&mut self, color: Rgb)`로 두고, 편의 함수는 트레이트 밖에 `fn fill_any(canvas: &mut dyn Canvas, color: impl Into<Rgb>) { canvas.fill(color.into()) }`처럼 따로 만듭니다. 트레이트 객체로 부르는 부분과 변환하는 제네릭 부분을 나누는 것으로, 예제 02의 `fill`과 `fill_exact`를 나눈 것과 같은 모양입니다. 트레이트에 `where Self: Sized`를 붙인 제네릭 메서드를 두는 방법은 `ch12-generics-vs-trait-objects`에서 다룹니다.
+처음 선언은 E0038(``because method `fill` has generic type parameters``)입니다. 트레이트 메서드는 `fn fill(&mut self, color: Rgb)`로 두고, 편의 함수는 트레이트 밖에 `fn fill_any(canvas: &mut dyn Canvas, color: impl Into<Rgb>) { canvas.fill(color.into()) }`처럼 따로 만듭니다. 트레이트 객체로 부르는 부분과 변환하는 제네릭 부분을 나누는 것으로, 예제 02의 `fill`과 `fill_exact`를 나눈 것과 같은 모양입니다. 트레이트에 `where Self: Sized`를 붙인 제네릭 메서드를 두는 방법은 [`ch12-generics-vs-trait-objects`](../ch12-generics-vs-trait-objects/README.md)에서 다룹니다.
 
 </details>
 

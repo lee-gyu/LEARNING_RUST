@@ -60,7 +60,7 @@ log.iter()
 
 단계마다 나아지는 점은 다음과 같습니다.
 
-- **0 → 1: 인덱스가 사라집니다.** 0단계에서 `i`는 `log`를 가리키는 데만 쓰입니다. 그런데도 읽는 사람은 범위가 `0..log.len()`이 맞는지, `log[i]`가 매번 같은 원소인지 확인해야 합니다. 인덱싱은 실행 중에 경계 검사(bounds check)를 거치고, 범위를 벗어나면 패닉합니다(패닉을 피하는 설계는 `ch18-dont-panic`). `for session in log`에는 인덱스가 없으므로 잘못 쓸 인덱스도, 벗어날 범위도 없습니다.
+- **0 → 1: 인덱스가 사라집니다.** 0단계에서 `i`는 `log`를 가리키는 데만 쓰입니다. 그런데도 읽는 사람은 범위가 `0..log.len()`이 맞는지, `log[i]`가 매번 같은 원소인지 확인해야 합니다. 인덱싱은 실행 중에 경계 검사(bounds check)를 거치고, 범위를 벗어나면 패닉합니다(패닉을 피하는 설계는 [`ch18-dont-panic`](../ch18-dont-panic/README.md)). `for session in log`에는 인덱스가 없으므로 잘못 쓸 인덱스도, 벗어날 범위도 없습니다.
 - **1 → 2 → 3: 흐름 제어가 반복문 머리로 올라옵니다.** "어디까지 보는가"(`take_while`)와 "무엇을 건너뛰는가"(`filter_map`)가 본문 중간의 `break`, `continue`가 아니라 이름 붙은 어댑터가 됩니다. `break`의 조건은 "멈출 조건"(`day > 14`)이고 `take_while`의 조건은 "계속할 조건"(`day <= 14`)이라 **방향이 뒤집힌다**는 점에 주의합니다. 걸러 내면서 `Option`을 벗기는 일은 `filter`와 `map` 둘이 아니라 `filter_map` 하나가 맡습니다([Part 1 ch5](../../part1-standard-lib/ch5-iterators/README.md) 2.5~2.6절).
 - **3 → 4: 가변 상태가 사라집니다.** 본문의 계산이 `map`이 되면 남은 것은 "더한다"뿐이고, 이것은 소비 메서드 `sum`입니다. 체인을 위에서 아래로 읽으면 함수가 하는 일이 그대로 문장이 됩니다.
 
@@ -77,7 +77,7 @@ help: consider using an iterator
 
 반복자로 쓰면 "첫 원소를 건너뛴다"는 것을 `skip(1)`이라고 적어야 하므로 의도하지 않은 건너뛰기가 숨을 곳이 없습니다.
 
-성능에 대해서는 이 챕터에서 재지 않습니다. 반복자 체인이 손으로 쓴 반복문과 같은 수준으로 최적화되는 이유는 Part 0 ch13 2.15절과 Part 1 ch5 2.4절에서 보았고, 측정과 최적화의 판단은 `ch20-avoid-over-optimizing`에서 다룹니다.
+성능에 대해서는 이 챕터에서 재지 않습니다. 반복자 체인이 손으로 쓴 반복문과 같은 수준으로 최적화되는 이유는 Part 0 ch13 2.15절과 Part 1 ch5 2.4절에서 보았고, 측정과 최적화의 판단은 [`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우: 인덱스 자체가 계산의 재료일 때.** 두 배열을 다른 위치로 함께 읽거나(`v[i] * w[n - 1 - i]`), 이웃한 원소를 비교하는(`v[i] > v[i - 1]`) 반복문에는 clippy도 경고하지 않습니다. 이 경우도 `zip`과 `rev`, `windows(2)` 같은 대안이 있지만, 인덱스 산술이 문제의 본질이라면 인덱스가 드러난 반복문이 더 정직할 수 있습니다. 인덱스를 출력에도 쓰는 반복문(`println!("{i}: {}", v[i])`)은 clippy가 `.enumerate()`를 쓰라고 제안합니다.
 
@@ -183,7 +183,7 @@ hit_days([120, 119], TARGET);                                    // 배열
 
 **돌려줄 때도 반복자로.** 예제의 `cups_in`은 기록에서 꺼낸 잔 수를 `Vec`이 아니라 `impl Iterator<Item = u32>`로 돌려줍니다(Part 1 ch5 2.18절). 그래서 3번 구역에서 부르는 쪽이 `take(2)`로 앞부분만 보거나 `sum()`으로 더할 때 중간 `Vec`이 생기지 않고, `hit_days(cups_in(pos_log), TARGET)`처럼 함수 경계를 넘어 체인이 이어집니다.
 
-**지침을 따르지 않아도 되는 경우: 본문이 슬라이스의 능력을 쓸 때.** 예제 03의 4번 구역은 "전날보다 많이 판 날"을 셉니다. 이웃한 두 날을 함께 보는 `windows(2)`는 슬라이스의 메서드이고, 반복자에는 안정판에서 쓸 수 있는 같은 메서드가 없습니다. 길이(`len`)가 먼저 필요하거나, 여러 번 돌거나, 정렬하거나 인덱스로 접근하는 함수도 마찬가지입니다. 이런 함수를 `impl IntoIterator`로 받으면 본문 첫 줄에서 `collect`하게 되어, 부르는 쪽이 하던 일을 받는 쪽이 숨겨서 할 뿐입니다. 이때는 `&[T]`가 정직한 시그니처입니다. 또 `impl IntoIterator`는 제네릭이라 넘기는 타입마다 함수가 따로 만들어집니다(`ch12-generics-vs-trait-objects`). 크레이트 안에서 한 가지 타입으로만 부른다면 굳이 열 필요가 없습니다.
+**지침을 따르지 않아도 되는 경우: 본문이 슬라이스의 능력을 쓸 때.** 예제 03의 4번 구역은 "전날보다 많이 판 날"을 셉니다. 이웃한 두 날을 함께 보는 `windows(2)`는 슬라이스의 메서드이고, 반복자에는 안정판에서 쓸 수 있는 같은 메서드가 없습니다. 길이(`len`)가 먼저 필요하거나, 여러 번 돌거나, 정렬하거나 인덱스로 접근하는 함수도 마찬가지입니다. 이런 함수를 `impl IntoIterator`로 받으면 본문 첫 줄에서 `collect`하게 되어, 부르는 쪽이 하던 일을 받는 쪽이 숨겨서 할 뿐입니다. 이때는 `&[T]`가 정직한 시그니처입니다. 또 `impl IntoIterator`는 제네릭이라 넘기는 타입마다 함수가 따로 만들어집니다([`ch12-generics-vs-trait-objects`](../ch12-generics-vs-trait-objects/README.md)). 크레이트 안에서 한 가지 타입으로만 부른다면 굳이 열 필요가 없습니다.
 
 ### 2.4 반복문 안의 `?`를 체인으로 옮길 때의 선택지
 
@@ -608,7 +608,7 @@ error[E0499]: cannot borrow `notes` as mutable more than once at a time
 
 - **읽는 법**: 첫 번째 대여는 `filter`의 클로저가 `notes`를 캡처하면서, 두 번째 대여는 `filter_map`의 클로저가 캡처하면서 생겼습니다. `first borrow later used by call`은 첫 클로저가 `filter_map`을 부르는 시점에도 살아 있다는 뜻입니다.
 - **원인**: 어댑터는 클로저를 필드로 들고 있다가(Part 1 ch5 2.4절) `collect`가 돌 때 번갈아 부릅니다. 그래서 두 클로저가 `notes`를 가변으로 빌린 채 동시에 살아 있어야 합니다. 반복문 본문이라면 한 자리에서 차례로 고치므로 문제가 되지 않습니다.
-- **해결**: 상태를 여러 단계에서 고쳐야 한다면 `for` + `match`로 씁니다(2.6절). 체인을 유지하려면 상태를 고치는 단계를 하나로 합칩니다. 이 경우 `filter_map` 하나가 빈 줄도 함께 처리하면 됩니다. `RefCell`로 감싸 대여 검사를 실행 중으로 미루는 방법도 있지만, 대여 규칙을 피하기 위한 구조 변경은 `ch15-borrow-checker`에서 다룹니다.
+- **해결**: 상태를 여러 단계에서 고쳐야 한다면 `for` + `match`로 씁니다(2.6절). 체인을 유지하려면 상태를 고치는 단계를 하나로 합칩니다. 이 경우 `filter_map` 하나가 빈 줄도 함께 처리하면 됩니다. `RefCell`로 감싸 대여 검사를 실행 중으로 미루는 방법도 있지만, 대여 규칙을 피하기 위한 구조 변경은 [`ch15-borrow-checker`](../ch15-borrow-checker/README.md)에서 다룹니다.
 
 ### 4.4 그 밖의 실수
 
@@ -763,8 +763,8 @@ fn process_returns(
 
 ## 6. 참고 자료
 
-- *Effective Rust* (David Drysdale): [Item 9: Consider using iterator transforms instead of explicit loops](https://effective-rust.com/iterators.html). 이 챕터가 다룬 지침의 범위를 정한 기준 문서입니다. 반복문을 반복자로 바꾸는 단계, `Result` 값을 모으는 방법, 명시적 반복문이 나은 경우를 다룹니다. 책은 인덱스 반복문의 경계 검사에 관해 Sergey Davidoff의 글 [How to avoid bounds checks in Rust (without unsafe!)](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)를 인용합니다. 성능을 따지는 이야기는 `ch20-avoid-over-optimizing`에서 이어집니다.
+- *Effective Rust* (David Drysdale): [Item 9: Consider using iterator transforms instead of explicit loops](https://effective-rust.com/iterators.html). 이 챕터가 다룬 지침의 범위를 정한 기준 문서입니다. 반복문을 반복자로 바꾸는 단계, `Result` 값을 모으는 방법, 명시적 반복문이 나은 경우를 다룹니다. 책은 인덱스 반복문의 경계 검사에 관해 Sergey Davidoff의 글 [How to avoid bounds checks in Rust (without unsafe!)](https://shnatsel.medium.com/how-to-avoid-bounds-checks-in-rust-without-unsafe-f65e618b4c1e)를 인용합니다. 성능을 따지는 이야기는 [`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md)에서 이어집니다.
 - 본편의 관련 챕터: Part 0 [ch13](../../part0-getting-started/ch13-closures-iterators/README.md)(어댑터와 소비 메서드, 반복문을 체인으로 바꾼 첫 예, 비용 없는 추상화), [ch6](../../part0-getting-started/ch6-enums-pattern-matching/README.md)(`let...else`). Part 1 [ch5](../../part1-standard-lib/ch5-iterators/README.md)(`IntoIterator`를 받는 함수, `Result`로 `collect`하는 원리, `partition`, 어댑터·소비 메서드 선택표, `scan`, `try_fold`/`try_for_each`, `impl Iterator` 반환), [ch2](../../part1-standard-lib/ch2-option-result/README.md)(클로저 안의 `?`, `Result<Vec<_>, _>`로 모으기).
-- 부록의 관련 챕터: [ch2](../ch2-express-common-behavior/README.md)(가장 느슨한 바운드), [ch3](../ch3-option-result-transforms/README.md)(변환 메서드에서 어디서 멈출까), [ch8](../ch8-references-pointers/README.md)(읽기만 하는 매개변수는 슬라이스로). 직접 만든 컬렉션에 `FromIterator`를 구현할지는 `ch10-standard-traits`에서 다룹니다.
+- 부록의 관련 챕터: [ch2](../ch2-express-common-behavior/README.md)(가장 느슨한 바운드), [ch3](../ch3-option-result-transforms/README.md)(변환 메서드에서 어디서 멈출까), [ch8](../ch8-references-pointers/README.md)(읽기만 하는 매개변수는 슬라이스로). 직접 만든 컬렉션에 `FromIterator`를 구현할지는 [`ch10-standard-traits`](../ch10-standard-traits/README.md)에서 다룹니다.
 - 표준 라이브러리 문서: [`Iterator`](https://doc.rust-lang.org/std/iter/trait.Iterator.html)(`max_by_key`의 같은 값 처리, `try_fold`, `try_for_each`, nightly 전용인 `try_find`), [`IntoIterator`](https://doc.rust-lang.org/std/iter/trait.IntoIterator.html)(함수 인자를 `IntoIterator`로 받는 예), [`ControlFlow`](https://doc.rust-lang.org/std/ops/enum.ControlFlow.html)(`try_for_each`에서 일찍 멈추는 예).
 - Clippy 린트 목록: [rust-1.100.0 판](https://rust-lang.github.io/rust-clippy/rust-1.100.0/index.html). 이 챕터에 나온 `needless_range_loop`, `unnecessary_fold`, `manual_find`, `explicit_counter_loop`, `manual_try_fold`, `map_flatten`, `needless_for_each`의 설명과 기본 수준을 찾아볼 수 있습니다.

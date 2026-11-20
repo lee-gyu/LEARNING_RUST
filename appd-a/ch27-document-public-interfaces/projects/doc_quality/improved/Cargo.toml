@@ -1,0 +1,11 @@
+[package]
+name = "kvconf"
+version = "0.1.0"
+edition = "2024"
+publish = false
+# crates.io가 첫 화면에 보여 줄 파일입니다. 적지 않아도 Cargo는 패키지 디렉터리의 README.md를
+# 찾아 쓰지만, 다른 파일을 쓰거나(readme = "docs/intro.md") 끄려면(readme = false) 이 필드를 씁니다.
+readme = "README.md"
+
+# 루트 워크스페이스와 분리합니다. 이 디렉터리 안에서 빌드합니다.
+[workspace]

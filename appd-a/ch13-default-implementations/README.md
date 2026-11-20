@@ -183,7 +183,7 @@ where
     Self: Sized + Iterator<Item = &'a T>,
 ```
 
-원소가 `Clone`인 타입의 참조를 내놓는 반복자에서만 쓸 수 있다는 뜻입니다. `Clone`이 아닌 `Ticket`의 벡터에서 `v.iter().cloned()`를 부르면 ``error[E0277]: the trait bound `Ticket: Clone` is not satisfied``와 ``note: required by a bound in `cloned` ``가 나옵니다(같은 모양의 코드로 확인). 표준 라이브러리의 기본 메서드에 자주 붙어 있는 `where Self: Sized`는 트레이트 객체와 관련된 바운드라서 `ch12-generics-vs-trait-objects`에서 다룹니다.
+원소가 `Clone`인 타입의 참조를 내놓는 반복자에서만 쓸 수 있다는 뜻입니다. `Clone`이 아닌 `Ticket`의 벡터에서 `v.iter().cloned()`를 부르면 ``error[E0277]: the trait bound `Ticket: Clone` is not satisfied``와 ``note: required by a bound in `cloned` ``가 나옵니다(같은 모양의 코드로 확인). 표준 라이브러리의 기본 메서드에 자주 붙어 있는 `where Self: Sized`는 트레이트 객체와 관련된 바운드라서 [`ch12-generics-vs-trait-objects`](../ch12-generics-vs-trait-objects/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 트레이트의 뜻 자체가 그 능력을 전제한다면 슈퍼트레이트가 맞습니다. `Ord`는 `pub trait Ord: Eq + PartialOrd`로 선언되어 있습니다. 순서를 정할 수 있는 타입이라면 같은지도 판단할 수 있어야 하기 때문입니다. `Error`도 `pub trait Error: Debug + Display`라서 모든 에러가 메시지를 보여 줄 수 있습니다([ch4](../ch4-idiomatic-errors/README.md)). 기준은 "이 능력이 없는 구현이 있을 수 있는가"입니다. 있을 수 있다면 그 능력을 쓰는 메서드에만 바운드를 붙입니다.
 

@@ -88,7 +88,7 @@ impl Drop for PooledConn<'_> {
 // Deref/DerefMut으로 안의 Conn을 빌려 줍니다.
 ```
 
-요청 처리 함수는 수동판에서 `give_back` 한 줄을 지운 것이 전부인데, 빈 요청이든 파싱 실패든 패닉이든 쉬는 연결이 언제나 3개로 돌아오고 마지막 요청도 성공합니다. 패닉 경로가 동작하는 것은 패닉으로 함수를 빠져나갈 때도 되감기가 지역 변수를 버리기 때문입니다. 패닉과 되감기의 자세한 동작은 `ch18-dont-panic`과 Part 10 `ch8-unwinding`에서 다룹니다.
+요청 처리 함수는 수동판에서 `give_back` 한 줄을 지운 것이 전부인데, 빈 요청이든 파싱 실패든 패닉이든 쉬는 연결이 언제나 3개로 돌아오고 마지막 요청도 성공합니다. 패닉 경로가 동작하는 것은 패닉으로 함수를 빠져나갈 때도 되감기가 지역 변수를 버리기 때문입니다. 패닉과 되감기의 자세한 동작은 [`ch18-dont-panic`](../ch18-dont-panic/README.md)과 Part 10 `ch8-unwinding`에서 다룹니다.
 
 가드를 설계할 때 세 가지를 봅니다.
 
@@ -106,7 +106,7 @@ let mut conn = DropGuard::new(conn, |c| pool.give_back(c));
 
 예제의 3번 구역은 2번 구역과 같은 결과를 냅니다. 정리를 취소하고 값을 되찾으려면 `DropGuard::dismiss(guard)`를 부릅니다(클로저는 실행되지 않습니다). 여러 곳에서 쓰는 자원이라면 API가 직접 가드 타입을 돌려주게 하는 편이 낫습니다. 이름이 있는 타입에는 메서드와 문서와 `#[must_use]` 메시지를 붙일 수 있고, 구조체 필드의 타입으로 적을 수도 있습니다. 한 함수 안에서 한 번 쓰는 정리라면 `DropGuard`로 충분합니다(연습 3).
 
-**어떤 타입에 `Drop`이 필요한가.** 책은 세 부류를 꼽습니다. 파일 디스크립터 같은 운영체제 자원, 잠금 같은 동기화 자원, 그리고 unsafe 코드나 FFI가 다루는 원시 메모리입니다(`ch16-avoid-unsafe`, `ch34-ffi-boundaries`). `Box`나 `Vec`이 소유한 메모리는 이미 그 타입들의 `Drop`이 해제합니다.
+**어떤 타입에 `Drop`이 필요한가.** 책은 세 부류를 꼽습니다. 파일 디스크립터 같은 운영체제 자원, 잠금 같은 동기화 자원, 그리고 unsafe 코드나 FFI가 다루는 원시 메모리입니다([`ch16-avoid-unsafe`](../ch16-avoid-unsafe/README.md), [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)). `Box`나 `Vec`이 소유한 메모리는 이미 그 타입들의 `Drop`이 해제합니다.
 
 **따르지 않아도 되는 경우: 필드가 이미 해제를 맡을 때.** `Drop` 문서의 말대로 Rust는 값의 필드마다 소멸자를 자동으로 부르므로, 대부분의 타입은 `Drop`을 구현할 필요가 없습니다. 예제의 `Session { conn: PooledConn<'a>, user: String }`은 `Drop`이 없지만, 세션이 버려지면 `conn` 필드가 연결을 돌려줍니다(4번 구역). 자원을 직접 다루는 타입 하나에만 `Drop`을 두고, 그것을 담는 타입에는 두지 않습니다. 필요 없는 `Drop`은 비용이 있습니다.
 
@@ -174,14 +174,14 @@ help: use `let _ = ...` to ignore the resulting value
 **따르지 않아도 되는 경우.**
 
 - 함수 전체가 잠금 안에서 해야 하는 짧은 일이라면 가드를 함수 끝까지 두어도 됩니다.
-- 범위를 좁힌다는 것은 필요 없는 일을 빼는 것이지, 한 번에 끝나야 하는 일을 쪼개는 것이 아닙니다. 점수를 넣는 잠금과 순위를 읽는 잠금을 따로 잡으면, 그 사이에 다른 스레드가 점수를 넣어 순위가 틀릴 수 있습니다. 잠금을 어디서 잡고 풀지, 교착 상태를 어떻게 피할지는 `ch17-shared-state-parallelism`에서 다룹니다.
+- 범위를 좁힌다는 것은 필요 없는 일을 빼는 것이지, 한 번에 끝나야 하는 일을 쪼개는 것이 아닙니다. 점수를 넣는 잠금과 순위를 읽는 잠금을 따로 잡으면, 그 사이에 다른 스레드가 점수를 넣어 순위가 틀릴 수 있습니다. 잠금을 어디서 잡고 풀지, 교착 상태를 어떻게 피할지는 [`ch17-shared-state-parallelism`](../ch17-shared-state-parallelism/README.md)에서 다룹니다.
 - 동결 가드처럼 범위 자체가 목적인 가드는 지켜야 할 구간 전체에 걸쳐 둡니다.
 
 ### 2.4 지침 3: 실패할 수 있는 해제는 `Result`를 돌려주는 메서드로 따로 둔다
 
 `Drop`의 메서드는 `fn drop(&mut self)` 하나입니다. 이 시그니처에서 두 가지 제약이 나옵니다.
 
-- **실패를 돌려줄 수 없습니다.** 반환 타입이 `()`이므로 해제가 실패해도 부르는 쪽에 알릴 길이 없습니다. `drop` 안에서 할 수 있는 일은 무시하기, 로그 남기기, 패닉하기인데, 패닉은 피해야 합니다. `Drop` 문서는 되감기 중에 실행된 `drop`이 다시 패닉하면(이중 패닉) 프로그램이 중단될 가능성이 크다고 경고합니다(`ch18-dont-panic`).
+- **실패를 돌려줄 수 없습니다.** 반환 타입이 `()`이므로 해제가 실패해도 부르는 쪽에 알릴 길이 없습니다. `drop` 안에서 할 수 있는 일은 무시하기, 로그 남기기, 패닉하기인데, 패닉은 피해야 합니다. `Drop` 문서는 되감기 중에 실행된 `drop`이 다시 패닉하면(이중 패닉) 프로그램이 중단될 가능성이 크다고 경고합니다([`ch18-dont-panic`](../ch18-dont-panic/README.md)).
 - **필드를 값으로 꺼낼 수 없습니다.** `self`를 빌려 받을 뿐이므로, 필드를 옮기려면 2.2절처럼 `Option::take()`나 `mem::take()`로 꺼내고 빈 값을 남깁니다.
 
 `drop`을 직접 부를 수 없는 것(E0040)도 같은 시그니처 때문입니다. `x.drop()`이 컴파일된다면 `drop`은 `x`를 빌리기만 하므로, 정리가 끝난 `x`를 계속 쓸 수 있고 스코프 끝에서 한 번 더 정리하게 됩니다. 그래서 일찍 버릴 때는 값을 옮겨 가는 `drop(x)` 함수를 씁니다([Part 0 ch14](../../part0-getting-started/ch14-smart-pointers/README.md) 2.6절).
@@ -345,7 +345,7 @@ index out of bounds: the len is 3 but the index is 7
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-`catch_unwind`에 넘기는 클로저는 `RefCell`을 담은 풀을 빌리므로 `UnwindSafe`가 아니어서 `AssertUnwindSafe`로 감쌌습니다. 되감기 안전성은 `ch18-dont-panic`에서 다룹니다.
+`catch_unwind`에 넘기는 클로저는 `RefCell`을 담은 풀을 빌리므로 `UnwindSafe`가 아니어서 `AssertUnwindSafe`로 감쌌습니다. 되감기 안전성은 [`ch18-dont-panic`](../ch18-dont-panic/README.md)에서 다룹니다.
 
 ### 02_narrow_guard_scope — 가드의 범위
 

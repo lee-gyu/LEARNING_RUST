@@ -177,7 +177,7 @@ app v0.1.0 (…/additive/app)
     └── datefmt v0.1.0 (…/additive/datefmt) default,korean (*)
 ```
 
-더하기만 하는 기능에는 "켜면 덜어진다"는 모양이 없습니다. `no_std`를 지원할 때도 `no_std` 기능으로 `std`를 끄는 대신 `std` 기능으로 `std`를 쓰는 코드를 켜는 것이 같은 원리입니다(Cargo Book, `ch33-no-std`).
+더하기만 하는 기능에는 "켜면 덜어진다"는 모양이 없습니다. `no_std`를 지원할 때도 `no_std` 기능으로 `std`를 끄는 대신 `std` 기능으로 `std`를 쓰는 코드를 켜는 것이 같은 원리입니다(Cargo Book, [`ch33-no-std`](../ch33-no-std/README.md)).
 
 **따르지 않아도 되는 경우.** 책은 예외를 두지 않습니다. 정말 배타적인 선택(예: 서로 다른 백엔드 둘이 같은 심볼을 정의)이 필요하다면 Cargo Book의 "Mutually exclusive features" 절이 권하는 대안을 봅니다.
 
@@ -338,7 +338,7 @@ unexpected_cfgs = { level = "warn", check-cfg = ['cfg(expensive_checks)'] }
 | `exclusive_features/additive`의 `datefmt` | `korean` | 2 | 둘 다 통과 |
 | `gated_api/fixed`의 `notice` | `attachments` | 2 | 둘 다 통과 |
 
-broken 판을 additive 판으로 바꾸며 기능이 둘에서 하나로 줄었습니다. 의존성이 필요 없는 ISO 서식을 기능으로 두지 않았기 때문입니다. 기능은 의존성 그래프를 줄일 때(이 경우 `weekday`) 쓰는 도구이고, 작은 코드 조각마다 기능을 두면 조합만 늘어납니다. 책이 `no_std` 지원을 위한 `std`·`alloc` 기능을 흔한 예로 드는 것도 의존성(표준 라이브러리)을 덜어 내는 기능이기 때문입니다(`ch33-no-std`).
+broken 판을 additive 판으로 바꾸며 기능이 둘에서 하나로 줄었습니다. 의존성이 필요 없는 ISO 서식을 기능으로 두지 않았기 때문입니다. 기능은 의존성 그래프를 줄일 때(이 경우 `weekday`) 쓰는 도구이고, 작은 코드 조각마다 기능을 두면 조합만 늘어납니다. 책이 `no_std` 지원을 위한 `std`·`alloc` 기능을 흔한 예로 드는 것도 의존성(표준 라이브러리)을 덜어 내는 기능이기 때문입니다([`ch33-no-std`](../ch33-no-std/README.md)).
 
 **비권장 코드.** 기본 기능으로만 검사합니다. Cargo Book의 "Feature combinations" 절에 따르면 테스트와 clippy 같은 도구는 따로 지정하지 않으면 기본 기능으로만 실행됩니다. 이 챕터의 예제를 기본 기능으로만 검사했다면 `04_required_features`는 한 번도 컴파일되지 않습니다.
 
@@ -351,7 +351,7 @@ for f in "" "--no-default-features" "--all-features"; do
 done
 ```
 
-`--all-features`가 통과하려면 모든 기능이 함께 켜질 수 있어야 합니다. broken 판의 `datefmt`처럼 배타적인 기능이 있으면 이 기본 검사부터 실패하므로, 지침 2를 지키는 것이 검사의 전제이기도 합니다. 기능이 많을 때는 `cargo-hack`이 조합을 대신 돌려 줍니다. 그 README에 따르면 `--each-feature`(기능 하나씩), `--feature-powerset`(모든 조합), `--depth`(한 번에 켤 기능 수 제한), `--mutually-exclusive-features` 같은 옵션이 있습니다(예: `cargo hack check --feature-powerset`). 이 저장소에는 설치돼 있지 않아 실행해 확인하지 못했습니다. CI에 넣는 구성은 `ch32-continuous-integration`에서 다룹니다.
+`--all-features`가 통과하려면 모든 기능이 함께 켜질 수 있어야 합니다. broken 판의 `datefmt`처럼 배타적인 기능이 있으면 이 기본 검사부터 실패하므로, 지침 2를 지키는 것이 검사의 전제이기도 합니다. 기능이 많을 때는 `cargo-hack`이 조합을 대신 돌려 줍니다. 그 README에 따르면 `--each-feature`(기능 하나씩), `--feature-powerset`(모든 조합), `--depth`(한 번에 켤 기능 수 제한), `--mutually-exclusive-features` 같은 옵션이 있습니다(예: `cargo hack check --feature-powerset`). 이 저장소에는 설치돼 있지 않아 실행해 확인하지 못했습니다. CI에 넣는 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서 다룹니다.
 
 **기능 전용 예제·테스트는 `required-features`로 표시합니다.** [`04_required_features.rs`](examples/04_required_features.rs)는 기능 전용 함수를 조건 없이 부릅니다. 대신 `Cargo.toml`에 다음을 적었습니다.
 

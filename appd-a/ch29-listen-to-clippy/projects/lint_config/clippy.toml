@@ -1,0 +1,13 @@
+# Clippy 설정 파일입니다. 린트의 수준(켜고 끄기)은 Cargo.toml의 [lints]에서 정하고,
+# 여기서는 일부 린트가 "무엇을 문제로 볼지"를 조정합니다. Clippy 문서는 이 파일 형식이
+# 불안정하며 바뀔 수 있다고 적고 있습니다. 키 목록: Clippy 문서의 Lint Configuration.
+#
+# Clippy는 CARGO_MANIFEST_DIR(각 패키지 디렉터리)부터 위로 올라가며 이 파일을 찾으므로,
+# 워크스페이스 루트에 두면 모든 멤버에 적용됩니다.
+
+# wildcard_imports: 경로에 `units`가 든 글롭 가져오기는 허용합니다(단위 상수 모음).
+# (경로에 `prelude`가 든 글롭은 설정하지 않아도 허용됩니다.)
+allowed-wildcard-imports = ["units"]
+
+# unwrap_used: 테스트 코드에서는 실패하면 패닉하는 것이 맞으므로 허용합니다(ch18 2.6절).
+allow-unwrap-in-tests = true

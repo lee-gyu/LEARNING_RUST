@@ -250,7 +250,7 @@ let left = match c.goal_min.checked_sub(total) {                       // ④ �
 
 - **범위 안임이 바로 보이는 인덱스.** `offset`이 방금 확인한 `i`로 `self.cells[i]`를 쓰는 것처럼, 바로 위의 검사가 범위를 보장하면 인덱싱이 더 읽기 쉽습니다. 01의 `b'a' + self.file`도 `file`이 0~7이므로 넘칠 수 없습니다. 이런 곳에는 근거를 주석으로 남깁니다. 2.6절의 린트를 켠 크레이트라면 `#[expect(clippy::indexing_slicing, reason = "…")]`로 그 자리만 예외로 둡니다.
 - **넘침이 버그일 때.** 넘침이 일어나면 코드가 틀린 것이라면 기본 연산자로 두어 디버그 빌드의 패닉으로 알게 하는 것도 방법입니다(Part 1 ch14 2.9절의 표). 다만 릴리스 빌드에서는 위처럼 틀린 값이 되므로, 외부 입력이 닿는 계산이라면 `checked_*`나 `strict_*`를 씁니다.
-- 인덱싱의 경계 검사가 성능에 주는 영향은 측정해 보기 전에는 판단하지 않습니다(`ch20-avoid-over-optimizing`).
+- 인덱싱의 경계 검사가 성능에 주는 영향은 측정해 보기 전에는 판단하지 않습니다([`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md)).
 
 ### 2.5 지침 4: `catch_unwind`를 예외 처리로 쓰지 않는다
 
@@ -296,8 +296,8 @@ fn try_start(&mut self, member: &str) -> Result<u8, StartError> {
 
 **따르지 않아도 되는 경우: `catch_unwind`를 쓰는 곳.**
 
-- **작업 하나의 버그가 전체를 멈추지 않게 하는 경계.** 스레드 풀이 작업마다, 서버가 요청마다 패닉을 가두는 경우입니다(Part 1 ch8 2.9절). 이때는 패닉이 지나간 상태를 믿지 않습니다. 04의 3번 구역은 고칠 수 없는 패닉판 `start`를 배정표의 사본에서 실행하고, 성공했을 때만 사본을 반영합니다. 대신 요청마다 복제 비용이 듭니다. `thread::spawn`과 `join`도 같은 경계입니다. 스레드가 패닉하면 그 스레드의 상태와 함께 끝나고, `join`이 `Err`를 돌려줍니다. 여러 스레드가 함께 쓰는 `Mutex`는 잠금을 쥔 채 패닉하면 포이즈닝으로 이 사실을 알려 줍니다(`ch17-shared-state-parallelism`).
-- **FFI 경계.** C 코드가 부르는 Rust 함수에서 패닉이 밖으로 나가지 않게 막는 곳입니다(책). 지금은 막지 않아도 중단되지만, 프로세스를 끝내는 대신 C 쪽에 에러 코드를 돌려주려면 여전히 `catch_unwind`로 붙잡아 바꿉니다. 자세한 것은 `ch34-ffi-boundaries`에서 다룹니다.
+- **작업 하나의 버그가 전체를 멈추지 않게 하는 경계.** 스레드 풀이 작업마다, 서버가 요청마다 패닉을 가두는 경우입니다(Part 1 ch8 2.9절). 이때는 패닉이 지나간 상태를 믿지 않습니다. 04의 3번 구역은 고칠 수 없는 패닉판 `start`를 배정표의 사본에서 실행하고, 성공했을 때만 사본을 반영합니다. 대신 요청마다 복제 비용이 듭니다. `thread::spawn`과 `join`도 같은 경계입니다. 스레드가 패닉하면 그 스레드의 상태와 함께 끝나고, `join`이 `Err`를 돌려줍니다. 여러 스레드가 함께 쓰는 `Mutex`는 잠금을 쥔 채 패닉하면 포이즈닝으로 이 사실을 알려 줍니다([`ch17-shared-state-parallelism`](../ch17-shared-state-parallelism/README.md)).
+- **FFI 경계.** C 코드가 부르는 Rust 함수에서 패닉이 밖으로 나가지 않게 막는 곳입니다(책). 지금은 막지 않아도 중단되지만, 프로세스를 끝내는 대신 C 쪽에 에러 코드를 돌려주려면 여전히 `catch_unwind`로 붙잡아 바꿉니다. 자세한 것은 [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)에서 다룹니다.
 
 ### 2.6 지침 5: 사람의 주의 대신 도구로 막는다
 
@@ -389,7 +389,7 @@ error: arithmetic operation that can potentially result in unexpected side-effec
 
 **`no-panic` 크레이트.** 책이 소개하는 더 강한 도구입니다. crates.io의 이름은 `no-panic`(2026-11-19 기준 0.1.37)이고, 함수에 `#[no_panic]` 속성을 붙이면 컴파일러가 그 함수에서 패닉할 길이 없다는 것을 증명하지 못할 때 **링크 단계의 에러**(`ERROR[no-panic]: detected panic in function ...`)를 냅니다. 문서에 따르면 검사가 링크 단계에서 일어나므로 링커를 부르지 않는 `cargo check`에서는 동작하지 않고, 최적화해야 증명되는 함수는 디버그 빌드에서 실패할 수 있어 릴리스 빌드에서만 켜거나 `opt-level`을 올리라고 안내하며, `panic = "abort"` 프로필에서는 효과가 없습니다. 이 챕터는 외부 크레이트를 추가하지 않았으므로 직접 실행해 보지는 않았습니다.
 
-**따르지 않아도 되는 경우.** restriction 린트는 비용이 큽니다. `arithmetic_side_effects`를 켜면 평범한 `i + 1`도 모두 `checked_*`나 `wrapping_*`으로 바꿔야 합니다. 그래서 프로젝트 전체가 아니라 "패닉하지 않겠다"고 약속한 라이브러리의 핵심부나 FFI 경계 가까운 코드에 켭니다. 애플리케이션 전체에 켤 린트를 고르는 일반론은 `ch29-listen-to-clippy`, CI에서 돌리는 방법은 `ch32-continuous-integration`, 퍼즈 테스트로 패닉하는 입력을 찾는 방법은 `ch30-beyond-unit-tests`에서 다룹니다.
+**따르지 않아도 되는 경우.** restriction 린트는 비용이 큽니다. `arithmetic_side_effects`를 켜면 평범한 `i + 1`도 모두 `checked_*`나 `wrapping_*`으로 바꿔야 합니다. 그래서 프로젝트 전체가 아니라 "패닉하지 않겠다"고 약속한 라이브러리의 핵심부나 FFI 경계 가까운 코드에 켭니다. 애플리케이션 전체에 켤 린트를 고르는 일반론은 [`ch29-listen-to-clippy`](../ch29-listen-to-clippy/README.md), CI에서 돌리는 방법은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md), 퍼즈 테스트로 패닉하는 입력을 찾는 방법은 [`ch30-beyond-unit-tests`](../ch30-beyond-unit-tests/README.md)에서 다룹니다.
 
 ### 2.7 책과 달라진 점
 

@@ -107,7 +107,7 @@ use templog::{Log, VERSION, mean};
 - **내 크레이트 안 모듈을 `pub use`로 재내보내기.** 예제의 `units`는 `celsius`, `fahrenheit` 하위 모듈을 `pub use self::celsius::*;`로 모아 바깥에 `units::to_kelvin`처럼 보여 줍니다. 두 하위 모듈에 같은 이름이 생겨도 내 빌드에서 바로 드러나므로, 남이 배포한 업데이트가 내 코드를 깨는 일은 없습니다.
 - **프렐류드.** `std::io::prelude`의 문서는 이 모듈이 "I/O를 많이 쓰는 모듈의 맨 위에 글롭 하나를 더해" 자주 쓰는 트레이트의 가져오기를 줄이려고 있다고 설명하고, 내용은 `BufRead`, `Read`, `Seek`, `Write` 네 트레이트뿐입니다. 크레이트의 프렐류드는 함께 쓰는 핵심 타입과 트레이트만 골라 둔 목록이라(예제의 `templog::prelude`에는 `mean`이 없습니다) 무엇이 더해질지 작성자가 신중히 정합니다. 그래도 글롭이므로 위험이 0은 아니고, 편의가 작은 위험보다 크다고 판단하는 것입니다.
 
-Clippy의 `wildcard_imports` 린트가 같은 기준을 씁니다. 이 린트는 pedantic 그룹이라 기본으로 꺼져 있으며, 켜면 `use templog::*;`에는 경고하고 경로에 `prelude`가 든 글롭, `pub use` 재내보내기, 테스트 모듈의 `use super::*`에는 경고하지 않습니다. 예제 03은 이 린트를 켜 두었는데도 경고가 없습니다. 다만 1.100.0에서 확인해 보니 내 크레이트의 모듈이라도 `pub` 없이 `use units::*;`로 가져오면 경고하고, 테스트가 아닌 모듈의 `use super::*`에도 경고합니다. 린트를 프로젝트 단위로 켜는 방법은 `ch29-listen-to-clippy`에서 다룹니다.
+Clippy의 `wildcard_imports` 린트가 같은 기준을 씁니다. 이 린트는 pedantic 그룹이라 기본으로 꺼져 있으며, 켜면 `use templog::*;`에는 경고하고 경로에 `prelude`가 든 글롭, `pub use` 재내보내기, 테스트 모듈의 `use super::*`에는 경고하지 않습니다. 예제 03은 이 린트를 켜 두었는데도 경고가 없습니다. 다만 1.100.0에서 확인해 보니 내 크레이트의 모듈이라도 `pub` 없이 `use units::*;`로 가져오면 경고하고, 테스트가 아닌 모듈의 `use super::*`에도 경고합니다. 린트를 프로젝트 단위로 켜는 방법은 [`ch29-listen-to-clippy`](../ch29-listen-to-clippy/README.md)에서 다룹니다.
 
 ### 2.3 지침 2: 글롭을 남긴다면 그 의존성의 버전을 고정한다
 

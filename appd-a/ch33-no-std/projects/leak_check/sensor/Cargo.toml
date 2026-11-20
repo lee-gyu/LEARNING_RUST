@@ -1,0 +1,14 @@
+[package]
+name = "sensor"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tinyhex = { path = "../../tinyhex", default-features = false }
+# std를 쓰는 의존성은 std 기능을 켰을 때만 끌어옵니다.
+stdful = { path = "../stdful", optional = true }
+
+[features]
+default = ["std"]
+std = ["dep:stdful"]

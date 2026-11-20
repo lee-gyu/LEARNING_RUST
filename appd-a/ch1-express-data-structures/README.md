@@ -54,7 +54,7 @@ fn load_port(text: &str) -> Result<u16, ParseIntError> {
 }
 ```
 
-타입을 `u16`으로 정한 것만으로 파싱이 범위 검사를 겸합니다. `"70000"`은 `number too large to fit in target type`, `"-1"`은 `invalid digit found in string`으로 거부됩니다. 이 함수를 통과한 값은 언제나 올바른 포트이므로 안쪽 코드는 다시 확인하지 않아도 됩니다. 변환은 바깥 세계(텍스트, 다른 라이브러리가 넘겨준 `i64`)와 만나는 **경계(boundary)** 한 곳에서만 하고, 안쪽에서는 의미에 맞는 타입으로 다닙니다. 이미 다른 타입으로 받은 값이라면 `u16::try_from(value)`가 같은 역할을 합니다. `as`, `From`, `TryFrom` 가운데 무엇을 고를지는 `ch5-type-conversions`에서 다룹니다.
+타입을 `u16`으로 정한 것만으로 파싱이 범위 검사를 겸합니다. `"70000"`은 `number too large to fit in target type`, `"-1"`은 `invalid digit found in string`으로 거부됩니다. 이 함수를 통과한 값은 언제나 올바른 포트이므로 안쪽 코드는 다시 확인하지 않아도 됩니다. 변환은 바깥 세계(텍스트, 다른 라이브러리가 넘겨준 `i64`)와 만나는 **경계(boundary)** 한 곳에서만 하고, 안쪽에서는 의미에 맞는 타입으로 다닙니다. 이미 다른 타입으로 받은 값이라면 `u16::try_from(value)`가 같은 역할을 합니다. `as`, `From`, `TryFrom` 가운데 무엇을 고를지는 [`ch5-type-conversions`](../ch5-type-conversions/README.md)에서 다룹니다.
 
 넓히는 변환에서는 **위치**도 중요합니다. 0~65535 범위의 포트는 65536개라 `u16`에 들어가지 않으므로, 포트 개수를 세는 함수의 반환 타입은 `u32`여야 합니다. 이때 E0308의 `help:`를 그대로 따라 `(last - first + 1).into()`라고 쓰면 컴파일은 되지만, 계산은 여전히 `u16`으로 하고 결과만 넓힙니다. `ports_in_range(0, 65535)`를 부르면 디버그 빌드는 `attempt to add with overflow`로 패닉하고, 릴리스 빌드는 `0`을 돌려줍니다. 넓히는 변환은 계산하기 **전에** 합니다.
 
@@ -104,7 +104,7 @@ draw(pos.col, pos.row);
 
 필드 이름으로 꺼내므로 순서를 기억할 필요가 없습니다. 구조체 패턴으로 풀 때도 `let SeatPos { col, row } = pos;`처럼 이름으로 맞추므로 적는 순서가 결과를 바꾸지 않습니다.
 
-다만 이름은 실수를 **보이게** 할 뿐 막지는 못합니다. `draw(pos.row, pos.col)`도 컴파일됩니다. 그래도 `x` 자리에 `pos.row`를 넘기는 코드는 읽는 순간 어색하므로, 튜플을 풀던 때와 달리 리뷰에서 걸러집니다. 줄과 칸을 바꿔 넘기는 것까지 컴파일 에러로 만들려면 둘을 서로 다른 타입으로 감싸야 합니다. 그 방법인 뉴타입 패턴은 `ch6-newtype-pattern`에서 다룹니다.
+다만 이름은 실수를 **보이게** 할 뿐 막지는 못합니다. `draw(pos.row, pos.col)`도 컴파일됩니다. 그래도 `x` 자리에 `pos.row`를 넘기는 코드는 읽는 순간 어색하므로, 튜플을 풀던 때와 달리 리뷰에서 걸러집니다. 줄과 칸을 바꿔 넘기는 것까지 컴파일 에러로 만들려면 둘을 서로 다른 타입으로 감싸야 합니다. 그 방법인 뉴타입 패턴은 [`ch6-newtype-pattern`](../ch6-newtype-pattern/README.md)에서 다룹니다.
 
 | 데이터의 모양 | 고를 타입 |
 | --- | --- |
@@ -160,7 +160,7 @@ count(TEXT, WORD, Case::Insensitive, Scope::WholeWord) // 3
 **따르지 않아도 되는 경우.**
 
 - 메서드 이름이 `bool`의 뜻을 말해 주고 인자가 그 하나뿐일 때는 `bool`로 충분합니다. 표준 라이브러리의 `OpenOptions::new().read(true).write(true)`나 `TcpStream::set_nonblocking(true)`가 그렇습니다. 호출 지점에서 뜻이 보이고, 순서를 헷갈릴 다른 `bool`도 없습니다.
-- 뜻이 앞으로도 참과 거짓뿐이고 다른 `bool`과 섞이지 않게만 하고 싶다면, 뉴타입(`ch6-newtype-pattern`)이 더 가벼운 선택일 수 있습니다.
+- 뜻이 앞으로도 참과 거짓뿐이고 다른 `bool`과 섞이지 않게만 하고 싶다면, 뉴타입([`ch6-newtype-pattern`](../ch6-newtype-pattern/README.md))이 더 가벼운 선택일 수 있습니다.
 
 clippy에는 `bool` 매개변수가 많은 함수를 잡는 `fn_params_excessive_bools`가 있지만, pedantic 그룹이라 기본으로 꺼져 있고 켜도 `bool`이 3개를 넘을 때만 경고합니다. 이 예제의 `count_flags`처럼 두 개인 경우는 사람이 판단해야 합니다.
 
@@ -205,7 +205,7 @@ enum Discount {
 
 경우의 수로 보면 차이가 분명합니다. 구조체가 표현할 수 있는 상태의 수는 필드마다의 경우의 수를 **곱한** 것이고, 열거형은 배리언트마다의 경우의 수를 **더한** 것입니다. 그래서 구조체를 곱 타입(product type), 열거형을 합 타입(sum type)이라고 부르고, 둘을 합쳐 대수적 데이터 타입(algebraic data type)이라고 합니다. 무효한 상태는 대개 곱하면서 생긴 남는 조합입니다. 덤으로 이 툴체인에서는 크기도 줄었습니다. `DiscountFields`는 12바이트, `Discount`는 8바이트입니다(기본 표현의 메모리 배치는 보장되지 않으므로 다른 툴체인에서는 다를 수 있습니다).
 
-남은 무효한 상태도 있습니다. `Discount::Rate { percent: 150 }`은 여전히 만들 수 있습니다. 이처럼 값 하나의 범위에 관한 규칙은 열거형이 아니라, 값을 만드는 경로를 제한하는 타입으로 지킵니다(`ch6-newtype-pattern`).
+남은 무효한 상태도 있습니다. `Discount::Rate { percent: 150 }`은 여전히 만들 수 있습니다. 이처럼 값 하나의 범위에 관한 규칙은 열거형이 아니라, 값을 만드는 경로를 제한하는 타입으로 지킵니다([`ch6-newtype-pattern`](../ch6-newtype-pattern/README.md)).
 
 **따르지 않아도 되는 경우.**
 
@@ -248,7 +248,7 @@ fn setting<'a>(settings: &HashMap<&str, &'a str>, key: &str) -> Option<&'a str> 
 }
 ```
 
-`Option<usize>`는 `usize`처럼 계산에 쓸 수 없으므로 `None`을 처리하지 않고는 위치를 꺼낼 수 없습니다(첫 번째 문제 해결). `None`과 `Some("")`은 서로 다른 값이므로 "없음"과 "빈 값"이 구별됩니다(두 번째 문제 해결). 덤으로 `-1`을 담느라 필요했던 부호 있는 타입도 필요 없어져서 위치를 `usize`로 돌려줄 수 있습니다. 표준 라이브러리도 같은 선택을 합니다. `Iterator::position`, `str::find`, `HashMap::get`, `slice::first`는 모두 `Option`을 돌려줍니다. `copied`, `unwrap_or`, `?` 같은 도구로 `Option`을 다루는 방법은 `ch3-option-result-transforms`에서 정리합니다.
+`Option<usize>`는 `usize`처럼 계산에 쓸 수 없으므로 `None`을 처리하지 않고는 위치를 꺼낼 수 없습니다(첫 번째 문제 해결). `None`과 `Some("")`은 서로 다른 값이므로 "없음"과 "빈 값"이 구별됩니다(두 번째 문제 해결). 덤으로 `-1`을 담느라 필요했던 부호 있는 타입도 필요 없어져서 위치를 `usize`로 돌려줄 수 있습니다. 표준 라이브러리도 같은 선택을 합니다. `Iterator::position`, `str::find`, `HashMap::get`, `slice::first`는 모두 `Option`을 돌려줍니다. `copied`, `unwrap_or`, `?` 같은 도구로 `Option`을 다루는 방법은 [`ch3-option-result-transforms`](../ch3-option-result-transforms/README.md)에서 정리합니다.
 
 **따르지 않아도 되는 경우.**
 
@@ -301,7 +301,7 @@ fn duration(start: &str, end: &str) -> Result<u32, TimeError> {
      = note: this `Result` may be an `Err` variant, which should be handled
   ```
 
-- 표준 타입이므로 `?`와 표준 라이브러리의 메서드를 그대로 쓸 수 있습니다. 위의 `duration`은 `?`로 실패를 바로 위로 넘깁니다. 에러 타입을 어떻게 설계할지는 `ch4-idiomatic-errors`에서 다룹니다.
+- 표준 타입이므로 `?`와 표준 라이브러리의 메서드를 그대로 쓸 수 있습니다. 위의 `duration`은 `?`로 실패를 바로 위로 넘깁니다. 에러 타입을 어떻게 설계할지는 [`ch4-idiomatic-errors`](../ch4-idiomatic-errors/README.md)에서 다룹니다.
 
 `Option`과 `Result` 중에서는 이렇게 고릅니다. "찾지 못함"처럼 실패 이유가 하나뿐이고 자명하면 `Option`, 호출한 쪽이 이유에 따라 다르게 행동하거나 사용자에게 이유를 알려야 하면 `Result`입니다.
 

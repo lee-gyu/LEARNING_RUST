@@ -1,0 +1,11 @@
+# publish를 막지 않았으므로 게시할 수 있는 패키지입니다. 그런데 license와
+# license-file이 모두 없고, path 의존성에 version이 없습니다.
+# 빌드와 테스트는 문제없이 통과합니다. meta_lint가 두 가지를 짚습니다.
+[package]
+name = "ledger-report"
+version.workspace = true
+edition.workspace = true
+description = "가계부 요약 보고서"
+
+[dependencies]
+ledger-core = { path = "../ledger-core" }

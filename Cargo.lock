@@ -314,7 +314,43 @@ name = "er-ch26-feature-creep"
 version = "0.0.0"
 
 [[package]]
+name = "er-ch27-document-public-interfaces"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch28-macros-judiciously"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch29-listen-to-clippy"
+version = "0.0.0"
+
+[[package]]
 name = "er-ch3-option-result-transforms"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch30-beyond-unit-tests"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch31-tooling-ecosystem"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch32-continuous-integration"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch33-no-std"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch34-ffi-boundaries"
+version = "0.0.0"
+
+[[package]]
+name = "er-ch35-bindgen"
 version = "0.0.0"
 
 [[package]]

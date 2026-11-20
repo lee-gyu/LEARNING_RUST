@@ -1,0 +1,25 @@
+[package]
+name = "tinyhex"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 의존성도 `no_std`여야 의미가 있습니다. thiserror는 기본 기능(std)을 끄면 `no_std`로 빌드됩니다.
+thiserror = { version = "2.0.21", default-features = false }
+
+[features]
+# 관례: 기본 기능에 std를 둡니다. 보통의 std 사용자는 아무것도 적지 않아도 모든 API를 씁니다.
+default = ["std"]
+# 힙 할당기가 있는 환경에서 쓰는 API(`String`, `Vec`을 돌려주는 함수)를 더합니다.
+alloc = []
+# 운영체제가 있는 환경의 API(`std::io` 연동)를 더합니다. std가 있으면 할당기도 있으므로 alloc을 켜고,
+# 의존성의 std 기능도 함께 켭니다.
+std = ["alloc", "thiserror/std"]
+
+[[example]]
+name = "dump"
+required-features = ["std"]
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

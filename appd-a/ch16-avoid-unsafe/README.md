@@ -71,8 +71,8 @@ fn name_of(bytes: &[u8]) -> &str {
 | 여러 곳이 한 값을 소유하거나 함께 고침 | 서로 가리키는 원시 포인터 | `Rc`/`Arc`, `RefCell`/`Mutex`, `Weak` (책) | [ch8](../ch8-references-pointers/README.md) 2.6~2.7절, ch15 2.8절 |
 | 자기 참조 구조체 | 자기 필드를 가리키는 원시 포인터 | 원문과 뷰 나누기, 범위로 가리키기, `Pin`(책), 자기 참조 크레이트 | ch15 2.9절 |
 | 메모리를 직접 할당·해제 | 할당기 호출 + `Drop` | `Box`, `Vec` (해제는 이미 그 타입들의 `Drop`이 함) | [ch11](../ch11-drop-raii/README.md) 2.2절, Part 10 |
-| `Send`가 아닌 타입을 스레드로 보냄 | `unsafe impl Send/Sync` | `Arc<Mutex<T>>`, 채널 | `ch17-shared-state-parallelism`, Part 10 |
-| C 함수를 부름 | `unsafe extern` | 안전한 대안이 없음 → 2.5절의 래퍼 | Part 1 ch14 2.5절, `ch34-ffi-boundaries` |
+| `Send`가 아닌 타입을 스레드로 보냄 | `unsafe impl Send/Sync` | `Arc<Mutex<T>>`, 채널 | [`ch17-shared-state-parallelism`](../ch17-shared-state-parallelism/README.md), Part 10 |
+| C 함수를 부름 | `unsafe extern` | 안전한 대안이 없음 → 2.5절의 래퍼 | Part 1 ch14 2.5절, [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md) |
 
 `ptr::read`/`ptr::write` 줄에는 덧붙일 것이 있습니다. `ptr::read` 문서의 Ownership of the Returned Value 절대로, `read`는 `Copy`가 아닌 값도 비트 그대로 복사해 같은 값의 주인을 둘로 만듭니다. 그 사이에 패닉으로 빠져나가면 같은 값이 두 번 해제됩니다(문서의 `swap` 구현 예가 이 틈을 주석으로 경고합니다). `mem::replace`에는 이 틈이 없습니다. 같은 일을 하는 안전한 함수는 대개 `unsafe` 판보다 짧을 뿐 아니라 이런 틈도 막아 둔 것입니다.
 
@@ -119,7 +119,7 @@ let (groups, rest) = alts.as_chunks::<GROUP>(); // &[[i32; 5]]와 남은 원소
 | 5분 평균: `alts[g * GROUP + k]` | 남음 |
 | 5분 평균: `as_chunks` | 없음 |
 
-컴파일러가 검사를 지울 수 있으면 지우고, 손으로 계산한 인덱스처럼 증명하기 어려운 곳에는 남깁니다. 남은 곳도 `unsafe`가 아니라 `as_chunks` 같은 표현으로 바꾸면 사라졌습니다. 이 결과는 이 컴파일러와 이 기계에서 본 것이고 보장되지 않습니다. 남은 검사가 실제로 느린지는 측정해야 알 수 있으며, 측정하는 방법은 `ch20-avoid-over-optimizing`에서 다룹니다.
+컴파일러가 검사를 지울 수 있으면 지우고, 손으로 계산한 인덱스처럼 증명하기 어려운 곳에는 남깁니다. 남은 곳도 `unsafe`가 아니라 `as_chunks` 같은 표현으로 바꾸면 사라졌습니다. 이 결과는 이 컴파일러와 이 기계에서 본 것이고 보장되지 않습니다. 남은 검사가 실제로 느린지는 측정해야 알 수 있으며, 측정하는 방법은 [`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md)에서 다룹니다.
 
 #### 사례 2. 바이트를 수와 문자열로 읽을 때
 
@@ -200,7 +200,7 @@ bins.try_into().map_err(|v: Vec<Bin>| format!("칸이 {}개뿐", v.len()))
 
 **지침을 따르지 않아도 되는 경우.**
 
-- 측정해 보니 남은 검사가 실제 병목이고, 안전한 표현으로 바꿔도 검사가 사라지지 않을 때입니다. 그때도 2.5~2.7절의 방법으로 가둡니다(측정은 `ch20-avoid-over-optimizing`).
+- 측정해 보니 남은 검사가 실제 병목이고, 안전한 표현으로 바꿔도 검사가 사라지지 않을 때입니다. 그때도 2.5~2.7절의 방법으로 가둡니다(측정은 [`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md)).
 - 일부만 초기화된 버퍼처럼 표준 라이브러리 수준의 저수준 자료구조를 직접 만들 때입니다. `Vec`을 직접 구현하는 일은 Part 10에서 다룹니다.
 - C 함수처럼 안전한 대안이 원리적으로 없을 때입니다(2.5절).
 
@@ -217,7 +217,7 @@ bins.try_into().map_err(|v: Vec<Bin>| format!("칸이 {}개뿐", v.len()))
 | `once_cell` | 한 번만 초기화하는 값 | 표준에 들어왔습니다. `OnceCell`/`OnceLock`(1.70.0), `LazyCell`/`LazyLock`(1.80.0). 새 코드는 표준을 씁니다(Part 1 ch7 2.11절, ch11 2.9절) |
 | `byteorder` | 바이트와 수의 변환 | 정수 하나는 `from_le_bytes`/`to_be_bytes` 등(1.32.0)으로 충분합니다(사례 2). 리더·라이터에 바로 붙는 읽기·쓰기 메서드가 필요하면 크레이트를 씁니다 |
 | `rand` | 난수 | 표준의 `std::random`은 1.100.0에서 nightly 전용(E0658)이라 여전히 크레이트가 필요합니다 |
-| `cxx` | C++와 Rust 연동 | `ch35-bindgen`에서 소개합니다 |
+| `cxx` | C++와 Rust 연동 | [`ch35-bindgen`](../ch35-bindgen/README.md)에서 소개합니다 |
 
 책에 없는 예를 하나 더 들면, 구조체와 바이트를 안전하게 바꿔 보는 `bytemuck`과 `zerocopy`가 있습니다. 둘 다 "이 타입은 어떤 바이트 배열이든 올바른 값"이라는 조건을 트레이트로 확인한 뒤에만 변환을 허락합니다(2026-11-19에 crates.io에서 각각 1.25.2, 0.8.63을 확인했고 이 저장소에서는 써 보지 않았습니다).
 
@@ -227,7 +227,7 @@ bins.try_into().map_err(|v: Vec<Bin>| format!("칸이 {}개뿐", v.len()))
 
 ### 2.5 지침 3: 피할 수 없는 `unsafe`는 안전한 래퍼 한 곳에 가둔다
 
-책은 FFI처럼 `unsafe`를 피할 수 없을 때 **모든 `unsafe` 코드를 담는 래퍼 계층**을 두라고 권합니다. 나머지 코드는 래퍼의 안전한 API만 쓰게 하고, 문제가 생기면 볼 곳을 래퍼로 좁히는 것입니다. 이 챕터는 FFI를 실행하지 않으므로(`ch34-ffi-boundaries`), 표준 라이브러리의 `String`이 쓰는 설계를 작게 따라 해 봅니다. 1.100.0 소스에서 `String`은 `Vec<u8>` 필드 하나를 감싼 구조체이고, `String::from_utf8`이 만들 때 한 번 UTF-8을 확인하며, `as_str`은 ``// SAFETY: String contents are stipulated to be valid UTF-8``라는 주석과 함께 `from_utf8_unchecked`를 부릅니다.
+책은 FFI처럼 `unsafe`를 피할 수 없을 때 **모든 `unsafe` 코드를 담는 래퍼 계층**을 두라고 권합니다. 나머지 코드는 래퍼의 안전한 API만 쓰게 하고, 문제가 생기면 볼 곳을 래퍼로 좁히는 것입니다. 이 챕터는 FFI를 실행하지 않으므로([`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)), 표준 라이브러리의 `String`이 쓰는 설계를 작게 따라 해 봅니다. 1.100.0 소스에서 `String`은 `Vec<u8>` 필드 하나를 감싼 구조체이고, `String::from_utf8`이 만들 때 한 번 UTF-8을 확인하며, `as_str`은 ``// SAFETY: String contents are stipulated to be valid UTF-8``라는 주석과 함께 `from_utf8_unchecked`를 부릅니다.
 
 **문제 상황.** 염기 서열 파일에서 읽은 바이트(A, C, G, T)를 화면에 보여 주고, 패턴을 찾고, 상보 서열(A↔T, C↔G)을 만듭니다. A/C/G/T만 있다는 것을 확인했다면 ASCII이므로 검사 없이 `&str`로 볼 수 있습니다.
 
@@ -344,7 +344,7 @@ pub unsafe fn field(line: &[u8], range: Range<usize>) -> &str {
 | `undocumented_unsafe_blocks` | Clippy | allow (restriction) | 안전성 주석이 없는 `unsafe` 블록 |
 | `multiple_unsafe_ops_per_block` | Clippy | allow (restriction) | unsafe 연산이 둘 이상인 블록 |
 
-꺼진 린트는 파일 첫머리의 `#![warn(clippy::undocumented_unsafe_blocks)]`나 `Cargo.toml`의 `[lints.clippy]`에 `undocumented_unsafe_blocks = "warn"`으로 켭니다. 린트 수준을 고르는 기준은 `ch29-listen-to-clippy`에서, `[lints]` 테이블은 Part 3 `ch3-manifest-targets`에서 더 다룹니다.
+꺼진 린트는 파일 첫머리의 `#![warn(clippy::undocumented_unsafe_blocks)]`나 `Cargo.toml`의 `[lints.clippy]`에 `undocumented_unsafe_blocks = "warn"`으로 켭니다. 린트 수준을 고르는 기준은 [`ch29-listen-to-clippy`](../ch29-listen-to-clippy/README.md)에서, `[lints]` 테이블은 Part 3 `ch3-manifest-targets`에서 더 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 두 연산이 정확히 같은 전제 조건 하나에 기대고, 떼어 놓으면 오히려 읽기 어렵다면 한 블록에 두고 주석이 두 연산을 모두 설명하게 합니다. restriction 그룹의 린트는 모든 프로젝트에 켜라는 것이 아니라, `unsafe`가 있는 크레이트에서 골라 켜라는 것입니다.
 
@@ -378,9 +378,9 @@ cargo +nightly miri run              # 바이너리를 Miri로 실행
 
 README는 `cargo miri run/test`가 `cargo run/test`와 같은 인자를 받는다고 설명하므로, 이 챕터의 예제는 `cargo +nightly miri test -p er-ch16-avoid-unsafe --example 04_safe_wrapper`나 `cargo +nightly miri run -p er-ch16-avoid-unsafe --example 03_build_arrays`로 돌릴 수 있을 것입니다. **이 저장소에서는 실행하지 못했습니다.** README의 설명대로라면 예제 03의 2번 구역이 일부러 낸 누수가 보고될 것으로 보이지만 확인하지 않았습니다.
 
-README가 밝히는 한계도 알아 둡니다. Miri는 프로그램의 여러 가능한 실행 중 하나만 시험하므로, 다른 실행에서만 드러나는 버그는 놓칠 수 있습니다. Miri가 미정의 동작을 찾으면 코드는 확실히 건전하지 않지만, 아무것도 찾지 못했다고 건전하다는 증명이 되지는 않습니다. 네트워크 같은 플랫폼 API는 지원이 제한됩니다. 그래서 Miri는 테스트를 대신하지 않고, 테스트가 실행하는 경로를 더 엄격하게 확인해 줍니다. 불변식의 경계를 겨냥한 테스트가 많을수록 Miri가 볼 경로도 많아집니다. 퍼즈 테스트 같은 다른 도구는 `ch30-beyond-unit-tests`와 `ch31-tooling-ecosystem`에서 다룹니다.
+README가 밝히는 한계도 알아 둡니다. Miri는 프로그램의 여러 가능한 실행 중 하나만 시험하므로, 다른 실행에서만 드러나는 버그는 놓칠 수 있습니다. Miri가 미정의 동작을 찾으면 코드는 확실히 건전하지 않지만, 아무것도 찾지 못했다고 건전하다는 증명이 되지는 않습니다. 네트워크 같은 플랫폼 API는 지원이 제한됩니다. 그래서 Miri는 테스트를 대신하지 않고, 테스트가 실행하는 경로를 더 엄격하게 확인해 줍니다. 불변식의 경계를 겨냥한 테스트가 많을수록 Miri가 볼 경로도 많아집니다. 퍼즈 테스트 같은 다른 도구는 [`ch30-beyond-unit-tests`](../ch30-beyond-unit-tests/README.md)와 [`ch31-tooling-ecosystem`](../ch31-tooling-ecosystem/README.md)에서 다룹니다.
 
-**스레드.** 여러 스레드가 함께 쓰는 값에서는 `unsafe` 블록의 전제 조건이 "다른 스레드가 그 사이에 고치지 않는다"까지 늘어납니다. `static mut`이 위험한 이유가 이것이고(Part 0 ch19 2.5절), 이 챕터의 예제가 횟수를 셀 때 `static` 원자 타입을 쓴 이유이기도 합니다. 원시 포인터를 담은 타입에 `unsafe impl Send/Sync`를 붙이는 일은 그 타입이 스레드 사이에서 안전하다는 증명을 떠맡는 일입니다. 스레드와 공유 상태는 `ch17-shared-state-parallelism`에서, 그 증명을 직접 하는 방법은 Part 10에서 다룹니다.
+**스레드.** 여러 스레드가 함께 쓰는 값에서는 `unsafe` 블록의 전제 조건이 "다른 스레드가 그 사이에 고치지 않는다"까지 늘어납니다. `static mut`이 위험한 이유가 이것이고(Part 0 ch19 2.5절), 이 챕터의 예제가 횟수를 셀 때 `static` 원자 타입을 쓴 이유이기도 합니다. 원시 포인터를 담은 타입에 `unsafe impl Send/Sync`를 붙이는 일은 그 타입이 스레드 사이에서 안전하다는 증명을 떠맡는 일입니다. 스레드와 공유 상태는 [`ch17-shared-state-parallelism`](../ch17-shared-state-parallelism/README.md)에서, 그 증명을 직접 하는 방법은 Part 10에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 표준 라이브러리와 크레이트가 건전하다면 미정의 동작은 `unsafe` 코드에서만 생기므로, 직접 쓴 `unsafe`가 없는 크레이트에서 Miri가 찾을 것은 거의 없습니다. 그래도 테스트는 언제나 씁니다.
 
@@ -395,7 +395,7 @@ README가 밝히는 한계도 알아 둡니다. Miri는 프로그램의 여러 �
 - **책에 없는 린트가 있습니다.** rustc의 `unnecessary_transmutes`(warn)와 `invalid_from_utf8_unchecked`(deny)가 1.100.0에서 기본으로 켜져 있습니다. 패키지 단위로 린트 수준을 정하는 Cargo의 `[lints]` 테이블은 Cargo 문서에 "MSRV: Respected as of 1.74"로 적혀 있습니다.
 - **책에 없는 지침.** 다음은 책의 Item 16이 명시적으로 권하지 않는 내용입니다(2026-11-19에 온라인판에서 확인). 책은 표준 라이브러리와 크레이트에서 찾기, 래퍼 계층, 안전성 주석과 `missing_safety_doc`, 작은 블록과 `unsafe_op_in_unsafe_fn`, 테스트, Miri, 스레드까지 다룹니다.
   - 2.2절의 짝짓기 표 전체와 2.3절의 세 사례(경계 검사, 바이트 재해석, 배열 초기화)에서 고른 구체적인 API: 표준 라이브러리 문서, 컴파일러의 `help:`(E0277의 `array::from_fn` 제안, `unnecessary_transmutes`의 `from_le_bytes` 제안), 직접 실행한 결과가 근거입니다.
-  - 2.3절의 "검사가 실제로 남는지 확인하고 측정한 뒤에 판단한다": `--emit asm`으로 본 결과가 근거입니다. 측정 자체는 책의 Item 20(`ch20-avoid-over-optimizing`)이 다룹니다.
+  - 2.3절의 "검사가 실제로 남는지 확인하고 측정한 뒤에 판단한다": `--emit asm`으로 본 결과가 근거입니다. 측정 자체는 책의 Item 20([`ch20-avoid-over-optimizing`](../ch20-avoid-over-optimizing/README.md))이 다룹니다.
   - 2.4절의 `bytemuck`·`zerocopy`와 RustSec 확인: crates.io와 ch15가 근거입니다.
   - 2.5절의 "모듈이 안전성 검토의 범위", "불변식을 깰 수 있는 메서드는 `unsafe fn`", `#![deny(unsafe_code)]`와 모듈 단위 허락, `forbid`와 `[lints]`: Rustonomicon의 Working with Unsafe, 1.100.0의 `String` 소스, Cargo 문서의 `[lints]` 절, 직접 컴파일한 결과(E0453)가 근거입니다.
   - 2.6절의 `undocumented_unsafe_blocks`·`multiple_unsafe_ops_per_block`, "린트는 주석의 내용을 확인하지 않는다": Clippy 1.100.0의 린트 목록과 직접 컴파일한 결과가 근거입니다.

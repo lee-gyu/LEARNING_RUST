@@ -270,7 +270,7 @@ help: try to adjust your dependencies so that only one package uses the `links =
 failed to select a version for `chime-sys` which could resolve this conflict
 ```
 
-0.2와 0.3은 호환되지 않으므로 보통이면 함께 들어올 두 버전인데, `links` 때문에 해석 단계에서 거절되었습니다. 실험해 보니 `ring-tone`을 `[dev-dependencies]`로 옮겨도 같은 에러가 났습니다. 고치려면 두 쪽이 같은 버전을 쓰게 맞춥니다(연습 3). C 라이브러리를 링크하는 일 자체는 Part 3 `ch8-build-scripts`와 `ch34-ffi-boundaries`에서 다룹니다.
+0.2와 0.3은 호환되지 않으므로 보통이면 함께 들어올 두 버전인데, `links` 때문에 해석 단계에서 거절되었습니다. 실험해 보니 `ring-tone`을 `[dev-dependencies]`로 옮겨도 같은 에러가 났습니다. 고치려면 두 쪽이 같은 버전을 쓰게 맞춥니다(연습 3). C 라이브러리를 링크하는 일 자체는 Part 3 `ch8-build-scripts`와 [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)에서 다룹니다.
 
 ### 2.4 지침 3: `Cargo.lock`을 커밋하고, 정해 둔 때에 올린다
 
@@ -339,7 +339,7 @@ required by package `thiserror-impl v2.0.21`
 
 `thiserror-impl`이 적어 둔 아래쪽 경계 1.0.35가 그대로 지켜집니다. ch21 2.2절에서 "아래쪽 경계는 실제로 필요한 가장 낮은 버전"이라고 한 약속이 여기서 사용자를 지켜 줍니다. `--verbose`의 `Unchanged` 알림은 이 실행들에서 직접 의존성에만 붙었습니다. `real_graph`의 전이 의존성 `darling` 0.20.11은 crates.io에 0.24.1이 있는데도(2026-11-19 `cargo search darling`) 알림이 없었습니다. 전이 의존성이 얼마나 뒤처졌는지는 2.5절의 도구가 맡습니다.
 
-정해 둔 때에 올리는 일은 사람의 기억보다 자동화에 맡깁니다. 책은 GitHub의 Dependabot을 들고, Cargo Book의 Continuous Integration 장은 Dependabot이나 Renovate가 의존성 갱신 PR을 정기적으로 만들게 하는 방법과, `cargo update` 뒤에 빌드와 테스트를 돌리되 실패해도 전체를 막지 않는 "Latest Dependencies" CI 작업을 예로 듭니다. 그 작업은 `rust-version` 때문에 새 버전이 걸러지지 않도록 `CARGO_RESOLVER_INCOMPATIBLE_RUST_VERSIONS=allow`를 줍니다(리졸버 3은 Part 2 ch5 2.6절). CI 구성은 `ch32-continuous-integration`에서 다룹니다.
+정해 둔 때에 올리는 일은 사람의 기억보다 자동화에 맡깁니다. 책은 GitHub의 Dependabot을 들고, Cargo Book의 Continuous Integration 장은 Dependabot이나 Renovate가 의존성 갱신 PR을 정기적으로 만들게 하는 방법과, `cargo update` 뒤에 빌드와 테스트를 돌리되 실패해도 전체를 막지 않는 "Latest Dependencies" CI 작업을 예로 듭니다. 그 작업은 `rust-version` 때문에 새 버전이 걸러지지 않도록 `CARGO_RESOLVER_INCOMPATIBLE_RUST_VERSIONS=allow`를 줍니다(리졸버 3은 Part 2 ch5 2.6절). CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 라이브러리가 CI에서 늘 최신 의존성으로만 시험하려고 `Cargo.lock`을 커밋하지 않는 것은 Cargo Book도 드는 선택지입니다. 대신 같은 커밋의 빌드가 날마다 달라질 수 있다는 것을 받아들여야 합니다. 보안 권고가 나온 의존성은 정해 둔 때를 기다리지 않고 바로 `cargo update 이름`으로 올립니다.
 
@@ -418,7 +418,7 @@ unicode-ident v1.0.27 (MIT OR Apache-2.0) AND Unicode-3.0
 
 `unicode-ident`에는 MIT나 Apache-2.0이 아닌 `Unicode-3.0`이 **함께**(`AND`) 붙어 있어 허용 목록에 넣었습니다. `fnv`와 `ident_case`처럼 `/`로 적은 옛 표기도 섞여 있습니다.
 
-**보안 권고: RustSec.** RustSec 권고 데이터베이스는 crates.io 크레이트의 알려진 취약점을 모은 데이터베이스이고, Rust Secure Code Working Group이 관리합니다. `cargo-audit`(`cargo audit`)는 `Cargo.lock`을 이 데이터베이스와 대조하고, `cargo-deny`의 `advisories` 검사도 같은 데이터베이스를 씁니다. `cargo-deny`의 `[advisories]` 설정에 `unmaintained`와 `unsound` 키가 따로 있는 것처럼, 권고는 취약점만이 아니라 유지되지 않는 크레이트와 건전하지 않은 API도 다룹니다. ch15·ch16에서 본 건전성 문제가 여기에 올라옵니다. 권고는 내 코드가 그대로여도 새로 붙으므로, 이 검사는 커밋할 때만이 아니라 정기적으로 돌려야 의미가 있습니다. `cargo-audit`도 설치돼 있지 않아 실행해 확인하지 못했습니다. 이 도구들을 CI에서 정기적으로 돌리는 구성은 `ch32-continuous-integration`에서, 도구 전체의 지도는 `ch31-tooling-ecosystem`에서 다룹니다.
+**보안 권고: RustSec.** RustSec 권고 데이터베이스는 crates.io 크레이트의 알려진 취약점을 모은 데이터베이스이고, Rust Secure Code Working Group이 관리합니다. `cargo-audit`(`cargo audit`)는 `Cargo.lock`을 이 데이터베이스와 대조하고, `cargo-deny`의 `advisories` 검사도 같은 데이터베이스를 씁니다. `cargo-deny`의 `[advisories]` 설정에 `unmaintained`와 `unsound` 키가 따로 있는 것처럼, 권고는 취약점만이 아니라 유지되지 않는 크레이트와 건전하지 않은 API도 다룹니다. ch15·ch16에서 본 건전성 문제가 여기에 올라옵니다. 권고는 내 코드가 그대로여도 새로 붙으므로, 이 검사는 커밋할 때만이 아니라 정기적으로 돌려야 의미가 있습니다. `cargo-audit`도 설치돼 있지 않아 실행해 확인하지 못했습니다. 이 도구들을 CI에서 정기적으로 돌리는 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서, 도구 전체의 지도는 [`ch31-tooling-ecosystem`](../ch31-tooling-ecosystem/README.md)에서 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 버리고 갈 실험용 프로젝트에 정책 파일까지 둘 필요는 없습니다. 도구가 틀리게 잡은 것은 도구를 끄지 말고 이유를 적어 예외로 둡니다(`deny.toml`의 `skip`·`ignore`, 위 도구들의 metadata 표).
 
@@ -507,7 +507,7 @@ $ CARGO_REGISTRY_GLOBAL_MIN_PUBLISH_AGE="30 days" cargo generate-lockfile
 
 계속 쓰려면 `.cargo/config.toml`의 `[registry]`에 `global-min-publish-age = "7 days"`처럼 적습니다. 보안 수정 릴리스도 같은 시간만큼 늦게 받게 되므로, Cargo Book의 Dependency Resolution 장(Publish age 절)은 설정 `resolver.incompatible-publish-age = "allow"`와 `cargo update --precise`를 함께 써서 특정 버전을 바로 받는 길을 설명합니다.
 
-**지침을 따르지 않아도 되는 경우.** 비용을 따진 결론은 대개 "의존한다"입니다. 책도 직접 짜는 쪽이 대개 더 비싸다고 결론짓습니다. 직접 쓴 코드도 시험하고 유지하고 버그를 고쳐야 하고, 널리 쓰이는 크레이트는 그 일을 많은 사람이 나눠 하고 있기 때문입니다. 직접 쓰는 편이 나은 것은 필요한 부분이 몇 줄뿐인데 크레이트가 크거나, 출력 모양을 꾸미는 정도의 부수적인 용도일 때입니다. `no_std` 대상은 쓸 수 있는 크레이트가 줄어 선택지가 좁아집니다(`ch33-no-std`).
+**지침을 따르지 않아도 되는 경우.** 비용을 따진 결론은 대개 "의존한다"입니다. 책도 직접 짜는 쪽이 대개 더 비싸다고 결론짓습니다. 직접 쓴 코드도 시험하고 유지하고 버그를 고쳐야 하고, 널리 쓰이는 크레이트는 그 일을 많은 사람이 나눠 하고 있기 때문입니다. 직접 쓰는 편이 나은 것은 필요한 부분이 몇 줄뿐인데 크레이트가 크거나, 출력 모양을 꾸미는 정도의 부수적인 용도일 때입니다. `no_std` 대상은 쓸 수 있는 크레이트가 줄어 선택지가 좁아집니다([`ch33-no-std`](../ch33-no-std/README.md)).
 
 ### 2.7 책과 달라진 점
 

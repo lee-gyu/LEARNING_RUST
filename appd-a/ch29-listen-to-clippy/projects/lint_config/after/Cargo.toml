@@ -1,0 +1,11 @@
+# 워크스페이스의 린트 설정에 맞춰 고친 판입니다.
+[package]
+name = "after"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+# 워크스페이스의 [workspace.lints]를 그대로 물려받습니다.
+# 이 표에 다른 키를 더해 일부만 바꿀 수는 없습니다(README 4.4절).
+[lints]
+workspace = true

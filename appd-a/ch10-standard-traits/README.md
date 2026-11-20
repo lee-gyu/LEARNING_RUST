@@ -45,7 +45,7 @@
 
 각 트레이트의 구현 문법과 트레이트끼리 지켜야 할 성질(동치 관계, 전순서, `Hash`와 `Eq`의 관계)은 Part 1 ch6이 다뤘습니다. 이 표의 가운데 세 열이 판단의 재료입니다. 사용자에게 열어 주는 것이 많을수록 넉넉하게 구현할 이유가 되고, 약속을 지킬 수 없거나 derive가 뜻과 다른 구현을 만든다면 구현하지 않거나 손으로 씁니다.
 
-**다른 챕터에서 다루는 표준 트레이트.** 변환(`From`/`TryFrom`)은 [ch5](../ch5-type-conversions/README.md), `Error`는 [ch4](../ch4-idiomatic-errors/README.md), `Fn`/`FnMut`/`FnOnce`는 [ch2](../ch2-express-common-behavior/README.md), 포인터 트레이트(`Deref`, `AsRef`, `Borrow`)는 [ch8](../ch8-references-pointers/README.md), `Drop`은 `ch11-drop-raii`, 반복자 트레이트는 `ch9-iterator-transforms`에서 다룹니다. 반복자 쪽에서 내 타입에 구현할지 따질 것은 하나입니다. 내 타입이 원소를 담는 컬렉션이라면 `FromIterator`(`collect()`로 만들기), `Extend`(`extend()`로 덧붙이기), `IntoIterator`(`for` 문으로 돌기)를 구현해 표준 컬렉션처럼 쓰게 해 줍니다. 컬렉션이 아닌 타입에는 붙이지 않습니다.
+**다른 챕터에서 다루는 표준 트레이트.** 변환(`From`/`TryFrom`)은 [ch5](../ch5-type-conversions/README.md), `Error`는 [ch4](../ch4-idiomatic-errors/README.md), `Fn`/`FnMut`/`FnOnce`는 [ch2](../ch2-express-common-behavior/README.md), 포인터 트레이트(`Deref`, `AsRef`, `Borrow`)는 [ch8](../ch8-references-pointers/README.md), `Drop`은 [`ch11-drop-raii`](../ch11-drop-raii/README.md), 반복자 트레이트는 [`ch9-iterator-transforms`](../ch9-iterator-transforms/README.md)에서 다룹니다. 반복자 쪽에서 내 타입에 구현할지 따질 것은 하나입니다. 내 타입이 원소를 담는 컬렉션이라면 `FromIterator`(`collect()`로 만들기), `Extend`(`extend()`로 덧붙이기), `IntoIterator`(`for` 문으로 돌기)를 구현해 표준 컬렉션처럼 쓰게 해 줍니다. 컬렉션이 아닌 타입에는 붙이지 않습니다.
 
 ### 2.2 지침 1: derive가 만드는 구현이 타입의 뜻과 맞는지 확인한다
 
@@ -756,7 +756,7 @@ help: consider annotating `YearMonth` with `#[derive(Debug)]`
 <details>
 <summary>힌트</summary>
 
-덧셈은 `a/b + c/d = (ad + cb) / bd`를 `i64`로 계산한 뒤 `Ratio::new`로 정규화합니다. `new`가 `None`(결과가 `i32`를 넘음)을 돌려주면 연산자는 `Option`을 돌려줄 수 없으므로, 정수 덧셈처럼 패닉하거나 `checked_add` 같은 메서드를 따로 두는 것 중에서 고릅니다(패닉하는 API의 문제는 `ch18-dont-panic`). 2.8절의 원칙대로 `Sub`는 `self + (-rhs)`, `AddAssign`은 `*self = *self + rhs`로 써서 규칙을 한 곳에 둡니다. `Sum`은 `iter.fold(zero, |acc, r| acc + r)` 모양이고, `sum`은 `Option`이 아니라 `Self`를 돌려주므로 0은 모듈 안에서 `Ratio { num: 0, den: 1 }`로 직접 만듭니다(이미 기약분수라 정규화가 필요 없습니다).
+덧셈은 `a/b + c/d = (ad + cb) / bd`를 `i64`로 계산한 뒤 `Ratio::new`로 정규화합니다. `new`가 `None`(결과가 `i32`를 넘음)을 돌려주면 연산자는 `Option`을 돌려줄 수 없으므로, 정수 덧셈처럼 패닉하거나 `checked_add` 같은 메서드를 따로 두는 것 중에서 고릅니다(패닉하는 API의 문제는 [`ch18-dont-panic`](../ch18-dont-panic/README.md)). 2.8절의 원칙대로 `Sub`는 `self + (-rhs)`, `AddAssign`은 `*self = *self + rhs`로 써서 규칙을 한 곳에 둡니다. `Sum`은 `iter.fold(zero, |acc, r| acc + r)` 모양이고, `sum`은 `Option`이 아니라 `Self`를 돌려주므로 0은 모듈 안에서 `Ratio { num: 0, den: 1 }`로 직접 만듭니다(이미 기약분수라 정규화가 필요 없습니다).
 
 </details>
 
