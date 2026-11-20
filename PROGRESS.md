@@ -150,8 +150,8 @@
 
 ## 작업 방식 메모
 
-- 챕터는 `tutor` 서브 에이전트(`.claude/agents/tutor.md`)가 하나씩 작성하고, 메인 세션이 보고를 받아 이 문서·로드맵·파트 README를 갱신합니다.
-- 워크스페이스 `members = ["part*/ch*", "appd-*/ch*"]` 때문에 `Cargo.toml`이 없거나 빌드 타깃이 하나도 없는 챕터 디렉터리가 있으면 **모든 챕터의 cargo 명령이 실패**합니다. 여러 챕터를 동시에 작성할 때는 메인 세션이 `Cargo.toml`과 자리표시 예제(`examples/00_placeholder.rs`)를 갖춘 디렉터리를 먼저 만들어 둡니다. 에이전트마다 `CARGO_TARGET_DIR`을 따로 줘서 빌드 디렉터리도 나눕니다.
+- 챕터는 메인 세션이 로드맵 순서대로 하나씩 직접 작성하고, 챕터마다 `reviewer` 서브 에이전트(`.claude/agents/reviewer.md`)의 검증을 통과한 뒤 이 문서·로드맵·파트 README를 갱신합니다. 2026-11-20까지의 챕터(Part 0~2, 부록 A)는 `tutor` 서브 에이전트 여럿이 동시에 작성했으므로, 아래 메모의 "위임 메시지", "챕터를 쓴 에이전트", "동시에 빌드" 같은 표현은 그 방식에서 나온 것입니다.
+- 워크스페이스 `members = ["part*/ch*", "appd-*/ch*"]` 때문에 `Cargo.toml`이 없거나 빌드 타깃이 하나도 없는 챕터 디렉터리가 있으면 **모든 챕터의 cargo 명령이 실패**합니다. 챕터 디렉터리를 만들 때는 `Cargo.toml`과 첫 예제 파일을 연달아 만든 뒤에 cargo를 실행합니다.
 - 챕터 README와 소스 파일은 `web/scripts/sync-content.mjs`가 사이트 페이지로 변환합니다. 상대 링크가 가리키는 파일이 없으면 `[sync-content] … 링크 대상이 없습니다` 경고가 나오므로, 챕터를 추가한 뒤 `web/`에서 `pnpm build`로 확인합니다.
 - 저장소 루트나 파트 디렉터리에서 `cargo new`를 실행하면 Cargo가 루트 `Cargo.toml`의 `members`에 새 경로를 조용히 추가합니다. `projects/` 아래 독립 프로젝트는 저장소 밖 임시 디렉터리에서 만든 뒤 복사하고 빈 `[workspace]` 테이블을 추가합니다.
 - 예제 작성 시 clippy 주의: 서식 지정 없는 문자열 리터럴 인자는 `clippy::print_literal`, `3.141592` 같은 원주율 근삿값은 `clippy::approx_constant`(기본 deny)에 걸립니다. `x: x`처럼 쓴 필드는 `clippy::redundant_field_names`에 걸립니다.
@@ -160,7 +160,7 @@
 - 매크로가 펼친 코드의 lint는 매크로를 부른 곳에 `#[expect]`를 붙여야 막힙니다. rustfmt는 `|x| { x + 1 }`을 `|x| x + 1`로 바꿉니다.
 - 다른 챕터를 가리킬 때는 "8장"이 아니라 `ch8` 형식으로 씁니다. "N장"은 The Book의 장을 가리킬 때만 씁니다(저장소 챕터 번호와 Book 장 번호는 ch14부터 다릅니다).
 - `ch8-collections`의 `examples/07_string_utf8.rs` 출력 주석 한 줄과 README의 07 출력 블록 한 줄에는 일부러 조합형(NFD) 한글 바이트가 들어 있습니다. 편집 도구가 완성형(NFC)으로 바꿔 저장할 수 있으므로 이 두 파일은 `perl` 등으로 바이트를 보존하며 고칩니다.
-- 여러 에이전트가 같은 임시 디렉터리를 쓰므로, 챕터마다 전용 하위 디렉터리를 정해 줍니다.
+- 임시 파일과 `rustc --out-dir` 산출물은 챕터마다 전용 디렉터리에 둡니다(메인 세션은 `target/tmp/<패키지>`, reviewer는 `target/review/<패키지>`).
 - 예제 안의 `#[cfg(test)]` 코드는 `cargo clippy --examples`로 검사되지 않습니다. `cargo clippy -p <패키지> --examples -- --test -D warnings`를 쓰되, 인자만 바꾸면 다시 검사하지 않으므로 먼저 소스를 `touch`합니다.
 - `ch11-testing` 예제에는 일부러 실패하는 테스트가 `#[ignore]`로 들어 있습니다. 워크스페이스 전체에 `cargo test -- --include-ignored`를 돌리면 실패하는 것이 정상입니다.
 - `println!` 호출 문에 붙인 `#[expect]`는 무시되고 `unused_attributes` 경고가 납니다. `let s = format!(..)` 같은 `let` 문에 붙입니다. 서식 관련으로 기본 켜진 lint: `clippy::unused_format_specs`(`format_args!` 결과에 너비 지정), rustc `invalid_from_utf8`(잘못된 UTF-8 리터럴을 `from_utf8`에 넘김).
