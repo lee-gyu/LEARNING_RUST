@@ -1,0 +1,15 @@
+[package]
+name = "shelf-report"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+# 같은 워크스페이스의 멤버입니다. 경로는 루트의 [workspace.dependencies]에 적혀 있습니다.
+shelf-core.workspace = true
+# 외부 크레이트입니다. 버전 요구 사항은 루트에 한 번만 적혀 있습니다.
+unicode-width.workspace = true
+
+[lints]
+workspace = true

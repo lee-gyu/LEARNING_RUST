@@ -1,0 +1,29 @@
+# 워크스페이스 루트의 매니페스트입니다.
+# [package]가 없고 [workspace]만 있는 이런 매니페스트를 가상 매니페스트라고 합니다.
+
+[workspace]
+# crates/ 바로 아래의 디렉터리를 모두 멤버로 삼습니다.
+members = ["crates/*"]
+# 글롭에 걸리지만 워크스페이스에 넣지 않을 디렉터리입니다.
+exclude = ["crates/shelf-wip"]
+# 가상 매니페스트에는 에디션이 없으므로 리졸버 버전을 직접 적습니다.
+resolver = "3"
+
+# 멤버가 `키.workspace = true`로 물려받을 수 있는 [package] 값입니다.
+[workspace.package]
+version = "0.3.0"
+edition = "2024"
+rust-version = "1.85"
+publish = false
+
+# 멤버가 `이름.workspace = true`로 물려받을 수 있는 의존성입니다.
+# 버전과 경로를 여기 한 곳에만 적습니다.
+[workspace.dependencies]
+shelf-core = { path = "crates/shelf-core" }
+shelf-report = { path = "crates/shelf-report" }
+unicode-width = "0.2"
+
+# 멤버가 `[lints] workspace = true`로 물려받을 수 있는 린트 수준입니다.
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"

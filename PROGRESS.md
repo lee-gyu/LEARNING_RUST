@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-20 (Part 3 ch1~ch3 추가)
+- 마지막 갱신: 2026-11-20 (Part 3 ch1~ch4 추가)
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -15,7 +15,7 @@
 | Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
-| Part 3. Cargo | 3 / 11 |
+| Part 3. Cargo | 4 / 11 |
 | Part 4~11 | 0 / 58 |
 | 부록 A. Effective Rust (본편 합계와 별도) | 35 / 35 |
 
@@ -101,6 +101,7 @@
 | ✅ | `ch1-getting-started` | 예제 2 / 에러 2 / 프로젝트 1 | 통과 | 2026-11-20 | `projects/text-stat`(라이브러리 + 바이너리 3개 + 예제 + 통합 테스트, 관례가 정하는 위치를 거의 다 쓰는 패키지). **crates.io의 `unicode-segmentation` 1.13.3에 의존**(2026-11-20 기준, `Cargo.lock`이 고정). `01`은 `rustc`를 자식 프로세스로 세 번 실행(첫 번째는 일부러 실패, 예제의 종료 코드는 0). `02`의 출력은 Cargo home의 내용에 따라 컴퓨터마다 다름. `cargo run`(바이너리가 셋이라 종료 코드 101)과 `--locked` 실패는 일부러 보이는 에러. Cargo Book과 다른 실제 동작: `registry/index`는 git 저장소가 아니라 sparse 프로토콜의 캐시 파일. Cargo Book 1.1(설치)은 Part 0 ch1로 넘기고, 2.6절의 git 의존성 설명은 crates.io 의존성과 `--locked` 실험으로 바꿈. `compile_fail`은 2개뿐이고 나머지 실수는 Cargo의 에러라 표로 실음. 검증 2회(첫 보고에서 "레지스트리" 정의와 영어 병기 누락을 고침). README 633줄 |
 | ✅ | `ch2-dependencies` | 예제 2 / 에러 1 / 프로젝트 2 | 통과 | 2026-11-20 | `projects/three-sources`(crates.io의 `heck` 0.5.0, GitHub `rust-lang/cfg-if`의 태그 `v1.0.4`를 가리키는 git 의존성, path 의존성 `crates/frame`과 그 전이 의존성 `unicode-width` 0.2.3. **처음 빌드할 때 crates.io와 GitHub에 접속**, 버전은 2026-11-20 기준이며 `Cargo.lock`이 고정)와 `projects/resolver-lab`(디렉터리 소스로 만든 연습용 레지스트리와 패키지 다섯 개, 네트워크 불필요). 챕터 패키지의 dev-dependency `semver` 1.0.28. **`resolver-lab/conflict-fails`는 일부러 해석에 실패**(종료 코드 101, `Cargo.lock` 없음)하고, `pick/Cargo.lock`은 일부러 옛 버전(`tint` 1.1.0)을 적어 둔 것. `vendor/`의 `tint`·`banner`는 가상의 크레이트(crates.io에 이름만 같은 `tint`가 있어 `resolver-lab` 밖에서 실행하면 그쪽을 찾음). Cargo Book과 다른 실제 동작: 요구 사항에 맞는 `[patch]` 항목은 레지스트리에 더 높은 버전이 있어도 먼저 골라짐(3.3.1의 설명과 다름). 로드맵의 "버전 충돌 관찰"을 crates.io 대신 연습용 레지스트리에서 함. `compile_fail`은 1개이고 나머지 실수는 Cargo의 에러라 표로 실음. `[replace]`·`paths`는 한 문단, 다른 레지스트리(`registry` 키)는 다루지 않음. 검증 2회(첫 보고에서 틸드 규칙 설명, `tint-fix` 주석, `[dependencies]` 표의 사실 오류와 영어 병기 누락을 고침). README 639줄 |
 | ✅ | `ch3-manifest-targets` | 예제 2 / 에러 2 / 프로젝트 1 | 통과 | 2026-11-20 | `projects/unit-tools`(라이브러리 이름을 `[lib] name = "units"`로 바꾸고, 관례 밖의 바이너리·예제를 `[[bin]]`·`[[example]]`로 선언하고, `default-run`, `test = false`, `harness = false`인 통합 테스트, `rust-version = "1.85"`, `[lints]` 표 셋을 쓴 패키지. 외부 크레이트와 네트워크 없음). `02`는 `cargo metadata --no-deps`를 자식 프로세스로 실행해 JSON을 문자열 검색으로 읽음(빌드 없음). `unit-tools`는 `[lints.clippy]`로 `pedantic` 그룹을 켠 채 `cargo clippy --all-targets -- -D warnings`를 통과. `cargo run --bin c2f -- abc`는 일부러 종료 코드 1. `compile_fail/forbid_unsafe_code.rs`는 `[lints.rust] unsafe_code = "forbid"`를 `rustc`만으로 재현하려고 크레이트 속성으로 옮겨 적은 것(에러 코드 없음). 로드맵과 달라진 점: `[[bench]]`는 표의 키와 기본값만 다루고 실습은 ch9로, `[package]`의 게시용 키는 표로 묶고 ch10으로 넘김. Cargo Book이 정하지 않은 실제 동작: `[lints]`에서 그룹과 개별 린트의 `priority`가 같으면 1.100.0에서는 린트 이름에 따라 결과가 달라짐(본문에 관찰한 대로 적음). 미확인: `unit-tools`가 실제 1.85 툴체인에서 빌드되는지(미설치, Clippy `incompatible_msrv`만 통과), `cargo add`가 `rust-version`에 맞는 버전을 고르는 동작(문서로만 확인). 검증 2회(첫 보고에서 `rust-version` 정책 순서, 타깃 `name`의 기본값, 없는 내용 인용, 따라 할 수 없는 안내를 고침). README 549줄 |
+| ✅ | `ch4-workspaces` | 예제 2 / 에러 0 / 프로젝트 1 | 통과 | 2026-11-20 | `projects/bookshelf`(가상 워크스페이스: 라이브러리 `shelf-core`·`shelf-report`, 바이너리 `shelf-cli`, 멤버가 아닌 `shelf-wip`). crates.io의 `unicode-width` 0.2.3 사용. `compile_fail` 없음(실수가 모두 Cargo의 에러). 검증 3회 |
 
 - Part 3부터는 메인 세션이 챕터를 하나씩 직접 쓰고 `reviewer` 서브 에이전트의 검증을 통과한 뒤 다음 챕터로 넘어갑니다. 사실 확인은 툴체인과 함께 설치된 1.100.0의 Cargo Book(`rustc --print sysroot` 아래 `share/doc/rust/html/cargo/`)과 직접 실행으로 했습니다.
 

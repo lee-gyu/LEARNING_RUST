@@ -1,0 +1,19 @@
+[package]
+name = "shelf-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+# 패키지 이름은 shelf-cli이지만 실행 파일 이름은 shelf로 합니다(ch3의 타깃 표).
+[[bin]]
+name = "shelf"
+path = "src/main.rs"
+
+[dependencies]
+shelf-core.workspace = true
+shelf-report.workspace = true
+unicode-width.workspace = true
+
+[lints]
+workspace = true

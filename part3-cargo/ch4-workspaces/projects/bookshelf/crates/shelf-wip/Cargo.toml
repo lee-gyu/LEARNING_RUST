@@ -1,0 +1,10 @@
+# 아직 워크스페이스에 넣지 않은 실험용 패키지입니다.
+# 루트의 `exclude`가 이 디렉터리를 멤버에서 뺐으므로 설정을 물려받지 않고 직접 적습니다.
+[package]
+name = "shelf-wip"
+version = "0.0.1"
+edition = "2024"
+publish = false
+
+# 자기 자신을 워크스페이스 루트로 선언합니다. 이 패키지는 독립된 Cargo.lock과 target/을 가집니다.
+[workspace]
