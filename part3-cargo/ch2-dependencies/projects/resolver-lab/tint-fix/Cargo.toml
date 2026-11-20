@@ -1,0 +1,10 @@
+[package]
+name = "tint"
+# 요구 사항(patched의 "1.0", banner의 "1.1")에 맞는 버전이어야 쓰입니다.
+# 1.2.0을 고친 판이라는 것이 드러나게 1.2.1로 올렸습니다.
+version = "1.2.1"
+edition = "2024"
+description = "tint 1.2.0의 yellow 버그를 고친 로컬 사본"
+
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 테이블입니다.
+[workspace]

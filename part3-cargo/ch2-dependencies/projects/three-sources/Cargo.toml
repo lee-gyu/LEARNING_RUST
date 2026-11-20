@@ -1,0 +1,18 @@
+[package]
+name = "three-sources"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 1. crates.io: 이름과 버전 요구 사항만 적습니다.
+heck = "0.5"
+
+# 2. git 저장소: 저장소 주소와 커밋을 고르는 키(tag, branch, rev 가운데 하나)를 적습니다.
+cfg-if = { git = "https://github.com/rust-lang/cfg-if", tag = "v1.0.4" }
+
+# 3. 로컬 경로: 이 Cargo.toml이 있는 디렉터리를 기준으로 한 상대 경로입니다.
+frame = { path = "crates/frame" }
+
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 테이블입니다.
+[workspace]

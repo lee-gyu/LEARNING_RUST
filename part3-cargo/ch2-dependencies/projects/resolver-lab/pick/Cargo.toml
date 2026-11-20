@@ -1,0 +1,12 @@
+[package]
+name = "pick"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 요구 사항 "1.0"은 ">=1.0.0, <2.0.0"입니다. 이 줄을 바꿔 가며 Cargo가 고르는 버전을 봅니다.
+tint = "1.0"
+
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 테이블입니다.
+[workspace]

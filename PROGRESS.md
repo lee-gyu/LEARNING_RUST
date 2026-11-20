@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-20 (Part 3 ch1 추가)
+- 마지막 갱신: 2026-11-20 (Part 3 ch1·ch2 추가)
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -15,7 +15,7 @@
 | Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
-| Part 3. Cargo | 1 / 11 |
+| Part 3. Cargo | 2 / 11 |
 | Part 4~11 | 0 / 58 |
 | 부록 A. Effective Rust (본편 합계와 별도) | 35 / 35 |
 
@@ -99,6 +99,7 @@
 | 상태 | 챕터 | 산출물 | 검증 | 완료일 | 비고 |
 | --- | --- | --- | --- | --- | --- |
 | ✅ | `ch1-getting-started` | 예제 2 / 에러 2 / 프로젝트 1 | 통과 | 2026-11-20 | `projects/text-stat`(라이브러리 + 바이너리 3개 + 예제 + 통합 테스트, 관례가 정하는 위치를 거의 다 쓰는 패키지). **crates.io의 `unicode-segmentation` 1.13.3에 의존**(2026-11-20 기준, `Cargo.lock`이 고정). `01`은 `rustc`를 자식 프로세스로 세 번 실행(첫 번째는 일부러 실패, 예제의 종료 코드는 0). `02`의 출력은 Cargo home의 내용에 따라 컴퓨터마다 다름. `cargo run`(바이너리가 셋이라 종료 코드 101)과 `--locked` 실패는 일부러 보이는 에러. Cargo Book과 다른 실제 동작: `registry/index`는 git 저장소가 아니라 sparse 프로토콜의 캐시 파일. Cargo Book 1.1(설치)은 Part 0 ch1로 넘기고, 2.6절의 git 의존성 설명은 crates.io 의존성과 `--locked` 실험으로 바꿈. `compile_fail`은 2개뿐이고 나머지 실수는 Cargo의 에러라 표로 실음. 검증 2회(첫 보고에서 "레지스트리" 정의와 영어 병기 누락을 고침). README 633줄 |
+| ✅ | `ch2-dependencies` | 예제 2 / 에러 1 / 프로젝트 2 | 통과 | 2026-11-20 | `projects/three-sources`(crates.io의 `heck` 0.5.0, GitHub `rust-lang/cfg-if`의 태그 `v1.0.4`를 가리키는 git 의존성, path 의존성 `crates/frame`과 그 전이 의존성 `unicode-width` 0.2.3. **처음 빌드할 때 crates.io와 GitHub에 접속**, 버전은 2026-11-20 기준이며 `Cargo.lock`이 고정)와 `projects/resolver-lab`(디렉터리 소스로 만든 연습용 레지스트리와 패키지 다섯 개, 네트워크 불필요). 챕터 패키지의 dev-dependency `semver` 1.0.28. **`resolver-lab/conflict-fails`는 일부러 해석에 실패**(종료 코드 101, `Cargo.lock` 없음)하고, `pick/Cargo.lock`은 일부러 옛 버전(`tint` 1.1.0)을 적어 둔 것. `vendor/`의 `tint`·`banner`는 가상의 크레이트(crates.io에 이름만 같은 `tint`가 있어 `resolver-lab` 밖에서 실행하면 그쪽을 찾음). Cargo Book과 다른 실제 동작: 요구 사항에 맞는 `[patch]` 항목은 레지스트리에 더 높은 버전이 있어도 먼저 골라짐(3.3.1의 설명과 다름). 로드맵의 "버전 충돌 관찰"을 crates.io 대신 연습용 레지스트리에서 함. `compile_fail`은 1개이고 나머지 실수는 Cargo의 에러라 표로 실음. `[replace]`·`paths`는 한 문단, 다른 레지스트리(`registry` 키)는 다루지 않음. 검증 2회(첫 보고에서 틸드 규칙 설명, `tint-fix` 주석, `[dependencies]` 표의 사실 오류와 영어 병기 누락을 고침). README 639줄 |
 
 - Part 3부터는 메인 세션이 챕터를 하나씩 직접 쓰고 `reviewer` 서브 에이전트의 검증을 통과한 뒤 다음 챕터로 넘어갑니다. 사실 확인은 툴체인과 함께 설치된 1.100.0의 Cargo Book(`rustc --print sysroot` 아래 `share/doc/rust/html/cargo/`)과 직접 실행으로 했습니다.
 
@@ -248,12 +249,13 @@
 
 - Cargo 실습(Part 3 ch1): `cargo new`·`cargo init`과 독립 프로젝트를 고쳐 보는 실험은 저장소 밖 사본에서 합니다. 이 셸은 `CARGO_HOME`을 이미 정해 두고 있어서 "rustup 프록시가 넣어 준다"를 확인하려면 `env -u CARGO_HOME`으로 실행합니다(프록시는 자식에게 `CARGO_HOME`과 `RUSTUP_TOOLCHAIN`을 넣고, 툴체인 디렉터리의 `cargo`를 직접 실행하면 넣지 않음). `CARGO_HOME`을 빈 임시 디렉터리로 주면 `Downloaded` 줄과 새 Cargo home의 구조를 볼 수 있고, Cargo는 고른 패키지의 의존성만 내려받습니다(의존성 없는 패키지는 `Updating crates.io index`만 나옴). cargo 1.100.0의 `target/debug/`에는 `deps/`가 없고 크레이트별 결과는 `build/<패키지>/<해시>/out/`에 있으며, `target/debug/` 바로 아래의 실행 파일과 `.rlib`은 그 사본입니다. `cargo init`은 `src/lib.rs`만 있어도 `Creating binary (application) package`라고 출력하고, 기존 `.gitignore` 끝에 `# Added by cargo`와 `/target`을 덧붙입니다. 패키지 자신의 `version`을 바꿔도 `Cargo.lock`이 다시 쓰입니다. `--locked` 실패의 종료 코드는 101이고, 파이프 뒤의 `$?`는 cargo의 종료 코드가 아니므로 따로 받습니다. cargo 1.100.0은 쓰지 않는 의존성에 `cargo::unused_dependencies` 경고를 냅니다. `rustc`는 컴파일에 실패해도 `--out-dir` 디렉터리를 만듭니다. `cargo build -v`로 `rustc` 명령을 보이는 장면은 Part 0 ch7 2.2절, Part 2 ch1 2.3절, Part 3 ch1 2.1절에 있으므로 뒤 챕터는 가리키기만 합니다.
 - reviewer 운영(Part 3): reviewer가 사용량 한도로 중단되면 한도가 풀린 뒤 같은 reviewer에게 메시지를 보내 이어서 실행합니다.
+- 의존성 실습(Part 3 ch2): cargo 1.100.0은 요구 사항에 맞는 `[patch]` 항목이 있으면 레지스트리에 더 높은 버전이 있어도 그것을 먼저 고르고 `cargo update` 뒤에도 유지합니다(Cargo Book 3.3.1의 설명과 다름). 버전이 요구 사항 밖이거나 이미 `Cargo.lock`에 다른 버전이 잠겨 있으면 ``patch … was not used in the crate graph`` 경고가 나오고, 뒤쪽은 `cargo update 이름`으로 풉니다. `[patch.crates-io]`는 디렉터리 소스로 바꾼 연습용 레지스트리에도 적용됩니다. 디렉터리 소스에서는 `cargo update X --precise <버전>`이 무시되고(잠긴 버전을 줘도 최신으로 올라감) 잠금 파일에 `checksum` 줄이 없습니다. crates.io에는 진짜 `tint`(1.0.0, 1.0.1)가 있어 연습용 레지스트리 밖(`--manifest-path` 등)에서 실행하면 그쪽을 찾으므로, 가상의 크레이트 이름을 정할 때는 밖에서 실행했을 때의 메시지까지 확인합니다. `cargo add --git`·`--path`는 `version` 키도 함께 적습니다. `cargo add 이름@1.0.5`는 요구 사항만 `"1.0.5"`로 적고 잠금 파일에는 범위 안의 최신이 들어갑니다. 플랫폼별 의존성(`[target.'cfg(windows)'.dependencies]`)은 다른 플랫폼에서도 `Cargo.lock`에 적히고 `cargo tree`에는 `--target all`을 줘야 보입니다. 적지 않은 크레이트를 쓴 에러의 1.100.0 문구는 경로를 바로 쓰면 ``E0433 cannot find module or crate `x` in this scope``, `use`로 가져오면 E0432이고, help는 `rustc` 직접 실행에서는 `you might be missing a crate named`, Cargo 빌드에서는 `cargo add`를 안내합니다. 2.5절의 `cargo add`/`cargo update` 표처럼 프로젝트 파일을 고치는 실험은 저장소 밖 사본에서 하고, 디렉터리 소스 프로젝트는 디렉터리를 통째로 복사해야 `.cargo/config.toml`과 `vendor/`가 함께 갑니다. 옛 버전이 잠긴 `Cargo.lock`은 `vendor/`에서 새 버전 디렉터리를 잠시 치운 채 `cargo generate-lockfile`로 만듭니다. git 의존성을 한 번 받으면 Cargo home에 `git/db`와 `git/checkouts`가 생겨 Part 3 ch1 예제 `02_cargo_home`의 출력이 "있음"으로 바뀝니다.
 
 ## 후속 조치
 
 챕터 작성 중 발견한, 다른 파일에 반영해야 할 사항을 적습니다.
 
-- ch2: 이 워크스페이스에서 `cargo doc -p rand`는 cargo 1.98.1 내부 패닉으로 끝납니다(`rand`가 dev-dependency뿐이라 생기는 문제로 보임). README에는 대안 `cargo doc -p p0-ch2-guessing-game --examples --open`을 안내했습니다. Part 3 `ch2-dependencies` 작성 때 다시 확인합니다.
+- ch2: 이 워크스페이스에서 `cargo doc -p rand`는 cargo 1.98.1 내부 패닉으로 끝납니다(`rand`가 dev-dependency뿐이라 생기는 문제로 보임). README에는 대안 `cargo doc -p p0-ch2-guessing-game --examples --open`을 안내했습니다. **2026-11-20 Part 3 ch2에서 다시 확인**: 1.100.0에서는 워크스페이스에 `rand`가 두 버전(0.10.4와 `trpl`이 끌어온 0.8.8) 있어 `cargo doc -p rand`가 ``specification `rand` is ambiguous``로 끝나고, `cargo doc -p rand@0.10.4`는 여전히 cargo 내부 패닉(`did not find features for … within activated_features`)입니다. Part 0 ch2 README 2.3절의 "cargo 1.98.1에서는 … 내부 오류" 문장을 이 결과와 Part 3 ch2 2.5절(`이름@버전`)에 맞춰 고칩니다.
 - ch9: 워크스페이스 멤버 패키지의 `[profile]`은 무시되고 경고가 납니다(`profiles for the non root package will be ignored`). 프로필은 루트 `Cargo.toml`에만 둘 수 있습니다. Part 3 `ch6-profiles-build-performance` 작성 때 반영합니다.
 - ch11: `cargo test 이름`이 문서 테스트를 건너뛰는 동작은 Part 3 `ch9-testing-ci`에서 다시 다룹니다.
 - ch19: unsafe 예제는 Miri로 확인하지 못했습니다. Part 10을 시작해 nightly와 Miri를 준비하면 `ch19-advanced-features`의 `01`, `02` 예제를 `cargo +nightly miri run`으로 다시 확인합니다.
@@ -274,7 +276,7 @@
 - Part 2 ch4: Part 10에서 nightly와 Miri를 준비하면 `examples/05_unsafe_changes.rs`와 `projects/edition_compare/shared/new_syntax.rs`의 unsafe 블록을 `cargo +nightly miri run`으로 확인합니다.
 - Part 2 ch4: README가 1095줄로 목표(1000줄)를 넘었습니다. 14개 항목의 에러 인용이 대부분이며, 줄일지는 읽어 보고 정합니다.
 - Part 2 전체: ch1~ch4를 동시에 작성해서, 서로를 링크 없이 코드 서식의 이름으로만 가리키는 곳이 있습니다. 상대 링크로 바꾸는 것은 선택 사항입니다.
-- Part 2 ch5: Part 10에서 Miri를 준비하면 `examples/03_env_unsafe.rs`와 `projects/ecosystem_compare/shared/main.rs`의 unsafe 블록을 확인합니다. `projects/msrv_resolver`의 결과(`smol_str` 0.3.2와 0.3.7)는 crates.io의 2026-11-19 상태에 기대므로, Part 3 `ch2-dependencies`를 쓸 때 다시 확인합니다.
+- Part 2 ch5: Part 10에서 Miri를 준비하면 `examples/03_env_unsafe.rs`와 `projects/ecosystem_compare/shared/main.rs`의 unsafe 블록을 확인합니다. `projects/msrv_resolver`의 결과(`smol_str` 0.3.2와 0.3.7)는 crates.io의 2026-11-19 상태에 기댑니다. 2026-11-20 Part 3 ch2를 쓰며 `cargo update --dry-run`으로 다시 확인했고 변화가 없었습니다(`Locking 0 packages`).
 - Part 2 ch6: Part 10에서 Miri를 준비하면 `examples/02_fix_leftovers_2024.rs`의 unsafe 블록을 확인합니다. 린트 수준의 우선순위(`--force-warn`, `-W`, `#[allow]`)와 `[lints]` 테이블은 Part 5 `ch3-lints`로, 에디션과 무관한 `cargo fix`는 Part 6 `ch1-reading-diagnostics`로, 빌드 스크립트가 만든 코드의 마이그레이션은 Part 3 `ch8-build-scripts`로 미뤘습니다.
 
 - Part 1 ch8: README 2.4절 끝이 "반복을 줄여 주는 크레이트는 Part 7 `ch2-implementation-errors`에서 다룬다"고 적고 있습니다. `thiserror`·`anyhow`의 기본은 부록 A ch4가 다루므로 함께 가리키도록 고칠지 정합니다.
@@ -291,7 +293,7 @@
 
 - 부록 A ch16: unsafe 코드를 Miri로 확인하지 못했습니다. nightly와 Miri를 준비하면 `cargo +nightly miri run -p er-ch16-avoid-unsafe --example <이름>`(예제 5개)과 `cargo +nightly miri test -p er-ch16-avoid-unsafe --example 04_safe_wrapper`로 다시 확인하고, README 첫머리의 미검증 고지를 고칩니다. 소개한 크레이트 버전(`bytemuck` 1.25.2, `zerocopy` 0.8.63, `once_cell` 1.21.4)은 2026-11-19의 crates.io 기준입니다.
 - 부록 A ch21~ch26: 설치하지 않은 도구는 소개만 하고 실행 결과를 싣지 않았습니다. `cargo-semver-checks`(ch21), `cargo-deny`·`cargo-udeps`·`cargo-machete`·`cargo-audit`(ch25, `projects/real_graph/deny.toml`은 문서에서 확인한 키로 쓴 예시), `cargo-hack`(ch26). 설치를 승인받으면 실행해 보고 각 README의 "실행해 확인하지 못했다"는 고지를 고칩니다. ch32(CI)를 쓸 때 다시 필요합니다.
-- 부록 A ch25: `projects/real_graph`의 `cargo tree`·`cargo update --dry-run` 출력과 `syn` 2/3 중복은 crates.io의 2026-11-19 상태에 기댑니다(`Cargo.lock`으로 고정). Part 3 `ch2-dependencies`를 쓸 때 다시 확인합니다.
+- 부록 A ch25: `projects/real_graph`의 `cargo tree`·`cargo update --dry-run` 출력과 `syn` 2/3 중복은 crates.io의 2026-11-19 상태에 기댑니다(`Cargo.lock`으로 고정). 2026-11-20 Part 3 ch2를 쓰며 `cargo update --dry-run`으로 다시 확인했고 변화가 없었습니다(`Locking 0 packages`).
 - 부록 A ch21~ch26 → 뒤 챕터: `ch27-document-public-interfaces`(재내보낸 항목이 문서에 보이는 모양), `ch28-macros-judiciously`(매크로가 재내보낸 의존성을 `$crate` 경로로 쓰는 관행), `ch29-listen-to-clippy`(`wildcard_imports`·`unreachable_pub`을 `[lints]`로 프로젝트 단위로 켜기, `clippy.toml`의 `allowed-wildcard-imports`), `ch31-tooling-ecosystem`(도구 지도, `cargo metadata`, 1.100.0에서 `cargo install`이 `.crate` 안의 `Cargo.lock`을 기본으로 쓰게 된 것), `ch32-continuous-integration`(MSRV·라이선스 점검, 기능 조합 돌리기와 `cargo-hack`, "Latest Dependencies" 작업, 의존성 점검 도구), `ch33-no-std`(`std`/`alloc` 기능의 실제 구현), `ch34-ffi-boundaries`(C 코드를 링크하는 크레이트와 `links`). → 본편: Part 3 `ch2-dependencies`(해석 규칙 전반, git 의존성, `[patch]`), `ch5-features`(`[features]` 문법 전반), `ch8-build-scripts`, `ch10-publishing-semver`(게시 절차, SemVer 규칙 전체 목록), Part 5 `ch5-conditional-compilation`(`--cfg`·`--check-cfg`), Part 9 `ch4-attributes`(`#[non_exhaustive]`·`#[deprecated]`·`#[doc(hidden)]`), `ch8-special-types-names`(가시성과 이름 해석 규칙 전체). Part 3을 쓸 때 부록 ch21·ch25·ch26과 서로 링크합니다.
 - 부록 A ch22: 봉인된 트레이트(sealed trait)는 이름과 API 가이드라인 C-SEALED만 언급했고 직접 다룬 챕터가 없습니다. Part 9를 쓸 때 다룰지 정합니다.
 - 부록 A ch16 → `ch25-dependency-graph`: 의존성을 고르는 기준(유지 상태, RustSec 권고 확인). → `ch29-listen-to-clippy`: 린트 수준을 고르는 기준. → `ch30-beyond-unit-tests`·`ch31-tooling-ecosystem`: 퍼즈 테스트 같은 도구. → `ch34-ffi-boundaries`·`ch35-bindgen`: FFI 경계의 unsafe. ch17 → `ch32-continuous-integration`, `ch34-ffi-boundaries`, Part 10 `ch9-concurrency`. ch18 → `ch29-listen-to-clippy`(패닉을 막는 린트의 프로젝트 단위 설정), `ch30-beyond-unit-tests`, `ch32-continuous-integration`, `ch34-ffi-boundaries`(FFI 경계를 넘는 패닉), Part 3 `ch6-profiles-build-performance`(`panic` 프로필 설정), Part 9 `ch9-memory-panic-linkage`, Part 10 `ch8-unwinding`. ch19 → `ch21-semver`(지원할 툴체인 버전을 정하는 일), `ch28-macros-judiciously`(derive 매크로), Part 9 `ch2-macros`. ch20 → `ch30-beyond-unit-tests`(벤치마크 도구), `ch33-no-std`, Part 3 `ch6-profiles-build-performance`.
@@ -305,6 +307,7 @@
 - Part 0 ch19: README 참고 자료의 The Little Book of Rust Macros 링크(`veykril.github.io/tlborm/`)가 `lukaswirth.dev/tlborm/`으로 리다이렉트됩니다(2026-11-20 확인). 새 주소로 고칩니다.
 - Part 1 ch14: README 2.5절 끝이 `CString::into_raw`/`from_raw`와 C 라이브러리 링크를 Part 10·Part 3으로만 넘깁니다. 부록 A ch34가 일부를 다루므로 함께 가리키도록 고칠지 정합니다(선택 사항). 부록 A ch16의 "`[lints]`는 Part 3 `ch3-manifest-targets`에서"라는 문장에도 ch29를 덧붙일 수 있습니다.
 - Part 3 ch1 → 뒤 챕터: `ch2-dependencies`(버전 요구 사항 문법, 의존성 출처, `cargo update`·`cargo tree`, 해석 규칙, "라이브러리는 잠금 파일이 아니라 `Cargo.toml`의 범위로 쓰인다"는 점의 뒷이야기), `ch3-manifest-targets`(타깃을 `Cargo.toml`에 직접 적기, `default-run`), `ch4-workspaces`, `ch6-profiles-build-performance`(`target/` 안의 구조, 프로필), `ch7-configuration-env`(`config.toml`, Cargo가 설정하는 환경 변수), `ch9-testing-ci`(`benches/`, CI에서 Cargo home 캐시), `ch10-publishing-semver`(레지스트리에 게시, `cargo install`), Part 5 `ch1-rustc-basics`(`rustc` 옵션). ch1 README는 이 챕터들을 아직 이름으로만 가리킵니다.
+- Part 3 ch2 → 뒤 챕터: `ch4-workspaces`(`[workspace.dependencies]`와 `workspace = true`, `[patch]`는 워크스페이스 루트에만 적는다는 점), `ch5-features`(`features`·`default-features`·`optional`, `cargo tree -e features`, 기능 통합), `ch7-configuration-env`(`.cargo/config.toml` 자체, 소스 교체 설정), `ch8-build-scripts`(`[build-dependencies]`의 쓰임), `ch10-publishing-semver`(SemVer 호환성 규칙 전체, 게시할 때 git·path 의존성이 거절되는 것, 다른 레지스트리). 이제 `ch2-dependencies`가 생겼으므로 Part 0 ch2 README 191행, Part 3 ch1 README, 부록 A ch24·ch25 README가 이름으로만 가리키던 곳을 상대 링크로 바꿀 수 있습니다.
 
 ## 용어 메모
 
@@ -523,3 +526,5 @@
 | (선언이 어긋났지만 메모리는 망가지지 않아 값만 틀리게 읽힌 것) | 잘못 해석한 값(미정의 동작과 구별) |
 | (Part 3) target / auto-discovery / convention over configuration | 타깃 / 관례로 찾아냄(자동 탐색) / 설정보다 관례 |
 | (Part 3) registry / index / Cargo home / lockfile / `.crate` 파일 | 레지스트리 / 색인 / Cargo home(영어 그대로) / 잠금 파일 / 압축 파일. 저장소 밖으로 복사해 실험하는 것은 "사본" |
+| (Part 3) version requirement / default·caret / tilde / wildcard / comparison / pre-release | 버전 요구 사항 / 기본 요구 사항(= 캐럿 요구 사항) / 틸드 / 와일드카드 / 비교 / 프리릴리스. 버전의 세 자리는 "첫째·둘째·셋째 자리" |
+| (Part 3) source (의존성을 받아 오는 곳) / source replacement / resolver / platform-specific dependencies | 출처 / 소스 교체 / 리졸버 / 플랫폼별 의존성. `[patch]`로 끼워 넣는 고친 크레이트는 "고친 사본", 실험용 복사본은 "저장소 밖에 복사한 …" |

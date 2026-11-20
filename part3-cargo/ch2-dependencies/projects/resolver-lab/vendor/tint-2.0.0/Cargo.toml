@@ -1,0 +1,5 @@
+[package]
+name = "tint"
+version = "2.0.0"
+edition = "2024"
+description = "연습용 레지스트리의 가상 크레이트: 색 이름을 16진 코드로 바꿉니다."

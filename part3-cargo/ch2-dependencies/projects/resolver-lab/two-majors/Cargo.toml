@@ -1,0 +1,14 @@
+[package]
+name = "two-majors"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 이 패키지는 tint 2.x를, banner 0.3.0은 tint 1.x를 요구합니다.
+# 1.x와 2.x는 호환되지 않는 버전이라 Cargo는 둘 다 빌드에 넣습니다.
+tint = "2"
+banner = "0.3"
+
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 테이블입니다.
+[workspace]

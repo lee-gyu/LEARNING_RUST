@@ -1,0 +1,9 @@
+[package]
+name = "frame"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# frame이 직접 쓰는 의존성입니다. three-sources 쪽에서 보면 "의존성의 의존성"(전이 의존성)입니다.
+unicode-width = "0.2"

@@ -1,0 +1,14 @@
+[package]
+name = "unified"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 이 패키지는 tint "1.0"을, banner 0.3.0은 tint "1.1"을 요구합니다.
+# 두 범위는 서로 호환되고 겹치므로 Cargo는 tint를 하나만 고릅니다.
+tint = "1.0"
+banner = "0.3"
+
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 테이블입니다.
+[workspace]

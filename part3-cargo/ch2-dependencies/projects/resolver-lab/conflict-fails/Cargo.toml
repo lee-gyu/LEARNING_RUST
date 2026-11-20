@@ -1,0 +1,15 @@
+[package]
+name = "conflict-fails"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# 일부러 실패하는 패키지입니다.
+# "=1.0.0"은 정확히 1.0.0만 허용하고, banner 0.3.0은 tint "1.1"(1.1.0 이상)을 요구합니다.
+# 둘 다 1.x라서 하나로 합쳐야 하는데 겹치는 버전이 없습니다.
+tint = "=1.0.0"
+banner = "0.3"
+
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 테이블입니다.
+[workspace]
