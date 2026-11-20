@@ -45,6 +45,8 @@
 - 예제 안의 `#[cfg(test)]` 코드는 `cargo clippy --examples`로 검사되지 않습니다. `cargo clippy -p <패키지> --examples -- --test -D warnings`를 쓰되 먼저 소스를 `touch`합니다. `cargo test --examples`는 예제의 `main`을 실행하지 않습니다.
 - 에러 코드와 메시지는 기억과 다른 경우가 많았습니다. `compile_fail/` 파일과 README의 인용은 반드시 `rustc --edition 2024`로 실행해 확인합니다. 에디션에 따라 결과가 다른 파일은 머리말에 에디션별 결과를 적고 이름 끝에 `_2015`·`_2021`을 붙입니다(Part 2의 방식).
 - README에 "앞 챕터에서 봤다"고 쓸 때는 그 챕터를 열어 실제로 있는지 확인합니다. 용어가 처음 나오는 곳에는 영어를 병기합니다. 이 두 가지가 Part 3 검증에서 가장 자주 지적됐습니다.
+- README에 출력이나 메시지를 옮긴 뒤에는 저장된 파일을 다시 확인합니다. `\ub3c4`처럼 역슬래시 u 이스케이프가 든 출력은 쓰는 과정에서 글자로 바뀐 적이 있으므로 `grep`으로 역슬래시가 남았는지 보고, 실제 출력 파일과 README 블록을 스크립트로 대조합니다(대조할 출력 목록에 바이너리·독립 프로젝트의 출력도 넣습니다).
+- 백틱이 든 메시지를 인라인으로 인용할 때는 `` `` 내용 `` ``처럼 백틱 두 개와 공백으로 감쌉니다(세 개로 열면 세 개로 닫아야 함). 사이트가 쓰는 파서로 렌더링해 코드 밖에 남은 백틱을 찾으면 잡힙니다. `web/node_modules/.pnpm/` 아래의 `micromark`와 `micromark-extension-gfm-table`로 README를 HTML로 바꾸고 `<pre>`·`<code>`를 지운 뒤 백틱이 남은 줄을 셉니다.
 - 연습 문제가 `Compiling` 줄 수처럼 빌드 상태에 따라 달라지는 것을 물으면 시작 상태(새 사본, `cargo clean`)를 문제에 적습니다. 앞 연습의 변경이 뒤 연습의 답을 바꾸는지도 확인합니다.
 
 ### 1.4 Cargo 관련 사실 (cargo 1.100.0에서 확인, Part 3의 남은 챕터용)
@@ -57,7 +59,7 @@
 - **타깃**: `default-run`이 없는 바이너리를 가리키면 매니페스트를 읽는 단계에서 실패해 `cargo run --bin`의 목록도 볼 수 없습니다. `autobins = false`는 `src/main.rs`도 찾지 않게 합니다. harness를 켠 테스트 파일에 `fn main`이 남아 있으면 경고 없이 `running 0 tests`가 됩니다.
 - **의존성**: 요구 사항에 맞는 `[patch]` 항목은 레지스트리에 더 높은 버전이 있어도 먼저 골라집니다(Cargo Book 3.3.1의 설명과 다름). 이미 다른 버전이 잠겨 있으면 `patch … was not used` 경고가 나고 `cargo update 이름`으로 풉니다. `cargo add --git`·`--path`는 `version`도 함께 적습니다. 플랫폼별 의존성은 다른 플랫폼에서도 `Cargo.lock`에 적히고 `cargo tree`에는 `--target all`을 줘야 보입니다. 같은 `links` 값을 가진 두 패키지는 해석 단계에서 거부됩니다.
 - **워크스페이스**: `cargo new`는 새 경로가 `members`(글롭 포함)에 걸리지 않으면 덧붙이고, `[workspace.package]`·`[workspace.lints]`가 있으면 상속하는 매니페스트를 만듭니다. 워크스페이스 안에 다른 워크스페이스를 두려면 바깥의 `exclude`와 안쪽의 `[workspace]` 표가 둘 다 필요합니다(이 저장소 안의 독립 워크스페이스가 그 경우). 한 워크스페이스에 같은 이름의 패키지를 둘 수 없습니다. 상속한 의존성에 멤버가 덧붙일 수 있는 키는 `features`·`default-features`·`optional`뿐입니다.
-- **기능과 cfg**(부록 A ch26에서 확인): 챕터 패키지에 `[features]`를 두면 기본·`--no-default-features`·`--all-features` 세 조합으로 빌드·clippy·실행을 확인합니다(조합을 바꿀 때 소스를 `touch`). `required-features`가 붙은 예제는 기능 없이 `cargo build --examples`에서 건너뛰고 `cargo run`은 종료 상태 101입니다. 사용자 정의 cfg 이름은 `[lints.rust] unexpected_cfgs`의 `check-cfg`로 알립니다. 2024 에디션에서도 `dep:`을 쓰지 않은 선택적 의존성은 같은 이름의 암묵적 기능을 만듭니다. 의존성의 기능이 켜졌는지는 `cargo tree -e features -i <크레이트>`로 봅니다.
+- **기능과 cfg**(부록 A ch26에서 확인): 챕터 패키지에 `[features]`를 두면 기본·`--no-default-features`·`--all-features` 세 조합으로 빌드·clippy·실행을 확인합니다(조합을 바꿀 때 소스를 `touch`). 독립 워크스페이스에서는 라이브러리 멤버마다 `-p <멤버>`로 조합을 검사합니다. 루트의 `--no-default-features`는 다른 멤버가 의존성 선언으로 요청한 기본 기능을 끄지 못합니다(기능 통합). 기능 뒤에 둔 함수만 쓰는 테스트 모듈은 그 기능이 꺼진 조합에서 `dead_code` 경고를 내므로 모듈째 같은 조건으로 가립니다. 기능 뒤에 있는 항목을 부르면 E0425에 ``found an item that was configured out`` / ``the item is gated behind the `x` feature`` note가 붙습니다. `dep:`으로 감춘 선택적 의존성 이름을 `--features`에 주면 대신 쓸 기능을 알려 주는 에러가 납니다. `required-features`가 붙은 예제는 기능 없이 `cargo build --examples`에서 건너뛰고 `cargo run`은 종료 상태 101입니다. 사용자 정의 cfg 이름은 `[lints.rust] unexpected_cfgs`의 `check-cfg`로 알립니다. 2024 에디션에서도 `dep:`을 쓰지 않은 선택적 의존성은 같은 이름의 암묵적 기능을 만듭니다. 의존성의 기능이 켜졌는지는 `cargo tree -e features -i <크레이트>`로 봅니다.
 - **프로필과 측정**(부록 A ch18·ch20): `panic = "abort"`인 프로그램의 종료 상태는 macOS에서 134입니다. 시간 측정 출력은 실행마다 달라지는 줄을 시간 줄로만 한정하고 "어느 쪽이 빠르다"를 단정하는 줄을 두지 않습니다.
 - **설정과 CI**(부록 A ch32): `CARGO_BUILD_WARNINGS=deny`는 rustc·Clippy·rustdoc·Cargo의 경고를 모두 실패로 만듭니다. `RUSTFLAGS` 값이 바뀌면 전부 다시 컴파일됩니다. YAML 문법은 시스템 Ruby의 `ruby -ryaml`로 확인할 수 있습니다.
 - **빌드 스크립트**(부록 A ch34·ch35): `cc` 1.11.2는 소스의 `rerun-if-changed`를 내지 않으므로 직접 출력합니다. C 컴파일러와 libclang(Homebrew LLVM)은 설치돼 있습니다.
@@ -76,17 +78,16 @@
 
 | 맡을 챕터 | 이어받을 내용 (넘긴 곳) |
 | --- | --- |
-| Part 3 `ch5-features` | `[features]` 문법 전반(부록 A ch26과 서로 링크). 의존성의 `features`·`default-features`·`optional`, `cargo tree -e features`, 기능 통합(Part 3 ch2). `required-features`(ch3). 워크스페이스에서의 기능 통합과, 상속한 의존성에 멤버가 `default-features = false`를 적는 것(ch4. 1.100.0에서는 경고 없이 적용됨) |
 | Part 3 `ch6-profiles-build-performance` | 프로필 자체(Part 0 ch1). 멤버의 `[profile]`이 무시되는 것(Part 0 ch9, Part 3 ch4는 경고만 보임). `target/` 안의 구조(Part 3 ch1). `panic` 프로필 설정(부록 A ch18), 측정(부록 A ch20) |
 | Part 3 `ch7-configuration-env` | Cargo home의 `config.toml`, Cargo가 설정하는 환경 변수(Part 3 ch1). 패키지 가까이의 `.cargo/config.toml`과 소스 교체 설정(ch2) |
-| Part 3 `ch8-build-scripts` | `[build-dependencies]`의 쓰임(Part 3 ch2). `build`·`links` 키(ch3). 빌드 스크립트가 만든 코드의 에디션 마이그레이션(Part 2 ch6). 부록 A ch34·ch35와 서로 링크 |
-| Part 3 `ch9-testing-ci` | `benches/`, CI에서 Cargo home 캐시(Part 3 ch1). `[[bench]]`와 벤치마크용 `harness = false`, MSRV를 실제 툴체인으로 확인하기(ch3). 워크스페이스의 CI(ch4). `cargo test 이름`이 문서 테스트를 건너뛰는 동작(Part 0 ch11). 부록 A ch30·ch32와 서로 링크 |
-| Part 3 `ch10-publishing-semver` | 레지스트리에 게시, `cargo install`(Part 3 ch1). SemVer 호환성 규칙 전체, git·path 의존성이 있으면 게시가 거절되는 것, 다른 레지스트리(ch2). 게시용 키와 `include`·`exclude`(ch3). 워크스페이스 패키지 게시(ch4). 부록 A ch21·ch30과 서로 링크 |
+| Part 3 `ch8-build-scripts` | `[build-dependencies]`의 쓰임(Part 3 ch2). 빌드 스크립트가 켜진 기능을 아는 `CARGO_FEATURE_<이름>`(ch5). `build`·`links` 키(ch3). 빌드 스크립트가 만든 코드의 에디션 마이그레이션(Part 2 ch6). 부록 A ch34·ch35와 서로 링크 |
+| Part 3 `ch9-testing-ci` | `benches/`, CI에서 Cargo home 캐시(Part 3 ch1). `[[bench]]`와 벤치마크용 `harness = false`, MSRV를 실제 툴체인으로 확인하기(ch3). 워크스페이스의 CI(ch4). 기능 조합을 돌리는 도구와 CI(ch5. 기본·없음·전부 세 조합과 `-p` 검사는 ch5 2.6절이 보였음). `cargo test 이름`이 문서 테스트를 건너뛰는 동작(Part 0 ch11). 부록 A ch30·ch32와 서로 링크 |
+| Part 3 `ch10-publishing-semver` | 레지스트리에 게시, `cargo install`(Part 3 ch1). SemVer 호환성 규칙 전체, git·path 의존성이 있으면 게시가 거절되는 것, 다른 레지스트리(ch2). 게시용 키와 `include`·`exclude`(ch3). 워크스페이스 패키지 게시(ch4). 기능·선택적 의존성을 더하거나 빼는 것과 기본 기능에서 빼는 것의 SemVer 규칙(ch5). 부록 A ch21·ch30과 서로 링크 |
 | Part 3 `ch11-commands-tools` | `cargo metadata`(Part 3 ch3·ch4의 예제가 문자열 검색으로만 읽음). 사용자 정의 하위 명령(부록 A ch31과 서로 링크) |
-| Part 4 전체 | rustdoc 기능, 숨김 줄과 코드 블록 속성(부록 A ch27·ch30과 서로 링크) |
+| Part 4 전체 | rustdoc 기능, 숨김 줄과 코드 블록 속성(부록 A ch27·ch30과 서로 링크). docs.rs가 문서를 만들 때 켤 기능(`[package.metadata.docs.rs]`)과 문서의 기능 표시(`doc_cfg`, nightly), 꺼진 기능 뒤 항목으로 가는 문서 링크가 깨지는 문제(Part 3 ch5) |
 | Part 5 `ch1-rustc-basics` | `rustc` 옵션(Part 3 ch1), `crate-type`의 종류(ch3) |
 | Part 5 `ch3-lints` | 린트 수준이 여러 곳에서 정해질 때의 우선순위(`--force-warn`, `-W`, `#[allow]`, `[lints]`)(Part 2 ch6, Part 3 ch3). 부록 A ch29와 서로 링크 |
-| Part 5 `ch4`·`ch5`·`ch6` | 크로스 컴파일(부록 A ch32·ch33), `--cfg`·`--check-cfg`(부록 A ch26), 커버리지(부록 A ch31·ch32) |
+| Part 5 `ch4`·`ch5`·`ch6` | 크로스 컴파일(부록 A ch32·ch33), `--cfg`·`--check-cfg`(부록 A ch26. Cargo가 기능을 이 옵션으로 넘기는 모습은 Part 3 ch5 2.2절), 커버리지(부록 A ch31·ch32) |
 | Part 6 `ch1-reading-diagnostics` | 에디션과 무관한 `cargo fix`(Part 2 ch6) |
 | Part 7 `ch2-implementation-errors` | `anyhow`의 `context`와 종료 코드(부록 A ch4). Part 1 ch8 2.4절이 이 챕터를 가리킴 |
 | Part 8 `ch1`·`ch5`·`ch7` | `no_std`(부록 A ch33), 타입 상태 빌더(부록 A ch7) |
@@ -345,3 +346,5 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (Part 3) source (의존성을 받아 오는 곳) / source replacement / resolver / platform-specific dependencies | 출처 / 소스 교체 / 리졸버 / 플랫폼별 의존성. `[patch]`로 끼워 넣는 고친 크레이트는 "고친 사본", 실험용 복사본은 "저장소 밖에 복사한 …" |
 | (Part 3) TOML table / array of tables / target table / auto-discovery / test harness | 표 / 표 배열 / 타깃 표 / 자동 탐색 / 테스트 러너(libtest harness). Part 3 ch3부터 매니페스트의 `[…]`는 "표"로 부름(앞 챕터의 "빈 `[workspace]` 테이블"과 같은 것) |
 | (Part 3) MSRV / lint priority | 최소 지원 Rust 버전(MSRV) / 우선순위(`priority`). 수준은 allow·warn·deny·forbid를 영어 그대로 |
+| (Part 3) feature / default feature / optional dependency / implicit feature / weak dependency feature (`?`) / feature unification / additive | 기능 / 기본 기능 / 선택적 의존성 / 암묵적 기능 / (`?` 표기는 풀어 씀: "이미 켜져 있을 때만") / 기능 통합 / 가산적(더하기만 하는) |
+| (Part 3) configuration (`cfg`) / configured out | 구성 / 조건 때문에 빠진 |

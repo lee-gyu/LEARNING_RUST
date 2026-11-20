@@ -1,0 +1,9 @@
+[package]
+name = "report-web"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# 기본 기능(markdown)은 그대로 두고 json과 ascii를 더 켭니다.
+textfmt = { workspace = true, features = ["json", "ascii"] }

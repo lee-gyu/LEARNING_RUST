@@ -1,0 +1,21 @@
+[package]
+name = "textfmt"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# 선택적 의존성: `json` 기능을 켤 때만 빌드에 들어옵니다.
+jsonesc = { workspace = true, optional = true }
+
+[features]
+# 아무것도 지정하지 않으면 켜지는 기능입니다.
+default = ["markdown"]
+markdown = []
+csv = []
+# `dep:`을 쓰면 선택적 의존성 이름과 같은 암묵적 기능(`jsonesc`)이 생기지 않습니다.
+json = ["dep:jsonesc"]
+# `?`: jsonesc가 이미 켜져 있을 때만 그 크레이트의 `unicode-escape`를 켭니다.
+ascii = ["jsonesc?/unicode-escape"]
+# 다른 기능을 묶은 기능입니다.
+full = ["markdown", "csv", "json"]

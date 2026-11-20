@@ -1,0 +1,9 @@
+[package]
+name = "report-cli"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# 기본 기능(markdown)은 끄고 csv만 켭니다.
+textfmt = { workspace = true, default-features = false, features = ["csv"] }

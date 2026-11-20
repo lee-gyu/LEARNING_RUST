@@ -24,5 +24,6 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch2-dependencies](ch2-dependencies/) | 버전 요구 사항 문법(기본·캐럿, 틸드, 와일드카드, 비교, 프리릴리스), crates.io·git·path 세 출처와 잠금 파일의 `source`, 의존성 표의 종류와 이름 바꾸기, `cargo add`·`remove`·`update`·`tree`, 의존성 해석 규칙과 해석 실패 읽기, `[patch]` — 세 출처를 쓰는 패키지(`three-sources`), 연습용 레지스트리(`resolver-lab`) |
 | [ch3-manifest-targets](ch3-manifest-targets/) | 매니페스트의 표 지도, `[package]`의 키와 모르는 키 경고·`[package.metadata]`, 타깃 표(`[lib]`·`[[bin]]`·`[[example]]`·`[[test]]`)와 `default-run`·`test`·`harness`·자동 탐색, `rust-version`의 효과, `[lints]`의 수준과 `priority`·Cargo 자신의 린트 — 타깃을 직접 구성한 패키지(`unit-tools`) |
 | [ch4-workspaces](ch4-workspaces/) | 워크스페이스가 함께 쓰는 것(`Cargo.lock`·`target/`·명령), 루트 패키지형과 가상 매니페스트, `members`·`exclude`·`default-members`와 `-p`·`--workspace`, 멤버 간 path 의존과 다시 컴파일되는 범위, `[workspace.package]`·`[workspace.dependencies]`·`[workspace.lints]` 상속, 루트에서만 읽는 설정 — 패키지 셋으로 나눈 프로그램(`bookshelf`) |
+| [ch5-features](ch5-features/) | `[features]`와 `default`, `#[cfg(feature)]`와 `cfg!`, `--features`·`--no-default-features`·`--all-features`와 의존성의 `features`·`default-features`, `required-features`, 선택적 의존성과 `dep:`·`?`, 기능 통합과 `cargo tree -e features`, 가산적인 기능 설계 — 기능을 서로 다르게 켜는 워크스페이스(`formats`) |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

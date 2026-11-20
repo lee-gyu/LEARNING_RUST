@@ -1073,6 +1073,10 @@ name = "p3-ch4-workspaces"
 version = "0.0.0"
 
 [[package]]
+name = "p3-ch5-features"
+version = "0.0.0"
+
+[[package]]
 name = "parking_lot"
 version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"

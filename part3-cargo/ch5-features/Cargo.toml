@@ -1,0 +1,20 @@
+[package]
+name = "p3-ch5-features"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+# 이 챕터 패키지의 기능입니다. 예제 01·02가 `cfg`로 확인합니다.
+[features]
+default = ["pretty"]
+# 점수를 상자 안에 그려 출력합니다.
+pretty = []
+# 평균과 최고점을 계산하는 함수를 더합니다.
+stats = []
+# 두 기능을 함께 켜는 묶음입니다.
+full = ["pretty", "stats"]
+
+# 예제 02는 `stats` 기능이 켜져 있을 때만 빌드합니다.
+[[example]]
+name = "02_required_features"
+required-features = ["stats"]

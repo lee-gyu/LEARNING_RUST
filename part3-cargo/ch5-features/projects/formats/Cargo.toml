@@ -1,0 +1,14 @@
+# 기능(feature)을 실습하는 워크스페이스입니다. 외부 크레이트 없이 path 의존성만 씁니다.
+[workspace]
+members = ["crates/*"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# 멤버는 이 의존성을 물려받으면서 각자 다른 기능을 켭니다.
+[workspace.dependencies]
+textfmt = { path = "crates/textfmt" }
+jsonesc = { path = "crates/jsonesc" }
