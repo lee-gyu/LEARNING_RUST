@@ -1200,7 +1200,7 @@ The Book은 이 프로젝트를 더 발전시킬 과제로 문서 보강, 테스
 <details>
 <summary>힌트</summary>
 
-의존성은 `cargo add 크레이트이름`으로 추가합니다(ch2에서 `rand`를 추가한 방법과 같습니다. 의존성 관리는 Part 3 `ch2-dependencies`에서 자세히 다룹니다). 크레이트 문서는 crates.io 페이지의 Documentation 링크나 `cargo doc --open`으로 볼 수 있습니다. 문서에서 `Drop`, `join`, `panic`이라는 단어를 찾아 보면 비교할 내용이 빨리 보입니다. 이 프로젝트의 테스트(`drop_waits_for_all_queued_jobs` 등)를 그 크레이트로 옮겨 실행해 보는 것도 좋은 방법입니다.
+의존성은 `cargo add 크레이트이름`으로 추가합니다(ch2에서 `rand`를 추가한 방법과 같습니다. 의존성 관리는 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서 자세히 다룹니다). 크레이트 문서는 crates.io 페이지의 Documentation 링크나 `cargo doc --open`으로 볼 수 있습니다. 문서에서 `Drop`, `join`, `panic`이라는 단어를 찾아 보면 비교할 내용이 빨리 보입니다. 이 프로젝트의 테스트(`drop_waits_for_all_queued_jobs` 등)를 그 크레이트로 옮겨 실행해 보는 것도 좋은 방법입니다.
 
 </details>
 

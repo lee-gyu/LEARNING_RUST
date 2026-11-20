@@ -235,7 +235,7 @@ $ cargo update
 
 **가상 매니페스트에는 직접 적어야 합니다.** 리졸버는 워크스페이스 전체에 하나이고 루트 패키지의 설정만 씁니다. `[package]`가 없는 가상 매니페스트는 에디션이 없으므로, 멤버가 모두 2024 에디션이어도 `resolver`를 적지 않으면 리졸버 1이 쓰입니다([ch1](../ch1-editions-overview/README.md) 2.7절, [ch3](../ch3-rust-2021/README.md) 2.3절). 위 패키지를 가상 워크스페이스의 멤버로 옮겨 확인하자 `` warning: virtual workspace defaulting to `resolver = "1"` despite one or more workspace members being on edition 2024 which implies `resolver = "3"` ``와 함께 0.3.7이 골라졌고, `[workspace]`에 `resolver = "3"`을 적자 0.3.2가 골라졌습니다. 이 저장소의 루트 `Cargo.toml`과 `projects/ecosystem_compare`가 `resolver = "3"`을 적은 이유입니다.
 
-**왜 에디션이 필요했나.** 코드가 컴파일되지 않게 되는 변경은 아니지만, 같은 `Cargo.toml`에서 고르는 의존성 버전이 바뀝니다. 지금까지 최신 버전을 받던 프로젝트가 갑자기 낮은 버전을 받게 되므로 기본값을 바꾸는 시점을 에디션에 맞췄습니다. 자동 마이그레이션은 없고, Edition Guide는 CI에서 최신 의존성으로도 검사하기를 권합니다. 의존성 해석의 자세한 규칙은 Part 3 `ch2-dependencies`에서 다룹니다.
+**왜 에디션이 필요했나.** 코드가 컴파일되지 않게 되는 변경은 아니지만, 같은 `Cargo.toml`에서 고르는 의존성 버전이 바뀝니다. 지금까지 최신 버전을 받던 프로젝트가 갑자기 낮은 버전을 받게 되므로 기본값을 바꾸는 시점을 에디션에 맞췄습니다. 자동 마이그레이션은 없고, Edition Guide는 CI에서 최신 의존성으로도 검사하기를 권합니다. 의존성 해석의 자세한 규칙은 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서 다룹니다.
 
 ### 2.7 Cargo 매니페스트 정리: 키 이름과 상속 `default-features`
 
@@ -252,7 +252,7 @@ $ cargo update
 
 2024의 에러는 `` error: failed to parse manifest at `…/Cargo.toml` `` 다음 `Caused by:` 아래에 나옵니다. 2021에서 두 이름을 함께 쓰면 `` `dev_dependencies` is redundant with `dev-dependencies`, preferring `dev-dependencies` in the `app` package ``처럼 하이픈 이름을 고릅니다. 고치는 방법은 이름을 하이픈 쪽으로 바꾸는 것뿐이고, 2021에서도 그대로 동작합니다.
 
-**상속 `default-features`.** 워크스페이스는 `[workspace.dependencies]`에 의존성을 한 번 적고, 멤버가 `helper = { workspace = true }`로 물려받게 할 수 있습니다(Part 3 `ch4-workspaces`). 멤버가 물려받으면서 `default-features = false`를 적었을 때의 동작이 에디션과 Cargo 버전에 따라 다릅니다. 기본 기능 `fancy`를 가진 `helper`를 워크스페이스에 `helper = { path = "helper" }`로 적고, 멤버 `app`이 `helper = { workspace = true, default-features = false }`로 물려받아 `cfg!(feature = "fancy")`를 출력해 확인했습니다.
+**상속 `default-features`.** 워크스페이스는 `[workspace.dependencies]`에 의존성을 한 번 적고, 멤버가 `helper = { workspace = true }`로 물려받게 할 수 있습니다([Part 3 ch4](../../part3-cargo/ch4-workspaces/README.md)). 멤버가 물려받으면서 `default-features = false`를 적었을 때의 동작이 에디션과 Cargo 버전에 따라 다릅니다. 기본 기능 `fancy`를 가진 `helper`를 워크스페이스에 `helper = { path = "helper" }`로 적고, 멤버 `app`이 `helper = { workspace = true, default-features = false }`로 물려받아 `cfg!(feature = "fancy")`를 출력해 확인했습니다.
 
 | `app`의 에디션 | cargo 1.100.0 | cargo 1.98.1 |
 | --- | --- | --- |
@@ -406,7 +406,7 @@ pub fn greeting(formal: bool) -> … {      pub fn greeting(formal: bool) -> …
 | 2024 에디션의 언어 변경(RPIT 캡처, 임시값 범위, `unsafe extern` 등) | [Part 2 ch4](../ch4-rust-2024-language/README.md) |
 | 2021의 프렐류드 추가, 기능 리졸버 2, 배열 `IntoIterator` | [Part 2 ch3](../ch3-rust-2021/README.md) |
 | `cargo fix --edition`으로 이 챕터의 변경을 자동으로 고치는 절차 | Part 2 `ch6-migration-practice` |
-| 의존성 해석, 매니페스트와 타깃, 워크스페이스 상속의 상세 | Part 3 `ch2-dependencies`, `ch3-manifest-targets`, `ch4-workspaces` |
+| 의존성 해석, 매니페스트와 타깃, 워크스페이스 상속의 상세 | [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md), [ch3](../../part3-cargo/ch3-manifest-targets/README.md), [ch4](../../part3-cargo/ch4-workspaces/README.md) |
 | 기능(feature)의 상세 | Part 3 `ch5-features` |
 | 문서 주석과 문서 테스트 작성법, rustdoc 상세 | Part 4 (`ch3-doc-tests` 등) |
 | unsafe와 비동기 시그널 안전성의 깊은 내용 | Part 10 |

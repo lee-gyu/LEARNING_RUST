@@ -201,7 +201,7 @@ int_text = { version = "1.0.19", package = "itoa" }
 
 왼쪽의 `int_text`가 코드에서 쓰는 이름이고(`int_text::Buffer`), `package`가 crates.io의 실제 이름입니다. 한 크레이트의 두 버전에 동시에 의존하거나 이름이 같은 두 출처의 크레이트를 함께 쓸 때 필요합니다.
 
-의존성 한 줄에는 이 밖에 `features`·`default-features`·`optional`(Part 3 `ch5-features`)과 `workspace = true`(`ch4-workspaces`)를 적을 수 있습니다.
+의존성 한 줄에는 이 밖에 `features`·`default-features`·`optional`(Part 3 `ch5-features`)과 `workspace = true`([ch4](../ch4-workspaces/README.md))를 적을 수 있습니다.
 
 ### 2.5 의존성을 다루는 명령
 

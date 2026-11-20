@@ -344,7 +344,7 @@ pub unsafe fn field(line: &[u8], range: Range<usize>) -> &str {
 | `undocumented_unsafe_blocks` | Clippy | allow (restriction) | 안전성 주석이 없는 `unsafe` 블록 |
 | `multiple_unsafe_ops_per_block` | Clippy | allow (restriction) | unsafe 연산이 둘 이상인 블록 |
 
-꺼진 린트는 파일 첫머리의 `#![warn(clippy::undocumented_unsafe_blocks)]`나 `Cargo.toml`의 `[lints.clippy]`에 `undocumented_unsafe_blocks = "warn"`으로 켭니다. 린트 수준을 고르는 기준은 [`ch29-listen-to-clippy`](../ch29-listen-to-clippy/README.md)에서, `[lints]` 테이블은 Part 3 `ch3-manifest-targets`에서 더 다룹니다.
+꺼진 린트는 파일 첫머리의 `#![warn(clippy::undocumented_unsafe_blocks)]`나 `Cargo.toml`의 `[lints.clippy]`에 `undocumented_unsafe_blocks = "warn"`으로 켭니다. 린트 수준을 고르는 기준은 [`ch29-listen-to-clippy`](../ch29-listen-to-clippy/README.md)에서, `[lints]` 테이블은 [Part 3 ch3](../../part3-cargo/ch3-manifest-targets/README.md)에서 더 다룹니다.
 
 **지침을 따르지 않아도 되는 경우.** 두 연산이 정확히 같은 전제 조건 하나에 기대고, 떼어 놓으면 오히려 읽기 어렵다면 한 블록에 두고 주석이 두 연산을 모두 설명하게 합니다. restriction 그룹의 린트는 모든 프로젝트에 켜라는 것이 아니라, `unsafe`가 있는 크레이트에서 골라 켜라는 것입니다.
 
@@ -679,7 +679,7 @@ error[E0451]: field `bases` of struct `DnaSeq` is private
 <details>
 <summary>힌트</summary>
 
-`#[allow]`와 `#[expect]` 세 곳이 모두 E0453이 되고, `unsafe` 블록과 `unsafe fn` 선언이 린트 에러로 남습니다(4.2절). `dna` 모듈은 비권장 판을 지워도 `as_str` 안에 `unsafe`가 남으므로 `forbid`와 함께 둘 수 없습니다. 실제 프로젝트라면 `DnaSeq`를 별도 라이브러리 크레이트로 떼어 그 크레이트만 `unsafe`를 쓰게 하고(`deny` + 모듈 허락), 그것을 쓰는 애플리케이션 크레이트의 `Cargo.toml`에 `[lints.rust] unsafe_code = "forbid"`를 겁니다. 그러면 검토할 `unsafe`가 어느 크레이트에 있는지가 의존성 목록에 드러납니다. 한 워크스페이스에 크레이트 여럿을 두는 방법은 Part 3 `ch4-workspaces`에서 다룹니다.
+`#[allow]`와 `#[expect]` 세 곳이 모두 E0453이 되고, `unsafe` 블록과 `unsafe fn` 선언이 린트 에러로 남습니다(4.2절). `dna` 모듈은 비권장 판을 지워도 `as_str` 안에 `unsafe`가 남으므로 `forbid`와 함께 둘 수 없습니다. 실제 프로젝트라면 `DnaSeq`를 별도 라이브러리 크레이트로 떼어 그 크레이트만 `unsafe`를 쓰게 하고(`deny` + 모듈 허락), 그것을 쓰는 애플리케이션 크레이트의 `Cargo.toml`에 `[lints.rust] unsafe_code = "forbid"`를 겁니다. 그러면 검토할 `unsafe`가 어느 크레이트에 있는지가 의존성 목록에 드러납니다. 한 워크스페이스에 크레이트 여럿을 두는 방법은 [Part 3 ch4](../../part3-cargo/ch4-workspaces/README.md)에서 다룹니다.
 
 </details>
 

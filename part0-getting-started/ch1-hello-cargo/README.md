@@ -285,7 +285,7 @@ cargo run -p p0-ch1-hello-cargo --example 01_hello_world
 | `--example 01_hello_world` | 그 패키지의 `examples/01_hello_world.rs`를 실행합니다. 확장자 `.rs`는 빼고 씁니다. |
 | `-q` (선택) | `--quiet`의 줄임입니다. `Compiling`, `Running` 같은 Cargo 메시지를 숨기고 프로그램 출력만 보여 줍니다. |
 
-이 명령이 저장소 어디에서나 통하는 이유는 저장소 루트의 `Cargo.toml`이 모든 챕터 패키지를 하나로 묶은 워크스페이스(workspace)이기 때문입니다(Part 3에서 다룹니다). 워크스페이스의 빌드 결과는 저장소 루트의 `target/` 하나에 모이고, 예제 실행 파일은 `target/debug/examples/` 아래에 생깁니다.
+이 명령이 저장소 어디에서나 통하는 이유는 저장소 루트의 `Cargo.toml`이 모든 챕터 패키지를 하나로 묶은 워크스페이스(workspace)이기 때문입니다([Part 3 ch4](../../part3-cargo/ch4-workspaces/README.md)에서 다룹니다). 워크스페이스의 빌드 결과는 저장소 루트의 `target/` 하나에 모이고, 예제 실행 파일은 `target/debug/examples/` 아래에 생깁니다.
 
 ```console
 $ cargo run -p p0-ch1-hello-cargo --example 01_hello_world

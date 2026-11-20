@@ -123,7 +123,7 @@ rand = "0.10.4"
 `cargo doc`은 프로젝트와 의존성의 API 문서를 로컬에서 HTML로 만들고, `--open`을 붙이면 브라우저로 엽니다. `rand`에 어떤 함수와 메서드가 있는지 인터넷 없이 찾아볼 수 있습니다.
 
 - 직접 만든 프로젝트에서는 `cargo doc --open`을 실행하고, 왼쪽 사이드바의 크레이트 목록에서 `rand`를 고릅니다.
-- 이 저장소에서는 `rand`가 dev-dependency이므로 예제 문서를 만들 때 함께 만들어집니다. `cargo doc -p p0-ch2-guessing-game --examples --open`을 실행하고 사이드바에서 `rand`를 고릅니다. 생성된 문서는 `target/doc/rand/index.html`에 있습니다. 참고로 이 저장소에서 `cargo doc -p rand`를 실행하면 cargo 1.98.1에서는 cargo 내부 오류(panic)로 끝났습니다.
+- 이 저장소에서는 `rand`가 dev-dependency이므로 예제 문서를 만들 때 함께 만들어집니다. `cargo doc -p p0-ch2-guessing-game --examples --open`을 실행하고 사이드바에서 `rand`를 고릅니다. 생성된 문서는 `target/doc/rand/index.html`에 있습니다. 참고로 이 저장소에서 `cargo doc -p rand`는 동작하지 않습니다. cargo 1.98.1에서는 cargo 내부 오류(panic)로 끝났고, 1.100.0에서는 저장소에 `rand`가 두 버전 들어 있어 ``specification `rand` is ambiguous`` 에러가 납니다(이름에 버전을 붙여 가리키는 방법은 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md) 2.5절).
 
 **직접 해 보기**
 
@@ -188,7 +188,7 @@ $ cargo update
     Updating rand v0.10.1 -> v0.10.4
 ```
 
-의존성을 고르고 고정하는 방법은 Part 3의 ch2-dependencies에서 자세히 다룹니다.
+의존성을 고르고 고정하는 방법은 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서 자세히 다룹니다.
 
 ### 2.4 난수 만들기: `rand::rng().random_range(1..=100)`
 

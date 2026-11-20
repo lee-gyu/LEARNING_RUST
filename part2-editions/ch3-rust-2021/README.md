@@ -385,7 +385,7 @@ warning: the meaning of the `pat` fragment specifier is changing in Rust 2021, w
 | 2024 에디션의 언어 변화(`gen` 키워드, `#"..."` 예약, `expr` 프래그먼트, 임시값 범위 등) | Part 2 `ch4-rust-2024-language` |
 | 2024 에디션의 프렐류드(`Future`/`IntoFuture`), `resolver = "3"`, `Box<[T]>`의 `IntoIterator` | Part 2 `ch5-rust-2024-ecosystem` |
 | `cargo fix --edition`의 절차와 자동 수정이 넣어 주는 코드 | Part 2 `ch6-migration-practice` |
-| 기능, 의존성 해석의 상세 | Part 3 `ch5-features`, `ch2-dependencies` |
+| 기능, 의존성 해석의 상세 | Part 3 `ch5-features`, [ch2](../../part3-cargo/ch2-dependencies/README.md) |
 | 매크로 프래그먼트 지정자 전체 | Part 9 `ch2-macros` |
 
 ## 3. 예제 안내

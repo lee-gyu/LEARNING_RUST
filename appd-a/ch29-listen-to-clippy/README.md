@@ -14,7 +14,7 @@ Clippy는 컴파일러가 통과시킨 코드에서 흔한 실수와 어색한 �
 - [ch18](../ch18-dont-panic/README.md) 2.6절: restriction 린트를 `[lints.clippy]`와 `clippy.toml`로 켠 [`projects/panic_free_lib`](../ch18-dont-panic/projects/panic_free_lib)
 - [ch22](../ch22-minimize-visibility/README.md) 2.6절(`unreachable_pub`), [ch23](../ch23-avoid-wildcard-imports/README.md) 2.2절(`wildcard_imports`), [ch26](../ch26-feature-creep/README.md) 2.2·2.5절(`cfg!`, `[lints.rust]`)
 
-린트 수준의 우선순위 규칙 전체(`--force-warn`, `-W`/`-A`의 순서, `--cap-lints`)와 rustc 린트 그룹은 Part 5 `ch3-lints`에서, 매니페스트의 `[lints]` 전반은 Part 3 `ch3-manifest-targets`에서, CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서 다룹니다. 문서 관련 린트의 내용은 [`ch27-document-public-interfaces`](../ch27-document-public-interfaces/README.md)가 다룹니다.
+린트 수준의 우선순위 규칙 전체(`--force-warn`, `-W`/`-A`의 순서, `--cap-lints`)와 rustc 린트 그룹은 Part 5 `ch3-lints`에서, 매니페스트의 `[lints]` 전반은 [Part 3 ch3](../../part3-cargo/ch3-manifest-targets/README.md)에서, CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서 다룹니다. 문서 관련 린트의 내용은 [`ch27-document-public-interfaces`](../ch27-document-public-interfaces/README.md)가 다룹니다.
 
 ## 1. 학습 목표
 

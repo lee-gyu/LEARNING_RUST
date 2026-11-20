@@ -176,7 +176,7 @@ text-stat/
 | `tests/이름.rs`, `tests/이름/main.rs` | 통합 테스트 | 파일 또는 디렉터리 이름 | 여럿 |
 | `benches/이름.rs`, `benches/이름/main.rs` | 벤치마크 | 파일 또는 디렉터리 이름 | 여럿 |
 
-이 저장소의 챕터 패키지가 `examples/01_….rs` 파일만으로 이뤄진 것도 이 표의 다섯째 줄 덕분입니다. `tests/`는 [Part 0 ch11](../../part0-getting-started/ch11-testing/README.md)에서 썼고, `benches/`는 Part 3 `ch9-testing-ci`에서 다룹니다. 관례와 다른 위치나 이름을 쓰려면 `Cargo.toml`에 타깃을 직접 적어야 하며, 이것은 `ch3-manifest-targets`의 주제입니다.
+이 저장소의 챕터 패키지가 `examples/01_….rs` 파일만으로 이뤄진 것도 이 표의 다섯째 줄 덕분입니다. `tests/`는 [Part 0 ch11](../../part0-getting-started/ch11-testing/README.md)에서 썼고, `benches/`는 Part 3 `ch9-testing-ci`에서 다룹니다. 관례와 다른 위치나 이름을 쓰려면 `Cargo.toml`에 타깃을 직접 적어야 하며, 이것은 [ch3](../ch3-manifest-targets/README.md)의 주제입니다.
 
 **여러 파일로 된 타깃.** 타깃 하나가 여러 파일로 이뤄지면 `이름/main.rs`와 모듈 파일을 한 디렉터리에 둡니다. `top-words/main.rs`는 `mod rank;`로 같은 디렉터리의 `rank.rs`를 자기 모듈로 선언합니다. `src/bin/` 바로 아래에 `rank.rs`를 두면 안 됩니다. 그 자리의 `.rs` 파일은 모두 바이너리로 취급되어 `rank`라는 실행 파일을 만들려다 `main` 함수가 없다는 에러가 납니다.
 
@@ -326,7 +326,7 @@ warning: unused dependency `unicode-width`
 
 **잠금 파일을 버전 관리에 넣을까.** Cargo Book의 답은 "잘 모르겠으면 넣는다"입니다. `cargo new`가 만드는 `.gitignore`에는 `/target`뿐이라 `Cargo.lock`은 기본으로 커밋 대상입니다. 잠금 파일이 저장소에 있으면 과거 커밋을 그때와 같은 의존성으로 빌드할 수 있고, CI가 내 변경 때문이 아니라 바깥에서 새 버전이 게시된 탓에 실패하는 일이 없습니다.
 
-한 가지 알아 둘 한계가 있습니다. 잠금 파일은 **그 패키지를 직접 빌드할 때만** 쓰입니다. 내 라이브러리를 의존성으로 쓰는 다른 패키지는 내 `Cargo.lock`을 보지 않고 내 `Cargo.toml`의 범위만 봅니다. 그래서 라이브러리는 잠금 파일을 커밋했더라도 `Cargo.toml`의 범위를 정확히 적어야 합니다. 범위를 적는 문법과 Cargo가 버전을 고르는 규칙은 다음 챕터 `ch2-dependencies`에서 다룹니다.
+한 가지 알아 둘 한계가 있습니다. 잠금 파일은 **그 패키지를 직접 빌드할 때만** 쓰입니다. 내 라이브러리를 의존성으로 쓰는 다른 패키지는 내 `Cargo.lock`을 보지 않고 내 `Cargo.toml`의 범위만 봅니다. 그래서 라이브러리는 잠금 파일을 커밋했더라도 `Cargo.toml`의 범위를 정확히 적어야 합니다. 범위를 적는 문법과 Cargo가 버전을 고르는 규칙은 다음 챕터 [ch2](../ch2-dependencies/README.md)에서 다룹니다.
 
 ### 2.5 이미 있는 패키지에서 작업하기
 
@@ -522,7 +522,7 @@ available binaries: longest-line, text-stat, top-words
 ```
 
 - **원인**: `cargo run`은 바이너리 하나를 실행하는 명령인데 후보가 셋입니다. `src/main.rs`가 있다고 해서 그것이 기본이 되지는 않습니다.
-- **해결**: `cargo run --bin text-stat`처럼 이름을 줍니다. 메시지가 말하는 `default-run` 키는 `ch3-manifest-targets`에서 다룹니다.
+- **해결**: `cargo run --bin text-stat`처럼 이름을 줍니다. 메시지가 말하는 `default-run` 키는 [ch3](../ch3-manifest-targets/README.md)에서 다룹니다.
 
 ### 4.2 패키지 이름의 `-`를 코드에 그대로 씀 — [`hyphen_in_crate_name.rs`](compile_fail/hyphen_in_crate_name.rs)
 

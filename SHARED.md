@@ -116,6 +116,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 - Part 0 ch19 README 참고 자료: The Little Book of Rust Macros의 주소를 `lukaswirth.dev/tlborm/`으로 고칩니다.
 - Part 1 ch1 README: "툴체인은 1.98.1, 온라인 문서는 1.100.0"을 전제로 든 `bool::toggle` 예와 로컬 문서 버전 표기를 현재 툴체인에 맞게 고칩니다.
 - 챕터 README 머리말의 "확인한 툴체인: rustc 1.98.1"(Part 0, Part 1 ch1~ch4)은 작성 당시 기준입니다. 1.100.0에서 출력과 에러 메시지까지 다시 확인한 챕터부터 바꿉니다.
+- Part 1 ch7과 ch11에 같은 이름의 예제 `08_once_lazy`가 있어 `cargo build --workspace --examples`에서 `output filename collision` 경고가 납니다(Cargo는 장래에 에러가 될 수 있다고 알림). 한쪽의 이름을 바꿉니다. 새 예제를 만들 때는 워크스페이스 전체에서 파일 이름이 겹치지 않는지 확인합니다.
 - 정할 것(선택 사항): Part 0 ch8의 `Vec` drop 순서 설명에 "보장되지 않음" 단서를 붙일지. Part 0 ch17 2.8절의 `Box<dyn Error>` 설명. Part 1 ch12 `03`의 64 MiB. 분량이 목표를 넘은 README(Part 0의 여러 챕터, Part 1 ch2·ch4, Part 2 ch4). Part 0~2 안에서 뒤 챕터를 이름으로만 가리키는 곳을 링크로 바꿀지. Part 1 ch8 2.4절·ch14 2.5절이 부록 A ch4·ch34도 가리키게 할지. 부록 A의 "책에 없는 지침"을 둘지.
 
 ### 2.5 crates.io의 시점에 기대는 것

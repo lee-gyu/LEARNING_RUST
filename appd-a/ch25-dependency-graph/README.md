@@ -14,7 +14,7 @@
 - [ch4](../ch4-idiomatic-errors/README.md)와 [ch7](../ch7-builders/README.md): 실습에 쓰는 `thiserror`, `anyhow`, `derive_builder`
 - [ch26](../ch26-feature-creep/README.md): 기능 통합과 `cargo tree -e features`
 
-Cargo가 의존성을 해석하는 규칙 전반과 path·git 의존성, `[patch]`는 Part 3 `ch2-dependencies`에서, 빌드 스크립트를 쓰는 법은 Part 3 `ch8-build-scripts`에서 다룹니다. 여기서는 판단에 필요한 만큼만 씁니다.
+Cargo가 의존성을 해석하는 규칙 전반과 path·git 의존성, `[patch]`는 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서, 빌드 스크립트를 쓰는 법은 Part 3 `ch8-build-scripts`에서 다룹니다. 여기서는 판단에 필요한 만큼만 씁니다.
 
 ## 1. 학습 목표
 

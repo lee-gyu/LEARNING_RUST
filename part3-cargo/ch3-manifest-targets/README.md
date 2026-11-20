@@ -59,7 +59,7 @@
 | 린트 | `[lints]` | 2.5절 |
 | 기능 | `[features]` | Part 3 `ch5-features` |
 | 빌드 설정 | `[profile.*]` | Part 3 `ch6-profiles-build-performance` |
-| 워크스페이스 | `[workspace]` | Part 3 `ch4-workspaces` |
+| 워크스페이스 | `[workspace]` | [ch4](../ch4-workspaces/README.md) |
 | 그 밖 | `[badges]`, `[hints]`, `[replace]` | 아래 설명 |
 
 `[badges]`는 레지스트리에 보여 줄 배지를 적는 표이고, `[hints]`는 컴파일 방법에 대한 힌트를 적는 표인데 Cargo Book에 따르면 안정화된 힌트가 아직 없습니다. `[replace]`는 `[patch]`로 대체된 옛 표입니다(ch2 2.7절).
@@ -75,7 +75,7 @@
 | 타깃 고르기 | `default-run`, `autolib`, `autobins`, `autoexamples`, `autotests`, `autobenches` | 2.3절 |
 | 게시할 때 쓰는 정보 | `description`, `license`, `license-file`, `repository`, `homepage`, `documentation`, `readme`, `keywords`, `categories`, `include`, `exclude`, `publish` | Part 3 `ch10-publishing-semver`. `authors`는 더는 권장하지 않는(deprecated) 키입니다. |
 | 빌드 스크립트 | `build`, `links` | Part 3 `ch8-build-scripts` |
-| 워크스페이스 | `workspace`, `resolver` | Part 3 `ch4-workspaces` |
+| 워크스페이스 | `workspace`, `resolver` | [ch4](../ch4-workspaces/README.md) |
 | 다른 도구 | `metadata` | 아래 설명 |
 
 `unit-tools`의 `[package]`입니다.
@@ -331,7 +331,7 @@ warning: this function could have a `#[must_use]` attribute
 | --- | --- | --- |
 | `unused_dependencies` | warn | 적어 놓고 쓰지 않는 의존성 |
 | `unknown_lints` | warn | `[lints.cargo]`에 적은 모르는 린트 이름 |
-| `missing_lints_inheritance` | warn | 워크스페이스에 `[workspace.lints]`가 있는데 패키지가 물려받지 않음(`ch4-workspaces`) |
+| `missing_lints_inheritance` | warn | 워크스페이스에 `[workspace.lints]`가 있는데 패키지가 물려받지 않음([ch4](../ch4-workspaces/README.md)) |
 | `non_kebab_case_bins` | allow | `kebab-case`가 아닌 바이너리 이름 |
 | `non_snake_case_packages` | allow | `snake_case`가 아닌 패키지 이름 |
 
@@ -341,7 +341,7 @@ warning: this function could have a `#[must_use]` attribute
 warning: binary `km_to_mi` should have a kebab-case name
 ```
 
-`[lints]`를 프로젝트의 규칙으로 운영하는 방법(어떤 그룹을 켜고, 예외를 어떻게 남기는가)은 [부록 A ch29](../../appd-a/ch29-listen-to-clippy/README.md)가 다룹니다. 워크스페이스의 여러 패키지가 같은 `[lints]`를 쓰게 하는 방법은 다음 챕터 `ch4-workspaces`에 있습니다.
+`[lints]`를 프로젝트의 규칙으로 운영하는 방법(어떤 그룹을 켜고, 예외를 어떻게 남기는가)은 [부록 A ch29](../../appd-a/ch29-listen-to-clippy/README.md)가 다룹니다. 워크스페이스의 여러 패키지가 같은 `[lints]`를 쓰게 하는 방법은 다음 챕터 [ch4](../ch4-workspaces/README.md)에 있습니다.
 
 ## 3. 예제 안내
 

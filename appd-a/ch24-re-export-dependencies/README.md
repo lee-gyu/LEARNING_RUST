@@ -14,7 +14,7 @@
 - [ch23](../ch23-avoid-wildcard-imports/README.md) 2.1절: 글롭으로 들어온 이름의 순위
 - [ch6](../ch6-newtype-pattern/README.md) 2.6절(위임 구현의 비용), [ch19](../ch19-avoid-reflection/README.md) 2.2절(`type_name`은 진단에만)
 
-[ch22](../ch22-minimize-visibility/README.md) 2.5절은 자기 크레이트 안의 항목을 `pub use`로 공개 경로에 올리는 데까지 다루고, 다른 크레이트를 재내보내는 일을 이 챕터로 미뤘습니다. Cargo를 다루는 본편(Part 3)은 아직 없으므로, 이 챕터에 필요한 Cargo 동작은 그때마다 한두 문장으로 풀고 자세한 것은 Part 3 `ch2-dependencies`로 미룹니다.
+[ch22](../ch22-minimize-visibility/README.md) 2.5절은 자기 크레이트 안의 항목을 `pub use`로 공개 경로에 올리는 데까지 다루고, 다른 크레이트를 재내보내는 일을 이 챕터로 미뤘습니다. 부록은 Cargo를 다루는 본편(Part 3)을 전제로 하지 않으므로, 이 챕터에 필요한 Cargo 동작은 그때마다 한두 문장으로 풀고 자세한 것은 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)로 넘깁니다.
 
 ## 1. 학습 목표
 
@@ -118,7 +118,7 @@ money처럼 생성자가 크레이트 수준 함수이거나 사용자가 트레
 **라이브러리를 고칠 수 없을 때.** receipt 1.0.0을 써야 하는 앱 작성자에게는 두 가지 방법이 있습니다.
 
 - **요구 사항을 라이브러리와 같은 호환 범위로 맞춥니다.** 앱도 `money = "0.3"`에 의존하면 Cargo가 receipt의 것과 한 버전으로 합칩니다. 가장 간단하지만, cafe처럼 0.4에만 있는 `usd`가 필요하면 쓸 수 없습니다.
-- **의존성 이름 바꾸기**(renaming dependencies)로 두 버전에 모두 의존합니다. [`cafe-renamed`](projects/two_versions/cafe-renamed/Cargo.toml)는 `Cargo.toml`에 다음 줄을 더하고, receipt와 주고받는 값은 `money03::won(3200)`으로 만듭니다. `package` 키는 "이 의존성의 실제 패키지 이름"을 적는 곳이고, 코드에서는 왼쪽의 이름(`money03`)으로 씁니다(Part 3 `ch2-dependencies`에서 다룸).
+- **의존성 이름 바꾸기**(renaming dependencies)로 두 버전에 모두 의존합니다. [`cafe-renamed`](projects/two_versions/cafe-renamed/Cargo.toml)는 `Cargo.toml`에 다음 줄을 더하고, receipt와 주고받는 값은 `money03::won(3200)`으로 만듭니다. `package` 키는 "이 의존성의 실제 패키지 이름"을 적는 곳이고, 코드에서는 왼쪽의 이름(`money03`)으로 씁니다([Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서 다룸).
 
 ```toml
 money = "0.4"
