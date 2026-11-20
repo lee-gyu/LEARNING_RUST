@@ -384,7 +384,7 @@ impl Wake for Task {
 | `Pin::new_unchecked`, `get_unchecked_mut`, 고정 투영 | 고정의 약속을 사람이 보증하며 안쪽 필드를 고정된 채로 꺼냄 | Part 10 |
 | `Send`/`Sync` 직접 구현 | `unsafe impl`로 스레드 안전성을 보증 | Part 10 `ch9-concurrency` |
 | `AsyncIterator`, `future::join!`, `LocalWaker` | 아직 불안정한 비동기 API | Part 11 |
-| `Any`와 다운캐스트 | 실행 중 타입 확인 | `ch14-ffi-any-misc` |
+| `Any`와 다운캐스트 | 실행 중 타입 확인 | [ch14](../ch14-ffi-any-misc/README.md) |
 | 동기화 도구 자체(`Mutex`, `Condvar`, 채널, 원자 타입) | 이 챕터는 쓰기만 함 | [ch11](../ch11-threads-sync/README.md) |
 
 ## 3. 예제 안내

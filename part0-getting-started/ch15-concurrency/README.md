@@ -4,7 +4,7 @@
 
 - 패키지: `p0-ch15-concurrency`
 - 기준 문서: [The Book 16장 Fearless Concurrency](https://doc.rust-lang.org/book/ch16-00-concurrency.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 - 챕터 번호: 이 저장소는 The Book 14장을 Part 3으로 옮겼기 때문에 Book 16장이 `ch15`입니다. 이 문서에서 "N장"은 The Book의 장을, `chN`은 이 저장소의 챕터를 가리킵니다.
 
 ## 1. 학습 목표
@@ -21,7 +21,7 @@
 
 ### 2.1 겁 없는 동시성
 
-동시성(concurrency)은 프로그램의 여러 부분이 서로 독립적으로 실행되는 것이고, 병렬성(parallelism)은 여러 부분이 실제로 같은 순간에 실행되는 것입니다. The Book 16장은 둘을 굳이 나누지 않고 "동시성"이라고 부르며, 이 챕터도 그렇게 씁니다. 둘의 차이는 비동기를 다루는 `ch16-async`에서 중요해집니다.
+동시성(concurrency)은 프로그램의 여러 부분이 서로 독립적으로 실행되는 것이고, 병렬성(parallelism)은 여러 부분이 실제로 같은 순간에 실행되는 것입니다. The Book 16장은 둘을 굳이 나누지 않고 "동시성"이라고 부르며, 이 챕터도 그렇게 씁니다. 둘의 차이는 비동기를 다루는 [ch16](../ch16-async/README.md)에서 중요해집니다.
 
 동시성 프로그램이 어려운 까닭은 **실행 순서를 보장할 수 없기** 때문입니다. 두 스레드 중 어느 쪽이 먼저 실행될지는 운영체제가 정하고, 그 결정은 실행할 때마다 바뀔 수 있습니다. 그래서 동시성 버그는 테스트에서는 멀쩡하다가 특정한 순서로 실행된 날에만 나타나고, 다시 재현하기도 어렵습니다.
 
@@ -138,7 +138,7 @@ help: consider cloning the value before moving it into the closure
 | 두 스레드가 각자 따로 써야 함 | `clone()`한 사본을 `move`로 옮김 | 02의 3번 구역 |
 | 여러 스레드가 같은 값을 함께 써야 함 | `Arc`로 감싸고 복제본을 하나씩 옮김 | 2.8절, 06 |
 
-`i32` 같은 `Copy` 타입은 `move`해도 복사본이 들어가므로 원래 변수를 계속 쓸 수 있습니다. 스레드가 반드시 어떤 스코프 안에서 끝나도록 보장하면 지역 변수를 빌려 쓰는 것도 가능한데, 이것이 스코프 스레드(`thread::scope`)이며 Part 1 `ch11-threads-sync`에서 다룹니다.
+`i32` 같은 `Copy` 타입은 `move`해도 복사본이 들어가므로 원래 변수를 계속 쓸 수 있습니다. 스레드가 반드시 어떤 스코프 안에서 끝나도록 보장하면 지역 변수를 빌려 쓰는 것도 가능한데, 이것이 스코프 스레드(`thread::scope`)이며 [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md)에서 다룹니다.
 
 ### 2.5 메시지 전달: 채널
 
@@ -319,7 +319,7 @@ println!("{}", *counter.lock().unwrap()); // 항상 10000
 
 `RefCell`이 `Send`이면서 `Sync`는 아니라는 점이 두 트레이트의 차이를 잘 보여 줍니다. `RefCell`을 통째로 다른 스레드에 **넘기는** 것은 괜찮습니다. 넘긴 뒤에는 그 스레드 하나만 쓰기 때문입니다(07의 2번 구역). 하지만 여러 스레드가 **함께** 쓰면, 두 스레드가 동시에 "아무도 안 빌렸다"고 확인한 뒤 각자 가변 참조를 얻을 수 있습니다. 바로 데이터 경쟁입니다. 반대로 `Mutex<T>`는 한 번에 한 스레드만 안의 값에 들여보내므로, `T`가 `Sync`가 아니어도 `Sync`입니다.
 
-`Send`와 `Sync`를 직접 구현하는 것은 `unsafe` 코드입니다. 컴파일러가 확인해 주던 안전성을 프로그래머가 대신 보증해야 하기 때문입니다. `unsafe`는 `ch19-advanced-features`에서, `Send`/`Sync`를 직접 구현하는 방법은 Part 10 `ch9-concurrency`에서 다룹니다.
+`Send`와 `Sync`를 직접 구현하는 것은 `unsafe` 코드입니다. 컴파일러가 확인해 주던 안전성을 프로그래머가 대신 보증해야 하기 때문입니다. `unsafe`는 [ch19](../ch19-advanced-features/README.md)에서, `Send`/`Sync`를 직접 구현하는 방법은 Part 10 `ch9-concurrency`에서 다룹니다.
 
 ### 2.10 컴파일러가 막아 주지 못하는 것
 
@@ -350,12 +350,12 @@ ch14에서 `Rc`의 참조 순환이 컴파일러가 막아 주지 못하는 메�
 
 | 주제 | 한 줄 소개 | 다루는 곳 |
 | --- | --- | --- |
-| 스코프 스레드 `thread::scope` | 스코프가 끝나기 전에 스레드가 반드시 끝나도록 보장해, 지역 변수를 `move` 없이 빌려 쓰게 함 | Part 1 `ch11-threads-sync` |
-| `RwLock<T>` | 읽기는 여러 스레드가 동시에, 쓰기는 한 스레드만 하게 하는 잠금 | Part 1 `ch11-threads-sync` |
-| `Condvar` | 어떤 조건이 만족될 때까지 스레드를 재워 두었다가 깨우는 장치 | Part 1 `ch11-threads-sync` |
-| 원자 타입(`AtomicUsize` 등) | 정수 카운터 같은 단순한 값을 `Mutex` 없이 여러 스레드에서 안전하게 고침 | Part 1 `ch11-threads-sync` |
-| 비동기(`async`/`await`) | 스레드 대신 태스크로 동시성을 얻는 방법과 스레드와의 비교 | `ch16-async` |
-| 스레드 풀 | 스레드를 미리 만들어 두고 일을 나눠 주는 구조 | `ch20-web-server-project` |
+| 스코프 스레드 `thread::scope` | 스코프가 끝나기 전에 스레드가 반드시 끝나도록 보장해, 지역 변수를 `move` 없이 빌려 쓰게 함 | [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md) |
+| `RwLock<T>` | 읽기는 여러 스레드가 동시에, 쓰기는 한 스레드만 하게 하는 잠금 | [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md) |
+| `Condvar` | 어떤 조건이 만족될 때까지 스레드를 재워 두었다가 깨우는 장치 | [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md) |
+| 원자 타입(`AtomicUsize` 등) | 정수 카운터 같은 단순한 값을 `Mutex` 없이 여러 스레드에서 안전하게 고침 | [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md) |
+| 비동기(`async`/`await`) | 스레드 대신 태스크로 동시성을 얻는 방법과 스레드와의 비교 | [ch16](../ch16-async/README.md) |
+| 스레드 풀 | 스레드를 미리 만들어 두고 일을 나눠 주는 구조 | [ch20](../ch20-web-server-project/README.md) |
 | `Send`/`Sync` 직접 구현, 메모리 순서 | `unsafe`로 동시성 타입 만들기 | Part 10 `ch9-concurrency` |
 
 ## 3. 예제 안내
@@ -475,7 +475,7 @@ cargo run -p p0-ch15-concurrency --example 03_channel_basics
     기다리는 동안 다른 일을 5번 했습니다
 ```
 
-- **3번 구역**: 보내는 스레드가 100ms를 잔 뒤에 보냈으므로, `recv`가 그동안 기다렸다는 것을 시간 측정으로 확인합니다. `Instant::now()`는 지금 시각을 기록하고, `elapsed()`는 그때부터 흐른 시간을 돌려줍니다(시간 측정은 Part 1 `ch10-env-process-time`에서 다룹니다).
+- **3번 구역**: 보내는 스레드가 100ms를 잔 뒤에 보냈으므로, `recv`가 그동안 기다렸다는 것을 시간 측정으로 확인합니다. `Instant::now()`는 지금 시각을 기록하고, `elapsed()`는 그때부터 흐른 시간을 돌려줍니다(시간 측정은 [Part 1 ch10](../../part1-standard-lib/ch10-env-process-time/README.md)에서 다룹니다).
 - **4번 구역**: 송신자가 사라져도 이미 채널에 들어 있던 메시지는 받을 수 있고, 다 꺼낸 다음에야 `Err(RecvError)`가 나옵니다.
 - **6번 구역**: `send`는 기다리지 않으므로 스레드 하나 안에서도 보내고 받을 수 있습니다. 덕분에 `try_recv`의 세 가지 결과를 순서가 정해진 출력으로 볼 수 있습니다.
 - **7번 구역**: "다른 일을 N번 했습니다"의 N은 실행마다 다를 수 있습니다. 이 환경에서 여러 번 실행했을 때는 4나 5였습니다.
@@ -695,16 +695,16 @@ error[E0277]: `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
    | |_________^ `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
    |
    = help: within `{closure@compile_fail/e0277_rc_is_not_send.rs:22:36: 22:43}`, the trait `Send` is not implemented for `Rc<std::sync::Mutex<i32>>`
-note: required because it's used within this closure
-  --> compile_fail/e0277_rc_is_not_send.rs:22:36
+note: required because `counter` is used within this closure
+  --> compile_fail/e0277_rc_is_not_send.rs:23:27
    |
-22 |         let handle = thread::spawn(move || {
-   |                                    ^^^^^^^
+23 |             let mut num = counter.lock().unwrap();
+   |                           ^^^^^^^
 note: required by a bound in `spawn`
-  --> /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/thread/functions.rs:125:0
+  --> /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/std/src/thread/functions.rs:125:0
 ```
 
-- **읽는 법**: 메시지가 길지만 첫 줄과 `= help:` 줄만 보면 됩니다. "`Rc<Mutex<i32>>`는 스레드 사이에 안전하게 보낼 수 없다", 이유는 "`Send` 트레이트가 구현되어 있지 않다"입니다. 아래의 두 `note:`는 "클로저가 이 `Rc`를 캡처했고(required because it's used within this closure), `spawn`이 클로저에 `Send`를 요구한다(required by a bound in `spawn`)"는 연결 고리를 보여 줍니다. 마지막 `-->`가 가리키는 `/rustc/...` 경로는 표준 라이브러리 소스의 위치로, 내 코드의 위치가 아닙니다.
+- **읽는 법**: 메시지가 길지만 첫 줄과 `= help:` 줄만 보면 됩니다. "`Rc<Mutex<i32>>`는 스레드 사이에 안전하게 보낼 수 없다", 이유는 "`Send` 트레이트가 구현되어 있지 않다"입니다. 아래의 두 `note:`는 "클로저가 이 `Rc`를 캡처했고(required because `counter` is used within this closure), `spawn`이 클로저에 `Send`를 요구한다(required by a bound in `spawn`)"는 연결 고리를 보여 줍니다. 마지막 `-->`가 가리키는 `/rustc/...` 경로는 표준 라이브러리 소스의 위치로, 내 코드의 위치가 아닙니다.
 - **막은 버그**: 여러 스레드가 동시에 `Rc`를 `clone`하거나 drop하면 참조 카운트 갱신이 서로 덮어써질 수 있습니다. 카운트가 실제보다 작아지면 다른 스레드가 쓰는 중에 값이 해제되고, 커지면 영영 해제되지 않습니다.
 - **해결**: `Rc`를 `Arc`로 바꿉니다. `use std::rc::Rc;`를 `use std::sync::Arc;`로, `Rc::new`와 `Rc::clone`을 `Arc::new`와 `Arc::clone`으로 바꾸면 됩니다. 사용법이 같기 때문입니다.
 

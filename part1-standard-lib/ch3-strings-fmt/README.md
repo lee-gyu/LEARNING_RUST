@@ -8,7 +8,7 @@
 
 - 패키지: `p1-ch3-strings-fmt`
 - 기준 문서: [`std::string`](https://doc.rust-lang.org/std/string/index.html), [`std::str`](https://doc.rust-lang.org/std/str/index.html)과 [원시 타입 `str`](https://doc.rust-lang.org/std/primitive.str.html), [`std::char`](https://doc.rust-lang.org/std/char/index.html), [`std::fmt`](https://doc.rust-lang.org/std/fmt/index.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -26,7 +26,7 @@
 
 ### 2.1 시그니처로 읽는 문자열 메서드
 
-`String`은 `Deref<Target = str>`를 구현하므로 `str`의 메서드를 모두 쓸 수 있습니다(API 문서의 "Methods from `Deref<Target = str>`", `ch1-std-overview`). 그래서 문자열 메서드는 대부분 `str`에 있고, `String`에는 내용을 바꾸는 메서드가 따로 있습니다. 메서드가 수십 개지만 시그니처의 모양은 몇 가지뿐입니다.
+`String`은 `Deref<Target = str>`를 구현하므로 `str`의 메서드를 모두 쓸 수 있습니다(API 문서의 "Methods from `Deref<Target = str>`", [ch1](../ch1-std-overview/README.md)). 그래서 문자열 메서드는 대부분 `str`에 있고, `String`에는 내용을 바꾸는 메서드가 따로 있습니다. 메서드가 수십 개지만 시그니처의 모양은 몇 가지뿐입니다.
 
 | 시그니처 모양 | 뜻 | 할당 | 예 |
 | --- | --- | --- | --- |
@@ -57,7 +57,7 @@
 | `FnMut(char) -> bool` 클로저 | 클로저가 `true`인 글자 | `line.find(\|c: char\| c.is_ascii_uppercase())` → `Some(11)` |
 | `char::is_whitespace` 같은 함수 | 함수가 `true`인 글자 | `line.find(char::is_whitespace)` → `Some(10)` |
 
-클로저는 매개변수 타입을 `c: char`로 적어야 합니다. 여러 타입이 `Pattern`을 구현하므로 `|c| ...`만으로는 컴파일러가 `c`의 타입을 정하지 못합니다(4.6절). `char`의 분류 메서드(`is_ascii_digit`, `is_alphanumeric` 등) 자체는 `ch1-std-overview`에서 다뤘습니다.
+클로저는 매개변수 타입을 `c: char`로 적어야 합니다. 여러 타입이 `Pattern`을 구현하므로 `|c| ...`만으로는 컴파일러가 `c`의 타입을 정하지 못합니다(4.6절). `char`의 분류 메서드(`is_ascii_digit`, `is_alphanumeric` 등) 자체는 [ch1](../ch1-std-overview/README.md)에서 다뤘습니다.
 
 ### 2.3 찾기와 나누기
 
@@ -148,7 +148,7 @@ Part 0 ch8에서 `&s[a..b]`가 글자 경계가 아니면 패닉하고, `get`은
 | 바이트 → 문자열 (검사) | `str::from_utf8(&bytes)` → `Result<&str, Utf8Error>` | `String::from_utf8(vec)` → `Result<String, FromUtf8Error>` |
 | 바이트 → 문자열 (대체) | `String::from_utf8_lossy(&bytes)` → `Cow<str>` | |
 
-`str`과 `String`은 언제나 올바른 UTF-8이라는 것을 타입이 보장합니다. 그래서 바이트를 문자열로 바꿀 때는 반드시 검사를 거치고, 실패하면 `Err`를 돌려줍니다. `Utf8Error::valid_up_to()`는 앞에서부터 몇 바이트까지가 올바른지 알려 줍니다. 잘못된 부분을 대체 문자(replacement character) `�`(U+FFFD)로 바꿔서라도 읽고 싶으면 `from_utf8_lossy`를 씁니다. 반환 타입 `Cow<str>`는 "빌린 `&str` 또는 소유한 `String`"을 담는 타입으로, 바꿀 것이 없으면 원본을 빌리기만 하고 바꿔야 할 때만 새 `String`을 만듭니다. `{}`로 출력하거나 `&str` 메서드를 그대로 쓸 수 있고, `to_string()`으로 `String`을 얻습니다(`Cow` 자체는 `ch6-core-traits`에서 다룹니다).
+`str`과 `String`은 언제나 올바른 UTF-8이라는 것을 타입이 보장합니다. 그래서 바이트를 문자열로 바꿀 때는 반드시 검사를 거치고, 실패하면 `Err`를 돌려줍니다. `Utf8Error::valid_up_to()`는 앞에서부터 몇 바이트까지가 올바른지 알려 줍니다. 잘못된 부분을 대체 문자(replacement character) `�`(U+FFFD)로 바꿔서라도 읽고 싶으면 `from_utf8_lossy`를 씁니다. 반환 타입 `Cow<str>`는 "빌린 `&str` 또는 소유한 `String`"을 담는 타입으로, 바꿀 것이 없으면 원본을 빌리기만 하고 바꿔야 할 때만 새 `String`을 만듭니다. `{}`로 출력하거나 `&str` 메서드를 그대로 쓸 수 있고, `to_string()`으로 `String`을 얻습니다(`Cow` 자체는 [ch6](../ch6-core-traits/README.md)에서 다룹니다).
 
 EUC-KR(CP949)로 저장된 한글 파일을 UTF-8로 읽으면 깨지는 이유도 여기에 있습니다. 표준 라이브러리는 UTF-8만 다루므로 다른 인코딩은 crates.io의 변환 크레이트로 바꿔야 합니다. 마찬가지로 유니코드 정규화(완성형·조합형 맞추기)와 자소 클러스터 단위 나누기(Part 0 ch8)도 표준 라이브러리에 없습니다.
 
@@ -238,7 +238,7 @@ let mut report = String::new();
 writeln!(report, "{item:<4}{price:>6}원").unwrap(); // String에 쓰기는 실패하지 않음
 ```
 
-`write!`는 `fmt::Result`를 돌려주는데, `String`에 쓰는 것은 실패하지 않으므로 `unwrap()`해도 됩니다. 파일이나 표준 출력에 쓰는 `io::Write`는 `ch9-io-fs-path`에서 다룹니다. 두 `Write`를 한 파일에서 함께 가져오면 이름이 겹치므로 `use std::fmt::Write as _;`처럼 이름 없이 가져옵니다.
+`write!`는 `fmt::Result`를 돌려주는데, `String`에 쓰는 것은 실패하지 않으므로 `unwrap()`해도 됩니다. 파일이나 표준 출력에 쓰는 `io::Write`는 [ch9](../ch9-io-fs-path/README.md)에서 다룹니다. 두 `Write`를 한 파일에서 함께 가져오면 이름이 겹치므로 `use std::fmt::Write as _;`처럼 이름 없이 가져옵니다.
 
 `fmt::Arguments`는 `Display`를 구현하므로 함수 매개변수로 받아 `{args}`로 출력할 수 있습니다. 로깅처럼 "서식은 지금 받고, 어디에 쓸지는 나중에 정하는" 코드에 씁니다. 다만 `fmt::Arguments`의 `Display`는 바깥의 너비를 무시합니다(`{:>12}`로 출력해도 정렬되지 않음). 이유는 바로 다음 절과 같습니다.
 
@@ -349,7 +349,7 @@ pub trait FromStr: Sized {
 
 `parse`는 공백을 걷어 내지 않으므로 사용자 입력은 `trim()`한 뒤에 파싱합니다. 표준 에러 타입(`ParseIntError` 등)은 `Display`를 구현하므로 `{e}`로 사람이 읽을 메시지를, `{e:?}`로 종류(`PosOverflow` 등)를 볼 수 있습니다.
 
-직접 만든 타입에 구현할 때는 에러 타입을 정하고 `from_str`을 작성합니다. 2.3~2.4절의 나누기·다듬기 메서드와 `ch2-option-result`의 `map_err`, `?`가 그대로 쓰입니다.
+직접 만든 타입에 구현할 때는 에러 타입을 정하고 `from_str`을 작성합니다. 2.3~2.4절의 나누기·다듬기 메서드와 [ch2](../ch2-option-result/README.md)의 `map_err`, `?`가 그대로 쓰입니다.
 
 ```rust
 impl FromStr for Version {
@@ -370,7 +370,7 @@ impl FromStr for Version {
 }
 ```
 
-`FromStr` 문서는 `Display` 출력이 기계가 다시 읽을 수 있는 모양이라면 `FromStr`도 같은 모양을 받아들이는 것이 좋다고 설명합니다. `Display`로 만든 문자열을 `parse`했을 때 원래 값이 나오면 **왕복(round-trip)** 된다고 합니다. 입력은 출력보다 너그러워도 됩니다. 예제의 `Version`은 `"v1.2.3"`도 받지만 출력은 `1.2.3`입니다. 에러 타입은 `derive(Debug)`한 열거형에 사용자에게 보여 줄 `Display`를 구현하면 충분합니다. `std::error::Error` 트레이트까지 구현하는 방법은 `ch8-errors-panic`에서 다룹니다.
+`FromStr` 문서는 `Display` 출력이 기계가 다시 읽을 수 있는 모양이라면 `FromStr`도 같은 모양을 받아들이는 것이 좋다고 설명합니다. `Display`로 만든 문자열을 `parse`했을 때 원래 값이 나오면 **왕복(round-trip)** 된다고 합니다. 입력은 출력보다 너그러워도 됩니다. 예제의 `Version`은 `"v1.2.3"`도 받지만 출력은 `1.2.3`입니다. 에러 타입은 `derive(Debug)`한 열거형에 사용자에게 보여 줄 `Display`를 구현하면 충분합니다. `std::error::Error` 트레이트까지 구현하는 방법은 [ch8](../ch8-errors-panic/README.md)에서 다룹니다.
 
 ## 3. 예제 안내
 
@@ -948,7 +948,7 @@ help: the trait `FromStr` is not implemented for `Color`
 <summary>힌트</summary>
 
 - `split_once(' ')`를 두 번 써서 날짜, 레벨, 나머지로 나눕니다. 나머지는 `strip_prefix('[')`로 대괄호를 떼고 `split_once("] ")`로 모듈과 메시지를 나눕니다.
-- `Option`을 돌려주는 단계는 `.ok_or(LogError::MissingModule)?`처럼 `Result`로 바꿔 `?`로 잇습니다(`ch2-option-result`).
+- `Option`을 돌려주는 단계는 `.ok_or(LogError::MissingModule)?`처럼 `Result`로 바꿔 `?`로 잇습니다([ch2](../ch2-option-result/README.md)).
 - `level_text.parse::<Level>()?`처럼 안쪽 타입의 `FromStr`을 그대로 쓰려면 두 에러 타입이 같아야 합니다. 같지 않다면 `.map_err(LogError::BadLevel)?`로 바꿉니다.
 - `FromStr`은 입력을 빌리는 타입을 만들 수 없으므로(2.12절) 필드는 `&str`이 아니라 `String`입니다.
 - 에러 배리언트의 필드를 `{:?}`로 출력하기만 하면 읽은 것으로 치지 않아 `dead_code` 경고가 납니다. 에러에 `Display`를 구현해 필드를 읽거나 `match`로 꺼내 쓰세요.
@@ -962,7 +962,7 @@ help: the trait `FromStr` is not implemented for `Color`
   - [원시 타입 `str`](https://doc.rust-lang.org/std/primitive.str.html): 찾기·나누기·다듬기·바꾸기 메서드 전체. 각 메서드의 시그니처에서 반환 타입을 보며 2.1절의 표와 맞춰 보세요.
   - [`std::str`](https://doc.rust-lang.org/std/str/index.html): `from_utf8`, `Utf8Error`, 그리고 `split` 같은 메서드가 돌려주는 반복자 타입(`Split`, `Lines` 등)이 있는 모듈입니다.
   - [`std::str::FromStr`](https://doc.rust-lang.org/std/str/trait.FromStr.html): "Input format and round-tripping" 절이 2.12절의 왕복 권고입니다. 예제는 `Point`를 `strip_prefix`, `split_once`, `map_err`로 파싱합니다.
-  - [`std::char`](https://doc.rust-lang.org/std/char/index.html): `char` 관련 함수와 타입. `char`의 메서드 자체는 `ch1-std-overview`에서 다뤘습니다.
+  - [`std::char`](https://doc.rust-lang.org/std/char/index.html): `char` 관련 함수와 타입. `char`의 메서드 자체는 [ch1](../ch1-std-overview/README.md)에서 다뤘습니다.
   - [`std::fmt`](https://doc.rust-lang.org/std/fmt/index.html): 서식 문법 전체(Syntax 절의 문법), 서식 트레이트 대응표, `format_args!` 설명. 2.8~2.9절의 원본입니다.
   - [`std::fmt::Formatter`](https://doc.rust-lang.org/std/fmt/struct.Formatter.html): `pad`, `width`, `precision`, `alternate`, `debug_struct` 등의 시그니처와 예제(2.10~2.11절).
 - Rust By Example
@@ -972,4 +972,4 @@ help: the trait `FromStr` is not implemented for `Color`
   - [To and from Strings](https://doc.rust-lang.org/rust-by-example/conversion/string.html): `Display`를 구현하면 `to_string`이 생긴다는 것과 `FromStr` 구현 예(`Circle`).
 - Rustlings
   - [`09_strings`](https://github.com/rust-lang/rustlings/tree/main/exercises/09_strings): `strings1.rs`~`strings4.rs`. 특히 `strings4.rs`는 식마다 `&str`인지 `String`인지 고르는 문제라 2.1절의 표로 풀 수 있습니다.
-  - [`23_conversions`](https://github.com/rust-lang/rustlings/tree/main/exercises/23_conversions): `conversions3.rs`가 `FromStr` 구현 연습입니다. 나머지(`as`, `From`, `TryFrom`, `AsRef`)는 `ch6-core-traits`의 주제입니다.
+  - [`23_conversions`](https://github.com/rust-lang/rustlings/tree/main/exercises/23_conversions): `conversions3.rs`가 `FromStr` 구현 연습입니다. 나머지(`as`, `From`, `TryFrom`, `AsRef`)는 [ch6](../ch6-core-traits/README.md)의 주제입니다.

@@ -4,7 +4,7 @@
 
 - 패키지: `p0-ch11-testing`
 - 기준 문서: [The Book 11장 Writing Automated Tests](https://doc.rust-lang.org/book/ch11-00-testing.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -71,7 +71,7 @@ mod tests {
 `cargo test`를 실행하면 Cargo는 코드를 **테스트 모드로 컴파일한 별도의 실행 파일**을 만들어 실행합니다. 이 실행 파일의 `main`은 우리가 쓴 `main`이 아니라 테스트 러너(test runner)입니다. 테스트 러너는 `#[test]`가 붙은 함수를 모두 찾아 실행하고 결과를 보고합니다.
 
 - 테스트 함수가 패닉 없이 끝나면 **통과(ok)**, 패닉하면 **실패(FAILED)** 입니다. 단언 매크로는 조건이 맞지 않을 때 패닉하는 매크로일 뿐입니다.
-- 테스트마다 **별도의 스레드**에서 실행됩니다. 그래서 한 테스트가 패닉해도 그 스레드만 끝나고 다른 테스트는 계속 실행됩니다. 실패 메시지의 `thread 'tests::...'`가 테스트 이름을 딴 그 스레드입니다. 스레드 자체는 `ch15-concurrency`에서 다룹니다.
+- 테스트마다 **별도의 스레드**에서 실행됩니다. 그래서 한 테스트가 패닉해도 그 스레드만 끝나고 다른 테스트는 계속 실행됩니다. 실패 메시지의 `thread 'tests::...'`가 테스트 이름을 딴 그 스레드입니다. 스레드 자체는 [ch15](../ch15-concurrency/README.md)에서 다룹니다.
 - 우리가 쓴 `main`은 실행되지 않습니다.
 
 **이 저장소의 예제에서 테스트 실행하기**: 이 챕터의 `examples/*.rs`는 `main`과 `#[cfg(test)] mod tests`를 함께 가집니다. `cargo run`은 `main`을, `cargo test --example`은 테스트를 실행합니다.
@@ -213,11 +213,11 @@ struct Rectangle {
 }
 ```
 
-둘 중 하나라도 빠지면 테스트가 **실행되기 전에, 컴파일 단계에서** 거부됩니다. 실패할 때 값을 보여 줄 수 없는 비교는 아예 허락하지 않는 것입니다. 4.1절과 4.2절에서 실제 에러를 봅니다. `derive`가 무엇을 만들어 주는지는 ch5에서 `Debug`로 처음 보았고, 트레이트 자체는 `ch10-generics-traits-lifetimes`에서 다룹니다.
+둘 중 하나라도 빠지면 테스트가 **실행되기 전에, 컴파일 단계에서** 거부됩니다. 실패할 때 값을 보여 줄 수 없는 비교는 아예 허락하지 않는 것입니다. 4.1절과 4.2절에서 실제 에러를 봅니다. `derive`가 무엇을 만들어 주는지는 ch5에서 `Debug`로 처음 보았고, 트레이트 자체는 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 다룹니다.
 
 ### 2.5 패닉을 검사하는 `#[should_panic]`
 
-잘못된 입력을 받으면 패닉하는 것이 **올바른 동작**인 코드도 있습니다. 다음 `Guess`는 1~100 사이의 값만 담도록 `new`에서 범위를 검사합니다(`ch9-error-handling`의 검증 타입과 같은 생각입니다).
+잘못된 입력을 받으면 패닉하는 것이 **올바른 동작**인 코드도 있습니다. 다음 `Guess`는 1~100 사이의 값만 담도록 `new`에서 범위를 검사합니다([ch9](../ch9-error-handling/README.md)의 검증 타입과 같은 생각입니다).
 
 ```rust
 impl Guess {
@@ -474,7 +474,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 - 실제 기능은 `src/lib.rs`(라이브러리)에 두고, 통합 테스트로 검사합니다.
 - `src/main.rs`(바이너리)는 라이브러리를 불러 실행을 시작할 만큼만 짧게 둡니다. `main.rs`에 남은 코드가 거의 없으므로, 라이브러리가 맞게 동작하면 바이너리도 맞게 동작한다고 볼 수 있습니다.
 
-`ch12-io-project-minigrep`에서 이 구성으로 명령줄 프로그램을 만들며 테스트를 먼저 작성하는 방식을 연습합니다.
+[ch12](../ch12-io-project-minigrep/README.md)에서 이 구성으로 명령줄 프로그램을 만들며 테스트를 먼저 작성하는 방식을 연습합니다.
 
 #### 문서 테스트 맛보기
 
@@ -905,7 +905,7 @@ all doctests ran in 0.38s; merged doctests compilation took 0.13s
 
 - `tests/common/mod.rs`의 구역은 없습니다. 하위 디렉터리 안의 파일이기 때문입니다.
 - 비공개 함수 `internal_adder`는 단위 테스트(`tests::internal`)에서만 검사합니다. 통합 테스트에서는 부를 수 없습니다(4.7절).
-- 마지막 `all doctests ran in …; merged doctests compilation took …` 줄은 에디션 2024의 rustdoc이 문서 테스트를 하나로 묶어 컴파일하기 때문에 붙습니다(Part 2 `ch5-rust-2024-ecosystem`). 시간은 실행마다 다릅니다.
+- 마지막 `all doctests ran in …; merged doctests compilation took …` 줄은 에디션 2024의 rustdoc이 문서 테스트를 하나로 묶어 컴파일하기 때문에 붙습니다([Part 2 ch5](../../part2-editions/ch5-rust-2024-ecosystem/README.md)). 시간은 실행마다 다릅니다.
 - 실행 파일 이름 끝의 해시(`adder-aa0091fdd9af81e8` 등)는 환경마다 다를 수 있습니다.
 
 **원하는 구역이나 테스트만 실행하기**

@@ -16,12 +16,14 @@
 - 임시 파일과 `rustc --out-dir` 산출물은 메인 세션이 `target/tmp/<패키지>`, reviewer가 `target/review/<패키지>`에 둡니다. `rustc`는 컴파일에 실패해도 `--out-dir` 디렉터리를 만듭니다.
 - 워크스페이스 멤버(챕터 패키지)의 `[profile]`과 `[patch]`는 무시됩니다. 프로필이 필요한 실습은 독립 프로젝트에서 합니다.
 - 챕터 README와 소스는 `web/scripts/sync-content.mjs`가 사이트 페이지로 바꿉니다. 상대 링크의 대상 파일이 없으면 `[sync-content] … 링크 대상이 없습니다` 경고가 납니다. 점으로 시작하는 파일(`.cargo/config.toml` 등)은 사이트에 실리지 않으므로 내용을 README에 인용합니다.
+- 예제 파일 이름은 워크스페이스 전체에서 겹치지 않게 짓습니다. 겹치면 `cargo build --workspace --examples`에서 `output filename collision` 경고가 납니다(`ls part*/ch*/examples/*.rs appd-*/ch*/examples/*.rs | xargs -n1 basename | sort | uniq -d`로 확인).
 - 다른 챕터는 `ch8` 형식으로 부릅니다. "N장"은 기준 문서의 장을 가리킬 때만 씁니다.
 - `ch8-collections`의 `examples/07_string_utf8.rs`와 그 README의 07 출력 블록에는 일부러 조합형(NFD) 한글 바이트가 들어 있습니다. 편집 도구가 완성형으로 바꿔 저장할 수 있으므로 이 두 파일은 `perl` 등으로 바이트를 보존하며 고칩니다.
 
 ### 1.2 환경
 
 - 설치된 툴체인은 1.98.1과 1.100.0뿐입니다(nightly와 Miri 없음). rustup은 설치되지 않은 툴체인 이름을 받으면 조회 명령이라도 내려받기를 시작합니다. 설치 여부는 `rustup toolchain list`로만 확인하고, `--toolchain`·`rustup run`·`cargo +<이름>`은 목록에 있는 것에만 씁니다. `rust-toolchain.toml`이 있는 프로젝트(부록 A ch32의 `projects/pollcount`)에서도 같은 일이 일어날 수 있습니다.
+- `mise` 명령은 실행하지 않습니다. 2026-11-20에 `mise ls rust`를 실행하자 mise가 예전 툴체인(1.98.1)을 제거했습니다(원인 미확인). rustup의 기본 툴체인이 1.98.1이라, 그 상태에서 `RUSTUP_TOOLCHAIN`을 지우고 `rustc`를 실행하면 rustup이 다시 내려받습니다. mise의 출력 예시(Part 0 ch1 README)는 다시 실행해 확인하지 않습니다.
 - 이 셸에는 `RUSTUP_TOOLCHAIN`과 `CARGO_HOME`이 이미 잡혀 있습니다. 작업 전에 `rustc --version`을 확인합니다. rustup 프록시가 자식 프로세스에 넣어 주는 값을 확인하려면 `env -u`로 변수를 지우고 실행합니다.
 - 툴체인·타깃 설치, `cargo install`, 패키지 관리자 사용은 사용자가 승인한 것만 합니다.
 - zsh 주의: `$var`를 단어로 나누지 않습니다(`${=var}`). `"$e:PASS"`는 수식자로 해석됩니다(`"${e}:PASS"`). `echo ===`는 실패합니다(`echo '==='`). 파이프 뒤의 `$?`는 마지막 명령의 종료 코드입니다(`${pipestatus[1]}`). `cmd 2>&1 >/dev/null | wc`는 표준 출력도 함께 셉니다.
@@ -112,12 +114,8 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 
 ### 2.4 고칠 문서
 
-- Part 0 ch19 README 2.14절: "`let x: ! = panic!();`은 E0658"이라는 설명이 1.100.0에서는 맞지 않습니다(never 타입 안정화). Part 2 ch4 2.10절이 1.100.0 기준을 보충했습니다.
-- Part 0 ch19 README 참고 자료: The Little Book of Rust Macros의 주소를 `lukaswirth.dev/tlborm/`으로 고칩니다.
-- Part 1 ch1 README: "툴체인은 1.98.1, 온라인 문서는 1.100.0"을 전제로 든 `bool::toggle` 예와 로컬 문서 버전 표기를 현재 툴체인에 맞게 고칩니다.
-- 챕터 README 머리말의 "확인한 툴체인: rustc 1.98.1"(Part 0, Part 1 ch1~ch4)은 작성 당시 기준입니다. 1.100.0에서 출력과 에러 메시지까지 다시 확인한 챕터부터 바꿉니다.
-- Part 1 ch7과 ch11에 같은 이름의 예제 `08_once_lazy`가 있어 `cargo build --workspace --examples`에서 `output filename collision` 경고가 납니다(Cargo는 장래에 에러가 될 수 있다고 알림). 한쪽의 이름을 바꿉니다. 새 예제를 만들 때는 워크스페이스 전체에서 파일 이름이 겹치지 않는지 확인합니다.
-- 정할 것(선택 사항): Part 0 ch8의 `Vec` drop 순서 설명에 "보장되지 않음" 단서를 붙일지. Part 0 ch17 2.8절의 `Box<dyn Error>` 설명. Part 1 ch12 `03`의 64 MiB. 분량이 목표를 넘은 README(Part 0의 여러 챕터, Part 1 ch2·ch4, Part 2 ch4). Part 0~2 안에서 뒤 챕터를 이름으로만 가리키는 곳을 링크로 바꿀지. Part 1 ch8 2.4절·ch14 2.5절이 부록 A ch4·ch34도 가리키게 할지. 부록 A의 "책에 없는 지침"을 둘지.
+- Part 0과 Part 1 ch1~ch4에서 **파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력**은 1.98.1에서 확인한 그대로입니다. 2026-11-20의 재확인은 예제 출력(두 툴체인에서 같음)과 `compile_fail/`의 메시지(문구가 바뀐 곳을 고침), 독립 프로젝트의 빌드·테스트만 다뤘습니다. 해당 챕터를 다시 손볼 때 1.100.0에서 재현해 확인합니다.
+- 정할 것(선택 사항): 분량이 목표를 넘은 README(Part 0의 여러 챕터, Part 1 ch2·ch4, Part 2 ch4)를 줄일지. Part 1 ch12 `03_split_read_write`가 주고받는 64 MiB를 줄일지. 부록 A의 "책에 없는 지침"을 둘지.
 
 ### 2.5 crates.io의 시점에 기대는 것
 

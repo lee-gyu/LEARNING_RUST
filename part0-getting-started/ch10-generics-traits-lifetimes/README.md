@@ -10,7 +10,7 @@
 
 - 패키지: `p0-ch10-generics-traits-lifetimes`
 - 기준 문서: [The Book 10장 Generic Types, Traits, and Lifetimes](https://doc.rust-lang.org/book/ch10-00-generics.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -253,7 +253,7 @@ error[E0117]: only traits defined in the current crate can be implemented for ty
 
 이 규칙을 **고아 규칙(orphan rule)** 이라고 부릅니다. 트레이트도 타입도 내 크레이트에 없는 구현은 "부모가 없는" 구현이라는 뜻입니다. 이 규칙이 없다면 서로 다른 두 크레이트가 각자 `impl Display for Vec<T>`를 작성할 수 있고, 두 크레이트를 함께 쓰는 프로그램은 어느 구현을 써야 할지 정할 수 없습니다. 고아 규칙은 "한 프로그램 안에서 (트레이트, 타입) 쌍마다 구현은 많아야 하나"라는 성질, 즉 **일관성(coherence)** 을 지키는 장치입니다. 덕분에 의존성을 하나 추가했다고 다른 크레이트의 구현이 내 코드와 충돌하는 일이 생기지 않습니다.
 
-남의 타입에 남의 트레이트를 꼭 구현해야 한다면, 마지막 `note:`처럼 그 타입을 감싼 내 타입을 만들어 거기에 구현합니다(뉴타입 패턴, `ch19-advanced-features`).
+남의 타입에 남의 트레이트를 꼭 구현해야 한다면, 마지막 `note:`처럼 그 타입을 감싼 내 타입을 만들어 거기에 구현합니다(뉴타입 패턴, [ch19](../ch19-advanced-features/README.md)).
 
 ### 2.8 `Display`, `Debug`, 그리고 `derive`
 
@@ -277,7 +277,7 @@ impl fmt::Display for Point {
 - `write!(f, ...)`는 `println!`과 같은 서식 문자열을 받아 `f`에 씁니다.
 - 반환 타입 `fmt::Result`는 쓰기가 성공했는지 알리는 `Result`입니다. `write!`가 돌려준 값을 그대로 돌려주면 됩니다.
 
-이제 `println!("{p}")`가 `(3, -2)`를 출력하고, `p.to_string()`과 `format!("{p}")`도 쓸 수 있습니다(`to_string`이 저절로 생기는 이유는 2.11절). 직접 구현한 `Display`에서 너비·정렬 같은 서식 지정을 지원하는 방법 등 자세한 내용은 Part 1 `ch3-strings-fmt`에서 다룹니다.
+이제 `println!("{p}")`가 `(3, -2)`를 출력하고, `p.to_string()`과 `format!("{p}")`도 쓸 수 있습니다(`to_string`이 저절로 생기는 이유는 2.11절). 직접 구현한 `Display`에서 너비·정렬 같은 서식 지정을 지원하는 방법 등 자세한 내용은 [Part 1 ch3](../../part1-standard-lib/ch3-strings-fmt/README.md)에서 다룹니다.
 
 `Display`는 derive할 수 없습니다. 사용자에게 보여 줄 모양은 타입마다 달라서 컴파일러가 정해 줄 수 없기 때문입니다.
 
@@ -348,9 +348,9 @@ fn make_reply(to: &str) -> impl Summary {
 }
 ```
 
-반환 타입에 `impl Summary`를 쓰면 "`Summary`를 구현한 어떤 타입 하나를 돌려준다"는 뜻입니다. 호출한 쪽은 그 타입이 `SocialPost`라는 것을 모르고 `Summary`의 메서드만 쓸 수 있습니다. `reply.username`은 E0609(``no field `username` on type `impl Summary` ``)입니다. 구체 타입을 숨겨 두면, 함수를 만든 쪽이 나중에 `Summary`를 구현한 다른 타입으로 바꿔도 호출하는 코드를 고칠 필요가 없습니다. 이 문법이 특히 쓸모 있는 곳은 클로저와 반복자처럼 타입 이름이 아주 길거나 아예 이름을 쓸 수 없는 경우이며, `ch13-closures-iterators`에서 보게 됩니다.
+반환 타입에 `impl Summary`를 쓰면 "`Summary`를 구현한 어떤 타입 하나를 돌려준다"는 뜻입니다. 호출한 쪽은 그 타입이 `SocialPost`라는 것을 모르고 `Summary`의 메서드만 쓸 수 있습니다. `reply.username`은 E0609(``no field `username` on type `impl Summary` ``)입니다. 구체 타입을 숨겨 두면, 함수를 만든 쪽이 나중에 `Summary`를 구현한 다른 타입으로 바꿔도 호출하는 코드를 고칠 필요가 없습니다. 이 문법이 특히 쓸모 있는 곳은 클로저와 반복자처럼 타입 이름이 아주 길거나 아예 이름을 쓸 수 없는 경우이며, [ch13](../ch13-closures-iterators/README.md)에서 보게 됩니다.
 
-다만 이름만 숨겼을 뿐, 컴파일러는 반환 타입을 **정확히 하나**로 정해야 합니다. 호출하는 쪽의 코드를 컴파일할 때 반환값의 크기와 어느 타입의 메서드를 부를지를 알아야 하기 때문입니다. `if`와 `else`에서 서로 다른 타입을 돌려주면 E0308로 거부됩니다(4.6절). 실행 중에 여러 타입 중 하나를 돌려주는 방법(트레이트 객체 `dyn Trait`)은 `ch17-trait-objects-oop`에서 배웁니다.
+다만 이름만 숨겼을 뿐, 컴파일러는 반환 타입을 **정확히 하나**로 정해야 합니다. 호출하는 쪽의 코드를 컴파일할 때 반환값의 크기와 어느 타입의 메서드를 부를지를 알아야 하기 때문입니다. `if`와 `else`에서 서로 다른 타입을 돌려주면 E0308로 거부됩니다(4.6절). 실행 중에 여러 타입 중 하나를 돌려주는 방법(트레이트 객체 `dyn Trait`)은 [ch17](../ch17-trait-objects-oop/README.md)에서 배웁니다.
 
 ### 2.11 바운드를 이용한 조건부 구현과 포괄 구현
 
@@ -402,7 +402,7 @@ impl<T: Display> Bracketed for T {
 
 "`Display`를 구현한 모든 타입 `T`"에 `Bracketed`를 구현했으므로 `42.bracketed()`, `"러스트".bracketed()`, 직접 `Display`를 구현한 `Score(95).bracketed()`가 모두 동작합니다. 앞으로 누군가 `Display`를 구현할 타입도 자동으로 포함됩니다.
 
-표준 라이브러리도 같은 방법을 씁니다. `ToString` 문서의 구현 목록(Implementors)에는 `impl<T> ToString for T where T: Display + ?Sized`가 있습니다(`?Sized`는 `str`처럼 크기가 정해지지 않은 타입도 포함한다는 뜻이며 `ch19-advanced-features`에서 다룹니다). 2.8절에서 `Display`만 구현했는데 `to_string()`이 생긴 이유가 이것입니다. 그래서 문서는 `ToString`을 직접 구현하지 말고 `Display`를 구현하라고 안내합니다.
+표준 라이브러리도 같은 방법을 씁니다. `ToString` 문서의 구현 목록(Implementors)에는 `impl<T> ToString for T where T: Display + ?Sized`가 있습니다(`?Sized`는 `str`처럼 크기가 정해지지 않은 타입도 포함한다는 뜻이며 [ch19](../ch19-advanced-features/README.md)에서 다룹니다). 2.8절에서 `Display`만 구현했는데 `to_string()`이 생긴 이유가 이것입니다. 그래서 문서는 `ToString`을 직접 구현하지 말고 `Display`를 구현하라고 안내합니다.
 
 ### 2.12 라이프타임은 댕글링 참조를 막기 위한 것입니다
 
@@ -1034,7 +1034,7 @@ help: you could change the return type to be a boxed trait object
 (이 아래에 `Box::new(...)`로 두 갈래를 감싸라는 `help:`가 더 나옵니다.)
 
 - **원인**: `impl Summary`는 "구체 타입 하나"를 숨긴 것이므로, 첫 갈래가 `NewsArticle`로 타입을 정한 뒤 다른 갈래가 `SocialPost`를 돌려줄 수 없습니다(2.10절). 두 타입이 모두 `Summary`를 구현했다는 사실은 상관이 없습니다.
-- **해결**: 한 가지 타입만 돌려주도록 설계를 바꿉니다. `help:`가 제안하는 `Box<dyn Summary>`는 실행 중에 여러 타입 중 하나를 고르는 트레이트 객체로, `Box`는 `ch14-smart-pointers`에서, `dyn Trait`은 `ch17-trait-objects-oop`에서 배웁니다.
+- **해결**: 한 가지 타입만 돌려주도록 설계를 바꿉니다. `help:`가 제안하는 `Box<dyn Summary>`는 실행 중에 여러 타입 중 하나를 고르는 트레이트 객체로, `Box`는 [ch14](../ch14-smart-pointers/README.md)에서, `dyn Trait`은 [ch17](../ch17-trait-objects-oop/README.md)에서 배웁니다.
 
 ## 5. 연습 문제
 
@@ -1132,13 +1132,13 @@ fn default_name() -> &str {
   - [10.2 Defining Shared Behavior with Traits](https://doc.rust-lang.org/book/ch10-02-traits.html)
   - [10.3 Validating References with Lifetimes](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html)
 - [Rust By Example](https://doc.rust-lang.org/rust-by-example/)
-  - [Generics](https://doc.rust-lang.org/rust-by-example/generics.html): 하위 절 [Functions](https://doc.rust-lang.org/rust-by-example/generics/gen_fn.html), [Implementation](https://doc.rust-lang.org/rust-by-example/generics/impl.html), [Bounds](https://doc.rust-lang.org/rust-by-example/generics/bounds.html), [Multiple bounds](https://doc.rust-lang.org/rust-by-example/generics/multi_bounds.html), [Where clauses](https://doc.rust-lang.org/rust-by-example/generics/where.html)가 이 챕터의 2.1~2.4절, 2.9절에 해당합니다. Bounds 절의 `HasArea` 예제는 연습 2와 비슷합니다. 뒤쪽의 New Type Idiom, Associated items, Phantom type parameters는 `ch19-advanced-features` 이후에 읽으면 됩니다.
-  - [Traits](https://doc.rust-lang.org/rust-by-example/trait.html): 트레이트 정의, 기본 메서드, `Self`를 돌려주는 연관 함수. 하위 절 [Derive](https://doc.rust-lang.org/rust-by-example/trait/derive.html)는 2.8절의 derive 목록을, [impl Trait](https://doc.rust-lang.org/rust-by-example/trait/impl_trait.html)는 2.9~2.10절을 다룹니다. impl Trait 절의 예제는 반복자와 클로저(`ch13-closures-iterators`)를 쓰므로 그 챕터 뒤에 다시 보면 좋습니다.
+  - [Generics](https://doc.rust-lang.org/rust-by-example/generics.html): 하위 절 [Functions](https://doc.rust-lang.org/rust-by-example/generics/gen_fn.html), [Implementation](https://doc.rust-lang.org/rust-by-example/generics/impl.html), [Bounds](https://doc.rust-lang.org/rust-by-example/generics/bounds.html), [Multiple bounds](https://doc.rust-lang.org/rust-by-example/generics/multi_bounds.html), [Where clauses](https://doc.rust-lang.org/rust-by-example/generics/where.html)가 이 챕터의 2.1~2.4절, 2.9절에 해당합니다. Bounds 절의 `HasArea` 예제는 연습 2와 비슷합니다. 뒤쪽의 New Type Idiom, Associated items, Phantom type parameters는 [ch19](../ch19-advanced-features/README.md) 이후에 읽으면 됩니다.
+  - [Traits](https://doc.rust-lang.org/rust-by-example/trait.html): 트레이트 정의, 기본 메서드, `Self`를 돌려주는 연관 함수. 하위 절 [Derive](https://doc.rust-lang.org/rust-by-example/trait/derive.html)는 2.8절의 derive 목록을, [impl Trait](https://doc.rust-lang.org/rust-by-example/trait/impl_trait.html)는 2.9~2.10절을 다룹니다. impl Trait 절의 예제는 반복자와 클로저([ch13](../ch13-closures-iterators/README.md))를 쓰므로 그 챕터 뒤에 다시 보면 좋습니다.
   - [Formatted print > Display](https://doc.rust-lang.org/rust-by-example/hello/print/print_display.html): `fmt::Display` 직접 구현과 `write!`. 끝의 활동 과제(`Complex` 출력)는 2.8절의 복습으로 좋습니다.
   - [Scoping rules > Lifetimes](https://doc.rust-lang.org/rust-by-example/scope/lifetime.html): 하위 절 [Explicit annotation](https://doc.rust-lang.org/rust-by-example/scope/lifetime/explicit.html), [Functions](https://doc.rust-lang.org/rust-by-example/scope/lifetime/fn.html), [Methods](https://doc.rust-lang.org/rust-by-example/scope/lifetime/methods.html), [Structs](https://doc.rust-lang.org/rust-by-example/scope/lifetime/struct.html), [Static](https://doc.rust-lang.org/rust-by-example/scope/lifetime/static_lifetime.html), [Elision](https://doc.rust-lang.org/rust-by-example/scope/lifetime/elision.html)이 2.12~2.17절에 해당합니다. Static 절에는 `T: 'static` 바운드와 `Box::leak`처럼 이 챕터에서 다루지 않은 내용도 있습니다.
 - Rustlings (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)
   - [`14_generics`](https://github.com/rust-lang/rustlings/tree/main/exercises/14_generics): `generics1.rs`는 `Vec<T>`의 `T`를 직접 적는 문제이고(`into()`는 타입 변환 트레이트로, 지금은 "숫자를 더 큰 정수 타입으로 바꾼다" 정도로 보면 됩니다), `generics2.rs`는 `u32`만 담던 `Wrapper` 구조체를 제네릭으로 바꾸는 문제입니다.
   - [`15_traits`](https://github.com/rust-lang/rustlings/tree/main/exercises/15_traits): `traits1.rs`·`traits2.rs`는 `String`과 `Vec<String>`에 내 트레이트를 구현하고(2.7절의 고아 규칙이 허용하는 경우), `traits3.rs`는 기본 구현, `traits4.rs`·`traits5.rs`는 `impl Trait`와 `+`로 매개변수 타입을 채우는 문제입니다.
   - [`16_lifetimes`](https://github.com/rust-lang/rustlings/tree/main/exercises/16_lifetimes): `lifetimes1.rs`는 `longest`의 시그니처(4.3절), `lifetimes2.rs`는 한 줄을 옮겨 E0597 고치기(4.4절), `lifetimes3.rs`는 참조 필드 구조체(2.14절)입니다.
-  - 대부분의 문제가 `#[cfg(test)]`와 `assert_eq!`로 된 테스트(`ch11-testing`)로 채점합니다. 테스트 코드는 고치지 말고 "이 값들이 같아야 한다"는 조건으로 읽으면 됩니다.
+  - 대부분의 문제가 `#[cfg(test)]`와 `assert_eq!`로 된 테스트([ch11](../ch11-testing/README.md))로 채점합니다. 테스트 코드는 고치지 말고 "이 값들이 같아야 한다"는 조건으로 읽으면 됩니다.
 - 에러 설명: `rustc --explain E0597`처럼 에러 코드를 넣어 실행하면 터미널에서 설명과 예제를 볼 수 있습니다.

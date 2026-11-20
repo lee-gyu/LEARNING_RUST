@@ -6,7 +6,7 @@ ch6에서 `match`, `if let`, `let...else`로 열거형을 다루면서 패턴을
 
 - 패키지: `p0-ch18-patterns`
 - 기준 문서: [The Book 19장 Patterns and Matching](https://doc.rust-lang.org/book/ch19-00-patterns.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -94,7 +94,7 @@ fn senior_discount(age_text: &str) -> &'static str {
 - 사슬의 고리 하나라도 실패하면(숫자가 아니거나 65 미만이면) `else`로 갑니다.
 - `if let Some(x) = a && let Some(y) = b && x < y`처럼 `let`을 여러 번 이을 수도 있습니다.
 - `&&`로만 이을 수 있습니다. `||`를 쓰면 `` `||` operators are not supported in let chain conditions `` 에러가 납니다.
-- Edition 2021 이하에서는 `let chains are only allowed in Rust 2024 or later` 에러가 납니다. 에디션별 차이는 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+- Edition 2021 이하에서는 `let chains are only allowed in Rust 2024 or later` 에러가 납니다. 에디션별 차이는 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md)에서 다룹니다.
 
 The Book 19.1절에는 "`if let Ok(age) = age && age > 30`처럼 두 조건을 합칠 수 없다"는 설명이 있지만, 이 저장소의 툴체인(Edition 2024)에서는 위처럼 합칠 수 있습니다.
 

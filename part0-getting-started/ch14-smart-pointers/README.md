@@ -6,7 +6,7 @@
 
 - 패키지: `p0-ch14-smart-pointers`
 - 기준 문서: [The Book 15장 Smart Pointers](https://doc.rust-lang.org/book/ch15-00-smart-pointers.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -75,7 +75,7 @@
 
 1. **컴파일 시점에 크기를 알 수 없는 타입**을, 정확한 크기가 필요한 자리에 써야 할 때. 재귀 타입이 대표적입니다(2.3절).
 2. **큰 데이터의 소유권을 복사 없이 넘기고 싶을 때.** 큰 배열을 그대로 이동하면 스택에서 배열 전체가 복사될 수 있지만, `Box`에 담아 두면 포인터 한 칸만 복사되고 데이터는 힙의 제자리에 있습니다. [`01_box_basics.rs`](examples/01_box_basics.rs)는 이동 전후의 힙 주소가 같다는 것을 `true`로 확인합니다.
-3. **구체적인 타입이 아니라 "어떤 트레이트를 구현했는가"만 중요할 때.** ch9에서 본 `Box<dyn Error>`가 이 경우입니다. `dyn Trait`(트레이트 객체)는 `ch17-trait-objects-oop`에서 배웁니다.
+3. **구체적인 타입이 아니라 "어떤 트레이트를 구현했는가"만 중요할 때.** ch9에서 본 `Box<dyn Error>`가 이 경우입니다. `dyn Trait`(트레이트 객체)는 [ch17](../ch17-trait-objects-oop/README.md)에서 배웁니다.
 
 정수 하나를 `Box`에 담는 것은 보통 의미가 없습니다. 값은 기본적으로 스택에 두는 편이 빠르고 간단하며, `Box`는 위 세 가지처럼 이유가 있을 때 씁니다.
 
@@ -132,7 +132,7 @@ let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 size(List) = size(Cons) = i32(4) + Box<List>(8) + 빈칸(4) = 16바이트
 ```
 
-빈칸 4바이트는 정렬(alignment) 때문에 생깁니다. 8바이트짜리 포인터는 8의 배수 위치에 놓여야 하므로 `i32` 뒤를 비워 둡니다. 태그 칸이 따로 없는 것은 `Box`가 절대 주소 0(null)을 갖지 않는다는 점을 이용해, 컴파일러가 "포인터 자리가 0이면 `Nil`"로 구분하기 때문입니다. 이런 메모리 배치의 세부는 Part 1 `ch7-smart-pointers-memory`에서 다시 다룹니다.
+빈칸 4바이트는 정렬(alignment) 때문에 생깁니다. 8바이트짜리 포인터는 8의 배수 위치에 놓여야 하므로 `i32` 뒤를 비워 둡니다. 태그 칸이 따로 없는 것은 `Box`가 절대 주소 0(null)을 갖지 않는다는 점을 이용해, 컴파일러가 "포인터 자리가 0이면 `Nil`"로 구분하기 때문입니다. 이런 메모리 배치의 세부는 [Part 1 ch7](../../part1-standard-lib/ch7-smart-pointers-memory/README.md)에서 다시 다룹니다.
 
 리스트가 길어져도 `List` 값 하나의 크기는 16바이트 그대로입니다. 아래 그림에서 맨 왼쪽 칸(변수 `list`)만 스택에 있고, 나머지 칸은 모두 힙에 있습니다.
 
@@ -180,7 +180,7 @@ impl<T> Deref for MyBox<T> {
 }
 ```
 
-- `type Target = T;`는 트레이트 안에서 쓸 타입 이름을 정하는 문법입니다. 연관 타입(associated type)이라고 부르며 `ch19-advanced-features`에서 자세히 다룹니다.
+- `type Target = T;`는 트레이트 안에서 쓸 타입 이름을 정하는 문법입니다. 연관 타입(associated type)이라고 부르며 [ch19](../ch19-advanced-features/README.md)에서 자세히 다룹니다.
 - 이제 `*y`라고 쓰면 컴파일러는 이것을 **`*(y.deref())`** 로 바꿉니다. `deref`가 안의 값의 참조 `&i32`를 돌려주고, 바깥의 평범한 `*`가 그 참조를 따라갑니다. 이 치환은 `*` 하나당 한 번만 일어나므로 끝없이 반복되지 않습니다.
 - `deref`가 값이 아니라 **참조**를 돌려주는 이유는 소유권입니다. 값을 돌려주면 안의 `T`가 `MyBox` 밖으로 이동해 버립니다. `*y`로 값을 들여다볼 때마다 `y`가 비어 버리면 안 됩니다.
 
@@ -269,7 +269,7 @@ drop(c);       // 여기서 [drop] some data가 출력됩니다.
 
 이 함수에는 마법이 없습니다. 표준 라이브러리 문서에 적힌 정의가 말 그대로 `pub fn drop<T>(_x: T) {}`입니다. 값을 인자로 받아 소유권을 가져온 뒤 아무것도 하지 않고 끝나면, 매개변수 `_x`가 스코프를 벗어나며 버려집니다. ch4의 "함수로 이동한 값은 그 함수가 끝날 때 drop된다"를 그대로 이용한 것입니다. 그리고 `c`는 이미 이동했으므로 스코프 끝에서 다시 drop되지 않습니다. **소유권이 "drop은 정확히 한 번"을 보장합니다.**
 
-일찍 버리는 것이 쓸모 있는 대표적인 경우는 빌린 것을 일찍 돌려줄 때입니다. 2.8절의 `RefCell`에서 대여를 일찍 끝낼 때, `ch15-concurrency`에서 잠금을 일찍 풀 때 씁니다.
+일찍 버리는 것이 쓸모 있는 대표적인 경우는 빌린 것을 일찍 돌려줄 때입니다. 2.8절의 `RefCell`에서 대여를 일찍 끝낼 때, [ch15](../ch15-concurrency/README.md)에서 잠금을 일찍 풀 때 씁니다.
 
 ### 2.7 `Rc<T>`: 소유자가 여럿인 값
 
@@ -309,7 +309,7 @@ let c = Cons(4, Rc::clone(&a));                              // 카운트 3
 `Rc<T>`에는 두 가지 제약이 있습니다.
 
 1. **안의 값을 읽기만 할 수 있습니다.** `Rc`는 `&T`만 내주고 `DerefMut`를 구현하지 않습니다. 여러 소유자가 저마다 값을 바꿀 수 있다면 "가변 참조는 하나뿐"이라는 대여 규칙이 깨지기 때문입니다. `Rc<String>`에 `push_str`을 부르면 E0596(``cannot borrow data in an `Rc` as mutable``)으로 거부됩니다(4.5절). 바꿔야 한다면 2.9절의 `Rc<RefCell<T>>`를 씁니다.
-2. **단일 스레드 전용입니다.** `Rc`는 카운트를 늘리고 줄이는 동작을 스레드 사이에서 안전하게 맞추지 않습니다. 대신 그만큼 빠릅니다. 다른 스레드로 넘기려 하면 컴파일러가 막습니다(``error[E0277]: `Rc<i32>` cannot be sent between threads safely``). 스레드 사이에서 공유할 때는 `ch15-concurrency`의 `Arc<T>`를 씁니다.
+2. **단일 스레드 전용입니다.** `Rc`는 카운트를 늘리고 줄이는 동작을 스레드 사이에서 안전하게 맞추지 않습니다. 대신 그만큼 빠릅니다. 다른 스레드로 넘기려 하면 컴파일러가 막습니다(``error[E0277]: `Rc<i32>` cannot be sent between threads safely``). 스레드 사이에서 공유할 때는 [ch15](../ch15-concurrency/README.md)의 `Arc<T>`를 씁니다.
 
 ### 2.8 `RefCell<T>`와 내부 가변성
 
@@ -322,7 +322,7 @@ ch4의 대여 규칙을 다시 떠올려 봅니다.
 
 왜 실행 시점 검사가 필요할까요? 컴파일러의 분석은 보수적입니다. 코드만 보고 안전하다고 **증명할 수 없으면** 실제로는 안전한 프로그램도 거부합니다. 잘못된 프로그램을 받아들이는 것보다 올바른 프로그램을 거부하는 쪽이 낫기 때문입니다. 대부분은 이 방식이 옳지만, 프로그래머는 규칙을 지킨다고 확신하는데 컴파일러가 확인할 수 없는 경우가 있습니다. 그때 `RefCell<T>`로 검사를 실행 시점으로 미룹니다.
 
-이렇게 **불변 참조만 가지고도 안의 데이터를 바꿀 수 있게 하는 설계**를 **내부 가변성(interior mutability)** 이라고 부릅니다. `RefCell<T>`는 내부적으로 `unsafe` 코드(`ch19-advanced-features`)를 쓰지만, 그것을 대여 규칙을 지키는 안전한 API로 감싸 두었으므로 쓰는 쪽은 안전한 Rust만 씁니다.
+이렇게 **불변 참조만 가지고도 안의 데이터를 바꿀 수 있게 하는 설계**를 **내부 가변성(interior mutability)** 이라고 부릅니다. `RefCell<T>`는 내부적으로 `unsafe` 코드([ch19](../ch19-advanced-features/README.md))를 쓰지만, 그것을 대여 규칙을 지키는 안전한 API로 감싸 두었으므로 쓰는 쪽은 안전한 Rust만 씁니다.
 
 ```rust
 use std::cell::RefCell;
@@ -406,7 +406,7 @@ let c = Cons(Rc::new(RefCell::new(4)), Rc::clone(&a));
 - `&self`밖에 없는데 안을 바꿔야 할 때: `RefCell<T>`
 - 여럿이 함께 가지면서 바꿔야 할 때: `Rc<RefCell<T>>`
 
-표준 라이브러리에는 내부 가변성을 주는 타입이 더 있습니다. 값을 통째로 넣고 빼는 `Cell<T>`, 한 번만 초기화하는 `OnceCell<T>`는 Part 1 `ch7-smart-pointers-memory`에서 다룹니다.
+표준 라이브러리에는 내부 가변성을 주는 타입이 더 있습니다. 값을 통째로 넣고 빼는 `Cell<T>`, 한 번만 초기화하는 `OnceCell<T>`는 [Part 1 ch7](../../part1-standard-lib/ch7-smart-pointers-memory/README.md)에서 다룹니다.
 
 ### 2.10 순환 참조와 메모리 누수
 
@@ -713,7 +713,7 @@ cargo run -p p0-ch14-smart-pointers --example 07_mock_messenger
     - 긴급 경고: 할당량의 90% 이상을 사용했습니다!
 ```
 
-같은 파일의 테스트 3개는 `cargo test`에 `--example`을 붙여 실행합니다(`ch11-testing`에서 본 방법입니다). 테스트는 병렬로 실행되므로 결과 줄의 순서는 실행마다 다를 수 있습니다.
+같은 파일의 테스트 3개는 `cargo test`에 `--example`을 붙여 실행합니다([ch11](../ch11-testing/README.md)에서 본 방법입니다). 테스트는 병렬로 실행되므로 결과 줄의 순서는 실행마다 다를 수 있습니다.
 
 ```sh
 cargo test -p p0-ch14-smart-pointers --example 07_mock_messenger
@@ -970,7 +970,7 @@ fn main() {
 - Rustlings: [`19_smart_pointers`](https://github.com/rust-lang/rustlings/tree/main/exercises/19_smart_pointers) (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)
   - `smart_pointers1.rs`: `Box`로 cons 리스트 만들기
   - `smart_pointers2.rs`: `Rc`로 태양을 여러 행성이 공유하기
-  - `smart_pointers3.rs`는 스레드와 `Arc`(`ch15-concurrency`), `smart_pointers4.rs`는 `Cow`(Part 1 `ch6-core-traits`)를 다루므로 해당 챕터를 마친 뒤에 풉니다.
+  - `smart_pointers3.rs`는 스레드와 `Arc`([ch15](../ch15-concurrency/README.md)), `smart_pointers4.rs`는 `Cow`([Part 1 ch6](../../part1-standard-lib/ch6-core-traits/README.md))를 다루므로 해당 챕터를 마친 뒤에 풉니다.
 - 표준 라이브러리 문서
   - [`std::rc`](https://doc.rust-lang.org/std/rc/index.html): `Rc`와 `Weak`, 순환을 `Weak`로 끊는 예
   - [`std::cell`](https://doc.rust-lang.org/std/cell/index.html): `Cell`, `RefCell`, `OnceCell`과 내부 가변성을 언제 쓰는지

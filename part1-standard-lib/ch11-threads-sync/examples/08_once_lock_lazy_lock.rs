@@ -1,7 +1,7 @@
 // 한 번만 초기화: OnceLock과 LazyLock은 OnceCell/LazyCell(Part 1 ch7)의 스레드 안전한 짝입니다.
 // static에 둘 수 있고, 여러 스레드가 동시에 처음 접근해도 초기화는 정확히 한 번만 일어납니다.
 //
-// 실행: cargo run -p p1-ch11-threads-sync --example 08_once_lazy
+// 실행: cargo run -p p1-ch11-threads-sync --example 08_once_lock_lazy_lock
 //
 // 스레드 안에서 출력하지 않고, 순서와 무관한 개수·비교만 출력하므로 실행할 때마다 같습니다.
 

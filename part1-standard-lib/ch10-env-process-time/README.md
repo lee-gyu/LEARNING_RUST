@@ -33,11 +33,11 @@
 | 받는 것 | 명령줄 인자 | `env::args`, `env::args_os` | 2.2절 |
 | 받는 것 | 환경 변수 | `env::var`, `env::var_os`, `env::vars_os` | 2.3~2.4절 |
 | 받는 것 | 현재 디렉터리 | `env::current_dir` | 2.5절 |
-| 받는 것 | 표준 입력 | `io::stdin` | `ch9-io-fs-path` |
-| 돌려주는 것 | 표준 출력, 표준 에러 | `io::stdout`, `io::stderr` | `ch9-io-fs-path` |
+| 받는 것 | 표준 입력 | `io::stdin` | [ch9](../ch9-io-fs-path/README.md) |
+| 돌려주는 것 | 표준 출력, 표준 에러 | `io::stdout`, `io::stderr` | [ch9](../ch9-io-fs-path/README.md) |
 | 돌려주는 것 | 종료 코드 | `main`의 반환값, `process::exit` | 2.6~2.7절 |
 
-이 표를 부모 쪽에서 보면 자식 프로세스(child process)를 실행하는 일이 됩니다. `std::process::Command`는 "자식에게 무엇을 건넬지"를 정하는 도구이고(2.8절), 자식이 돌려준 것은 `ExitStatus`와 파이프로 받습니다(2.9~2.10절). 표준 입출력 자체와 `Read`/`Write`는 `ch9-io-fs-path`에서 배웠습니다.
+이 표를 부모 쪽에서 보면 자식 프로세스(child process)를 실행하는 일이 됩니다. `std::process::Command`는 "자식에게 무엇을 건넬지"를 정하는 도구이고(2.8절), 자식이 돌려준 것은 `ExitStatus`와 파이프로 받습니다(2.9~2.10절). 표준 입출력 자체와 `Read`/`Write`는 [ch9](../ch9-io-fs-path/README.md)에서 배웠습니다.
 
 ### 2.2 명령줄 인자: `args`와 `args_os`
 
@@ -48,7 +48,7 @@
 | `env::args()` | `String` | 반복하는 도중에 **패닉** |
 | `env::args_os()` | `OsString` | 그대로 돌려줌 |
 
-`OsString`은 "운영체제가 쓰는 문자열"입니다. 유닉스에서 인자와 파일 이름은 아무 바이트의 나열일 수 있어서 UTF-8이라는 보장이 없습니다. 이 챕터에서는 `to_str()`(UTF-8이면 `Some(&str)`), `into_string()`(UTF-8이면 `Ok(String)`, 아니면 `Err(원래 값)`), `to_string_lossy()`(깨진 바이트를 `�`로 바꿈) 세 메서드만 쓰고, 타입 자체는 `ch14-ffi-any-misc`에서 다룹니다.
+`OsString`은 "운영체제가 쓰는 문자열"입니다. 유닉스에서 인자와 파일 이름은 아무 바이트의 나열일 수 있어서 UTF-8이라는 보장이 없습니다. 이 챕터에서는 `to_str()`(UTF-8이면 `Some(&str)`), `into_string()`(UTF-8이면 `Ok(String)`, 아니면 `Err(원래 값)`), `to_string_lossy()`(깨진 바이트를 `�`로 바꿈) 세 메서드만 쓰고, 타입 자체는 [ch14](../ch14-ffi-any-misc/README.md)에서 다룹니다.
 
 ```rust
 let raw_args: Vec<_> = env::args_os().collect();
@@ -115,7 +115,7 @@ Cargo가 빌드할 때 설정하는 환경 변수(`CARGO_PKG_VERSION` 등)와 �
 
 그렇다면 환경 변수를 바꾸고 싶을 때는 어떻게 할까요? 대부분은 **자식 프로세스에게 넘기기 위해서**입니다. 문서도 그럴 때는 `Command::env`를 쓰라고 안내합니다. 이 메서드는 자식의 환경만 정하고 지금 프로세스는 건드리지 않으므로 `unsafe`가 필요 없습니다(2.8절, 예제 03의 2번 구역). 설정 값을 함수에 넘기고 싶을 때는 환경 변수를 거치지 말고 인자로 넘깁니다. Part 0 ch12 연습 3의 힌트처럼, 값을 해석하는 함수를 따로 두면 테스트에서도 환경을 바꿀 필요가 없습니다.
 
-이 함수가 2021 에디션까지는 안전한 함수였다가 바뀐 경위는 Part 2 `ch5-rust-2024-ecosystem`에서 다룹니다.
+이 함수가 2021 에디션까지는 안전한 함수였다가 바뀐 경위는 [Part 2 ch5](../../part2-editions/ch5-rust-2024-ecosystem/README.md)에서 다룹니다.
 
 ### 2.5 현재 디렉터리, 실행 파일, 플랫폼 상수
 
@@ -202,7 +202,7 @@ pub fn exit(code: i32) -> !
 }
 ```
 
-같은 코드를 `process::exit(3)` 대신 `ExitCode::from(3)`을 돌려주며 끝내면 표준 출력에 두 줄이 나옵니다. `process::exit`로 끝내면 아무것도 나오지 않습니다. `BufWriter`는 drop될 때 버퍼를 비우는데(`ch9-io-fs-path`), 그 drop이 실행되지 않아 **써 둔 출력이 사라진 것**입니다. 파일에 쓰던 `BufWriter`였다면 파일 끝부분이 잘렸을 것입니다. 참고로 이 툴체인에서 확인한 바로는 `print!`처럼 표준 라이브러리 자체의 표준 출력 버퍼에 남은 내용은 `process::exit`에서도 출력됐습니다. 사라지는 것은 내가 만든 값의 drop에 맡긴 일입니다.
+같은 코드를 `process::exit(3)` 대신 `ExitCode::from(3)`을 돌려주며 끝내면 표준 출력에 두 줄이 나옵니다. `process::exit`로 끝내면 아무것도 나오지 않습니다. `BufWriter`는 drop될 때 버퍼를 비우는데([ch9](../ch9-io-fs-path/README.md)), 그 drop이 실행되지 않아 **써 둔 출력이 사라진 것**입니다. 파일에 쓰던 `BufWriter`였다면 파일 끝부분이 잘렸을 것입니다. 참고로 이 툴체인에서 확인한 바로는 `print!`처럼 표준 라이브러리 자체의 표준 출력 버퍼에 남은 내용은 `process::exit`에서도 출력됐습니다. 사라지는 것은 내가 만든 값의 drop에 맡긴 일입니다.
 
 그래서 문서는 `process::exit`를 "더 실행할 소멸자가 없는 곳"에서만 부르고, 되도록 `main`에서 `ExitCode`나 `Result`를 돌려주라고 권합니다. 패닉(종료 코드 101)과 달리 되감기도 없으므로 `catch_unwind`(Part 1 ch8)로도 막을 수 없습니다.
 
@@ -277,7 +277,7 @@ if !status.success() {
 | `Stdio::null()` | 입력은 빈 입력, 출력은 버림 |
 | `Stdio::from(child.stdout)` 등 | 다른 자식의 파이프 끝이나 파일(`File`)에 연결 |
 
-`piped()`로 설정하면 `spawn()`이 돌려준 `Child`의 공개 필드 `stdin: Option<ChildStdin>`, `stdout: Option<ChildStdout>`, `stderr: Option<ChildStderr>`에 부모 쪽 끝이 들어 있습니다. `ChildStdin`은 `Write`를, `ChildStdout`과 `ChildStderr`는 `Read`를 구현하므로 `ch9-io-fs-path`에서 배운 메서드를 그대로 씁니다. 꺼낼 때는 **`take()`** 를 씁니다. `child.stdout.unwrap()`은 필드를 `child` 밖으로 옮기는 부분 이동이라 그 뒤로 `child.wait()`를 부를 수 없습니다(4.5절). `take()`는 필드 자리에 `None`을 남깁니다(Part 1 ch2).
+`piped()`로 설정하면 `spawn()`이 돌려준 `Child`의 공개 필드 `stdin: Option<ChildStdin>`, `stdout: Option<ChildStdout>`, `stderr: Option<ChildStderr>`에 부모 쪽 끝이 들어 있습니다. `ChildStdin`은 `Write`를, `ChildStdout`과 `ChildStderr`는 `Read`를 구현하므로 [ch9](../ch9-io-fs-path/README.md)에서 배운 메서드를 그대로 씁니다. 꺼낼 때는 **`take()`** 를 씁니다. `child.stdout.unwrap()`은 필드를 `child` 밖으로 옮기는 부분 이동이라 그 뒤로 `child.wait()`를 부를 수 없습니다(4.5절). `take()`는 필드 자리에 `None`을 남깁니다(Part 1 ch2).
 
 [`04_pipes.rs`](examples/04_pipes.rs)의 1번 구역이 기본 모양입니다.
 
@@ -375,7 +375,7 @@ loop {
 }
 ```
 
-마감 시점을 한 번 정해 두면 몇 번을 돌든 "남은 시간"은 `deadline.saturating_duration_since(Instant::now())`로 언제든 계산할 수 있습니다. 채널의 `recv_timeout`처럼 제한 시간을 받는 함수에 이 남은 시간을 넘기는 방법은 `ch11-threads-sync`에서, 소켓의 제한 시간은 `ch12-net`에서 다룹니다.
+마감 시점을 한 번 정해 두면 몇 번을 돌든 "남은 시간"은 `deadline.saturating_duration_since(Instant::now())`로 언제든 계산할 수 있습니다. 채널의 `recv_timeout`처럼 제한 시간을 받는 함수에 이 남은 시간을 넘기는 방법은 [ch11](../ch11-threads-sync/README.md)에서, 소켓의 제한 시간은 [ch12](../ch12-net/README.md)에서 다룹니다.
 
 ### 2.13 `SystemTime`: 시스템 시계
 

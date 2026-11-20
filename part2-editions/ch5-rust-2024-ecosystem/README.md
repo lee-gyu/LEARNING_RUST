@@ -43,7 +43,7 @@ Edition Guide 5.2~5.5절의 항목입니다. "2021 코드에 생기는 일"은 2
 | 2.9 | 중첩 `include!` 경로 (5.4.2) | 문서 테스트 컴파일 에러 | 없음 | `ecosystem_compare` 문서 테스트 |
 | 2.10 | rustfmt 스타일 에디션 (5.5.1~5.5.4) | `cargo fmt`가 서식을 바꿈 | 없음 | 예제 04, `ecosystem_compare` |
 
-[ch3](../ch3-rust-2021/README.md), [ch4](../ch4-rust-2024-language/README.md)와 같이 각 절은 **2021에서는 → 2024에서는 → 왜 바꿨나 → 옮길 때** 순서로 설명합니다. `cargo fix --edition`이 이 변경들 가운데 무엇을 자동으로 고치는지는 Part 2 `ch6-migration-practice`에서 다룹니다. 미리 말해 두면, 리졸버·문서 테스트·`include!` 경로에는 자동 수정이 없고, `set_var`의 자동 수정은 `unsafe` 블록으로 감싸 주기만 합니다(2.5절).
+[ch3](../ch3-rust-2021/README.md), [ch4](../ch4-rust-2024-language/README.md)와 같이 각 절은 **2021에서는 → 2024에서는 → 왜 바꿨나 → 옮길 때** 순서로 설명합니다. `cargo fix --edition`이 이 변경들 가운데 무엇을 자동으로 고치는지는 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다. 미리 말해 두면, 리졸버·문서 테스트·`include!` 경로에는 자동 수정이 없고, `set_var`의 자동 수정은 `unsafe` 블록으로 감싸 주기만 합니다(2.5절).
 
 ### 2.2 네 도구는 에디션을 어디서 읽나
 
@@ -405,7 +405,7 @@ pub fn greeting(formal: bool) -> … {      pub fn greeting(formal: bool) -> …
 | --- | --- |
 | 2024 에디션의 언어 변경(RPIT 캡처, 임시값 범위, `unsafe extern` 등) | [Part 2 ch4](../ch4-rust-2024-language/README.md) |
 | 2021의 프렐류드 추가, 기능 리졸버 2, 배열 `IntoIterator` | [Part 2 ch3](../ch3-rust-2021/README.md) |
-| `cargo fix --edition`으로 이 챕터의 변경을 자동으로 고치는 절차 | Part 2 `ch6-migration-practice` |
+| `cargo fix --edition`으로 이 챕터의 변경을 자동으로 고치는 절차 | [Part 2 ch6](../ch6-migration-practice/README.md) |
 | 의존성 해석, 매니페스트와 타깃, 워크스페이스 상속의 상세 | [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md), [ch3](../../part3-cargo/ch3-manifest-targets/README.md), [ch4](../../part3-cargo/ch4-workspaces/README.md) |
 | 기능(feature)의 상세 | Part 3 `ch5-features` |
 | 문서 주석과 문서 테스트 작성법, rustdoc 상세 | Part 4 (`ch3-doc-tests` 등) |

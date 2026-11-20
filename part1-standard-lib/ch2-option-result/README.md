@@ -2,11 +2,11 @@
 
 `Option<T>`와 `Result<T, E>`는 Part 0에서 이미 여러 번 썼습니다. [Part 0 ch6](../../part0-getting-started/ch6-enums-pattern-matching/README.md)에서는 `match`, `if let`, `let...else`로 `Option`을 열었고, [Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md)에서는 `Result`와 `?`, `unwrap_or_else`로 에러를 다뤘습니다. 두 챕터 모두 "`map`, `and_then`, `ok_or` 같은 더 많은 메서드는 Part 1 `ch2-option-result`에서 다룬다"고 미뤄 두었고, ch9의 Rustlings 안내는 `map_err`도 이 챕터로 넘겼습니다. 이 챕터가 그 약속을 지킵니다.
 
-API 문서의 `Option` 페이지에는 메서드가 수십 개 있습니다. 알파벳순으로 외울 수는 없으므로, 이 챕터는 메서드를 **"무엇을 하고 싶은가"** 로 묶어 익힙니다. 안의 값 바꾸기, 실패할 수 있는 단계 잇기, 대안 고르기, 조건 묻기, 원본을 남긴 채 들여다보기, 제자리에서 꺼내고 채우기, `Option`과 `Result` 오가기, 반복자와 함께 쓰기입니다. 메서드마다 `ch1-std-overview`에서 배운 방법으로 시그니처를 읽고, Part 0에서 `match`로 길게 썼던 코드가 어떻게 줄어드는지 비교합니다.
+API 문서의 `Option` 페이지에는 메서드가 수십 개 있습니다. 알파벳순으로 외울 수는 없으므로, 이 챕터는 메서드를 **"무엇을 하고 싶은가"** 로 묶어 익힙니다. 안의 값 바꾸기, 실패할 수 있는 단계 잇기, 대안 고르기, 조건 묻기, 원본을 남긴 채 들여다보기, 제자리에서 꺼내고 채우기, `Option`과 `Result` 오가기, 반복자와 함께 쓰기입니다. 메서드마다 [ch1](../ch1-std-overview/README.md)에서 배운 방법으로 시그니처를 읽고, Part 0에서 `match`로 길게 썼던 코드가 어떻게 줄어드는지 비교합니다.
 
 - 패키지: `p1-ch2-option-result`
 - 기준 문서: [`std::option`](https://doc.rust-lang.org/std/option/index.html), [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), [`std::result`](https://doc.rust-lang.org/std/result/index.html), [`Result`](https://doc.rust-lang.org/std/result/enum.Result.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -85,7 +85,7 @@ let port: Result<u16, String> = input
 | `map_or_else(g, f)` | `fn map_or_else<U, D, F>(self, default: D, f: F) -> U` | `g()`의 결과. `Result`판은 `g(에러)` |
 | `map_or_default(f)` | `fn map_or_default<U, F>(self, f: F) -> U where U: Default` | `U`의 기본값 |
 
-두 가지를 주의합니다. 첫째, **기본값(또는 기본값 클로저)이 첫 번째 인자**이고 `Some`/`Ok`일 때의 클로저가 두 번째입니다. 둘째, `Result`의 `map_or_else`는 기본값 클로저에 에러 값을 넘기므로(`D: FnOnce(E) -> U`) 성공과 실패를 각각 다른 문장으로 바꿀 수 있습니다. `map_or_default`는 Rust 1.98.0에서 안정화된 새 메서드로, `map_or(0, f)`처럼 타입의 기본값을 쓰는 경우를 줄여 줍니다(`Default` 트레이트는 `ch6-core-traits`). 예제는 [`01_map_family.rs`](examples/01_map_family.rs)입니다.
+두 가지를 주의합니다. 첫째, **기본값(또는 기본값 클로저)이 첫 번째 인자**이고 `Some`/`Ok`일 때의 클로저가 두 번째입니다. 둘째, `Result`의 `map_or_else`는 기본값 클로저에 에러 값을 넘기므로(`D: FnOnce(E) -> U`) 성공과 실패를 각각 다른 문장으로 바꿀 수 있습니다. `map_or_default`는 Rust 1.98.0에서 안정화된 새 메서드로, `map_or(0, f)`처럼 타입의 기본값을 쓰는 경우를 줄여 줍니다(`Default` 트레이트는 [ch6](../ch6-core-traits/README.md)). 예제는 [`01_map_family.rs`](examples/01_map_family.rs)입니다.
 
 ### 2.3 실패할 수 있는 단계 잇기: `and_then`
 
@@ -136,7 +136,7 @@ fn parse_age(input: &str) -> Result<i32, AgeError> {
 }
 ```
 
-에러 열거형을 제대로 설계하는 방법(`Display`, `Error` 트레이트 구현 등)은 `ch8-errors-panic`에서 다룹니다. 이 챕터의 열거형은 `derive(Debug)`만 붙인 단순한 모양입니다. 예제는 [`02_and_then.rs`](examples/02_and_then.rs)입니다.
+에러 열거형을 제대로 설계하는 방법(`Display`, `Error` 트레이트 구현 등)은 [ch8](../ch8-errors-panic/README.md)에서 다룹니다. 이 챕터의 열거형은 `derive(Debug)`만 붙인 단순한 모양입니다. 예제는 [`02_and_then.rs`](examples/02_and_then.rs)입니다.
 
 ### 2.4 대안 고르기: `unwrap_or` 계열과 `or`, `or_else`
 
@@ -293,7 +293,7 @@ help: consider cloning the value if the performance cost is acceptable
 
 **`get_or_insert_with`** 는 "처음 필요할 때 한 번만 계산해 두기"에 씁니다. 예제 06의 `Report::summary`는 첫 요청에서만 요약을 계산하고, 두 번째부터는 저장해 둔 값을 돌려줍니다. 기본값으로 채우는 `get_or_insert_default`(1.83.0), 값을 직접 받는 `get_or_insert`도 있습니다.
 
-`Option`이 아닌 아무 타입에나 쓸 수 있는 `std::mem::take`와 `std::mem::replace`도 있으며 `ch7-smart-pointers-memory`에서 다룹니다. 예제는 [`06_in_place.rs`](examples/06_in_place.rs)입니다.
+`Option`이 아닌 아무 타입에나 쓸 수 있는 `std::mem::take`와 `std::mem::replace`도 있으며 [ch7](../ch7-smart-pointers-memory/README.md)에서 다룹니다. 예제는 [`06_in_place.rs`](examples/06_in_place.rs)입니다.
 
 ### 2.9 `Option`과 `Result` 오가기
 
@@ -378,7 +378,7 @@ fn required_port(text: &str) -> Result<u16, ConfigError> {
 }
 ```
 
-`?`는 에러 타입 사이에 `From` 트레이트로 정의된 변환이 있으면 에러를 저절로 바꿔 줍니다. Part 0 ch9에서 `Box<dyn Error>`를 돌려주는 함수가 `ParseIntError`에 그냥 `?`를 쓸 수 있었던 이유입니다. 직접 만든 `ConfigError`에는 그런 변환을 정의하지 않았으므로 `map_err`로 바꿨습니다. `From`은 `ch6-core-traits`에서, 에러 타입에 변환을 붙여 `map_err` 없이 `?`를 쓰게 하는 설계는 `ch8-errors-panic`에서 다룹니다.
+`?`는 에러 타입 사이에 `From` 트레이트로 정의된 변환이 있으면 에러를 저절로 바꿔 줍니다. Part 0 ch9에서 `Box<dyn Error>`를 돌려주는 함수가 `ParseIntError`에 그냥 `?`를 쓸 수 있었던 이유입니다. 직접 만든 `ConfigError`에는 그런 변환을 정의하지 않았으므로 `map_err`로 바꿨습니다. `From`은 [ch6](../ch6-core-traits/README.md)에서, 에러 타입에 변환을 붙여 `map_err` 없이 `?`를 쓰게 하는 설계는 [ch8](../ch8-errors-panic/README.md)에서 다룹니다.
 
 `?`를 어떤 타입에 쓸 수 있는지는 표준 라이브러리의 `Try` 트레이트가 정합니다. 이 트레이트는 아직 불안정(nightly 전용) 기능이라 안정판에서는 직접 구현할 수 없으므로, 우리가 `?`를 쓸 수 있는 것은 표준 라이브러리가 구현해 둔 `Option`, `Result` 등뿐입니다. Part 0 ch9의 에러 메시지에 나왔던 `FromResidual`도 이 기능의 일부입니다.
 
@@ -393,7 +393,7 @@ let numbers: Vec<i32> = (1..=3).chain(extra).collect(); // Some(4)면 [1, 2, 3, 
 
 다만 `for x in extra { ... }`처럼 `Option` 하나를 `for`로 돌면 `if let`으로 쓰라는 경고(`for_loops_over_fallibles`)가 납니다(4.6절).
 
-**실패를 건너뛰기**: `filter_map(|s| s.parse().ok())`는 클로저가 `Some(v)`를 돌려준 원소만 `v`로 남기고, 반복자의 `flatten()`은 `Option`(또는 `Result`) 원소에서 `None`(`Err`)을 건너뛰고 안의 값만 꺼냅니다. 실패한 원소를 조용히 버리는 방법이며, 이 어댑터들은 `ch5-iterators`에서 자세히 다룹니다.
+**실패를 건너뛰기**: `filter_map(|s| s.parse().ok())`는 클로저가 `Some(v)`를 돌려준 원소만 `v`로 남기고, 반복자의 `flatten()`은 `Option`(또는 `Result`) 원소에서 `None`(`Err`)을 건너뛰고 안의 값만 꺼냅니다. 실패한 원소를 조용히 버리는 방법이며, 이 어댑터들은 [ch5](../ch5-iterators/README.md)에서 자세히 다룹니다.
 
 **`Result<Vec<T>, E>`로 모으기**: Part 0 ch13에서 `collect`는 "무엇으로 모을지"를 타입 표기로 정한다고 했습니다. 원소가 `Result<T, E>`인 반복자는 세 가지로 모을 수 있습니다.
 
@@ -430,7 +430,7 @@ let numbers = line
     .collect::<Result<Vec<i32>, _>>()?;
 ```
 
-`collect`가 이렇게 여러 타입을 만들 수 있는 원리(`FromIterator` 트레이트)는 `ch5-iterators`에서 다룹니다. 예제는 [`08_iter_collect.rs`](examples/08_iter_collect.rs)입니다.
+`collect`가 이렇게 여러 타입을 만들 수 있는 원리(`FromIterator` 트레이트)는 [ch5](../ch5-iterators/README.md)에서 다룹니다. 예제는 [`08_iter_collect.rs`](examples/08_iter_collect.rs)입니다.
 
 ### 2.12 메서드 선택표
 
@@ -807,7 +807,7 @@ error[E0507]: cannot move out of `user.nickname` which is behind a shared refere
    |     |
    |     move occurs because `user.nickname` has type `Option<String>`, which does not implement the `Copy` trait
    |
-note: `Option::<T>::map` takes ownership of the receiver `self`, which moves `user.nickname`
+note: `std::option::Option::<T>::map` takes ownership of the receiver `self`, which moves `user.nickname`
 help: consider calling `.as_ref()` to borrow the value's contents
    |
 22 |     user.nickname.as_ref().map(|n| n.chars().count()).unwrap_or(0)
@@ -834,7 +834,7 @@ error[E0382]: borrow of moved value: `nickname`
 21 |     println!("원본: {nickname:?}");
    |                      ^^^^^^^^ value borrowed here after move
    |
-note: `Option::<T>::map` takes ownership of the receiver `self`, which moves `nickname`
+note: `std::option::Option::<T>::map` takes ownership of the receiver `self`, which moves `nickname`
 help: consider calling `.as_ref()` to borrow the value's contents
 ```
 
@@ -1070,7 +1070,7 @@ demote → 뺏긴 칭호: None
   - [Combinators: `and_then`](https://doc.rust-lang.org/rust-by-example/error/option_unwrap/and_then.html): `match` 판, `map` + `flatten` 판, `and_then` 판을 나란히 보여 줍니다(2.3절).
   - [Defaults: `or`, `or_else`, `get_or_insert`, `get_or_insert_with`](https://doc.rust-lang.org/rust-by-example/error/option_unwrap/defaults.html): `or`, `or_else`, `get_or_insert`, `get_or_insert_with`를 즉시 평가와 게으른 평가, 원본을 바꾸는지로 나눠 설명합니다(2.4, 2.5, 2.8절).
   - [`map` for `Result`](https://doc.rust-lang.org/rust-by-example/error/result/result_map.html): 두 문자열을 곱하는 함수를 `match` 판과 `and_then` + `map` 판으로 씁니다. 예제 07의 5번 구역과 같은 문제입니다.
-  - [Iterating over `Result`s](https://doc.rust-lang.org/rust-by-example/error/iter_result.html): 실패를 건너뛰기(`filter_map`), 실패를 따로 모으기(`map_err`), 전체를 실패로 만들기(`collect`), 성공과 실패를 나누기(`partition`). 마지막 방법은 `ch5-iterators`를 배운 뒤에 읽으면 좋습니다.
+  - [Iterating over `Result`s](https://doc.rust-lang.org/rust-by-example/error/iter_result.html): 실패를 건너뛰기(`filter_map`), 실패를 따로 모으기(`map_err`), 전체를 실패로 만들기(`collect`), 성공과 실패를 나누기(`partition`). 마지막 방법은 [ch5](../ch5-iterators/README.md)를 배운 뒤에 읽으면 좋습니다.
 - Rustlings (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)
   - [`12_options`](https://github.com/rust-lang/rustlings/tree/main/exercises/12_options): `options1.rs`~`options3.rs`. Part 0 ch6에서 이미 풀었다면, `match`로 쓴 답을 이 챕터의 메서드로 다시 써 보세요. `options3.rs`는 `match` 대상에 `&`를 붙이는 것 외에 `as_ref()`로도 풀 수 있습니다.
   - [`13_error_handling`](https://github.com/rust-lang/rustlings/tree/main/exercises/13_error_handling): `errors6.rs`가 Part 0 ch9에서 미뤄 둔 `map_err` 문제입니다. 빈칸을 `s.parse().map_err(ParsePosNonzeroError::ParseInt)?`처럼 채우면 2.10절의 `map_err(..)?` 모양이 됩니다.

@@ -4,7 +4,7 @@
 
 - 패키지: `p0-ch7-modules`
 - 기준 문서: [The Book 7장 Packages, Crates, and Modules](https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -337,7 +337,7 @@ tea();
 글롭은 편하지만, 코드만 보고는 `coffee`가 어디에서 왔는지 알 수 없고, 가져오는 모듈에 항목이 추가되면 내 코드의 이름과 겹칠 수도 있습니다. 그래서 일반 코드에서는 아껴 쓰고, 주로 다음 두 곳에서 씁니다.
 
 - 프렐류드(prelude) 패턴: 자주 쓰는 항목을 모아 둔 모듈을 한꺼번에 가져올 때입니다. ch2의 `use rand::prelude::*;`가 이 경우입니다.
-- 테스트 모듈에서 테스트할 대상을 모두 가져올 때입니다. `ch11-testing`에서 다룹니다.
+- 테스트 모듈에서 테스트할 대상을 모두 가져올 때입니다. [ch11](../ch11-testing/README.md)에서 다룹니다.
 
 ### 2.10 `pub use`로 재내보내기
 
@@ -433,7 +433,7 @@ use restaurant::back_of_house::{Appetizer, Breakfast};
 use restaurant::hosting;
 ```
 
-이때 바이너리는 **바깥 사용자와 같은 입장**입니다. 크레이트가 다르므로 라이브러리의 공개 API만 쓸 수 있습니다. 라이브러리를 만드는 사람이 스스로 첫 번째 사용자가 되므로 공개 API가 쓰기 편한지 자연스럽게 점검하게 되고, 라이브러리 쪽 코드는 다른 프로젝트에서도 그대로 가져다 쓸 수 있습니다. `ch12-io-project-minigrep`에서 이 구성으로 명령줄 프로그램을 만듭니다.
+이때 바이너리는 **바깥 사용자와 같은 입장**입니다. 크레이트가 다르므로 라이브러리의 공개 API만 쓸 수 있습니다. 라이브러리를 만드는 사람이 스스로 첫 번째 사용자가 되므로 공개 API가 쓰기 편한지 자연스럽게 점검하게 되고, 라이브러리 쪽 코드는 다른 프로젝트에서도 그대로 가져다 쓸 수 있습니다. [ch12](../ch12-io-project-minigrep/README.md)에서 이 구성으로 명령줄 프로그램을 만듭니다.
 
 두 크레이트의 이름이 모두 `restaurant`라서 헷갈리기 쉬운 점이 있습니다. **바이너리 안에서 `crate`는 바이너리 자신(`src/main.rs`)** 입니다. `main.rs`에서 `crate::eat_at_restaurant()`라고 쓰면 라이브러리가 아니라 바이너리의 루트에서 찾기 때문에 실패합니다.
 
@@ -923,12 +923,12 @@ error: could not compile `restaurant` (bin "restaurant") due to 1 previous error
   - [7.5 Separating Modules into Different Files](https://doc.rust-lang.org/book/ch07-05-separating-modules-into-different-files.html)
 - Rust By Example: [Modules](https://doc.rust-lang.org/rust-by-example/mod.html)와 [Crates](https://doc.rust-lang.org/rust-by-example/crates.html) 장
   - [Visibility](https://doc.rust-lang.org/rust-by-example/mod/visibility.html): 기본 비공개와 `pub`. 이 절에는 `pub(crate)`, `pub(super)`, `pub(in path)`처럼 공개 범위를 특정 크레이트나 모듈 안으로 제한하는 문법도 나옵니다. 예를 들어 `pub(crate)` 항목은 같은 크레이트 안에서는 어디서나 쓸 수 있지만 다른 크레이트에서는 쓸 수 없습니다. 그래서 `projects/restaurant`의 `fruit` 메서드를 `pub(crate)`로 바꾸면 라이브러리 안의 `serving.rs`는 그대로 빌드되지만, 바이너리 `main.rs`에서는 ``error[E0624]: method `fruit` is private``가 납니다.
-  - [Struct visibility](https://doc.rust-lang.org/rust-by-example/mod/struct_visibility.html): 공개·비공개 필드와 공개 생성자. 예제의 `OpenBox<T>`에 붙은 `<T>`는 제네릭(`ch10-generics-traits-lifetimes`)으로, "아무 타입이나 담을 수 있는 상자"라고 보고 읽으면 됩니다.
+  - [Struct visibility](https://doc.rust-lang.org/rust-by-example/mod/struct_visibility.html): 공개·비공개 필드와 공개 생성자. 예제의 `OpenBox<T>`에 붙은 `<T>`는 제네릭([ch10](../ch10-generics-traits-lifetimes/README.md))으로, "아무 타입이나 담을 수 있는 상자"라고 보고 읽으면 됩니다.
   - [The use declaration](https://doc.rust-lang.org/rust-by-example/mod/use.html): `use`, `as`, `pub use`. 블록 안의 `use`가 바깥 이름을 가리는(섀도잉) 예도 있습니다.
   - [super and self](https://doc.rust-lang.org/rust-by-example/mod/super.html): 이름이 같은 함수가 여러 모듈에 있을 때 `self::`, `super::`, `crate::`로 구분하는 예입니다.
   - [File hierarchy](https://doc.rust-lang.org/rust-by-example/mod/split.html): 모듈을 `my.rs`와 `my/` 디렉터리로 나누는 예입니다.
   - [Crates](https://doc.rust-lang.org/rust-by-example/crates.html), [Creating a Library](https://doc.rust-lang.org/rust-by-example/crates/lib.html), [Using a Library](https://doc.rust-lang.org/rust-by-example/crates/using_lib.html): Cargo 없이 `rustc --crate-type=lib`로 라이브러리 크레이트를 만들고 `--extern`으로 연결하는 과정입니다. 2.2절에서 본 `cargo build -v`의 출력과 비교해 보면 Cargo가 대신 해 주는 일을 알 수 있습니다.
 - Rustlings (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)
-  - [`10_modules`](https://github.com/rust-lang/rustlings/tree/main/exercises/10_modules): `modules1.rs`는 비공개 함수 호출 에러 고치기, `modules2.rs`는 `pub use ... as`로 재내보내며 이름 바꾸기, `modules3.rs`는 `std::time`의 항목 두 개를 (가능하면 중첩 경로로 한 줄에) 가져오기입니다. `modules3.rs`의 `Ok(n)`, `Err(_)`는 `ch9-error-handling`에서 배우는 `Result`의 배리언트인데, 지금은 "성공/실패 두 배리언트를 가진 열거형을 `match`한다"고 보고 읽으면 됩니다.
+  - [`10_modules`](https://github.com/rust-lang/rustlings/tree/main/exercises/10_modules): `modules1.rs`는 비공개 함수 호출 에러 고치기, `modules2.rs`는 `pub use ... as`로 재내보내며 이름 바꾸기, `modules3.rs`는 `std::time`의 항목 두 개를 (가능하면 중첩 경로로 한 줄에) 가져오기입니다. `modules3.rs`의 `Ok(n)`, `Err(_)`는 [ch9](../ch9-error-handling/README.md)에서 배우는 `Result`의 배리언트인데, 지금은 "성공/실패 두 배리언트를 가진 열거형을 `match`한다"고 보고 읽으면 됩니다.
 - API 문서: [`module_path!` 매크로](https://doc.rust-lang.org/std/macro.module_path.html): 결과의 첫 부분이 컴파일 중인 크레이트의 이름이라는 설명이 있습니다.
 - 에러 설명: `rustc --explain E0603`처럼 에러 코드를 넣어 실행하면 터미널에서 설명과 예제를 볼 수 있습니다.

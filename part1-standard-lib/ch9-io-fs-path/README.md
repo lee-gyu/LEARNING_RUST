@@ -40,7 +40,7 @@
 | 타입 | `Read` | `Write` | `BufRead` | `Seek` |
 | --- | --- | --- | --- | --- |
 | `File`, `&File` | O | O | | O |
-| `TcpStream`, `&TcpStream` (`ch12-net`) | O | O | | |
+| `TcpStream`, `&TcpStream` ([ch12](../ch12-net/README.md)) | O | O | | |
 | `Stdin` | O | | | |
 | `StdinLock` (`stdin().lock()`) | O | | O | |
 | `Stdout`, `Stderr`, `StdoutLock`, `StderrLock` | | O | | |
@@ -177,7 +177,7 @@ fn number_lines(input: impl BufRead, out: &mut impl Write) -> io::Result<Stats>
 
 **`BufWriter`는 `flush`하고 버립니다.** `BufWriter`가 버려질 때(drop) 남은 내용을 내보내려 시도하지만, 그때 난 에러는 **버려집니다**. drop에는 에러를 돌려줄 방법이 없기 때문입니다. 예제 03의 3번 구역은 8바이트짜리 `&mut [u8]`에 15바이트를 씁니다. `write_all`은 `BufWriter`의 버퍼에 담기기만 하므로 성공하고, flush 없이 버리면 앞 8바이트만 써진 채 아무 에러도 보이지 않습니다. 명시적으로 `flush()`를 부르면 `WriteZero: failed to write the buffered data`를 받습니다. 문서도 "버리기 전에 `flush`를 부르는 것이 매우 중요하다"고 강조합니다. 감싼 라이터를 되찾는 `into_inner()`도 flush를 하며, 실패하면 `Err`를 돌려줍니다.
 
-`std::process::exit`으로 프로그램을 끝내면 소멸자가 실행되지 않아 `BufWriter`에 남은 내용은 아예 사라집니다(`ch10-env-process-time`).
+`std::process::exit`으로 프로그램을 끝내면 소멸자가 실행되지 않아 `BufWriter`에 남은 내용은 아예 사라집니다([ch10](../ch10-env-process-time/README.md)).
 
 **`LineWriter`와 줄 버퍼링.** `LineWriter`는 줄바꿈(`\n`)을 만날 때마다 그때까지의 내용을 내보내는 라이터입니다. 예제 03의 4번 구역에서 세 줄을 쓰면 `write` 3번, 줄바꿈 없이 쓴 조각은 `flush`할 때까지 남습니다. 표준 출력이 이 방식(줄 버퍼링)입니다.
 
@@ -189,7 +189,7 @@ fn number_lines(input: impl BufRead, out: &mut impl Write) -> io::Result<Stats>
 | `io::stdout()` | `Stdout` (`Write`) | 줄 버퍼링 | `StdoutLock` (`Write`) |
 | `io::stderr()` | `Stderr` (`Write`) | 없음 | `StderrLock` (`Write`) |
 
-**핸들은 공유되고, 잠금이 있습니다.** `io::stdout()`이 돌려주는 핸들은 모두 프로세스 전체가 함께 쓰는 하나의 버퍼를 가리키고, 쓸 때마다 뮤텍스를 잠급니다. 그래서 `println!`을 1만 번 부르면 잠금도 1만 번입니다. 많이 출력할 때는 `lock()`으로 한 번 잠그고, `BufWriter`로 감쌉니다. 예제 03의 5번 구역에서 세 줄을 `StdoutLock`에 직접 쓰면 `write` 9번, `BufWriter`를 거치면 1번입니다. 잠금을 쥐고 있는 동안에는 다른 스레드가 표준 출력에 쓸 수 없으므로 다 쓴 잠금은 일찍 버립니다(`drop`). 같은 스레드에서 잠금을 쥔 채 `println!`을 부르는 것은 이 툴체인에서 멈추지 않고 출력됐습니다. 여러 스레드가 같은 출력에 쓰는 문제는 `ch11-threads-sync`에서 다룹니다.
+**핸들은 공유되고, 잠금이 있습니다.** `io::stdout()`이 돌려주는 핸들은 모두 프로세스 전체가 함께 쓰는 하나의 버퍼를 가리키고, 쓸 때마다 뮤텍스를 잠급니다. 그래서 `println!`을 1만 번 부르면 잠금도 1만 번입니다. 많이 출력할 때는 `lock()`으로 한 번 잠그고, `BufWriter`로 감쌉니다. 예제 03의 5번 구역에서 세 줄을 `StdoutLock`에 직접 쓰면 `write` 9번, `BufWriter`를 거치면 1번입니다. 잠금을 쥐고 있는 동안에는 다른 스레드가 표준 출력에 쓸 수 없으므로 다 쓴 잠금은 일찍 버립니다(`drop`). 같은 스레드에서 잠금을 쥔 채 `println!`을 부르는 것은 이 툴체인에서 멈추지 않고 출력됐습니다. 여러 스레드가 같은 출력에 쓰는 문제는 [ch11](../ch11-threads-sync/README.md)에서 다룹니다.
 
 **줄 버퍼링과 `flush`.** 문서는 표준 출력이 "터미널에 연결되면 줄 버퍼링"이라고 설명합니다. 줄바꿈 없이 `print!`한 내용은 버퍼에 남을 수 있으므로, 입력을 받기 전에 안내 문구를 보여 주려면 직접 `flush`합니다. 이 툴체인(macOS)에서는 파이프나 파일로 보낼 때도 줄 단위로 비웠지만, 문서가 약속한 것은 터미널의 경우뿐이므로 거기에 기대지 않습니다. 표준 에러는 버퍼가 없어 바로 나갑니다.
 
@@ -258,7 +258,7 @@ failed printing to stdout: Broken pipe (os error 32)
 | `modified()`, `accessed()`, `created()` | `io::Result<SystemTime>` (플랫폼에 따라 지원하지 않으면 `Err`) |
 | `permissions().readonly()` | 읽기 전용인지 |
 
-시각 값 자체(`SystemTime`)는 `ch10-env-process-time`에서 다룹니다. 유닉스 권한 비트(예: `0o644`)처럼 플랫폼에만 있는 정보는 `std::os::unix::fs::PermissionsExt` 같은 플랫폼 전용 확장 트레이트로 읽습니다. 이 챕터에서는 그런 확장이 있다는 것만 알아 둡니다.
+시각 값 자체(`SystemTime`)는 [ch10](../ch10-env-process-time/README.md)에서 다룹니다. 유닉스 권한 비트(예: `0o644`)처럼 플랫폼에만 있는 정보는 `std::os::unix::fs::PermissionsExt` 같은 플랫폼 전용 확장 트레이트로 읽습니다. 이 챕터에서는 그런 확장이 있다는 것만 알아 둡니다.
 
 ### 2.10 디렉터리
 
@@ -365,7 +365,7 @@ fn read_text(path: &Path) -> Result<String, FileError> {
 
 ### 2.13 `Path`와 `PathBuf`
 
-**`str`과 `String`의 관계와 같습니다.** `Path`는 크기를 모르는 빌린 경로(`&Path`로 씀), `PathBuf`는 소유한 경로입니다. `&PathBuf`는 역참조 강제 변환으로 `&Path`가 되므로 함수는 `&Path`로 받습니다. 두 타입은 문자열 대신 운영체제의 문자열 타입(`OsStr`/`OsString`) 위에 만들어져 있습니다. 운영체제의 경로는 UTF-8이 아닐 수 있기 때문이며, `OsStr` 자체는 `ch14-ffi-any-misc`에서 다룹니다.
+**`str`과 `String`의 관계와 같습니다.** `Path`는 크기를 모르는 빌린 경로(`&Path`로 씀), `PathBuf`는 소유한 경로입니다. `&PathBuf`는 역참조 강제 변환으로 `&Path`가 되므로 함수는 `&Path`로 받습니다. 두 타입은 문자열 대신 운영체제의 문자열 타입(`OsStr`/`OsString`) 위에 만들어져 있습니다. 운영체제의 경로는 UTF-8이 아닐 수 있기 때문이며, `OsStr` 자체는 [ch14](../ch14-ffi-any-misc/README.md)에서 다룹니다.
 
 | 하고 싶은 일 | `&Path`의 메서드 | `PathBuf`를 고치는 메서드 |
 | --- | --- | --- |
@@ -414,7 +414,7 @@ pub fn read_to_string<P: AsRef<Path>>(path: P) -> io::Result<String>
 | `is_file()`, `is_dir()`, `metadata()` | 종류, 메타데이터 | `false`, `Err` |
 | `canonicalize()` | `..`와 심볼릭 링크를 풀어 절대 경로로 | `Err(NotFound)` |
 
-예제 08의 7번 구역에서 `sub/../data.txt`는 구성 요소에 `..`이 남아 있지만 `exists()`는 `true`입니다(운영체제가 따라가 줌). `canonicalize()` 뒤에는 `..`이 사라집니다. macOS의 임시 디렉터리는 `/var/…` 아래에 있는데 `/var`가 `/private/var`를 가리키는 심볼릭 링크라서, `canonicalize` 결과가 `temp_dir()`이 준 경로와 달라집니다. 경로를 비교할 때 두 쪽 모두 `canonicalize`해야 하는 이유입니다. 상대 경로를 현재 디렉터리 기준 절대 경로로 바꾸는 `std::path::absolute`(1.79)도 있지만 현재 디렉터리는 `ch10-env-process-time`에서 다룹니다.
+예제 08의 7번 구역에서 `sub/../data.txt`는 구성 요소에 `..`이 남아 있지만 `exists()`는 `true`입니다(운영체제가 따라가 줌). `canonicalize()` 뒤에는 `..`이 사라집니다. macOS의 임시 디렉터리는 `/var/…` 아래에 있는데 `/var`가 `/private/var`를 가리키는 심볼릭 링크라서, `canonicalize` 결과가 `temp_dir()`이 준 경로와 달라집니다. 경로를 비교할 때 두 쪽 모두 `canonicalize`해야 하는 이유입니다. 상대 경로를 현재 디렉터리 기준 절대 경로로 바꾸는 `std::path::absolute`(1.79)도 있지만 현재 디렉터리는 [ch10](../ch10-env-process-time/README.md)에서 다룹니다.
 
 ## 3. 예제 안내
 

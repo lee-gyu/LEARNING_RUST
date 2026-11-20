@@ -33,7 +33,7 @@ let apples = 5;      // 불변: 이후에 apples = 6; 같은 대입을 할 수 �
 let mut bananas = 5; // 가변: bananas += 1; 처럼 바꿀 수 있습니다
 ```
 
-불변이 기본인 이유는 코드를 읽을 때 "이 값은 어디선가 바뀌지 않을까?"를 걱정하지 않게 하기 위해서입니다. 바뀌는 값에만 `mut`가 붙어 있으므로, `mut`가 없는 변수는 선언한 곳만 보면 됩니다. 바꾸지 않겠다고 해 놓고 바꾸려 하면 컴파일러가 막아 줍니다. 변수와 가변성은 `ch3-common-concepts`에서 자세히 다룹니다.
+불변이 기본인 이유는 코드를 읽을 때 "이 값은 어디선가 바뀌지 않을까?"를 걱정하지 않게 하기 위해서입니다. 바뀌는 값에만 `mut`가 붙어 있으므로, `mut`가 없는 변수는 선언한 곳만 보면 됩니다. 바꾸지 않겠다고 해 놓고 바꾸려 하면 컴파일러가 막아 줍니다. 변수와 가변성은 [ch3](../ch3-common-concepts/README.md)에서 자세히 다룹니다.
 
 게임에서 입력을 담을 변수는 처음에 비어 있다가 입력으로 채워져야 하므로 가변이어야 합니다.
 
@@ -41,7 +41,7 @@ let mut bananas = 5; // 가변: bananas += 1; 처럼 바꿀 수 있습니다
 let mut guess = String::new();
 ```
 
-`String`은 길이가 늘어날 수 있는 UTF-8 문자열 타입이고, `String::new()`는 빈 `String`을 만듭니다. `::`는 `new`가 `String` 타입에 딸린 함수, 즉 연관 함수(associated function)라는 뜻입니다. 연관 함수는 `ch5-structs`에서 다룹니다.
+`String`은 길이가 늘어날 수 있는 UTF-8 문자열 타입이고, `String::new()`는 빈 `String`을 만듭니다. `::`는 `new`가 `String` 타입에 딸린 함수, 즉 연관 함수(associated function)라는 뜻입니다. 연관 함수는 [ch5](../ch5-structs/README.md)에서 다룹니다.
 
 ### 2.2 표준 입력 읽기: `read_line`과 `expect`
 
@@ -56,9 +56,9 @@ io::stdin()
 - `use std::io;`: `io`는 표준 라이브러리(`std`)의 입출력 모듈입니다. Rust는 모든 프로그램에 자주 쓰는 항목 일부(prelude)를 자동으로 가져오는데, `io`는 거기에 없으므로 `use`로 직접 가져옵니다.
 - `io::stdin()`: 표준 입력(터미널 입력이나 파이프로 들어오는 입력)을 다루는 핸들을 돌려줍니다.
 - `.read_line(&mut guess)`: 한 줄을 읽어 `guess` **뒤에 덧붙입니다**. 기존 내용을 지우지 않는다는 점이 중요합니다(5절 연습 3).
-- `&mut guess`: `guess`를 잠시 빌려주되 고쳐 써도 된다는 뜻의 가변 참조(reference)입니다. 불변 변수에서는 가변 참조를 만들 수 없으므로 `guess`에 `mut`가 필요합니다. 참조와 대여(borrow)는 `ch4-ownership`에서 다룹니다.
+- `&mut guess`: `guess`를 잠시 빌려주되 고쳐 써도 된다는 뜻의 가변 참조(reference)입니다. 불변 변수에서는 가변 참조를 만들 수 없으므로 `guess`에 `mut`가 필요합니다. 참조와 대여(borrow)는 [ch4](../ch4-ownership/README.md)에서 다룹니다.
 
-`read_line`은 입력을 읽다가 실패할 수도 있으므로 결과를 `Result`라는 값으로 돌려줍니다. `Result`는 성공(`Ok`)과 실패(`Err`) 중 하나를 담는 타입입니다(자세한 내용은 `ch9-error-handling`에서 다룹니다). `expect`는 `Ok`이면 안에 든 값을 꺼내 주고, `Err`이면 전달한 메시지를 출력하며 프로그램을 멈춥니다. 이렇게 멈추는 것을 패닉(panic)이라고 합니다. `read_line`이 성공했을 때 꺼내 주는 값은 읽은 바이트 수입니다.
+`read_line`은 입력을 읽다가 실패할 수도 있으므로 결과를 `Result`라는 값으로 돌려줍니다. `Result`는 성공(`Ok`)과 실패(`Err`) 중 하나를 담는 타입입니다(자세한 내용은 [ch9](../ch9-error-handling/README.md)에서 다룹니다). `expect`는 `Ok`이면 안에 든 값을 꺼내 주고, `Err`이면 전달한 메시지를 출력하며 프로그램을 멈춥니다. 이렇게 멈추는 것을 패닉(panic)이라고 합니다. `read_line`이 성공했을 때 꺼내 주는 값은 읽은 바이트 수입니다.
 
 `expect`를 빼고 결과를 그냥 버리면 컴파일은 되지만 경고가 납니다. 실패할 수 있는 작업의 결과를 처리하지 않았다는 뜻입니다. 아래는 `.expect(...)`를 뺀 코드를 `unused.rs`라는 파일로 저장해 `rustc`로 컴파일한 결과의 앞부분입니다.
 
@@ -202,7 +202,7 @@ let secret_number = rand::rng().random_range(1..=100);
 - `rand::rng()`: 현재 스레드 전용 난수 생성기를 돌려줍니다. 운영체제가 주는 무작위 값으로 초기화되므로 실행할 때마다 다른 수가 나옵니다.
 - `random_range(1..=100)`: 범위 안의 수를 하나 뽑습니다. `1..=100`은 양 끝을 포함하는 범위이고, `1..100`이라고 쓰면 100은 빠집니다.
 
-`random_range`는 `RngExt`라는 트레이트(trait)가 제공하는 메서드입니다. 트레이트는 여러 타입이 공유하는 메서드 묶음인데, 트레이트의 메서드를 부르려면 그 트레이트가 스코프에 있어야 합니다. `rand::prelude::*`가 `RngExt`를 가져오기 때문에 `random_range`를 부를 수 있습니다(`use rand::RngExt;`만 써도 됩니다). 트레이트는 `ch10-generics-traits-lifetimes`에서 다룹니다.
+`random_range`는 `RngExt`라는 트레이트(trait)가 제공하는 메서드입니다. 트레이트는 여러 타입이 공유하는 메서드 묶음인데, 트레이트의 메서드를 부르려면 그 트레이트가 스코프에 있어야 합니다. `rand::prelude::*`가 `RngExt`를 가져오기 때문에 `random_range`를 부를 수 있습니다(`use rand::RngExt;`만 써도 됩니다). 트레이트는 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 다룹니다.
 
 > **다른 자료와 달라진 점**: The Book 영문판은 `rand = "0.10.1"` 기준이고, 이 저장소는 그 뒤에 나온 0.10.4를 씁니다. 같은 0.10 계열이라 코드는 같습니다. 반면 한국어 번역본(doc.rust-kr.org)과 예전 글은 `rand` 0.8 기준이라 코드가 다릅니다.
 >
@@ -226,7 +226,7 @@ let guess: u32 = guess.trim().parse().expect("숫자를 입력해야 합니다!"
 - `parse()`: 문자열을 다른 타입으로 바꿉니다. 한 문자열을 `u32`, `i64`, `f64` 등 여러 타입으로 바꿀 수 있으므로 어느 타입인지 알려 줘야 합니다. `let guess: u32`처럼 변수 이름 뒤에 `: 타입`을 적는 것이 타입 표기(type annotation)이고, 이것을 빼면 E0282 에러가 납니다(4.3절). `u32`는 부호 없는 32비트 정수입니다.
 - `parse()`도 실패할 수 있으므로 `Result`를 돌려줍니다. 3단계에서는 `expect`로 실패하면 멈추게 하고, 4단계에서는 `match`로 실패를 처리합니다.
 
-같은 이름 `guess`로 `let`을 한 번 더 쓴 것을 섀도잉(shadowing)이라고 합니다. 새 변수가 이전 변수를 가리므로 이 줄부터 `guess`는 `u32`입니다. 타입을 바꾸면서 같은 이름을 계속 쓰고 싶을 때 `guess_str`, `guess_num`처럼 이름을 둘 만들지 않아도 됩니다. 섀도잉은 `ch3-common-concepts`에서 자세히 다룹니다.
+같은 이름 `guess`로 `let`을 한 번 더 쓴 것을 섀도잉(shadowing)이라고 합니다. 새 변수가 이전 변수를 가리므로 이 줄부터 `guess`는 `u32`입니다. 타입을 바꾸면서 같은 이름을 계속 쓰고 싶을 때 `guess_str`, `guess_num`처럼 이름을 둘 만들지 않아도 됩니다. 섀도잉은 [ch3](../ch3-common-concepts/README.md)에서 자세히 다룹니다.
 
 Rust는 타입을 추론합니다. `guess`를 `u32`로 정하고 `secret_number`와 비교하면, 컴파일러는 `secret_number`도 `u32`여야 한다고 추론합니다. 이런 단서가 없으면 정수의 기본 타입인 `i32`가 됩니다.
 
@@ -242,7 +242,7 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-`cmp`는 두 값을 비교해 `Ordering`을 돌려줍니다. `Ordering`은 `Less`, `Greater`, `Equal` 세 경우 중 하나인 열거형(enum)이고, 각 경우를 배리언트(variant)라고 부릅니다. 열거형은 `ch6-enums-pattern-matching`에서 다룹니다.
+`cmp`는 두 값을 비교해 `Ordering`을 돌려줍니다. `Ordering`은 `Less`, `Greater`, `Equal` 세 경우 중 하나인 열거형(enum)이고, 각 경우를 배리언트(variant)라고 부릅니다. 열거형은 [ch6](../ch6-enums-pattern-matching/README.md)에서 다룹니다.
 
 `match`는 값을 위에서부터 차례로 각 갈래(arm)의 패턴과 맞춰 보고, 처음 맞는 갈래의 코드만 실행합니다. `=>` 왼쪽이 패턴, 오른쪽이 실행할 코드입니다. 다른 언어의 `switch`와 비슷하지만 중요한 차이가 있습니다. 가능한 경우를 하나라도 빠뜨리면 컴파일되지 않습니다. 예를 들어 `Ordering::Equal` 갈래를 지우면 다음 에러가 납니다.
 
@@ -271,9 +271,9 @@ let guess: u32 = match guess.trim().parse() {
 - `Ok(num)` 갈래: 성공했으면 안에 든 숫자를 `num`이라는 이름으로 꺼내고, 그 값이 `match` 전체의 값이 되어 `guess`에 들어갑니다. `match`는 값을 만들어 내는 표현식(expression)이기 때문에 이렇게 `let`의 오른쪽에 쓸 수 있습니다.
 - `Err(_)` 갈래: 실패했으면 안내를 출력하고 `continue`로 다음 입력을 받으러 갑니다. `_`는 "안의 값은 쓰지 않는다"는 뜻의 패턴입니다. 새 `guess`(`u32`)는 이 `let` 문이 끝나야 생기므로, `match` 안에서 쓴 `guess.trim()`의 `guess`는 아직 입력 문자열입니다.
 
-`expect`는 실패하면 멈추고, `match`는 실패했을 때 할 일을 직접 정합니다. 어느 쪽을 언제 고르는지는 `ch9-error-handling`에서 다룹니다.
+`expect`는 실패하면 멈추고, `match`는 실패했을 때 할 일을 직접 정합니다. 어느 쪽을 언제 고르는지는 [ch9](../ch9-error-handling/README.md)에서 다룹니다.
 
-**입력이 끝났을 때(EOF)**: The Book의 완성 코드는 입력이 끝나는 경우를 처리하지 않습니다. 파이프로 넣은 입력이 다 떨어지면 `read_line`은 0바이트를 읽고 `guess`는 빈 문자열이 됩니다. 빈 문자열은 숫자로 바꿀 수 없으니 `continue`하고, 다시 0바이트를 읽고, 이것을 끝없이 반복합니다. 이 저장소의 4단계 예제는 읽은 바이트 수가 0이면 게임을 끝냅니다. `if`는 `ch3-common-concepts`에서 다루지만 다른 언어의 `if`와 같다고 보면 됩니다.
+**입력이 끝났을 때(EOF)**: The Book의 완성 코드는 입력이 끝나는 경우를 처리하지 않습니다. 파이프로 넣은 입력이 다 떨어지면 `read_line`은 0바이트를 읽고 `guess`는 빈 문자열이 됩니다. 빈 문자열은 숫자로 바꿀 수 없으니 `continue`하고, 다시 0바이트를 읽고, 이것을 끝없이 반복합니다. 이 저장소의 4단계 예제는 읽은 바이트 수가 0이면 게임을 끝냅니다. `if`는 [ch3](../ch3-common-concepts/README.md)에서 다루지만 다른 언어의 `if`와 같다고 보면 됩니다.
 
 ```rust
 let bytes = io::stdin()

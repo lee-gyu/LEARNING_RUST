@@ -108,7 +108,7 @@ error: cannot find macro `bar` in this scope
 
 **크레이트에 다른 이름 붙이기.** 2015의 `extern crate scorekit as sk;`는 2018부터 `use scorekit as sk;`로 씁니다. 다만 둘은 범위가 다릅니다. 크레이트 루트의 `extern crate … as sk`는 크레이트 전체에서 `sk`를 쓰게 하지만, `use … as sk`는 그 모듈에만 별칭을 만듭니다. 하위 모듈에서도 쓰려면 그 모듈에서 `use crate::sk;`처럼 다시 가져옵니다. 예제 02는 `use std as stdlib;`로 이 모양을 보여 줍니다.
 
-**`extern crate`가 아직 필요한 곳.** Rust와 함께 배포되는 sysroot 크레이트 중 Cargo가 `--extern`으로 넘기지 않는 것(`alloc`, nightly의 `test` 등)은 2024 에디션에서도 `extern crate alloc;`이 필요합니다(예제 02의 7번 구역). 또 `extern crate`는 2018 이후에도 **에러가 아닙니다**. 기본 설정에서는 경고도 없고, 관용구 린트 그룹 `rust_2018_idioms`를 켜면 `unused_extern_crates`가 "unused extern crate"라고 알려 줍니다. 이 린트 그룹과 자동 수정은 Part 2 `ch6-migration-practice`에서 다룹니다.
+**`extern crate`가 아직 필요한 곳.** Rust와 함께 배포되는 sysroot 크레이트 중 Cargo가 `--extern`으로 넘기지 않는 것(`alloc`, nightly의 `test` 등)은 2024 에디션에서도 `extern crate alloc;`이 필요합니다(예제 02의 7번 구역). 또 `extern crate`는 2018 이후에도 **에러가 아닙니다**. 기본 설정에서는 경고도 없고, 관용구 린트 그룹 `rust_2018_idioms`를 켜면 `unused_extern_crates`가 "unused extern crate"라고 알려 줍니다. 이 린트 그룹과 자동 수정은 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다.
 
 ### 2.4 `use` 경로와 `::` 경로: 크레이트 루트 기준에서 현재 모듈 기준으로
 
@@ -232,7 +232,7 @@ Rust의 키워드에는 세 종류가 있습니다(The Reference). **엄격한 �
 
 **`dyn`을 붙이는 이유.** 2015 시절 코드는 트레이트 객체 타입을 `Box<Style>`, `&Style`처럼 트레이트 이름만으로 적었습니다. `dyn Trait` 문법은 2015 에디션에서도 쓸 수 있으므로(`dyn`이 약한 키워드인 덕분), 이 모양은 "그때는 아직 없던 문법"에 속합니다. Edition Guide는 트레이트 이름만 쓰는 문법이 잘못된 결정이었다고 설명합니다. 트레이트 이름과 타입 이름이 같은 자리에 오니 숙련자에게도 모호하고, 제네릭이나 `impl Trait`보다 자주 쓰이지도 않으며 때로는 더 느리고 아예 쓸 수 없을 때도 많은 기능을 가장 짧은 문법으로 우대했다는 것입니다. `dyn`을 붙이면 동적 디스패치라는 것이 눈에 보이고 `impl Trait`와 짝이 맞습니다(예제 03의 3번 구역).
 
-**2021 에디션에서 에러가 되는 두 모양.** `dyn` 없는 트레이트 객체와 `a...b` 범위 패턴은 2015 시절 코드에서 아주 흔하지만, 2015와 2018에서는 **경고**이고 2021부터 **에러**입니다. 끝을 포함하는 범위는 식에서 처음부터 `..=`였는데 패턴에서만 `...`를 쓰던 것을 `..=`로 맞춘 것입니다([Part 0 ch18](../../part0-getting-started/ch18-patterns/README.md)의 범위 패턴). 두 경고(문구는 3절의 `projects/scoreboard` 표)에는 `this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!`이라는 줄이 붙습니다. 2021 에디션의 에러(E0782, E0783)는 Part 2 `ch3-rust-2021`에서 다룹니다.
+**2021 에디션에서 에러가 되는 두 모양.** `dyn` 없는 트레이트 객체와 `a...b` 범위 패턴은 2015 시절 코드에서 아주 흔하지만, 2015와 2018에서는 **경고**이고 2021부터 **에러**입니다. 끝을 포함하는 범위는 식에서 처음부터 `..=`였는데 패턴에서만 `...`를 쓰던 것을 `..=`로 맞춘 것입니다([Part 0 ch18](../../part0-getting-started/ch18-patterns/README.md)의 범위 패턴). 두 경고(문구는 3절의 `projects/scoreboard` 표)에는 `this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2021!`이라는 줄이 붙습니다. 2021 에디션의 에러(E0782, E0783)는 [Part 2 ch3](../ch3-rust-2021/README.md)에서 다룹니다.
 
 ### 2.8 raw 식별자 `r#`
 
@@ -254,7 +254,7 @@ let score = scorekit::r#try(parts.next().unwrap_or(""))?;
 
 에디션이 다른 크레이트를 함께 링크할 수 있다는 약속은 raw 식별자가 있어서 지켜집니다. [ch1](../ch1-editions-overview/README.md) 2.7절의 `projects/edition_mix`가 2015 크레이트의 `async`·`await` 함수를 2024 에디션에서 `r#async`·`r#await`로 부른 것도 같은 원리이고, The Book의 부록 A도 같은 예(`try` 함수를 가진 2015 라이브러리)를 듭니다. 키워드와 같은 이름은 에디션과 상관없이 쓸모가 있기도 합니다. 설정 파일이나 외부 데이터의 `type`, `match` 같은 항목 이름을 필드 이름에 그대로 옮길 때입니다.
 
-**`r#`는 이름의 일부가 아닙니다.** The Reference는 "`r#` 접두사는 실제 식별자에 포함되지 않는다"고 정합니다. `let r#count = 3;`으로 만든 변수를 `count`로 읽을 수 있고(예제 01의 2번 구역), 키워드가 아닌 이름에 `r#`를 붙여도 아무 효과가 없습니다. 그래서 어떤 단어에 `r#`가 필요한지는 **그 코드를 컴파일하는 크레이트의 에디션**이 정합니다. `scorekit`을 2018 에디션으로 올리면 정의를 `pub fn r#try(..)`로 고쳐야 하지만, 2015판 프로그램은 여전히 `scorekit::try(..)`로 부릅니다(5절 연습 2). 2024 에디션 코드에서는 2024에 예약된 `gen`에도 `r#`가 필요합니다(Part 2 `ch4-rust-2024-language`).
+**`r#`는 이름의 일부가 아닙니다.** The Reference는 "`r#` 접두사는 실제 식별자에 포함되지 않는다"고 정합니다. `let r#count = 3;`으로 만든 변수를 `count`로 읽을 수 있고(예제 01의 2번 구역), 키워드가 아닌 이름에 `r#`를 붙여도 아무 효과가 없습니다. 그래서 어떤 단어에 `r#`가 필요한지는 **그 코드를 컴파일하는 크레이트의 에디션**이 정합니다. `scorekit`을 2018 에디션으로 올리면 정의를 `pub fn r#try(..)`로 고쳐야 하지만, 2015판 프로그램은 여전히 `scorekit::try(..)`로 부릅니다(5절 연습 2). 2024 에디션 코드에서는 2024에 예약된 `gen`에도 `r#`가 필요합니다([Part 2 ch4](../ch4-rust-2024-language/README.md)).
 
 raw 식별자 문법 자체는 2015 에디션에서도 쓸 수 있습니다. `r#async`, `r#try`는 2015 에디션 코드에서도 컴파일됩니다.
 
@@ -359,8 +359,8 @@ help: consider giving `p` an explicit type, where the placeholder `_` is specifi
 ### 2.12 이 챕터에서 다루지 않는 것
 
 - 에디션이 무엇이고 에디션이 다른 크레이트가 어떻게 함께 링크되는지, 매크로 본문이 어느 에디션으로 읽히는지는 [Part 2 ch1](../ch1-editions-overview/README.md)에서 다뤘습니다.
-- 2021 에디션에서 에러가 된 것(E0782, E0783)의 자세한 설명은 Part 2 `ch3-rust-2021`, 2024 에디션의 `gen` 키워드는 Part 2 `ch4-rust-2024-language`에서 다룹니다.
-- 경고를 따라 코드를 자동으로 고치는 `cargo fix --edition`과 에디션 호환성 린트 그룹 `rust_2018_compatibility`, 관용구 린트 그룹 `rust_2018_idioms`(`unused_extern_crates`, `elided_lifetimes_in_paths` 등)를 쓰는 마이그레이션 절차는 Part 2 `ch6-migration-practice`에서 다룹니다.
+- 2021 에디션에서 에러가 된 것(E0782, E0783)의 자세한 설명은 [Part 2 ch3](../ch3-rust-2021/README.md), 2024 에디션의 `gen` 키워드는 [Part 2 ch4](../ch4-rust-2024-language/README.md)에서 다룹니다.
+- 경고를 따라 코드를 자동으로 고치는 `cargo fix --edition`과 에디션 호환성 린트 그룹 `rust_2018_compatibility`, 관용구 린트 그룹 `rust_2018_idioms`(`unused_extern_crates`, `elided_lifetimes_in_paths` 등)를 쓰는 마이그레이션 절차는 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다.
 - 매크로의 `$crate`, 매크로 위생, `#[macro_use]`의 자세한 범위 규칙은 Part 9 `ch2-macros`, Cargo의 빌드 대상과 의존성 설정은 Part 3에서 다룹니다.
 
 ## 3. 예제 안내
@@ -586,7 +586,7 @@ cargo run -p app2018
 | `bare_trait_objects` | `report/mod.rs`의 `Box<Style>`, `report/table.rs`의 `&Style` | `` trait objects without an explicit `dyn` are deprecated `` |
 | `ellipsis_inclusive_range_patterns` | `report/mod.rs`의 `grade` | `` `...` range patterns are deprecated `` |
 
-`#[allow]`를 지운 2015판을 빌드하면 Cargo가 마지막 줄에 `` run `cargo fix --bin "app2015" -p app2015` to apply 7 suggestions ``라고도 알려 줍니다. 이 자동 수정은 Part 2 `ch6-migration-practice`에서 다룹니다.
+`#[allow]`를 지운 2015판을 빌드하면 Cargo가 마지막 줄에 `` run `cargo fix --bin "app2015" -p app2015` to apply 7 suggestions ``라고도 알려 줍니다. 이 자동 수정은 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다.
 
 **섞어 쓰면 나는 에러.** 2018판에서 `r#`를 빼고 `scorekit::try(..)`라고 쓰면 파싱 에러가 납니다. [ch1](../ch1-editions-overview/README.md) 4.5절에서 2015 크레이트의 `async` 함수를 2024 에디션에서 그대로 불렀을 때와 같은 에러입니다.
 
@@ -883,7 +883,7 @@ fn main() {
 
 - `app2015`는 다섯 개입니다. 익명 매개변수 두 개(`&str` 뒤의 `,`와 `u32` 뒤의 `)`에서 각각 `` expected one of `:`, `@`, or `|` ``), `try!` 하나, `use record::Record`의 E0432 하나, `::report::grade`의 E0433 하나입니다. `#[macro_use] extern crate`는 2018에서도 유효하고, `Box<Style>`과 `...` 패턴은 2018에서도 경고일 뿐인 데다 `#[allow]`로 막혀 있어 에러가 아닙니다. `scorekit::try`는 바깥의 `try!`가 먼저 에러가 되어 따로 보고되지 않습니다.
 - `app2018`은 2021과 2024에서도 고칠 것 없이 빌드되고 출력도 같습니다. 2018판이 2021에서 에러가 될 모양(`dyn` 없는 트레이트 객체, `...` 패턴)을 이미 쓰지 않기 때문입니다.
-- 워크스페이스 `Cargo.toml`에 `resolver = "3"`이 없으면 2021 이상으로 올렸을 때 Cargo가 `` virtual workspace defaulting to `resolver = "1"` ``라는 경고를 냅니다. 리졸버는 Part 2 `ch3-rust-2021`과 Part 3에서 다룹니다.
+- 워크스페이스 `Cargo.toml`에 `resolver = "3"`이 없으면 2021 이상으로 올렸을 때 Cargo가 `` virtual workspace defaulting to `resolver = "1"` ``라는 경고를 냅니다. 리졸버는 [Part 2 ch3](../ch3-rust-2021/README.md)과 Part 3에서 다룹니다.
 
 </details>
 

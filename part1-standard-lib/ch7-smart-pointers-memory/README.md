@@ -104,7 +104,7 @@ C 코드와 구조체를 주고받을 때처럼 배치를 고정해야 할 때�
 - **`char`는 0x10FFFF까지만 씁니다.** `Option<char>`는 4바이트입니다.
 - **데이터 없는 열거형**(`Direction`)은 태그가 0~3만 쓰므로 `Option<Direction>`도 1바이트입니다.
 
-이 중 **문서가 보장하는 것은 첫째뿐입니다.** [`std::option` 문서의 Representation 절](https://doc.rust-lang.org/std/option/index.html#representation)은 `Box<U>`, `&U`, `&mut U`, 함수 포인터, `num::NonZero*`, `ptr::NonNull<U>`에 대해 `Option<T>`가 `T`와 크기가 같다고 약속합니다. `bool`, `char` 등은 이 툴체인의 컴파일러가 해 준 최적화이며 보장되지는 않습니다. (`NonZero<u32>`처럼 0이 아님을 보장하는 정수 타입은 `ch14-ffi-any-misc`에서 다룹니다.)
+이 중 **문서가 보장하는 것은 첫째뿐입니다.** [`std::option` 문서의 Representation 절](https://doc.rust-lang.org/std/option/index.html#representation)은 `Box<U>`, `&U`, `&mut U`, 함수 포인터, `num::NonZero*`, `ptr::NonNull<U>`에 대해 `Option<T>`가 `T`와 크기가 같다고 약속합니다. `bool`, `char` 등은 이 툴체인의 컴파일러가 해 준 최적화이며 보장되지는 않습니다. (`NonZero<u32>`처럼 0이 아님을 보장하는 정수 타입은 [ch14](../ch14-ffi-any-misc/README.md)에서 다룹니다.)
 
 #### `String`을 담은 열거형이 `String`과 같은 크기인 이유
 
@@ -150,7 +150,7 @@ mem::discriminant(&Event::Click { x: 10, y: 20 }) == mem::discriminant(&Event::K
 | `&dyn Display`, `Box<dyn Display>` | 16 | 주소 + vtable 주소 ([Part 0 ch17](../../part0-getting-started/ch17-trait-objects-oop/README.md)) |
 | `Vec<i32>`, `String` | 24 | 주소 + 용량 + 길이 (포인터가 아니라 핸들 구조체) |
 
-참조든 `Box`든 `Rc`든, 무엇을 가리키느냐가 크기를 정합니다. `Box<dyn Trait>`와 `Box<dyn Error>`(`ch8-errors-panic`)도 넓은 포인터라 16바이트입니다.
+참조든 `Box`든 `Rc`든, 무엇을 가리키느냐가 크기를 정합니다. `Box<dyn Trait>`와 `Box<dyn Error>`([ch8](../ch8-errors-panic/README.md))도 넓은 포인터라 16바이트입니다.
 
 ### 2.5 `std::mem`으로 값 옮기기: `swap`, `replace`, `take`
 
@@ -199,7 +199,7 @@ fn pay(&mut self, amount: u32) {
 
 #### `take`: 꺼내고 기본값 남기기
 
-`mem::take(&mut x)`는 `mem::replace(&mut x, Default::default())`와 같습니다. `Default`는 "그 타입의 기본값"을 정하는 트레이트로, 정수는 0, `String`은 빈 문자열, `Vec`은 빈 벡터, `Option`은 `None`입니다(`ch6-core-traits`에서 자세히 다룹니다).
+`mem::take(&mut x)`는 `mem::replace(&mut x, Default::default())`와 같습니다. `Default`는 "그 타입의 기본값"을 정하는 트레이트로, 정수는 0, `String`은 빈 문자열, `Vec`은 빈 벡터, `Option`은 `None`입니다([ch6](../ch6-core-traits/README.md)에서 자세히 다룹니다).
 
 ```rust
 fn flush(&mut self) -> Vec<String> {
@@ -280,7 +280,7 @@ enum BoxedMessage { Ping, Data(Box<[u8; 1024]>) }  //    8바이트
 
 `Box::new(값)`은 인자로 받은 값을 힙으로 옮기는 함수이므로, 값이 먼저 어딘가(보통 스택)에 만들어집니다. 그래서 디버그 빌드에서 `Box::new([7u8; 16 * 1024 * 1024])`(16MiB)를 실행하면 `has overflowed its stack`으로 비정상 종료합니다(macOS의 zsh에서 종료 코드 134. `--release`로 최적화하면 이 코드는 통과했지만, 그것에 기대면 안 됩니다). 큰 버퍼는 처음부터 힙에 만드는 `vec!`으로 만들고 `into_boxed_slice()`로 바꿉니다. 길이가 정해진 배열 타입이 필요하면 `try_into()`로 `Box<[u8; N]>`을 얻습니다. 예제 04의 5번 구역입니다.
 
-`Box<dyn Trait>`는 Part 0 ch17에서, 고정된 위치가 필요한 값을 위한 `Box::pin`은 `ch13-async-primitives`에서 다룹니다.
+`Box<dyn Trait>`는 Part 0 ch17에서, 고정된 위치가 필요한 값을 위한 `Box::pin`은 [ch13](../ch13-async-primitives/README.md)에서 다룹니다.
 
 → [`examples/04_box_slices.rs`](examples/04_box_slices.rs)
 
@@ -305,7 +305,7 @@ enum BoxedMessage { Ping, Data(Box<[u8; 1024]>) }  //    8바이트
 | `Rc::get_mut(&mut rc)` | `Some(&mut T)` | `None` (`Weak`가 하나라도 있어도 `None`) |
 | `Rc::make_mut(&mut rc)` | `&mut T` (제자리) | 안의 값을 **복제**해 새 할당으로 갈라선 뒤 `&mut T` |
 
-`make_mut`처럼 "공유 중일 때만, 쓰기 직전에 복제하는" 방식을 **쓰기 시 복제(clone-on-write)** 라고 부릅니다. 읽기만 하는 동안은 복제 비용이 없고, 처음 고칠 때 한 번만 복제합니다. 예제 05에서 `reader`와 공유 중인 `config`에 `make_mut`으로 `push(5)`하면 `config`만 `[1, 2, 3, 4, 5]`가 되고 `reader`는 `[1, 2, 3, 4]`로 남으며, 둘의 카운트가 각각 1이 됩니다. 그 뒤 혼자가 된 `config`에 다시 `make_mut`하면 같은 할당을 그대로 씁니다. `Rc`가 아닌 참조에서 같은 생각을 구현한 `Cow`는 `ch6-core-traits`에서 다룹니다.
+`make_mut`처럼 "공유 중일 때만, 쓰기 직전에 복제하는" 방식을 **쓰기 시 복제(clone-on-write)** 라고 부릅니다. 읽기만 하는 동안은 복제 비용이 없고, 처음 고칠 때 한 번만 복제합니다. 예제 05에서 `reader`와 공유 중인 `config`에 `make_mut`으로 `push(5)`하면 `config`만 `[1, 2, 3, 4, 5]`가 되고 `reader`는 `[1, 2, 3, 4]`로 남으며, 둘의 카운트가 각각 1이 됩니다. 그 뒤 혼자가 된 `config`에 다시 `make_mut`하면 같은 할당을 그대로 씁니다. `Rc`가 아닌 참조에서 같은 생각을 구현한 `Cow`는 [ch6](../ch6-core-traits/README.md)에서 다룹니다.
 
 한 가지 주의할 점이 있습니다. 다른 `Rc`는 없고 `Weak`만 남아 있을 때 `make_mut`은 복제하지 않고 **`Weak`와의 연결을 끊습니다.** 예제에서 `make_mut` 뒤에 `watcher.upgrade()`가 `None`이 됩니다.
 
@@ -329,7 +329,7 @@ Rc::new_cyclic(|me: &Weak<Widget>| Widget { name: name.to_string(), me: me.clone
 
 클로저가 돌려준 값이 자리에 들어가야 `Rc`가 완성되므로, 클로저 안에서 `me.upgrade()`는 실패(`None`)합니다. 만들어진 뒤에는 `strong 1, weak 1`이고, `self.me.upgrade()`로 자신의 `Rc`를 얻습니다.
 
-스레드 사이에서 공유할 때의 짝인 `Arc`도 같은 이름의 함수(`ptr_eq`, `make_mut`, `into_inner`, `new_cyclic` 등)를 가지고 있으며 `ch11-threads-sync`에서 다룹니다.
+스레드 사이에서 공유할 때의 짝인 `Arc`도 같은 이름의 함수(`ptr_eq`, `make_mut`, `into_inner`, `new_cyclic` 등)를 가지고 있으며 [ch11](../ch11-threads-sync/README.md)에서 다룹니다.
 
 → [`examples/05_rc_more.rs`](examples/05_rc_more.rs)
 
@@ -428,7 +428,7 @@ loop {
 }
 ```
 
-`if let` 규칙이 에디션마다 다른 이유는 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+`if let` 규칙이 에디션마다 다른 이유는 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md)에서 다룹니다.
 
 #### `&mut`가 있으면 `get_mut`
 
@@ -488,7 +488,7 @@ settings.len();           // 여기서 초기화 함수가 불림
 
 문서는 쓸 수 있다면 다른 셀 타입보다 `Cell`을 먼저 고르라고 권합니다. 실행 비용이 없고 패닉할 일도 없기 때문입니다.
 
-이 넷은 모두 **단일 스레드 전용**입니다. 여러 스레드가 `&`로 함께 써도 안전하다는 표시인 `Sync`를 구현하지 않으므로 `static`에 둘 수 없습니다(4.4절). 스레드 사이에서 쓰는 짝은 다음과 같으며 모두 `ch11-threads-sync`에서 다룹니다.
+이 넷은 모두 **단일 스레드 전용**입니다. 여러 스레드가 `&`로 함께 써도 안전하다는 표시인 `Sync`를 구현하지 않으므로 `static`에 둘 수 없습니다(4.4절). 스레드 사이에서 쓰는 짝은 다음과 같으며 모두 [ch11](../ch11-threads-sync/README.md)에서 다룹니다.
 
 | 단일 스레드 | 스레드 안전한 짝 |
 | --- | --- |
@@ -890,7 +890,7 @@ error[E0277]: `OnceCell<String>` cannot be shared between threads safely
 
 - **읽는 법**: 마지막 `note:`가 핵심입니다. `static` 변수의 타입은 `Sync`를 구현해야 하는데 `OnceCell`은 그렇지 않다는 뜻입니다.
 - **원인**: `static`([Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md))은 프로그램 전체에 하나뿐이고 어느 스레드에서든 접근할 수 있습니다. 두 스레드가 동시에 `get_or_init`을 부르면 둘 다 "비어 있다"고 보고 동시에 쓰려 할 수 있으므로, 단일 스레드 전용인 셀 타입은 `static`에 둘 수 없습니다. `static COUNTER: Cell<u32>`도 같은 E0277이고, 이때 `note:`는 `std::sync::RwLock`이나 `std::sync::atomic::AtomicU32`를 제안합니다.
-- **해결**: `note:`대로 `std::sync::OnceLock<String>`을 씁니다. 메서드 이름(`get_or_init`, `set`, `get`)이 같습니다. 전역 값이 꼭 필요한 것이 아니라면 `OnceCell`을 지역 변수나 구조체 필드에 둡니다. `OnceLock`, `LazyLock`, 원자 타입은 `ch11-threads-sync`에서 다룹니다.
+- **해결**: `note:`대로 `std::sync::OnceLock<String>`을 씁니다. 메서드 이름(`get_or_init`, `set`, `get`)이 같습니다. 전역 값이 꼭 필요한 것이 아니라면 `OnceCell`을 지역 변수나 구조체 필드에 둡니다. `OnceLock`, `LazyLock`, 원자 타입은 [ch11](../ch11-threads-sync/README.md)에서 다룹니다.
 
 ### 4.5 실행 중 패닉: 대여 가드가 생각보다 오래 살아 있음
 
@@ -907,7 +907,7 @@ error[E0277]: `OnceCell<String>` cannot be shared between threads safely
 
 | 실수 | 결과 | 바로잡기 |
 | --- | --- | --- |
-| `static`이 안 되니 `const COUNTER: Cell<u32> = Cell::new(0);`으로 바꿈 | rustc 경고 `const_item_interior_mutations`: "each usage of a `const` item creates a new temporary". 쓸 때마다 새 `Cell`이 생겨 `set`이 아무 효과가 없음 | 전역 상태는 `ch11-threads-sync`의 원자 타입·`OnceLock`. 경고가 제안하는 `static`은 4.4절의 E0277이 됨 |
+| `static`이 안 되니 `const COUNTER: Cell<u32> = Cell::new(0);`으로 바꿈 | rustc 경고 `const_item_interior_mutations`: "each usage of a `const` item creates a new temporary". 쓸 때마다 새 `Cell`이 생겨 `set`이 아무 효과가 없음 | 전역 상태는 [ch11](../ch11-threads-sync/README.md)의 원자 타입·`OnceLock`. 경고가 제안하는 `static`은 4.4절의 E0277이 됨 |
 | `mem::swap(&mut v[0], &mut v[1])` | E0499(`cannot borrow v as mutable more than once at a time`) | `v.swap(0, 1)` |
 | 디버그 빌드에서 `Box::new([0u8; 16 * 1024 * 1024])` | 실행 중 `has overflowed its stack` | `vec![0u8; N].into_boxed_slice()` (2.7절) |
 | `mem::replace(&mut v, Vec::new())`, `mem::replace(&mut opt, None)` | clippy 경고 (2.5절) | `mem::take(&mut v)`, `opt.take()` |

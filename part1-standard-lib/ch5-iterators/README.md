@@ -165,11 +165,11 @@ stock.extend([("배", 5), ("사과", 9)]);         // BTreeMap: 같은 키는 �
 
 ### 2.4 어댑터는 구조체를 돌려줍니다
 
-`map`의 시그니처는 `fn map<B, F>(self, f: F) -> Map<Self, F>`입니다. `map`을 부르면 클로저가 실행되는 것이 아니라 **"안쪽 반복자 + 클로저"를 필드로 가진 `Map` 구조체**가 만들어질 뿐입니다. 예제 03은 `scores.iter().filter(|s| **s >= 70).map(|s| s / 10)`의 타입을 `std::any::type_name`(타입의 이름을 문자열로 돌려주는 함수, `std::any`는 `ch14-ffi-any-misc`에서 다룹니다)으로 출력합니다. 결과(3절)를 줄여 쓰면 `Map<Filter<slice::Iter<'_, i32>, {{closure}}>, {{closure}}>`이고, 바깥부터 읽으면 `Map(Filter(slice::Iter, 클로저), 클로저)`입니다. 어댑터를 붙일 때마다 한 겹씩 감쌉니다. `type_name`은 타입이 정의된 곳(`core::iter::adapters::map`)을 보여 주지만, 문서에서는 다시 내보낸 경로인 `std::iter::Map`으로 찾습니다(`core`와 `std`의 관계는 [ch1](../ch1-std-overview/README.md)). `type_name`의 결과는 디버깅용이라 툴체인에 따라 바뀔 수 있습니다.
+`map`의 시그니처는 `fn map<B, F>(self, f: F) -> Map<Self, F>`입니다. `map`을 부르면 클로저가 실행되는 것이 아니라 **"안쪽 반복자 + 클로저"를 필드로 가진 `Map` 구조체**가 만들어질 뿐입니다. 예제 03은 `scores.iter().filter(|s| **s >= 70).map(|s| s / 10)`의 타입을 `std::any::type_name`(타입의 이름을 문자열로 돌려주는 함수, `std::any`는 [ch14](../ch14-ffi-any-misc/README.md)에서 다룹니다)으로 출력합니다. 결과(3절)를 줄여 쓰면 `Map<Filter<slice::Iter<'_, i32>, {{closure}}>, {{closure}}>`이고, 바깥부터 읽으면 `Map(Filter(slice::Iter, 클로저), 클로저)`입니다. 어댑터를 붙일 때마다 한 겹씩 감쌉니다. `type_name`은 타입이 정의된 곳(`core::iter::adapters::map`)을 보여 주지만, 문서에서는 다시 내보낸 경로인 `std::iter::Map`으로 찾습니다(`core`와 `std`의 관계는 [ch1](../ch1-std-overview/README.md)). `type_name`의 결과는 디버깅용이라 툴체인에 따라 바뀔 수 있습니다.
 
 **왜 게으른가**: `Map` 구조체의 `next`가 불릴 때 비로소 안쪽 반복자의 `next`를 부르고, 받은 원소에 클로저를 적용합니다. 소비 메서드가 맨 바깥의 `next`를 부르면 그 요청이 안쪽으로 전달되고, 원소 하나가 체인을 끝까지 통과한 뒤에 다음 원소를 꺼냅니다. 예제 03의 2번 구역은 `inspect`로 이 흐름을 찍습니다. `take(2)`가 두 개를 받자 더 요청하지 않으므로 뒤의 원소는 꺼내지도 않습니다.
 
-**왜 비용이 없는가**: 예제 03의 1번 구역에서 크기를 재면(`std::mem::size_of_val`, 값이 차지하는 바이트 수. `ch7-smart-pointers-memory`에서 다룹니다, 64비트 환경 기준) 다음과 같습니다.
+**왜 비용이 없는가**: 예제 03의 1번 구역에서 크기를 재면(`std::mem::size_of_val`, 값이 차지하는 바이트 수. [ch7](../ch7-smart-pointers-memory/README.md)에서 다룹니다, 64비트 환경 기준) 다음과 같습니다.
 
 | 값 | 크기 | 들어 있는 것 |
 | --- | --- | --- |
@@ -452,7 +452,7 @@ fn long_words(text: &str, min: usize) -> impl Iterator<Item = &str> {
 ```
 
 - 돌려준 반복자는 함수가 끝난 뒤에 쓰이므로, 클로저가 매개변수(`n`, `min`)를 빌리면 안 됩니다. `move`로 복사해 넣습니다.
-- `long_words`는 입력 `text`를 빌린 반복자를 돌려줍니다. 2024 에디션에서는 반환 위치의 `impl Trait`가 입력의 라이프타임을 자동으로 붙잡으므로 `+ '_` 같은 표기가 필요 없습니다. 에디션별 차이는 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+- `long_words`는 입력 `text`를 빌린 반복자를 돌려줍니다. 2024 에디션에서는 반환 위치의 `impl Trait`가 입력의 라이프타임을 자동으로 붙잡으므로 `+ '_` 같은 표기가 필요 없습니다. 에디션별 차이는 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md)에서 다룹니다.
 - **`impl Iterator`는 `Iterator`라는 것만 약속합니다.** 실제 타입 `Filter<SplitWhitespace, _>`는 뒤에서도 꺼낼 수 있지만, 호출하는 쪽에서 `long_words(text, 4).rev()`를 쓰면 E0277(``the trait bound `impl Iterator<Item = &str>: DoubleEndedIterator` is not satisfied``)입니다. 더 약속하려면 `impl DoubleEndedIterator<Item = &str>`처럼 그 트레이트를 반환 타입에 적거나, 이름을 쓸 수 있는 타입이면 구체 타입을 그대로 돌려줍니다. 예제 08의 `Playlist::iter`가 `std::slice::Iter<'_, Song>`을 돌려주는 이유입니다.
 
 ### 2.19 반복자 만들기 ③: 직접 만든 컬렉션에 트레이트 구현
@@ -494,9 +494,9 @@ impl Extend<Song> for Playlist {
 
 이제 `collect::<Playlist>()`와 `playlist.extend(…)`가 됩니다. 그리고 2.3절의 `Result<V, E>: FromIterator<Result<T, E>> where V: FromIterator<T>` 덕분에, `"제목, 초"` 줄들을 `parse_song`(`Result<Song, String>`을 돌려줌)으로 바꿔 `Result<Playlist, String>`으로 모으는 것도 추가 코드 없이 됩니다. 하나라도 실패하면 첫 에러가 나옵니다.
 
-**직접 만든 반복자 구조체에 `DoubleEndedIterator`와 `ExactSizeIterator`**: 예제 07의 `Pages`는 1쪽부터 마지막 쪽까지 쪽 번호를 내놓는 반복자입니다. 아직 내놓지 않은 범위를 `front..=back` 두 필드로 들고, `next`는 `front`를, `next_back`은 `back`을 줄입니다. `size_hint`를 정확한 값으로 재정의하고 `impl ExactSizeIterator for Pages {}`(필수 메서드 없음)를 붙이면 `rev()`, `len()`, `enumerate().rev()`가 모두 따라옵니다. `Ord`, `Hash` 같은 다른 트레이트를 직접 구현하는 방법은 `ch6-core-traits`에서 다룹니다. 예제는 [`08_custom_iterators.rs`](examples/08_custom_iterators.rs)입니다.
+**직접 만든 반복자 구조체에 `DoubleEndedIterator`와 `ExactSizeIterator`**: 예제 07의 `Pages`는 1쪽부터 마지막 쪽까지 쪽 번호를 내놓는 반복자입니다. 아직 내놓지 않은 범위를 `front..=back` 두 필드로 들고, `next`는 `front`를, `next_back`은 `back`을 줄입니다. `size_hint`를 정확한 값으로 재정의하고 `impl ExactSizeIterator for Pages {}`(필수 메서드 없음)를 붙이면 `rev()`, `len()`, `enumerate().rev()`가 모두 따라옵니다. `Ord`, `Hash` 같은 다른 트레이트를 직접 구현하는 방법은 [ch6](../ch6-core-traits/README.md)에서 다룹니다. 예제는 [`08_custom_iterators.rs`](examples/08_custom_iterators.rs)입니다.
 
-**이 챕터에서 다루지 않는 것**: 비동기로 값을 하나씩 받는 스트림은 [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서 맛보았고 `ch13-async-primitives`에서 `Future`와 함께 다시 봅니다. 문서의 `iter!` 매크로나 `gen` 블록처럼 함수 본문에서 값을 하나씩 내놓는(yield) 문법은 아직 불안정 기능이며 Part 11에서 다룹니다. 반복자를 여러 스레드로 나눠 처리하는 병렬 반복은 표준 라이브러리에 없고 외부 크레이트로 제공됩니다.
+**이 챕터에서 다루지 않는 것**: 비동기로 값을 하나씩 받는 스트림은 [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서 맛보았고 [ch13](../ch13-async-primitives/README.md)에서 `Future`와 함께 다시 봅니다. 문서의 `iter!` 매크로나 `gen` 블록처럼 함수 본문에서 값을 하나씩 내놓는(yield) 문법은 아직 불안정 기능이며 Part 11에서 다룹니다. 반복자를 여러 스레드로 나눠 처리하는 병렬 반복은 표준 라이브러리에 없고 외부 크레이트로 제공됩니다.
 
 ## 3. 예제 안내
 

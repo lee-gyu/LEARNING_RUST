@@ -6,7 +6,7 @@
 
 - 패키지: `p0-ch9-error-handling`
 - 기준 문서: [The Book 9장 Error Handling](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024, macOS (파일 에러 메시지는 운영체제마다 다를 수 있습니다)
+- 확인한 툴체인: rustc 1.100.0, Edition 2024, macOS (파일 에러 메시지는 운영체제마다 다를 수 있습니다). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -54,7 +54,7 @@ thread 'main' (6293600) panicked at part0-getting-started/ch9-error-handling/exa
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-- **첫 줄**: `main` 스레드가 패닉했고, 위치는 `01_panic.rs`의 40번 줄 9번 열입니다. 괄호 안의 숫자는 스레드 ID로, 실행할 때마다 달라집니다(스레드는 `ch15-concurrency`에서 다룹니다).
+- **첫 줄**: `main` 스레드가 패닉했고, 위치는 `01_panic.rs`의 40번 줄 9번 열입니다. 괄호 안의 숫자는 스레드 ID로, 실행할 때마다 달라집니다(스레드는 [ch15](../ch15-concurrency/README.md)에서 다룹니다).
 - **둘째 줄**: `panic!`에 넘긴 메시지입니다.
 - **셋째 줄**: 백트레이스를 보는 방법을 알려 줍니다(2.4절).
 
@@ -85,7 +85,7 @@ panic = "abort"
 - 워크스페이스에서는 프로필을 **루트 `Cargo.toml`에만** 적을 수 있습니다. 이 저장소처럼 챕터 패키지의 `Cargo.toml`에 적으면 Cargo가 `warning: profiles for the non root package will be ignored, specify profiles at the workspace root:`라고 경고하고 무시합니다.
 - 01번 예제와 같은 코드를 abort로 빌드해 실행하면 패닉 메시지까지는 똑같이 나오지만 `[drop]` 줄은 나오지 않습니다. 종료 코드도 101이 아니라 abort 시그널에 따른 값(macOS의 zsh에서 134)입니다.
 
-이 챕터에서는 개념만 알아 두면 됩니다. 패닉을 붙잡아 처리하는 방법(`catch_unwind`)과 패닉 훅은 Part 1 `ch8-errors-panic`에서 다룹니다.
+이 챕터에서는 개념만 알아 두면 됩니다. 패닉을 붙잡아 처리하는 방법(`catch_unwind`)과 패닉 훅은 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md)에서 다룹니다.
 
 ### 2.4 백트레이스 읽기
 
@@ -102,15 +102,15 @@ thread 'main' (6268255) panicked at part0-getting-started/ch9-error-handling/exa
 출고 수량(20)이 재고(7)보다 많습니다
 stack backtrace:
    0: __rustc::rust_begin_unwind
-             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/panicking.rs:679:5
+             at /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/std/src/panicking.rs:676:5
    1: core::panicking::panic_fmt
-             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/panicking.rs:80:14
+             at /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/core/src/panicking.rs:80:14
    2: 01_panic::ship
              at ./part0-getting-started/ch9-error-handling/examples/01_panic.rs:40:9
    3: 01_panic::main
              at ./part0-getting-started/ch9-error-handling/examples/01_panic.rs:57:17
    4: <fn() as core::ops::function::FnOnce<()>>::call_once
-             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+             at /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/core/src/ops/function.rs:250:5
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
     [drop] ship의 출고 전표
     [drop] main의 장부
@@ -134,7 +134,7 @@ enum Result<T, E> {
 }
 ```
 
-- `T`는 성공했을 때 담을 값의 타입, `E`는 실패했을 때 담을 에러의 타입입니다. ch6의 `Option<T>`처럼 타입을 끼워 넣는 제네릭 문법이며 `ch10-generics-traits-lifetimes`에서 배웁니다.
+- `T`는 성공했을 때 담을 값의 타입, `E`는 실패했을 때 담을 에러의 타입입니다. ch6의 `Option<T>`처럼 타입을 끼워 넣는 제네릭 문법이며 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배웁니다.
 - `Result`, `Ok`, `Err`는 `Option`, `Some`, `None`처럼 프렐류드에 들어 있어 `use` 없이 씁니다.
 - 열거형이므로 ch6에서 배운 `match`, `if let`, `let...else`로 다룹니다. ch2 4단계에서 `parse`의 결과를 `Ok(num)`, `Err(_)`로 나눈 것이 바로 `Result`를 `match`한 것이었습니다.
 
@@ -208,7 +208,7 @@ match File::open(path) {
 
 [`03_error_kind.rs`](examples/03_error_kind.rs)는 이 함수를 네 가지 경로로 호출해 각 갈래를 모두 지나가 봅니다. 덮어쓰지 않고 새 파일만 만드는 `File::create_new`가 이미 있는 파일에 대해 `AlreadyExists`로 실패하는 것도 확인합니다.
 
-`match`가 세 겹으로 겹쳐 읽기 어렵다고 느꼈다면 맞게 본 것입니다. 이 모양은 다음 절의 `unwrap_or_else`와 클로저(`ch13-closures-iterators`), 2.8절의 `?`로 훨씬 짧아집니다.
+`match`가 세 겹으로 겹쳐 읽기 어렵다고 느꼈다면 맞게 본 것입니다. 이 모양은 다음 절의 `unwrap_or_else`와 클로저([ch13](../ch13-closures-iterators/README.md)), 2.8절의 `?`로 훨씬 짧아집니다.
 
 ### 2.7 `unwrap`과 `expect`: 실패하면 패닉하는 지름길
 
@@ -240,7 +240,7 @@ let settings = File::open(&path).expect("설정 파일 p0_ch9_04_settings.toml�
 설정 파일 p0_ch9_04_settings.toml이 있어야 합니다: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
-`unwrap_or_else`에 넘기는 `|e| { ... }`는 **클로저**, 즉 그 자리에서 만드는 이름 없는 함수입니다. `Err`일 때만 에러 값 `e`를 받아 실행되고, 그 결과가 꺼낸 값을 대신합니다. 클로저는 `ch13-closures-iterators`에서, `map`·`and_then`·`ok_or` 같은 더 많은 메서드는 Part 1 `ch2-option-result`에서 다룹니다. 예제는 [`04_unwrap_expect.rs`](examples/04_unwrap_expect.rs)입니다.
+`unwrap_or_else`에 넘기는 `|e| { ... }`는 **클로저**, 즉 그 자리에서 만드는 이름 없는 함수입니다. `Err`일 때만 에러 값 `e`를 받아 실행되고, 그 결과가 꺼낸 값을 대신합니다. 클로저는 [ch13](../ch13-closures-iterators/README.md)에서, `map`·`and_then`·`ok_or` 같은 더 많은 메서드는 [Part 1 ch2](../../part1-standard-lib/ch2-option-result/README.md)에서 다룹니다. 예제는 [`04_unwrap_expect.rs`](examples/04_unwrap_expect.rs)입니다.
 
 ### 2.8 에러 전파와 `?` 연산자
 
@@ -303,7 +303,7 @@ fn read_username_short(path: &Path) -> io::Result<String> {
 
 #### `io::Result<T>`와 ch7의 이름 충돌
 
-4단계의 `io::Result<String>`은 `Result<String, io::Error>`의 다른 이름(별칭)입니다. `std::io`의 함수들은 에러 타입이 모두 `io::Error`라서, 매번 적지 않도록 이 별칭을 둡니다. 비슷하게 `std::fmt::Result`는 `Result<(), fmt::Error>`의 별칭입니다(별칭을 만드는 `type` 문법은 `ch19-advanced-features`).
+4단계의 `io::Result<String>`은 `Result<String, io::Error>`의 다른 이름(별칭)입니다. `std::io`의 함수들은 에러 타입이 모두 `io::Error`라서, 매번 적지 않도록 이 별칭을 둡니다. 비슷하게 `std::fmt::Result`는 `Result<(), fmt::Error>`의 별칭입니다(별칭을 만드는 `type` 문법은 [ch19](../ch19-advanced-features/README.md)).
 
 [ch7](../ch7-modules/README.md)의 2.8절에서 "서로 다른 모듈의 같은 이름"을 다뤘는데, 이 둘이 대표적인 예입니다. 둘 다 이름이 `Result`라서 `use std::fmt::Result;`와 `use std::io::Result;`를 함께 쓰면 E0252(``the name `Result` is defined multiple times``)가 납니다. 게다가 둘 중 하나만 가져와도 그 파일에서 `Result`라는 이름이 프렐류드의 `Result<T, E>` 대신 그 별칭을 가리키게 됩니다. 그래서 관례적으로 `use std::io;`처럼 부모 모듈까지만 가져와 `io::Result<T>`, `fmt::Result`로 구분해 씁니다. ch7에서 배운 방법 1이 바로 이 관례입니다.
 
@@ -353,7 +353,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 ```
 
 - 성공했을 때 돌려줄 의미 있는 값이 없으므로 `Ok`에 유닛 `()`를 담습니다. 마지막 줄의 `Ok(())`를 빠뜨리면 반환 타입이 맞지 않아 컴파일되지 않습니다.
-- `Box<dyn Error>`는 **"어떤 종류의 에러든 담을 수 있는 타입"** 입니다. `?`가 `io::Error`든 `ParseIntError`든 이 타입으로 바꿔 주므로, 에러 타입이 여러 가지인 함수에서 편리합니다. `dyn`과 트레이트 객체는 `ch17-trait-objects-oop`에서, 에러 타입을 직접 설계하고 `From`으로 변환하는 방법은 Part 1 `ch8-errors-panic`에서 다룹니다.
+- `Box<dyn Error>`는 **"어떤 종류의 에러든 담을 수 있는 타입"** 입니다. `?`가 `io::Error`든 `ParseIntError`든 이 타입으로 바꿔 주므로, 에러 타입이 여러 가지인 함수에서 편리합니다. `dyn`과 트레이트 객체는 [ch17](../ch17-trait-objects-oop/README.md)에서, 에러 타입을 직접 설계하고 `From`으로 변환하는 방법은 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md)에서 다룹니다.
 
 `main`이 `Err(e)`를 돌려주면 Rust가 표준 에러에 `Error: `와 `e`의 디버그 형식을 출력하고, **종료 코드 1**로 프로그램을 끝냅니다.
 
@@ -368,7 +368,7 @@ Error: ParseIntError { kind: InvalidDigit }
 | 패닉 (되감기) | 101 |
 | 패닉 (`panic = "abort"`) | 시그널에 따라 다름 (macOS zsh에서 134) |
 
-종료 코드는 셸 스크립트나 다른 프로그램이 "이 프로그램이 성공했는가"를 판단하는 근거입니다. 사용자에게 보여 줄 에러 메시지를 직접 다듬어 출력하고 원하는 종료 코드로 끝내는 방법은 `ch12-io-project-minigrep`에서 다룹니다. 예제는 [`07_main_result.rs`](examples/07_main_result.rs)입니다.
+종료 코드는 셸 스크립트나 다른 프로그램이 "이 프로그램이 성공했는가"를 판단하는 근거입니다. 사용자에게 보여 줄 에러 메시지를 직접 다듬어 출력하고 원하는 종료 코드로 끝내는 방법은 [ch12](../ch12-io-project-minigrep/README.md)에서 다룹니다. 예제는 [`07_main_result.rs`](examples/07_main_result.rs)입니다.
 
 ### 2.11 패닉할까, `Result`를 돌려줄까
 
@@ -386,7 +386,7 @@ Error: ParseIntError { kind: InvalidDigit }
 | 함수의 약속(계약)을 호출한 쪽이 어김 | 패닉 | 호출한 쪽의 버그입니다. 고칠 곳은 호출한 코드입니다. |
 | 계속 진행하면 위험함 (잘못된 메모리 읽기 등) | 패닉 | 표준 라이브러리가 범위 밖 인덱스에서 패닉하는 이유입니다(ch3). |
 | 예제, 빠르게 만들어 보는 프로토타입 | `unwrap`/`expect` | 에러 처리는 나중에 채울 자리로 남겨 둡니다. 찾아서 고치기 쉽습니다. |
-| 테스트 | `unwrap`/`expect` | 실패하면 테스트가 실패해야 합니다(`ch11-testing`). |
+| 테스트 | `unwrap`/`expect` | 실패하면 테스트가 실패해야 합니다([ch11](../ch11-testing/README.md)). |
 | 코드에 직접 적은 값처럼 **절대 실패할 수 없다고 내가 아는** 경우 | `expect` | 컴파일러는 모르지만 나는 압니다. 그 근거를 메시지에 적습니다. |
 
 마지막 경우의 예가 04번 예제의 `"7".parse().expect("코드에 직접 적은 숫자 문자열이므로 항상 변환됩니다")`입니다. `parse`는 여전히 `Result`를 돌려주지만, 이 문자열은 바뀌지 않으므로 실패할 수 없습니다. 메시지에 근거를 적어 두면, 나중에 이 값을 사용자 입력으로 바꿀 때 이 `expect`도 고쳐야 한다는 것을 떠올릴 수 있습니다.
@@ -750,7 +750,7 @@ error[E0277]: `?` couldn't convert the error to `std::io::Error`
 
 - **읽는 법**: 함수의 에러 타입은 `io::Error`인데(`expected ... because of this`), `parse`가 돌려준 에러는 `ParseIntError`입니다. `note:`가 2.8절에서 말한 "`?`의 변환"을 설명합니다. `ParseIntError`를 `io::Error`로 바꾸는 방법(`From<ParseIntError>`)이 정의되어 있지 않아 변환할 수 없다는 뜻입니다.
 - **원인**: 한 함수 안에서 서로 다른 종류의 에러에 `?`를 썼습니다. 12번 줄의 `fs::read_to_string`은 `io::Error`라서 문제가 없습니다.
-- **해결**: 에러 타입을 두 에러를 모두 담을 수 있는 `Box<dyn Error>`로 바꿉니다(`use std::error::Error;`). [`07_main_result.rs`](examples/07_main_result.rs)의 `read_count`가 이렇게 고친 코드입니다. 에러의 종류를 호출한 쪽이 `match`로 구분해야 한다면 두 경우를 배리언트로 가진 에러 열거형을 직접 만들고 `From`을 구현하는데, 이 방법은 Part 1 `ch8-errors-panic`에서 다룹니다.
+- **해결**: 에러 타입을 두 에러를 모두 담을 수 있는 `Box<dyn Error>`로 바꿉니다(`use std::error::Error;`). [`07_main_result.rs`](examples/07_main_result.rs)의 `read_count`가 이렇게 고친 코드입니다. 에러의 종류를 호출한 쪽이 `match`로 구분해야 한다면 두 경우를 배리언트로 가진 에러 열거형을 직접 만들고 `From`을 구현하는데, 이 방법은 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md)에서 다룹니다.
 
 ### 4.4 `Result`를 성공한 값처럼 사용 — E0308
 
@@ -819,7 +819,7 @@ sum_csv("1, 두, 3")   // Err(ParseIntError { kind: InvalidDigit })
 <details>
 <summary>힌트</summary>
 
-[`07_main_result.rs`](examples/07_main_result.rs)의 `read_count`에서 출발합니다. `fs::read_to_string(path)?`로 읽고, `text.trim().split_once('=')`가 돌려주는 `Option`은 4.2절처럼 `.ok_or("'='가 없습니다")?`로 `Result`로 바꿔 `?`를 씁니다. 에러 타입이 `Box<dyn Error>`이므로 문자열도 `?`가 에러로 바꿔 줍니다. 키가 다를 때는 `return Err("port 설정이 아닙니다".into());`처럼 씁니다. `.into()`는 문자열을 `Box<dyn Error>`로 바꾸는 메서드로, `?`가 하는 변환을 직접 부르는 것입니다(Part 1 `ch6-core-traits`). 06번 예제의 `port_of`와 달리 실패 이유가 모두 구분된다는 점을 확인하세요.
+[`07_main_result.rs`](examples/07_main_result.rs)의 `read_count`에서 출발합니다. `fs::read_to_string(path)?`로 읽고, `text.trim().split_once('=')`가 돌려주는 `Option`은 4.2절처럼 `.ok_or("'='가 없습니다")?`로 `Result`로 바꿔 `?`를 씁니다. 에러 타입이 `Box<dyn Error>`이므로 문자열도 `?`가 에러로 바꿔 줍니다. 키가 다를 때는 `return Err("port 설정이 아닙니다".into());`처럼 씁니다. `.into()`는 문자열을 `Box<dyn Error>`로 바꾸는 메서드로, `?`가 하는 변환을 직접 부르는 것입니다([Part 1 ch6](../../part1-standard-lib/ch6-core-traits/README.md)). 06번 예제의 `port_of`와 달리 실패 이유가 모두 구분된다는 점을 확인하세요.
 
 </details>
 
@@ -874,7 +874,7 @@ sum_csv("1, 두, 3")   // Err(ParseIntError { kind: InvalidDigit })
   - [Unpacking options with `?`](https://doc.rust-lang.org/rust-by-example/error/option_unwrap/question_mark.html): 중첩된 `Option` 필드를 `?`로 따라가기. 예제의 `#[derive(Clone, Copy)]`는 `self.job?`이 값을 이동하지 않고 복사하게 하려고 붙인 것입니다.
   - [`Result`](https://doc.rust-lang.org/rust-by-example/error/result.html), [Early returns](https://doc.rust-lang.org/rust-by-example/error/result/early_returns.html), [Introducing `?`](https://doc.rust-lang.org/rust-by-example/error/result/enter_question_mark.html): 05번 예제의 1단계(`match`와 `return Err`)에서 2단계(`?`)로 가는 과정과 같은 흐름입니다. `try!`는 `?`가 생기기 전의 옛 방식이므로 읽고 넘어가면 됩니다.
   - [aliases for `Result`](https://doc.rust-lang.org/rust-by-example/error/result/result_alias.html): `io::Result` 같은 별칭을 직접 만드는 방법
-  - [`Box`ing errors](https://doc.rust-lang.org/rust-by-example/error/multiple_error_types/boxing_errors.html): 여러 에러 타입을 `Box<dyn Error>`로 묶기. 직접 만든 에러 타입에 `Display`와 `Error`를 구현하는 부분은 ch10의 트레이트와 Part 1 `ch8-errors-panic`을 배운 뒤에 읽으면 좋습니다.
+  - [`Box`ing errors](https://doc.rust-lang.org/rust-by-example/error/multiple_error_types/boxing_errors.html): 여러 에러 타입을 `Box<dyn Error>`로 묶기. 직접 만든 에러 타입에 `Display`와 `Error`를 구현하는 부분은 ch10의 트레이트와 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md)을 배운 뒤에 읽으면 좋습니다.
 - Rustlings (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)
   - [`13_error_handling`](https://github.com/rust-lang/rustlings/tree/main/exercises/13_error_handling)
     - `errors1.rs`: `Option<String>`을 돌려주던 함수를 실패 이유를 담는 `Result<String, String>`으로 바꾸기
@@ -882,7 +882,7 @@ sum_csv("1, 두, 3")   // Err(ParseIntError { kind: InvalidDigit })
     - `errors3.rs`: `()`를 돌려주는 `main`에서 `?`를 쓴 컴파일 에러 고치기 (4.1절)
     - `errors4.rs`: 양수만 담는 타입의 생성자가 음수와 0에 `Err`를 돌려주게 하기 (2.12절의 `Guess::parse`와 같은 발상)
     - `errors5.rs`: `main`의 반환 타입 `Result<(), Box<dyn ???>>`의 `???` 채우기. 답은 2.10절에서 쓴 트레이트 이름입니다.
-    - `errors6.rs`: `parse`의 에러를 직접 만든 에러 열거형의 배리언트로 감싸 돌려주기. 제공된 코드의 `map_err(ParsePosNonzeroError::Creation)`은 `Err` 안의 값을 그 배리언트로 감싸는 메서드입니다(Part 1 `ch2-option-result`). 빈 칸은 이 챕터의 `match`로 `Err(e) => return Err(ParsePosNonzeroError::ParseInt(e))`처럼 채워도 풀립니다.
-  - `errors4.rs`~`errors6.rs`의 `x if x < 0 =>`처럼 패턴 뒤에 `if` 조건을 붙인 갈래(매치 가드)는 `ch18-patterns`에서 다룹니다. "패턴이 맞고 조건도 참일 때만 이 갈래로 간다"고 읽으면 됩니다.
-  - 연습 파일 아래쪽의 `#[cfg(test)]`, `#[test]`, `assert_eq!`은 정답을 확인하는 테스트(`ch11-testing`)입니다.
+    - `errors6.rs`: `parse`의 에러를 직접 만든 에러 열거형의 배리언트로 감싸 돌려주기. 제공된 코드의 `map_err(ParsePosNonzeroError::Creation)`은 `Err` 안의 값을 그 배리언트로 감싸는 메서드입니다([Part 1 ch2](../../part1-standard-lib/ch2-option-result/README.md)). 빈 칸은 이 챕터의 `match`로 `Err(e) => return Err(ParsePosNonzeroError::ParseInt(e))`처럼 채워도 풀립니다.
+  - `errors4.rs`~`errors6.rs`의 `x if x < 0 =>`처럼 패턴 뒤에 `if` 조건을 붙인 갈래(매치 가드)는 [ch18](../ch18-patterns/README.md)에서 다룹니다. "패턴이 맞고 조건도 참일 때만 이 갈래로 간다"고 읽으면 됩니다.
+  - 연습 파일 아래쪽의 `#[cfg(test)]`, `#[test]`, `assert_eq!`은 정답을 확인하는 테스트([ch11](../ch11-testing/README.md))입니다.
 - 에러 설명: `rustc --explain E0277`처럼 에러 코드를 넣어 실행하면 터미널에서 설명과 예제를 볼 수 있습니다.

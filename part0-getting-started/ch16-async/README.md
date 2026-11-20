@@ -7,7 +7,7 @@ ch15에서는 스레드로 여러 일을 동시에 진행했습니다. 스레드
 - 패키지: `p0-ch16-async`
 - 기준 문서: [The Book 17장 Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams](https://doc.rust-lang.org/book/ch17-00-async-await.html)
 - 사용 크레이트: `trpl` 0.3.0 (예제 전용이라 `[dev-dependencies]`에 있습니다. 2.13절)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024, macOS
+- 확인한 툴체인: rustc 1.100.0, Edition 2024, macOS. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 - 네트워크 대신 타이머: The Book 17.1절의 "웹 페이지 제목 가져오기" 예제는 인터넷 접속이 필요하므로, 이 챕터에서는 느린 작업을 `trpl::sleep` 타이머로 흉내 냅니다. 예제는 모두 인터넷 없이 실행되고 몇 초 안에 끝납니다.
 
 ## 1. 학습 목표
@@ -65,7 +65,7 @@ fn slow_add_desugared(a: u32, b: u32) -> impl Future<Output = u32> {
 }
 ```
 
-- 반환 타입 `impl Future<Output = u32>`는 [ch10](../ch10-generics-traits-lifetimes/README.md)의 반환 위치 `impl Trait`입니다. "`Future` 트레이트를 구현한 어떤 타입인데, 끝나면 `u32`를 내놓는다"는 뜻입니다. `Output`은 `Future` 트레이트의 연관 타입(associated type)으로, ch13에서 본 `Iterator`의 `Item`처럼 트레이트를 구현하는 쪽이 정하는 타입입니다. 연관 타입은 `ch19-advanced-features`에서 자세히 다룹니다.
+- 반환 타입 `impl Future<Output = u32>`는 [ch10](../ch10-generics-traits-lifetimes/README.md)의 반환 위치 `impl Trait`입니다. "`Future` 트레이트를 구현한 어떤 타입인데, 끝나면 `u32`를 내놓는다"는 뜻입니다. `Output`은 `Future` 트레이트의 연관 타입(associated type)으로, ch13에서 본 `Iterator`의 `Item`처럼 트레이트를 구현하는 쪽이 정하는 타입입니다. 연관 타입은 [ch19](../ch19-advanced-features/README.md)에서 자세히 다룹니다.
 - `async move`인 이유: 함수는 퓨처를 만들어 돌려주고 바로 끝납니다. 퓨처는 나중에 실행되므로 함수의 지역 변수(매개변수 `a`, `b`)를 빌려서는 안 되고, 소유권을 가져가야 합니다. ch15에서 `thread::spawn`에 `move` 클로저를 넘긴 것과 같은 이유입니다.
 - Edition 2024에서는 `Future` 트레이트가 프렐류드에 들어 있어 `use` 없이 쓸 수 있습니다.
 - Clippy는 이렇게 풀어 쓴 함수를 보면 "`async fn`으로 쓰라"고 경고합니다(`manual_async_fn`). 두 형태가 같다는 증거이기도 합니다. 예제에서는 비교를 위해 `#[expect(clippy::manual_async_fn)]`을 붙였습니다.
@@ -267,7 +267,7 @@ let squares: Vec<i32> = trpl::stream_from_iter(1..=10)
 
 ### 2.11 비동기 트레이트 들여다보기: `Future`, `Pin`, `Unpin`, `Stream`
 
-이 절은 직접 구현하지 않고 **읽을 수 있을 정도**를 목표로 합니다. 퓨처와 실행기를 직접 만드는 것은 Part 1 `ch13-async-primitives`에서 다룹니다.
+이 절은 직접 구현하지 않고 **읽을 수 있을 정도**를 목표로 합니다. 퓨처와 실행기를 직접 만드는 것은 [Part 1 ch13](../../part1-standard-lib/ch13-async-primitives/README.md)에서 다룹니다.
 
 #### `Future` 트레이트와 `Poll`
 
@@ -307,7 +307,7 @@ pub enum Poll<T> {
 
 평소에는 직접 고정할 일이 없습니다. `.await`, `join`, `select`, `join_all`이 내부에서 알아서 고정하기 때문입니다. 직접 고정해야 하는 경우는 대표적으로 두 가지입니다.
 
-1. **서로 다른 퓨처를 한 컬렉션에 담을 때**: `async` 블록마다 타입이 다르므로 공통 타입인 `dyn Future<Output = ()>`(트레이트 객체, `ch17-trait-objects-oop`에서 다룹니다)로 묶어야 합니다. 이때 `Box<dyn Future>`는 `Future`를 구현하지 않으므로(`Box<T>`는 `T: Unpin`일 때만 `Future`입니다) E0277이 납니다(4.7절). `Box::pin`으로 고정한 `Pin<Box<dyn Future<Output = ()>>>`를 쓰거나, 힙 할당 없이 `pin!` 매크로로 지금 자리에 고정한 `Pin<&mut dyn Future<Output = ()>>`를 씁니다(`07`의 3·4번).
+1. **서로 다른 퓨처를 한 컬렉션에 담을 때**: `async` 블록마다 타입이 다르므로 공통 타입인 `dyn Future<Output = ()>`(트레이트 객체, [ch17](../ch17-trait-objects-oop/README.md)에서 다룹니다)로 묶어야 합니다. 이때 `Box<dyn Future>`는 `Future`를 구현하지 않으므로(`Box<T>`는 `T: Unpin`일 때만 `Future`입니다) E0277이 납니다(4.7절). `Box::pin`으로 고정한 `Pin<Box<dyn Future<Output = ()>>>`를 쓰거나, 힙 할당 없이 `pin!` 매크로로 지금 자리에 고정한 `Pin<&mut dyn Future<Output = ()>>`를 씁니다(`07`의 3·4번).
 2. **`Unpin`이 아닌 스트림에 `next`를 부를 때**: `StreamExt::next`는 `Self: Unpin`을 요구합니다. `pin!(stream)`으로 고정하면 `Pin<&mut 스트림>`은 `Unpin`이므로 `next`를 부를 수 있습니다(`06`의 4번).
 
 같은 `async fn`을 여러 번 호출해 만든 퓨처들은 타입이 같으므로 `Vec`에 그대로 담아 `trpl::join_all`에 넘길 수 있습니다(`07`의 2번). `join_all`을 쓸 때 직접 고정해야 하는 것은 타입이 다른 퓨처를 섞을 때뿐입니다.
@@ -1016,4 +1016,4 @@ Some("2번째 시도 성공")
 - Rustlings
   - [`24_async`](https://github.com/rust-lang/rustlings/tree/main/exercises/24_async): `#[tokio::main]`과 `tokio::spawn`으로 세 반의 평균 점수를 동시에 계산하는 문제입니다. `async`가 빠진 함수(4.1절)와 `JoinHandle`을 `.await`하지 않은 코드를 고칩니다. 2026년 11월 확인 기준으로 저장소 main 브랜치에만 있고 최신 릴리스(v6.5.0)에는 없습니다.
 - [Asynchronous Programming in Rust](https://rust-lang.github.io/async-book/): Rust 비동기 프로그래밍을 깊이 다루는 공식 자료입니다. 첫 페이지에 재작성 중이라 빠진 부분이 있다고 적혀 있습니다.
-- 이후 챕터: 트레이트 객체 `dyn`은 `ch17-trait-objects-oop`, 퓨처와 실행기를 직접 구현하는 것은 Part 1 `ch13-async-primitives`에서 다룹니다.
+- 이후 챕터: 트레이트 객체 `dyn`은 [ch17](../ch17-trait-objects-oop/README.md), 퓨처와 실행기를 직접 구현하는 것은 [Part 1 ch13](../../part1-standard-lib/ch13-async-primitives/README.md)에서 다룹니다.

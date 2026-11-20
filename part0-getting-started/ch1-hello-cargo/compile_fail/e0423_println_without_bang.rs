@@ -1,6 +1,6 @@
 // 컴파일 에러 예제: 매크로 이름 뒤의 `!`를 빠뜨림
 //
-// 기대하는 에러: error[E0423]: expected function, found macro `println`
+// 기대하는 에러: error[E0423]: cannot find function `println` in this scope
 // 핵심 메시지:   help: use `!` to invoke the macro
 //
 // 확인 (챕터 디렉터리에서, 산출물은 임시 디렉터리로):

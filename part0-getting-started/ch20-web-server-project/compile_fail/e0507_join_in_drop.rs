@@ -1,5 +1,5 @@
 // 기대하는 에러: E0507 cannot move out of `worker.thread` which is behind a mutable reference
-//                 `JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
+//                 `std::thread::JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
 //
 // 확인: rustc --edition 2024 compile_fail/e0507_join_in_drop.rs --out-dir /tmp/rust-ch20
 //

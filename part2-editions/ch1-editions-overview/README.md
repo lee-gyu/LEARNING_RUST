@@ -8,7 +8,7 @@ Part 2의 첫 챕터입니다. Part 0과 Part 1을 지나는 동안 "2021 에디
 - [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.7절, [Part 1 ch10](../../part1-standard-lib/ch10-env-process-time/README.md) 2.4절: `unsafe extern`, `static mut` 참조 금지, `env::set_var`의 unsafe화는 2024 에디션의 변화입니다.
 - [Part 1 ch1](../../part1-standard-lib/ch1-std-overview/README.md) 2.2절: 프렐류드의 목록은 크레이트의 에디션이 정합니다.
 
-이 챕터는 그 **에디션이라는 제도 자체**를 다룹니다. 왜 생겼는지, 무엇을 바꿀 수 있고 무엇은 바꿀 수 없는지, 에디션이 다른 크레이트들이 어떻게 한 프로그램 안에서 함께 동작하는지를 직접 확인합니다. 에디션마다 무엇이 바뀌었는지는 이어지는 Part 2 `ch2-rust-2015-2018`~`ch5-rust-2024-ecosystem`에서 하나씩 살펴봅니다.
+이 챕터는 그 **에디션이라는 제도 자체**를 다룹니다. 왜 생겼는지, 무엇을 바꿀 수 있고 무엇은 바꿀 수 없는지, 에디션이 다른 크레이트들이 어떻게 한 프로그램 안에서 함께 동작하는지를 직접 확인합니다. 에디션마다 무엇이 바뀌었는지는 이어지는 [Part 2 ch2](../ch2-rust-2015-2018/README.md)~[ch5](../ch5-rust-2024-ecosystem/README.md)에서 하나씩 살펴봅니다.
 
 - 패키지: `p2-ch1-editions-overview`
 - 기준 문서: [Edition Guide 1. What are editions?](https://doc.rust-lang.org/edition-guide/editions/index.html), [1.1 Creating a new project](https://doc.rust-lang.org/edition-guide/editions/creating-a-new-project.html)
@@ -72,7 +72,7 @@ error: expected identifier, found keyword `async`
 | 누가 정하나 | 툴체인을 설치한 사람 | 그 크레이트의 `Cargo.toml` |
 | 얻는 것 | 새 기능, 새 표준 라이브러리 API, 버그 수정 | 새 키워드와 문법, 정리된 규칙 |
 
-에디션을 올리는 작업을 마이그레이션(migration)이라고 합니다. 대부분은 `cargo fix --edition`이 자동 수정(automatic fix)으로 처리하며, 예를 들어 `async`라는 이름을 `r#async`로 바꿔 줍니다. 절차는 Part 2 `ch6-migration-practice`에서 다룹니다.
+에디션을 올리는 작업을 마이그레이션(migration)이라고 합니다. 대부분은 `cargo fix --edition`이 자동 수정(automatic fix)으로 처리하며, 예를 들어 `async`라는 이름을 `r#async`로 바꿔 줍니다. 절차는 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다.
 
 ### 2.3 에디션은 크레이트마다 고르고, 컴파일러 하나가 모두 압니다
 
@@ -136,7 +136,7 @@ error: expected identifier, found keyword `async`
 
 The Book 부록 E는 "에디션의 변화는 컴파일러가 코드를 처음 파싱하는 방식에만 영향을 준다"고 짧게 설명합니다. 실제로는 위 표처럼 이름을 찾는 규칙, 메서드 호출의 뜻, 임시값이 버려지는 시점도 바뀝니다. 핵심은 그 차이가 모두 **그 크레이트의 소스 코드를 읽는 방법**에 머문다는 점입니다.
 
-**예외: 모든 에디션에 적용된 변경.** 드물게 에디션과 상관없이 모든 크레이트에 적용되는 변경도 있습니다. Edition Guide 5.1.10절은 2024 에디션의 변경으로 소개했던 never 타입 폴백 변경이 "1.100부터 더 이상 에디션 전용이 아니다"라고 적고 있습니다. 실제로 이 툴체인에서 그 절의 예제(제네릭 함수 `f()?;`)는 2015·2021·2024 에디션 모두 같은 E0277(`` the trait bound `!: Default` is not satisfied ``)로 실패했습니다. never 타입 폴백이 무엇인지는 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+**예외: 모든 에디션에 적용된 변경.** 드물게 에디션과 상관없이 모든 크레이트에 적용되는 변경도 있습니다. Edition Guide 5.1.10절은 2024 에디션의 변경으로 소개했던 never 타입 폴백 변경이 "1.100부터 더 이상 에디션 전용이 아니다"라고 적고 있습니다. 실제로 이 툴체인에서 그 절의 예제(제네릭 함수 `f()?;`)는 2015·2021·2024 에디션 모두 같은 E0277(`` the trait bound `!: Default` is not satisfied ``)로 실패했습니다. never 타입 폴백이 무엇인지는 [Part 2 ch4](../ch4-rust-2024-language/README.md)에서 다룹니다.
 
 ### 2.5 에디션과 컴파일러 버전은 다릅니다
 
@@ -179,7 +179,7 @@ rustc 1.98.1로 실행하자 버전 줄이 `rustc 1.98.1 (48a229cea 2026-09-01)`
      X    X    X    X    bool::toggle (1.100.0)
 ```
 
-나머지 일곱 줄은 1.100.0과 똑같았습니다. 에디션에 따른 결과는 그대로이고, 컴파일러 버전이 마지막 줄의 결과를 바꾼 것입니다. `rust-version`을 보고 의존성의 버전을 고르는 2024 에디션의 리졸버는 Part 2 `ch5-rust-2024-ecosystem`에서, `rust-version` 필드 자체는 Part 3에서 다룹니다.
+나머지 일곱 줄은 1.100.0과 똑같았습니다. 에디션에 따른 결과는 그대로이고, 컴파일러 버전이 마지막 줄의 결과를 바꾼 것입니다. `rust-version`을 보고 의존성의 버전을 고르는 2024 에디션의 리졸버는 [Part 2 ch5](../ch5-rust-2024-ecosystem/README.md)에서, `rust-version` 필드 자체는 Part 3에서 다룹니다.
 
 ### 2.6 에디션을 적는 곳
 
@@ -285,7 +285,7 @@ pub fn await(job: Job) -> String { /* … */ }
 pub fn gen(prefix: &str, n: u32) -> Option<String> { /* … */ }
 ```
 
-2024 에디션인 [`app_2024`](projects/edition_mix/app_2024/src/main.rs)에서는 세 이름이 모두 키워드라서 그대로 쓰면 에러입니다(4.5절). 이럴 때 raw 식별자(raw identifier)를 씁니다. 이름 앞에 `r#`를 붙이면 "키워드가 아니라 글자 그대로의 이름"이라는 뜻이 되어, 2024 에디션 코드에서도 그 이름의 항목을 가리킬 수 있습니다. raw 식별자의 자세한 규칙은 Part 2 `ch2-rust-2015-2018`에서 다룹니다.
+2024 에디션인 [`app_2024`](projects/edition_mix/app_2024/src/main.rs)에서는 세 이름이 모두 키워드라서 그대로 쓰면 에러입니다(4.5절). 이럴 때 raw 식별자(raw identifier)를 씁니다. 이름 앞에 `r#`를 붙이면 "키워드가 아니라 글자 그대로의 이름"이라는 뜻이 되어, 2024 에디션 코드에서도 그 이름의 항목을 가리킬 수 있습니다. raw 식별자의 자세한 규칙은 [Part 2 ch2](../ch2-rust-2015-2018/README.md)에서 다룹니다.
 
 ```rust
 // app_2024/src/main.rs (2024 에디션)
@@ -344,7 +344,7 @@ macro_rules! first_item {
     2024 크레이트의 매크로: Some(10), core::option::Option<i32>
 ```
 
-배열 `numbers`는 세 번 모두 `app_2024`에서 넘긴 것이지만, `.into_iter()`라는 토큰은 각 매크로의 본문에서 왔습니다. 2015·2018 에디션에서는 배열에 메서드 호출 문법으로 `.into_iter()`를 부르면 참조를 내놓으므로(2.4절의 표), `jobs_2015`의 매크로만 `Option<&i32>`가 됩니다. 자세한 내용은 Part 2 `ch3-rust-2021`에서 다룹니다.
+배열 `numbers`는 세 번 모두 `app_2024`에서 넘긴 것이지만, `.into_iter()`라는 토큰은 각 매크로의 본문에서 왔습니다. 2015·2018 에디션에서는 배열에 메서드 호출 문법으로 `.into_iter()`를 부르면 참조를 내놓으므로(2.4절의 표), `jobs_2015`의 매크로만 `Option<&i32>`가 됩니다. 자세한 내용은 [Part 2 ch3](../ch3-rust-2021/README.md)에서 다룹니다.
 
 이 규칙 덕분에 라이브러리의 매크로는 그것을 쓰는 크레이트가 에디션을 올려도 뜻이 바뀌지 않습니다. 반대로 라이브러리가 자기 에디션을 올리면 매크로 본문이 새 규칙으로 읽히므로, 매크로를 고치는 것은 라이브러리 작성자의 몫입니다. 이때 매크로 본문의 에러는 라이브러리가 아니라 **매크로를 쓰는 크레이트를 컴파일할 때** 드러납니다(연습 1).
 
@@ -354,14 +354,14 @@ Edition Guide의 목차를 기준으로 정리했습니다. 처음 보는 항목
 
 | 에디션 | 함께 나온 버전 | 분야 | 대표 변경 | 다루는 곳 |
 | --- | --- | --- | --- | --- |
-| 2015 | 1.0 | 기준선 | 에디션 제도 이전의 Rust입니다. `edition`을 적지 않으면 이 에디션입니다 | `ch2-rust-2015-2018` |
-| 2018 | 1.31.0 | 언어 | 경로와 모듈 시스템 정리(`use` 경로를 다른 경로와 같은 규칙으로), `async`·`await`·`dyn` 키워드와 `try` 예약 | `ch2-rust-2015-2018` |
-| 2018 | | 언어·Cargo | 트레이트 메서드의 이름 없는 매개변수 금지(2015에서는 deprecated 경고), Cargo의 타깃 자동 탐색 규칙 변경 | `ch2-rust-2015-2018` |
-| 2021 | 1.56.0 | 언어 | 배열의 `into_iter()`가 값을 내놓음, 클로저 분리 캡처, `panic!` 매크로 일관성, 예약 문법(`c"…"` 같은 접두사 자리), `dyn` 없는 트레이트 객체가 에러 | `ch3-rust-2021` |
-| 2021 | | 프렐류드·Cargo | 프렐류드에 `TryFrom`·`TryInto`·`FromIterator` 추가, 기능 리졸버 2가 기본 | `ch3-rust-2021` |
-| 2024 | 1.85.0 | 언어 | let 체인, `if let`·마지막 표현식의 임시값 범위, RPIT 라이프타임 캡처, `unsafe extern`·unsafe 속성·`static mut` 참조 금지, `gen` 예약 | `ch4-rust-2024-language` |
-| 2024 | | 표준 라이브러리 | 프렐류드에 `Future`·`IntoFuture` 추가, `Box<[T]>`의 `into_iter()`, `env::set_var` 등이 unsafe 함수로 | `ch5-rust-2024-ecosystem` |
-| 2024 | | 도구 | `rust-version`을 고려하는 리졸버 3, rustdoc 문서 테스트 병합, rustfmt 스타일 에디션 | `ch5-rust-2024-ecosystem` |
+| 2015 | 1.0 | 기준선 | 에디션 제도 이전의 Rust입니다. `edition`을 적지 않으면 이 에디션입니다 | [ch2](../ch2-rust-2015-2018/README.md) |
+| 2018 | 1.31.0 | 언어 | 경로와 모듈 시스템 정리(`use` 경로를 다른 경로와 같은 규칙으로), `async`·`await`·`dyn` 키워드와 `try` 예약 | [ch2](../ch2-rust-2015-2018/README.md) |
+| 2018 | | 언어·Cargo | 트레이트 메서드의 이름 없는 매개변수 금지(2015에서는 deprecated 경고), Cargo의 타깃 자동 탐색 규칙 변경 | [ch2](../ch2-rust-2015-2018/README.md) |
+| 2021 | 1.56.0 | 언어 | 배열의 `into_iter()`가 값을 내놓음, 클로저 분리 캡처, `panic!` 매크로 일관성, 예약 문법(`c"…"` 같은 접두사 자리), `dyn` 없는 트레이트 객체가 에러 | [ch3](../ch3-rust-2021/README.md) |
+| 2021 | | 프렐류드·Cargo | 프렐류드에 `TryFrom`·`TryInto`·`FromIterator` 추가, 기능 리졸버 2가 기본 | [ch3](../ch3-rust-2021/README.md) |
+| 2024 | 1.85.0 | 언어 | let 체인, `if let`·마지막 표현식의 임시값 범위, RPIT 라이프타임 캡처, `unsafe extern`·unsafe 속성·`static mut` 참조 금지, `gen` 예약 | [ch4](../ch4-rust-2024-language/README.md) |
+| 2024 | | 표준 라이브러리 | 프렐류드에 `Future`·`IntoFuture` 추가, `Box<[T]>`의 `into_iter()`, `env::set_var` 등이 unsafe 함수로 | [ch5](../ch5-rust-2024-ecosystem/README.md) |
+| 2024 | | 도구 | `rust-version`을 고려하는 리졸버 3, rustdoc 문서 테스트 병합, rustfmt 스타일 에디션 | [ch5](../ch5-rust-2024-ecosystem/README.md) |
 
 예제 02의 표에서 에디션에 따라 갈린 다섯 줄은 이 표의 2018(`async` 키워드, `use` 경로), 2021(프렐류드), 2024(`gen` 예약, let 체인) 항목입니다. Edition Guide 5.1.10절의 never 타입 폴백 변경은 2.4절에서 본 대로 1.100부터 모든 에디션에 적용되므로 표에서 뺐습니다.
 
@@ -373,10 +373,10 @@ Edition Guide의 목차를 기준으로 정리했습니다. 처음 보는 항목
 
 | 주제 | 다루는 곳 |
 | --- | --- |
-| 각 에디션의 변경 상세 | Part 2 `ch2-rust-2015-2018`, `ch3-rust-2021`, `ch4-rust-2024-language`, `ch5-rust-2024-ecosystem` |
-| raw 식별자의 자세한 규칙 | Part 2 `ch2-rust-2015-2018` |
-| `cargo fix --edition`, 에디션 호환성 린트 그룹, 마이그레이션 절차 | Part 2 `ch6-migration-practice` |
-| 리졸버 버전과 `rust-version`을 고려하는 리졸버 | Part 2 `ch3-rust-2021`, `ch5-rust-2024-ecosystem` |
+| 각 에디션의 변경 상세 | [Part 2 ch2](../ch2-rust-2015-2018/README.md), [ch3](../ch3-rust-2021/README.md), [ch4](../ch4-rust-2024-language/README.md), [ch5](../ch5-rust-2024-ecosystem/README.md) |
+| raw 식별자의 자세한 규칙 | [Part 2 ch2](../ch2-rust-2015-2018/README.md) |
+| `cargo fix --edition`, 에디션 호환성 린트 그룹, 마이그레이션 절차 | [Part 2 ch6](../ch6-migration-practice/README.md) |
+| 리졸버 버전과 `rust-version`을 고려하는 리졸버 | [Part 2 ch3](../ch3-rust-2021/README.md), [ch5](../ch5-rust-2024-ecosystem/README.md) |
 | `rust-version` 필드, 워크스페이스와 매니페스트 상세 | Part 3 |
 | 릴리스 채널, nightly, `edition = "future"` | Part 11 `ch1-nightly-toolchain` |
 
@@ -537,7 +537,7 @@ error[E0308]: mismatched types
 
 - **읽는 법**: 첫 에러가 원인입니다. 이름(identifier)이 와야 할 자리에 키워드가 왔다는 뜻이고, `help:`가 raw 식별자 `r#async`를 제안합니다. 뒤의 두 에러는 그 여파입니다. 2018 이후의 에디션에서 `async { … }`는 async 블록이므로, 컴파일러는 `if async { … }`를 "조건이 async 블록인 `if`"로 읽었습니다. 같은 글자가 에디션에 따라 전혀 다른 뜻이 된 것입니다.
 - **원인**: 2015 에디션에서 쓴 코드를 2018 이후의 에디션으로 컴파일했습니다. 같은 파일을 `--edition 2015`로 컴파일하면 경고 없이 통과합니다.
-- **해결**: 이름을 바꿀 수 있다면 `send_later`처럼 키워드가 아닌 이름으로 바꿉니다. 다른 크레이트가 이미 그 이름으로 공개해서 바꿀 수 없다면 `r#async`라고 씁니다(2.7절). 에디션을 올리면서 생긴 에러라면 `cargo fix --edition`이 `r#`를 붙여 줍니다(Part 2 `ch6-migration-practice`).
+- **해결**: 이름을 바꿀 수 있다면 `send_later`처럼 키워드가 아닌 이름으로 바꿉니다. 다른 크레이트가 이미 그 이름으로 공개해서 바꿀 수 없다면 `r#async`라고 씁니다(2.7절). 에디션을 올리면서 생긴 에러라면 `cargo fix --edition`이 `r#`를 붙여 줍니다([Part 2 ch6](../ch6-migration-practice/README.md)).
 
 ### 4.2 2024 에디션에서 `gen`을 이름으로 씀
 
@@ -664,7 +664,7 @@ warning: jobs_2015/Cargo.toml: `package.edition` is unspecified, defaulting to `
 - 2018로 바꾸면 먼저 `jobs_2015` 자신의 `pub fn async`와 `pub fn await`에서 에러가 납니다. 두 함수의 정의를 `pub fn r#async`, `pub fn r#await`로 바꿉니다. 함수를 부르는 `app_2024`는 이미 `r#`를 쓰므로 고칠 필요가 없습니다.
 - 함수만 고치면 `jobs_2015`는 컴파일되지만, 이번에는 `app_2024`를 컴파일할 때 `jobs_2015::run_now!("정리")` 줄에서 `` expected identifier, found keyword `async` `` 등 에러 4개가 납니다. 각 에러는 `jobs_2015/src/lib.rs`의 매크로 본문(62·63번 줄)도 함께 가리킵니다. 매크로 본문은 쓰는 쪽에서 펼쳐질 때 비로소 읽히기 때문입니다(2.8절). 본문에 나오는 `async` 세 곳과 `await` 한 곳을 모두 `r#async`, `r#await`로 고칩니다.
 - 2018에서는 `jobs_2015::first_item!`이 여전히 `Option<&i32>`이고, 2021로 바꾸면 `Option<i32>`가 됩니다. 배열의 `into_iter()`가 바뀐 것이 2021 에디션이기 때문입니다.
-- 이 작업은 2.2절에서 말한 마이그레이션을 손으로 한 것입니다. `cargo fix --edition`은 Part 2 `ch6-migration-practice`에서 다룹니다. 끝나면 `git checkout -- .`(이 프로젝트 디렉터리에서)으로 되돌립니다.
+- 이 작업은 2.2절에서 말한 마이그레이션을 손으로 한 것입니다. `cargo fix --edition`은 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다. 끝나면 `git checkout -- .`(이 프로젝트 디렉터리에서)으로 되돌립니다.
 
 </details>
 
@@ -678,7 +678,7 @@ warning: jobs_2015/Cargo.toml: `package.edition` is unspecified, defaulting to `
 - `jobs_2015`에서는 `` `async` is a keyword in the 2018 edition ``이 4개, `` `await` is a keyword in the 2018 edition ``이 2개, 모두 6개가 나왔습니다. 매크로 본문의 이름도 포함됩니다.
 - 각 경고의 `help:`는 `` you can use a raw identifier to stay compatible: `r#async` ``이고, `warning:` 줄은 `this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!`입니다. 지금 에디션에서는 괜찮지만 다음 에디션에서는 에러가 된다는 뜻입니다.
 - `idgen_2021`에서는 `` `gen` is a keyword in the 2024 edition `` 경고 1개가 나옵니다.
-- 이 린트(lint)들은 기본 린트 수준이 allow(꺼짐)입니다(`rustc -W help`로 확인). `cargo fix --edition`은 이런 에디션 호환성 린트를 켜고 그 제안을 적용하는 방식으로 동작합니다(Part 2 `ch6-migration-practice`).
+- 이 린트(lint)들은 기본 린트 수준이 allow(꺼짐)입니다(`rustc -W help`로 확인). `cargo fix --edition`은 이런 에디션 호환성 린트를 켜고 그 제안을 적용하는 방식으로 동작합니다([Part 2 ch6](../ch6-migration-practice/README.md)).
 
 </details>
 
@@ -689,7 +689,7 @@ warning: jobs_2015/Cargo.toml: `package.edition` is unspecified, defaulting to `
 <details>
 <summary>힌트</summary>
 
-- C 문자열 리터럴은 `X X O O`였습니다. 리터럴 자체는 1.77.0에 안정화되었지만, 2018 이전 에디션에서 `c"hi"`는 이름 `c`와 문자열 `"hi"`로 나뉘어 읽혀 문법 에러가 납니다. 2021 에디션이 `이름"…"` 꼴을 예약 문법으로 비워 두었기 때문에 그 자리에 들어올 수 있었습니다(Part 2 `ch3-rust-2021`).
+- C 문자열 리터럴은 `X X O O`였습니다. 리터럴 자체는 1.77.0에 안정화되었지만, 2018 이전 에디션에서 `c"hi"`는 이름 `c`와 문자열 `"hi"`로 나뉘어 읽혀 문법 에러가 납니다. 2021 에디션이 `이름"…"` 꼴을 예약 문법으로 비워 두었기 때문에 그 자리에 들어올 수 있었습니다([Part 2 ch3](../ch3-rust-2021/README.md)).
 - `Box<Fn()>`은 `O O X X`였습니다. 2015·2018 에디션에서는 `trait objects without an explicit dyn are deprecated` 경고만 나고 컴파일되므로 `O`입니다. 2021 에디션부터 이 경고가 에러(E0782)가 되었습니다([Part 0 ch17](../../part0-getting-started/ch17-trait-objects-oop/README.md) 2.4절).
 - 예제는 에러 메시지를 버리므로, 메시지를 보고 싶으면 그 조각을 파일로 저장해 `rustc --edition <연도>`로 직접 컴파일합니다.
 

@@ -44,10 +44,10 @@
 
 | 쓰이는 곳 | 배운 곳 |
 | --- | --- |
-| `TcpStream`의 `read`/`write_all`/`read_to_end`, `BufReader`, `io::Error`와 `ErrorKind` | `ch9-io-fs-path` |
+| `TcpStream`의 `read`/`write_all`/`read_to_end`, `BufReader`, `io::Error`와 `ErrorKind` | [ch9](../ch9-io-fs-path/README.md) |
 | 서버를 스레드로 띄우고 `join`으로 결과 돌려받기, `move` 클로저 | [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md) |
-| 스코프 스레드로 지역 변수를 빌려 쓰기 | `ch11-threads-sync` |
-| 제한 시간에 쓰는 `Duration`, 걸린 시간을 재는 `Instant` | `ch10-env-process-time` |
+| 스코프 스레드로 지역 변수를 빌려 쓰기 | [ch11](../ch11-threads-sync/README.md) |
+| 제한 시간에 쓰는 `Duration`, 걸린 시간을 재는 `Instant` | [ch10](../ch10-env-process-time/README.md) |
 | `"127.0.0.1:8080".parse::<SocketAddr>()` | [ch3](../ch3-strings-fmt/README.md)의 `FromStr` |
 | `u32::try_from`, `to_be_bytes`/`from_be_bytes` | [ch6](../ch6-core-traits/README.md), [ch1](../ch1-std-overview/README.md) |
 
@@ -226,7 +226,7 @@ handle.join().expect("쓰기 스레드는 패닉하지 않아야 합니다")?;
 
 두 핸들은 같은 소켓을 가리키므로 한쪽에서 바꾼 설정(제한 시간 등)이 다른 쪽에도 보이고, `shutdown`은 어느 핸들로 불러도 연결에 작용합니다(1번 구역). 반면 핸들 하나를 버려도 연결은 닫히지 않습니다. 이 환경에서 원본을 버린 뒤에도 복제본으로 계속 읽고 쓸 수 있었고, 핸들을 모두 버리자 상대의 `read`가 0을 받았습니다. 이름이 `clone`이 아니라 `try_clone`인 것은 운영체제에 핸들을 하나 더 만들어 달라고 부탁하는 일이라 실패할 수 있기 때문입니다(`io::Result`).
 
-**② `&TcpStream`: 빌린 참조로 읽고 씁니다.** `Read`와 `Write`는 `TcpStream`뿐 아니라 `&TcpStream`에도 구현되어 있습니다. 그래서 `mut` 없이 `(&stream).write_all(..)`로 쓸 수 있고, `TcpStream`은 `Sync`이므로 여러 스레드가 `&TcpStream`을 함께 빌릴 수 있습니다. 스코프 스레드(`thread::scope`, 스코프가 끝나기 전에 모든 스레드를 `join`하므로 지역 변수를 빌릴 수 있는 스레드 — `ch11-threads-sync`)와 함께 쓰면 핸들을 늘리지 않고 나눌 수 있습니다(4번 구역).
+**② `&TcpStream`: 빌린 참조로 읽고 씁니다.** `Read`와 `Write`는 `TcpStream`뿐 아니라 `&TcpStream`에도 구현되어 있습니다. 그래서 `mut` 없이 `(&stream).write_all(..)`로 쓸 수 있고, `TcpStream`은 `Sync`이므로 여러 스레드가 `&TcpStream`을 함께 빌릴 수 있습니다. 스코프 스레드(`thread::scope`, 스코프가 끝나기 전에 모든 스레드를 `join`하므로 지역 변수를 빌릴 수 있는 스레드 — [ch11](../ch11-threads-sync/README.md))와 함께 쓰면 핸들을 늘리지 않고 나눌 수 있습니다(4번 구역).
 
 ```rust
 let received = thread::scope(|s| -> io::Result<Vec<u8>> {
@@ -290,7 +290,7 @@ fn is_timeout(e: &io::Error) -> bool {
 
 `connect_timeout`은 "응답이 없을 때" 기다림을 끊는 것이지 거부까지 기다리게 하지는 않습니다. 닫힌 포트에는 운영체제가 곧바로 거부를 알려 주므로 `connect_timeout`도 제한 시간 전에 `ConnectionRefused`로 돌아옵니다(04의 1번 구역). 진짜로 시간이 초과되는 상황(패킷이 사라지는 먼 호스트)은 루프백만으로 재현할 수 없어 이 챕터의 예제에서는 다루지 않습니다.
 
-**논블로킹 모드.** `set_nonblocking(true)`를 부르면 기다리지 않고 곧바로 돌아옵니다. 할 일이 없으면 `WouldBlock` 에러인데, 이것은 실패가 아니라 "지금은 없으니 나중에 다시 시도하라"는 뜻입니다(04의 5번 구역). 소켓 여러 개를 논블로킹으로 두고 준비된 것만 골라 처리하는 것이 **이벤트 루프**이고, 비동기 런타임이 안에서 하는 일입니다. 표준 라이브러리에는 "준비될 때까지 기다리는" 기능(운영체제의 `epoll`·`kqueue` 등)이 없어서 이벤트 루프는 보통 크레이트로 만듭니다. 퓨처와 실행기의 원리는 `ch13-async-primitives`에서, 비동기 런타임은 [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서 맛봤습니다.
+**논블로킹 모드.** `set_nonblocking(true)`를 부르면 기다리지 않고 곧바로 돌아옵니다. 할 일이 없으면 `WouldBlock` 에러인데, 이것은 실패가 아니라 "지금은 없으니 나중에 다시 시도하라"는 뜻입니다(04의 5번 구역). 소켓 여러 개를 논블로킹으로 두고 준비된 것만 골라 처리하는 것이 **이벤트 루프**이고, 비동기 런타임이 안에서 하는 일입니다. 표준 라이브러리에는 "준비될 때까지 기다리는" 기능(운영체제의 `epoll`·`kqueue` 등)이 없어서 이벤트 루프는 보통 크레이트로 만듭니다. 퓨처와 실행기의 원리는 [ch13](../ch13-async-primitives/README.md)에서, 비동기 런타임은 [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서 맛봤습니다.
 
 ### 2.8 TCP는 바이트 스트림: 메시지 경계 나누기
 
@@ -387,7 +387,7 @@ TCP는 번호 매기기, 확인 응답, 재전송, 순서 맞추기, 상대가 �
 
 | 주제 | 한 줄 소개 | 다루는 곳 |
 | --- | --- | --- |
-| 이벤트 루프, 비동기 네트워킹 | 논블로킹 소켓 여럿을 준비된 순서로 처리. 표준 라이브러리에는 `set_nonblocking`과 `WouldBlock`까지만 있음 | `ch13-async-primitives`(퓨처와 실행기), [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)(비동기 런타임) |
+| 이벤트 루프, 비동기 네트워킹 | 논블로킹 소켓 여럿을 준비된 순서로 처리. 표준 라이브러리에는 `set_nonblocking`과 `WouldBlock`까지만 있음 | [ch13](../ch13-async-primitives/README.md)(퓨처와 실행기), [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)(비동기 런타임) |
 | TLS(암호화 연결), HTTP 클라이언트 | 표준 라이브러리에 없어서 crates.io의 크레이트를 씀 | 이 저장소에서는 다루지 않음 |
 | 유닉스 도메인 소켓 | 같은 컴퓨터의 프로세스끼리 파일 경로로 통신. `std::os::unix::net`에 `UnixStream`, `UnixListener`, `UnixDatagram`이 있음 | 문서 참고 |
 | 소켓 옵션 | `set_nodelay`(작은 쓰기를 모으지 않음), `set_ttl`, UDP 브로드캐스트·멀티캐스트 | 문서 참고. `set_linger`, `set_keepalive`, `std::net::hostname`은 1.100.0에서 nightly 전용 |

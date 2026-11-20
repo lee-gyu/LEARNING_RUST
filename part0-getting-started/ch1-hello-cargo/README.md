@@ -3,7 +3,7 @@
 Rust를 설치하고, 컴파일러 `rustc`로 첫 프로그램을 직접 컴파일한 다음, 실제 개발에서 쓰는 빌드 도구 Cargo로 같은 일을 다시 해 봅니다. 마지막으로 앞으로 모든 챕터에서 쓰게 될 `println!`의 서식 출력을 익힙니다. The Book 1장에 해당합니다.
 
 - 패키지 이름: `p0-ch1-hello-cargo`
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 학습 목표
 
@@ -99,9 +99,9 @@ rustup으로 설치했다면 다음 명령도 알아 둡니다.
 
 ```console
 $ rustc --version
-rustc 1.98.1 (48a229cea 2026-09-01)
+rustc 1.100.0 (0ef1bc386 2026-11-09)
 $ cargo --version
-cargo 1.98.1 (797e8a9bc 2026-08-05)
+cargo 1.100.0 (3acc79c0c 2026-11-05)
 ```
 
 `rustc` 뒤의 숫자가 버전이고, 괄호 안은 그 버전을 만든 커밋 해시와 날짜입니다. 숫자는 설치한 시점에 따라 다릅니다.
@@ -110,12 +110,12 @@ mise로 설치했다면 mise가 어떤 툴체인을 고르고 있는지도 확�
 
 ```console
 $ mise ls rust
-rust  1.98.1 (symlink)  <저장소 경로>/mise.toml  latest
+rust  1.100.0 (symlink)  <저장소 경로>/mise.toml  latest
 $ rustup show active-toolchain
-1.98.1-aarch64-apple-darwin (overridden by environment variable RUSTUP_TOOLCHAIN)
+1.100.0-aarch64-apple-darwin (overridden by environment variable RUSTUP_TOOLCHAIN)
 ```
 
-두 번째 출력의 `overridden by environment variable RUSTUP_TOOLCHAIN`은 mise가 설정한 환경 변수 때문에 1.98.1이 선택됐다는 뜻입니다. `aarch64-apple-darwin`은 Apple Silicon macOS를 가리키며, 운영체제와 CPU에 따라 다르게 나옵니다.
+두 번째 출력의 `overridden by environment variable RUSTUP_TOOLCHAIN`은 mise가 설정한 환경 변수 때문에 1.100.0이 선택됐다는 뜻입니다. `aarch64-apple-darwin`은 Apple Silicon macOS를 가리키며, 운영체제와 CPU에 따라 다르게 나옵니다.
 
 ### 3. 첫 프로그램과 `rustc`
 
@@ -538,19 +538,20 @@ cargo build --release
 
 ```console
 $ rustc --edition 2024 compile_fail/e0423_println_without_bang.rs --out-dir /tmp/rust-ch1
-error[E0423]: expected function, found macro `println`
+error[E0423]: cannot find function `println` in this scope
   --> compile_fail/e0423_println_without_bang.rs:14:5
    |
 14 |     println("Hello, world!");
-   |     ^^^^^^^ not a function
+   |     ^^^^^^^ not found in this scope
    |
+   = note: a macro named `println` exists in another namespace
 help: use `!` to invoke the macro
    |
 14 |     println!("Hello, world!");
    |            +
 ```
 
-- **읽는 법**: 첫 줄의 `error[E0423]`이 에러 코드, 그 뒤가 요약입니다. "함수를 기대했는데 매크로를 찾았다"는 뜻입니다. `-->`는 파일:줄:칸 위치이고, `help:` 아래에 고친 코드가 `+` 표시와 함께 나옵니다.
+- **읽는 법**: 첫 줄의 `error[E0423]`이 에러 코드, 그 뒤가 요약입니다. "이 스코프에서 `println`이라는 함수를 찾을 수 없다"는 뜻이고, 그 아래 note가 같은 이름의 매크로는 있다고 알려 줍니다. `-->`는 파일:줄:칸 위치이고, `help:` 아래에 고친 코드가 `+` 표시와 함께 나옵니다.
 - **원인**: `!`가 없으면 컴파일러는 `println`이라는 **함수**를 찾습니다. 그런 함수는 없고 같은 이름의 매크로만 있습니다.
 - **해결**: `println!(...)`처럼 `!`를 붙입니다. 에러 코드가 있는 에러는 `rustc --explain E0423`으로 자세한 설명을 볼 수 있습니다.
 

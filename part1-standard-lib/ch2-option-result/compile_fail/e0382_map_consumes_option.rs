@@ -1,6 +1,6 @@
 // 기대하는 에러: error[E0382]: borrow of moved value: `nickname`
 // 핵심 메시지: `nickname` moved due to this method call / value borrowed here after move
-//             note: `Option::<T>::map` takes ownership of the receiver `self`, which moves `nickname`
+//             note: `std::option::Option::<T>::map` takes ownership of the receiver `self`, which moves `nickname`
 //             help: consider calling `.as_ref()` to borrow the value's contents
 //
 // 확인 (챕터 디렉터리에서):

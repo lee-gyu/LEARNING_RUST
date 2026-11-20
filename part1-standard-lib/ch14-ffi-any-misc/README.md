@@ -207,7 +207,7 @@ let len = unsafe { strlen(ptr) };              // 해제된 메모리를 읽음:
 
 이 모양은 컴파일러가 `dangling_pointers_from_temporaries` 경고로 알려 줍니다(4.6절). 바르게 쓰는 방법은 둘입니다. `CString`을 변수에 묶어 포인터보다 오래 살게 하거나, `strlen(CString::new(word).unwrap().as_ptr())`처럼 한 표현식 안에서 만들고 바로 넘깁니다. 임시값은 그 표현식이 끝날 때까지 살아 있기 때문입니다(예제 04의 3번 구역). 다만 경고는 이 흔한 모양만 잡습니다. 블록 안에서 만든 `CString`의 포인터를 블록 밖의 변수에 담는 코드는 이 툴체인에서 아무 경고 없이 컴파일되었습니다.
 
-이 챕터에서는 인자를 읽기만 하는 C 함수와 C가 돌려준 포인터를 읽는 것까지만 다룹니다. C 라이브러리를 직접 빌드해 링크하기, 콜백, 불투명 타입, C에서 Rust 부르기, `CString::into_raw`/`from_raw`로 소유권을 C에 넘겼다 되찾기는 Part 10 `ch12-ffi-beneath-std`에서, ABI와 링크 방식은 Part 9 `ch9-memory-panic-linkage`에서, `build.rs`로 C 코드를 컴파일하는 방법은 Part 3 `ch8-build-scripts`에서 다룹니다.
+이 챕터에서는 인자를 읽기만 하는 C 함수와 C가 돌려준 포인터를 읽는 것까지만 다룹니다. C 라이브러리를 직접 빌드해 링크하기, 콜백, 불투명 타입, C에서 Rust 부르기, `CString::into_raw`/`from_raw`로 소유권을 C에 넘겼다 되찾기는 Part 10 `ch12-ffi-beneath-std`에서, ABI와 링크 방식은 Part 9 `ch9-memory-panic-linkage`에서, `build.rs`로 C 코드를 컴파일하는 방법은 Part 3 `ch8-build-scripts`에서 다룹니다. 이 가운데 C 코드를 빌드해 링크하기, 불투명 포인터와 생성·해제 함수 쌍, C에서 Rust 부르기는 [부록 A ch34](../../appd-a/ch34-ffi-boundaries/README.md)에서 먼저 볼 수 있습니다.
 
 ### 2.6 `TypeId`와 `type_name`
 
@@ -456,7 +456,7 @@ match NonZero::new(scores.len() as u32) {
 | `build.rs`로 C 코드 컴파일 | 빌드 전에 실행되는 Rust 스크립트 | Part 3 `ch8-build-scripts` |
 | `#[repr(transparent)]`, 타입 레이아웃 | 구조체가 메모리에 놓이는 방식을 정하는 속성 | Part 9 `ch7-type-system`, Part 10 `ch2-data-layout` |
 | unsafe 코드를 Miri로 검사하기 | 미정의 동작을 실행 중에 찾는 도구 | Part 10 |
-| `env::set_var`가 unsafe가 된 경위 | 2021 → 2024 에디션의 변화 | Part 2 `ch5-rust-2024-ecosystem` |
+| `env::set_var`가 unsafe가 된 경위 | 2021 → 2024 에디션의 변화 | [Part 2 ch5](../../part2-editions/ch5-rust-2024-ecosystem/README.md) |
 
 ## 3. 예제 안내
 

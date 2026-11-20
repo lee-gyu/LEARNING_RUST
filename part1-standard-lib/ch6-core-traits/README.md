@@ -120,7 +120,7 @@ match expr {
 
 그래서 반환 타입이 `Result<_, Box<dyn Error>>`인 함수에서 `ParseIntError`에 `?`를 쓸 수 있습니다. 표준 라이브러리에 "`Error`를 구현한 모든 타입 `E`에 대해 `Box<dyn Error>: From<E>`"라는 구현이 있기 때문입니다. `&str`과 `String`에서 `Box<dyn Error>`로 가는 `From`도 있어서 `Err("메시지".into())`가 됩니다. [`01_from_into.rs`](examples/01_from_into.rs)의 `parse_minutes`와 `?`를 손으로 펼친 `parse_minutes_by_hand`가 같은 결과를 냅니다.
 
-반대로 `From` 구현이 없는 두 에러 타입 사이에서는 `?`가 E0277(`` `?` couldn't convert the error ``)로 거부됩니다([Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md)의 4.3절). 직접 만든 에러 타입에 `From<io::Error>` 같은 구현을 붙여 `?`가 저절로 변환하게 만드는 설계와 `Error` 트레이트는 `ch8-errors-panic`에서 다룹니다.
+반대로 `From` 구현이 없는 두 에러 타입 사이에서는 `?`가 E0277(`` `?` couldn't convert the error ``)로 거부됩니다([Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md)의 4.3절). 직접 만든 에러 타입에 `From<io::Error>` 같은 구현을 붙여 `?`가 저절로 변환하게 만드는 설계와 `Error` 트레이트는 [ch8](../ch8-errors-panic/README.md)에서 다룹니다.
 
 ### 2.4 `TryFrom`과 `as`: 무엇을 고를까
 
@@ -167,7 +167,7 @@ pub trait AsRef<T: ?Sized> { fn as_ref(&self) -> &T; }
 pub trait AsMut<T: ?Sized> { fn as_mut(&mut self) -> &mut T; }
 ```
 
-`AsRef<T>`는 "`&self`에서 `&T`를 **싸게** 얻을 수 있다"는 트레이트입니다. 새 값을 만들지 않고 참조만 바꾸므로 실패하지도, 비용이 들지도 않아야 합니다. 비용이 드는 변환이면 `From`을 씁니다. `String`, `&str`, `str`은 모두 `AsRef<str>`이고, `Vec<T>`, 배열, 슬라이스는 `AsRef<[T]>`입니다. 파일 경로를 받는 `std::fs` 함수들이 `P: AsRef<Path>`로 `&str`, `String`, `PathBuf`를 모두 받는 것도 같은 방법입니다(`ch9-io-fs-path`).
+`AsRef<T>`는 "`&self`에서 `&T`를 **싸게** 얻을 수 있다"는 트레이트입니다. 새 값을 만들지 않고 참조만 바꾸므로 실패하지도, 비용이 들지도 않아야 합니다. 비용이 드는 변환이면 `From`을 씁니다. `String`, `&str`, `str`은 모두 `AsRef<str>`이고, `Vec<T>`, 배열, 슬라이스는 `AsRef<[T]>`입니다. 파일 경로를 받는 `std::fs` 함수들이 `P: AsRef<Path>`로 `&str`, `String`, `PathBuf`를 모두 받는 것도 같은 방법입니다([ch9](../ch9-io-fs-path/README.md)).
 
 문자열을 받는 함수는 **그 문자열로 무엇을 하는지**에 따라 매개변수 타입을 고릅니다.
 
@@ -247,7 +247,7 @@ pub enum Cow<'a, B: ?Sized + ToOwned + 'a> {
 
 `String::from_utf8_lossy`([ch3](../ch3-strings-fmt/README.md))가 `Cow<str>`을 돌려주는 이유도 같습니다. 올바른 UTF-8이면 원본을 빌리고, 대체 문자로 고칠 곳이 있을 때만 `String`을 만듭니다. 구조체 필드를 `Cow<'a, str>`로 두면 `&'static str` 기본값과 실행 중에 만든 `String`을 같은 필드에 담을 수도 있습니다.
 
-주의할 점이 둘 있습니다. 첫째, `Cow`는 빌린 쪽의 라이프타임 `'a`를 지니므로 원본보다 오래 살 수 없습니다. 둘째, 함수 **매개변수**로 `&Cow<str>`을 받으면 clippy가 `ptr_arg`로 `&str`을 받으라고 권합니다. 읽기만 하는 함수에는 `&str`이 더 일반적이기 때문입니다(예제 04의 `is_borrowed`는 배리언트를 검사해야 해서 `#[expect]`로 예외를 둡니다). `Cow` 문서는 참조 카운팅 포인터에도 같은 기능(`Rc::make_mut`)이 있다고 안내합니다. `Rc`는 `ch7-smart-pointers-memory`에서 자세히 다룹니다.
+주의할 점이 둘 있습니다. 첫째, `Cow`는 빌린 쪽의 라이프타임 `'a`를 지니므로 원본보다 오래 살 수 없습니다. 둘째, 함수 **매개변수**로 `&Cow<str>`을 받으면 clippy가 `ptr_arg`로 `&str`을 받으라고 권합니다. 읽기만 하는 함수에는 `&str`이 더 일반적이기 때문입니다(예제 04의 `is_borrowed`는 배리언트를 검사해야 해서 `#[expect]`로 예외를 둡니다). `Cow` 문서는 참조 카운팅 포인터에도 같은 기능(`Rc::make_mut`)이 있다고 안내합니다. `Rc`는 [ch7](../ch7-smart-pointers-memory/README.md)에서 자세히 다룹니다.
 
 ### 2.8 연산자: `std::ops` 지도
 
@@ -372,7 +372,7 @@ impl Hash for Tag {
 - **경계가 섞이지 않게(prefix-free).** 여러 값을 이어 해시할 때 `("ab", "c")`와 `("a", "bc")`가 같은 바이트열이 되면 일부러 충돌을 만드는 셈입니다. `&str`의 `Hash`는 끝에 구분 바이트(`0xFF`)를 하나 더 넣어 이것을 막고, 예제 07의 `Tag`는 길이를 먼저 넣습니다.
 - **해시 값을 코드에 적어 두지 않습니다.** `RandomState`는 맵마다 시드가 다르고, `DefaultHasher`의 알고리즘과 표준 타입이 해셔에 넣는 바이트도 버전 사이에 보장되지 않습니다. 문서는 테스트에서도 해시 값 대신 `Eq`와의 일치를 확인하라고 권합니다. 이 챕터의 예제가 "해시가 같은가"만 출력하는 이유입니다.
 
-**맵에 들어간 키를 바꾸면 안 되는 이유.** 키의 해시(또는 순서)가 맵에 넣은 뒤에 바뀌면, 키는 옛 해시로 정한 자리에 그대로 있는데 찾을 때는 새 해시로 자리를 계산하므로 찾을 수 없습니다. `HashMap` 문서는 이것을 논리 오류라고 못 박습니다. 그래서 `HashMap`은 키의 `&mut`를 내주지 않습니다(`iter_mut`도 `(&K, &mut V)`). 문서는 그래도 `Cell`, `RefCell`, 전역 상태 등으로 키 내부를 고칠 수 있다고 경고합니다. 이런 내부 가변성 타입은 `ch7-smart-pointers-memory`에서 다룹니다. 키를 바꿔야 하면 `remove`한 뒤 고쳐서 다시 `insert`합니다. `BTreeMap`도 순서에 대해 같은 규칙이 있습니다.
+**맵에 들어간 키를 바꾸면 안 되는 이유.** 키의 해시(또는 순서)가 맵에 넣은 뒤에 바뀌면, 키는 옛 해시로 정한 자리에 그대로 있는데 찾을 때는 새 해시로 자리를 계산하므로 찾을 수 없습니다. `HashMap` 문서는 이것을 논리 오류라고 못 박습니다. 그래서 `HashMap`은 키의 `&mut`를 내주지 않습니다(`iter_mut`도 `(&K, &mut V)`). 문서는 그래도 `Cell`, `RefCell`, 전역 상태 등으로 키 내부를 고칠 수 있다고 경고합니다. 이런 내부 가변성 타입은 [ch7](../ch7-smart-pointers-memory/README.md)에서 다룹니다. 키를 바꿔야 하면 `remove`한 뒤 고쳐서 다시 `insert`합니다. `BTreeMap`도 순서에 대해 같은 규칙이 있습니다.
 
 **`with_hasher`로 해시 함수 바꾸기.** 기본 해셔는 HashDoS 공격을 막는 SipHash 1-3이지만(ch4 2.11절), 작은 키에서는 가장 빠른 알고리즘이 아닙니다. `Hasher`를 직접 구현하거나 crates.io의 해셔를 끼울 수 있습니다. 예제 07은 짧은 FNV-1a 알고리즘을 구현했습니다.
 
@@ -431,7 +431,7 @@ pub trait Default: Sized { fn default() -> Self; }
 
 **`derive`와 제네릭 바운드.** `#[derive(Clone)] struct Wrapper<T>`는 `impl<T: Clone> Clone for Wrapper<T>`를 만듭니다. 필드가 `Option<T>`나 `&T`처럼 `T`가 `Clone`이 아니어도 복제할 수 있는 모양이어도 바운드가 붙습니다. `Default`도 같아서, `#[derive(Default)] struct Wrapper<T> { inner: Option<T> }`에 `Default`가 없는 `T`를 넣으면 컴파일러가 `` consider manually implementing `Default` to avoid undesired bounds caused by "imperfect derives" ``라고 안내합니다. 이럴 때 손으로 구현합니다.
 
-**`std::marker`의 나머지.** `Copy`와 함께 `std::marker`에 있는 `Sized`는 "크기를 컴파일할 때 아는 타입"이라는 표시로, 타입 매개변수에 자동으로 붙고 `?Sized`로 풉니다(Part 0 ch19의 2.15절, 이 챕터 2.5절의 `shout`). `Send`/`Sync`는 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)에서 다뤘고 `ch11-threads-sync`에서 다시 봅니다. `Unpin`은 `ch13-async-primitives`, `PhantomData`는 Part 10 `ch4-variance-dropck`에서 다룹니다.
+**`std::marker`의 나머지.** `Copy`와 함께 `std::marker`에 있는 `Sized`는 "크기를 컴파일할 때 아는 타입"이라는 표시로, 타입 매개변수에 자동으로 붙고 `?Sized`로 풉니다(Part 0 ch19의 2.15절, 이 챕터 2.5절의 `shout`). `Send`/`Sync`는 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)에서 다뤘고 [ch11](../ch11-threads-sync/README.md)에서 다시 봅니다. `Unpin`은 [ch13](../ch13-async-primitives/README.md), `PhantomData`는 Part 10 `ch4-variance-dropck`에서 다룹니다.
 
 ## 3. 예제 안내
 

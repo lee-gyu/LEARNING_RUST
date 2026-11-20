@@ -9,7 +9,7 @@
 
 - 패키지: `p1-ch4-collections`
 - 기준 문서: [`std::collections`](https://doc.rust-lang.org/std/collections/index.html), [`std::vec`](https://doc.rust-lang.org/std/vec/index.html), [`std::slice`](https://doc.rust-lang.org/std/slice/index.html)와 [슬라이스 원시 타입](https://doc.rust-lang.org/std/primitive.slice.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -149,8 +149,8 @@ swap_remove(1) 후:  [ 가 | 마 | 다 | 라 ]   ← 마지막 요소 하나만 
 
 - **`for` 문 안에서 `remove(i)`를 부르며 지우지 않습니다.** 지울 때마다 뒤가 당겨져 인덱스가 어긋나 요소를 건너뛰기 쉽고, 지울 때마다 O(n)이 듭니다. 조건으로 지울 때는 `retain`이 정답입니다. 지운 요소도 필요하면 `extract_if`(1.87부터 안정화)를 씁니다.
 - **`dedup`은 이웃한 중복만 지웁니다.** `[3, 3, 5, 3]`은 `[3, 5, 3]`이 됩니다. 모든 중복을 지우려면 먼저 정렬해서 같은 값끼리 붙여 놓습니다. 처음 나온 순서를 지키며 지우는 방법은 2.14절에 있습니다.
-- `drain`, `extract_if`가 돌려주는 반복자는 `collect()`로 `Vec`에 모으거나 `for` 문에 넘깁니다. 반복자 자체는 `ch5-iterators`에서 자세히 다룹니다.
-- 벡터 전체의 소유권을 꺼내면서 빈 벡터를 남기고 싶을 때는 `std::mem::take`를 쓰는데, 이것은 `ch7-smart-pointers-memory`에서 다룹니다.
+- `drain`, `extract_if`가 돌려주는 반복자는 `collect()`로 `Vec`에 모으거나 `for` 문에 넘깁니다. 반복자 자체는 [ch5](../ch5-iterators/README.md)에서 자세히 다룹니다.
+- 벡터 전체의 소유권을 꺼내면서 빈 벡터를 남기고 싶을 때는 `std::mem::take`를 쓰는데, 이것은 [ch7](../ch7-smart-pointers-memory/README.md)에서 다룹니다.
 
 ### 2.7 `Vec`: 용량 관리
 
@@ -172,7 +172,7 @@ swap_remove(1) 후:  [ 가 | 마 | 다 | 라 ]   ← 마지막 요소 하나만 
 
 ### 2.8 정렬
 
-정렬 메서드는 `Vec`이 아니라 **슬라이스 `[T]`** 에 정의되어 있습니다. `Vec<T>`는 `[T]`로 역참조되므로 `v.sort()`처럼 부를 수 있고, 배열이나 `&mut [T]`에도 그대로 쓸 수 있습니다. `Vec` 문서에서는 "Methods from `Deref<Target = [T]>`" 아래에 있습니다(이 문서 읽는 법은 `ch1-std-overview`).
+정렬 메서드는 `Vec`이 아니라 **슬라이스 `[T]`** 에 정의되어 있습니다. `Vec<T>`는 `[T]`로 역참조되므로 `v.sort()`처럼 부를 수 있고, 배열이나 `&mut [T]`에도 그대로 쓸 수 있습니다. `Vec` 문서에서는 "Methods from `Deref<Target = [T]>`" 아래에 있습니다(이 문서 읽는 법은 [ch1](../ch1-std-overview/README.md)).
 
 | 메서드 | 비교 기준 | 안정 정렬 | 요구 |
 | --- | --- | --- | --- |
@@ -288,7 +288,7 @@ pub enum Entry<'a, K, V> {
 
 예를 들어 `teams.entry(team).or_default().push(name)`은 처음 보는 팀이면 빈 `Vec`을 넣고 그 `Vec`에 바로 `push`하고, `best.entry(name).and_modify(|b| *b = (*b).max(score)).or_insert(score)`는 기록이 있으면 더 큰 값으로 고치고 없으면 첫 기록을 넣습니다.
 
-**`or_insert(값)`과 `or_insert_with(클로저)`의 차이**: 메서드의 인자는 메서드를 부르기 전에 계산됩니다. 그래서 `or_insert(load_profile("민수"))`는 키가 이미 있어서 값이 쓰이지 않아도 `load_profile`을 부릅니다. 기본값을 만드는 데 비용이 들면 `or_insert_with(|| load_profile("민수"))`로 "필요할 때만" 만들게 합니다. clippy에도 이 모양을 잡는 `or_fun_call` lint가 있지만 기본으로는 꺼져 있어서, 직접 켜야(`-W clippy::or_fun_call`) 경고가 납니다. `ch2-option-result`의 `unwrap_or`와 `unwrap_or_else`의 관계와 같습니다.
+**`or_insert(값)`과 `or_insert_with(클로저)`의 차이**: 메서드의 인자는 메서드를 부르기 전에 계산됩니다. 그래서 `or_insert(load_profile("민수"))`는 키가 이미 있어서 값이 쓰이지 않아도 `load_profile`을 부릅니다. 기본값을 만드는 데 비용이 들면 `or_insert_with(|| load_profile("민수"))`로 "필요할 때만" 만들게 합니다. clippy에도 이 모양을 잡는 `or_fun_call` lint가 있지만 기본으로는 꺼져 있어서, 직접 켜야(`-W clippy::or_fun_call`) 경고가 납니다. [ch2](../ch2-option-result/README.md)의 `unwrap_or`와 `unwrap_or_else`의 관계와 같습니다.
 
 **`Entry`를 `match`하기**: "있을 때"와 "없을 때"에 하는 일이 크게 다르면 직접 `match`합니다. `OccupiedEntry`에서는 `get`, `get_mut`, `insert`(값 바꾸기), `remove`(항목 지우기)를, `VacantEntry`에서는 `insert`와 `key`를 쓸 수 있습니다. 예제 04의 재고 출고 함수는 수량이 0이 되면 `entry.remove()`로 항목을 지웁니다. 키를 다시 찾지 않습니다.
 
@@ -352,11 +352,11 @@ struct Version { major: u32, minor: u32, patch: u32 }
 
 - `Eq`는 `PartialEq`를, `Ord`는 `Eq`와 `PartialOrd`를 전제로 하므로 함께 적습니다. 컴파일러의 `help:`도 `#[derive(Eq, Hash, PartialEq)]`처럼 필요한 것을 모아 제안합니다.
 - **`derive(PartialOrd, Ord)`는 필드를 선언한 순서대로 비교합니다.** 첫 필드가 같을 때만 다음 필드를 봅니다. `Version`은 `major` → `minor` → `patch` 순서라서 버전 번호의 순서와 맞습니다(문자열 `"1.10.0"`과 `"1.9.1"`을 비교하면 거꾸로 됩니다). 예제 08의 `Job`처럼 필드 순서로 우선순위를 정할 수도 있습니다. 열거형에 `derive(Ord)`를 붙이면 먼저 선언한 배리언트가 작습니다.
-- 이 트레이트들을 손으로 구현하는 방법과 지켜야 할 규칙("`a == b`이면 `hash(a) == hash(b)`" 등)은 `ch6-core-traits`에서 다룹니다. 맵에 들어 있는 동안 키의 해시나 순서가 바뀌게 만들면 안 된다는 것도 문서가 강조하는 규칙입니다.
+- 이 트레이트들을 손으로 구현하는 방법과 지켜야 할 규칙("`a == b`이면 `hash(a) == hash(b)`" 등)은 [ch6](../ch6-core-traits/README.md)에서 다룹니다. 맵에 들어 있는 동안 키의 해시나 순서가 바뀌게 만들면 안 된다는 것도 문서가 강조하는 규칙입니다.
 
 **해시 함수와 순회 순서**: `HashMap`의 기본 해시 함수는 현재 SipHash 1-3입니다. 공격자가 같은 해시를 내는 키를 대량으로 보내 해시 맵을 극도로 느리게 만드는 공격(HashDoS)을 막도록 설계되었고, 맵을 만들 때마다 무작위 시드로 초기화됩니다. 그래서 `HashMap`과 `HashSet`의 순회 순서는 실행할 때마다 다르고, 같은 프로그램 안에서 같은 내용을 넣은 두 집합끼리도 다를 수 있습니다(이 툴체인에서 실제로 확인했습니다). 출력이나 테스트에서 순서가 필요하면 정렬하거나 `BTreeMap`/`BTreeSet`에 모읍니다. 이 챕터의 예제가 모두 그렇게 합니다. SipHash는 정수 같은 작은 키에서는 가장 빠른 해시 함수가 아니어서, 성능이 중요하면 `with_hasher`로 다른 해시 함수(crates.io에 여럿 있음)를 끼울 수 있지만, 대신 HashDoS 방어를 잃을 수 있습니다.
 
-덧붙여, `HashMap<String, V>`에서 `map.get("청팀")`처럼 `&str`로 찾을 수 있는 것은 `get`의 시그니처가 `K: Borrow<Q>`를 요구하고 `String`이 `Borrow<str>`를 구현하기 때문입니다. `Borrow`는 `ch6-core-traits`에서 다룹니다.
+덧붙여, `HashMap<String, V>`에서 `map.get("청팀")`처럼 `&str`로 찾을 수 있는 것은 `get`의 시그니처가 `K: Borrow<Q>`를 요구하고 `String`이 `Borrow<str>`를 구현하기 때문입니다. `Borrow`는 [ch6](../ch6-core-traits/README.md)에서 다룹니다.
 
 ### 2.12 `VecDeque`: 양쪽 끝이 모두 빠른 큐
 
@@ -401,7 +401,7 @@ struct Version { major: u32, minor: u32, patch: u32 }
 | x **이상**에서 가장 작은 키 | `map.range(x..).next()` |
 | 키 하나를 기준으로 둘로 나누기 | `split_off(&key)` |
 
-`range`는 범위 안의 항목을 오름차순으로 내놓는 반복자를 돌려줍니다. `next()`는 맨 앞 하나를, `next_back()`은 맨 뒤 하나를 꺼냅니다(`next_back`은 뒤에서도 꺼낼 수 있는 반복자의 메서드이며 `ch5-iterators`에서 다룹니다). 범위 문법은 [Part 0 ch3](../../part0-getting-started/ch3-common-concepts/README.md)의 `a..b`, `a..=b`를 그대로 씁니다. 시작이 끝보다 크면 패닉합니다(4.6절).
+`range`는 범위 안의 항목을 오름차순으로 내놓는 반복자를 돌려줍니다. `next()`는 맨 앞 하나를, `next_back()`은 맨 뒤 하나를 꺼냅니다(`next_back`은 뒤에서도 꺼낼 수 있는 반복자의 메서드이며 [ch5](../ch5-iterators/README.md)에서 다룹니다). 범위 문법은 [Part 0 ch3](../../part0-getting-started/ch3-common-concepts/README.md)의 `a..b`, `a..=b`를 그대로 씁니다. 시작이 끝보다 크면 패닉합니다(4.6절).
 
 "x 이하에서 가장 큰 키"는 생각보다 자주 나옵니다. 예제 06은 점수 구간표 `{0: 'F', 60: 'D', 70: 'C', 80: 'B', 90: 'A'}`에서 `range(..=79).next_back()`으로 79점의 학점 `'C'`를 찾습니다. `HashMap`이었다면 모든 기준점을 훑어야 합니다. `BTreeSet`에도 같은 `range`, `first`, `last`, `pop_first`, `pop_last`가 있어서, 버스 출발 시각 집합에서 `range(now..).next()`로 "지금 이후 첫 버스"를 찾습니다.
 
@@ -433,7 +433,7 @@ tags.retain(|t| seen.insert(*t)); // ["rust", "web", "rust", "cli"] → ["rust",
 | 상위집합인가 | `a.is_superset(&b)` | | `bool` |
 | 겹치는 게 없는가 | `a.is_disjoint(&b)` | | `bool` |
 
-- 메서드가 내놓는 것은 원소의 참조(`&T`)입니다. 새 집합으로 모으려면 `a.intersection(&b).copied().collect()`처럼 씁니다. `copied()`는 참조를 값으로 복사해 내놓는 어댑터입니다(`Copy` 타입일 때. 아니면 `cloned()`). 어댑터는 `ch5-iterators`에서 자세히 다룹니다.
+- 메서드가 내놓는 것은 원소의 참조(`&T`)입니다. 새 집합으로 모으려면 `a.intersection(&b).copied().collect()`처럼 씁니다. `copied()`는 참조를 값으로 복사해 내놓는 어댑터입니다(`Copy` 타입일 때. 아니면 `cloned()`). 어댑터는 [ch5](../ch5-iterators/README.md)에서 자세히 다룹니다.
 - 연산자는 원소를 복제해 새 집합을 만들므로 원소 타입이 `Clone`이어야 하고, 원래 두 집합은 그대로 남습니다.
 - `HashSet`의 결과는 순서가 정해져 있지 않으므로 출력할 때는 정렬합니다. `BTreeSet`의 결과는 정렬된 순서로 나옵니다.
 
@@ -573,7 +573,7 @@ sort_by_cached_key: ["apple", "Banana", "Cherry", "date", "fig", "Grape", "kiwi"
 partial_cmp: [3.0, 7.75, 12.5]
 ```
 
-3번의 불안정 정렬 결과와 5번의 `sort_by_key` 호출 횟수는 이 툴체인에서의 결과이며, 정렬 구현이 바뀌면 달라질 수 있습니다. 5번의 `sort`는 바이트 순이라 대문자로 시작하는 단어가 모두 앞에 옵니다(문자열 메서드 `to_lowercase`는 `ch3-strings-fmt`). 6번에서는 `-0.0`이 `0.0`보다 앞에, `NaN`이 `inf`보다 뒤에 놓입니다.
+3번의 불안정 정렬 결과와 5번의 `sort_by_key` 호출 횟수는 이 툴체인에서의 결과이며, 정렬 구현이 바뀌면 달라질 수 있습니다. 5번의 `sort`는 바이트 순이라 대문자로 시작하는 단어가 모두 앞에 옵니다(문자열 메서드 `to_lowercase`는 [ch3](../ch3-strings-fmt/README.md)). 6번에서는 `-0.0`이 `0.0`보다 앞에, `NaN`이 `inf`보다 뒤에 놓입니다.
 
 ### 03_binary_search — 이진 탐색
 
@@ -885,17 +885,23 @@ help: consider annotating `Cell` with `#[derive(Eq, Hash, PartialEq)]`
 error[E0502]: cannot borrow `stock` as mutable because it is also borrowed as immutable
   --> compile_fail/e0502_remove_while_iterating.rs:17:13
    |
-15 |     for (name, count) in &stock {
-   |                          ------
-   |                          |
-   |                          immutable borrow occurs here
-   |                          immutable borrow later used here
-16 |         if *count == 0 {
-17 |             stock.remove(name);
-   |             ^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+15 |       for (name, count) in &stock {
+   |       -                    ------
+   |       |                    |
+   |       |                    immutable borrow occurs here
+   |  _____|                    immutable borrow later used here
+   | |
+16 | |         if *count == 0 {
+17 | |             stock.remove(name);
+   | |             ^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+18 | |         }
+19 | |     }
+   | |_____- this for loop borrows `stock` immutably, preventing mutation within its body
+   |
+   = help: consider using an index-based loop instead, or collecting modifications into a separate collection
 ```
 
-- **읽는 법**: `&stock` 한 곳에 "immutable borrow occurs here"와 "later used here"가 함께 표시됩니다. `for` 문이 반복 내내 맵을 빌리고 있고, 다음 반복으로 넘어갈 때 그 대여를 다시 쓴다는 뜻입니다.
+- **읽는 법**: `&stock` 한 곳에 "immutable borrow occurs here"와 "later used here"가 함께 표시됩니다. `for` 문이 반복 내내 맵을 빌리고 있고, 다음 반복으로 넘어갈 때 그 대여를 다시 쓴다는 뜻입니다. rustc 1.100.0은 반복문 전체에 밑줄을 긋고(`this for loop borrows `stock` immutably`) 인덱스 반복문을 쓰거나 수정할 것을 따로 모으라는 `help:`도 덧붙입니다.
 - **원인**: 순회하는 동안 항목을 지우면 반복자가 가리키던 내부 구조가 바뀝니다. 다른 언어에서는 이것이 실행 중 예외("순회 중 수정")나 조용한 버그가 되지만, Rust는 대여 규칙으로 컴파일할 때 막습니다.
 - **해결**: 조건으로 지울 때는 `stock.retain(|_, count| *count > 0);`처럼 `retain`을 씁니다. 맵의 `retain` 클로저는 키의 참조(`&K`)와 값의 가변 참조(`&mut V`)를 받습니다. 지운 항목이 필요하면 `extract_if`(`HashMap`은 1.88부터 안정화)를, 지울 키를 먼저 모은 뒤 반복이 끝나고 지우는 방법도 있습니다. `Vec`, `HashSet`, `BTreeMap`, `VecDeque`, `BinaryHeap`에도 모두 `retain`이 있습니다.
 

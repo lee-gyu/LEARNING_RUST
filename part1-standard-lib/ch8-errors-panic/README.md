@@ -131,7 +131,7 @@ match read_count(path) {
 
 ### 2.4 `From`으로 `?`가 변환하게 하기
 
-`?`는 `Err(e)`를 만나면 `return Err(From::from(e))`처럼 동작합니다. `From`의 일반 원리는 `ch6-core-traits`에서 배웠으므로, 여기서는 에러에 적용하는 일만 남았습니다. 원인 에러 타입마다 `From`을 구현하면 `?`가 알아서 열거형으로 감쌉니다.
+`?`는 `Err(e)`를 만나면 `return Err(From::from(e))`처럼 동작합니다. `From`의 일반 원리는 [ch6](../ch6-core-traits/README.md)에서 배웠으므로, 여기서는 에러에 적용하는 일만 남았습니다. 원인 에러 타입마다 `From`을 구현하면 `?`가 알아서 열거형으로 감쌉니다.
 
 ```rust
 impl From<io::Error> for ReadCountError {
@@ -183,7 +183,7 @@ let h = h.parse().map_err(|source| SizeErrorB::BadNumber { field: "세로", sour
 
 원인 타입은 숨기면서 체인은 남기고 싶다면 원인을 `Box<dyn Error + Send + Sync>` 필드로 감싸고 `source()`에서 `Some(self.0.as_ref())`를 돌려주는 방법도 있습니다. 대부분은 감싸기가 기본입니다. 정보는 한 번 버리면 되찾을 수 없기 때문입니다.
 
-`Display`, `Error`, `From`을 배리언트마다 손으로 쓰는 일은 반복이 많습니다. 표준 라이브러리의 이 패턴을 매크로로 줄여 주는 크레이트가 있으며, Part 7 `ch2-implementation-errors`에서 다룹니다. 크레이트가 만들어 주는 코드도 결국 이 절의 구현과 같으므로, 손으로 한 번 써 보는 것이 그 크레이트를 이해하는 지름길입니다.
+`Display`, `Error`, `From`을 배리언트마다 손으로 쓰는 일은 반복이 많습니다. 표준 라이브러리의 이 패턴을 매크로로 줄여 주는 크레이트가 있습니다. [부록 A ch4](../../appd-a/ch4-idiomatic-errors/README.md)가 `thiserror`와 `anyhow`로 같은 종류의 에러 타입을 만들어 보이고, 명령줄 프로그램에서의 쓰임은 Part 7 `ch2-implementation-errors`에서 다룹니다. 크레이트가 만들어 주는 코드도 결국 이 절의 구현과 같으므로, 손으로 한 번 써 보는 것이 그 크레이트를 이해하는 지름길입니다.
 
 ### 2.5 `Box<dyn Error>`
 
@@ -219,7 +219,7 @@ fn react(err: &(dyn Error + 'static)) -> String {
 }
 ```
 
-`'static`이 필요한 이유는 다운캐스트가 실행 중에 타입을 비교하는 방식이라, 빌린 참조를 품은 타입의 라이프타임까지 같은지는 확인할 수 없기 때문입니다(`Any`와 다운캐스트 일반은 `ch14-ffi-any-misc`). Part 0 ch17은 "`Box<dyn Error>`는 안에 무엇이 들었는지 타입으로 알 수 없다"고 했는데, 정확히는 **실행 중에 물어볼 수는 있지만 컴파일러가 도와주지 않는다**는 뜻입니다. 위의 `else` 갈래를 빠뜨려도 경고가 없고, 문자열에서 만든 에러는 타입 이름이 공개되지 않아 꺼낼 방법도 없습니다.
+`'static`이 필요한 이유는 다운캐스트가 실행 중에 타입을 비교하는 방식이라, 빌린 참조를 품은 타입의 라이프타임까지 같은지는 확인할 수 없기 때문입니다(`Any`와 다운캐스트 일반은 [ch14](../ch14-ffi-any-misc/README.md)). Part 0 ch17은 "`Box<dyn Error>`는 안에 무엇이 들었는지 타입으로 알 수 없다"고 했는데, 정확히는 **실행 중에 물어볼 수는 있지만 컴파일러가 도와주지 않는다**는 뜻입니다. 위의 `else` 갈래를 빠뜨려도 경고가 없고, 문자열에서 만든 에러는 타입 이름이 공개되지 않아 꺼낼 방법도 없습니다.
 
 **스레드로 넘길 때: `+ Send + Sync`.** `thread::spawn`의 클로저가 돌려주는 값은 `join`을 부른 스레드로 옮겨지므로 `Send`여야 합니다(Part 0 ch15). `Box<dyn Error>`는 `Rc`를 품은 에러처럼 `Send`가 아닌 것도 담을 수 있으므로 다른 스레드로 보낼 수 없습니다(4.4절). `Box<dyn Error + Send + Sync>`는 "다른 스레드로 보내도 되고(`Send`), 여러 스레드가 함께 참조해도 되는(`Sync`) 에러만 담는다"는 약속이 붙은 타입입니다. 표준 라이브러리의 에러는 대부분 이 조건을 만족하므로, 스레드와 함께 쓰는 코드에서는 처음부터 이 모양을 쓰는 경우가 많습니다. `Box<dyn Trait>`의 라이프타임은 따로 적지 않으면 `'static`이라서 `Box<dyn Error + Send + Sync + 'static>`과 같은 타입입니다.
 
@@ -270,7 +270,7 @@ fn report(err: &dyn Error) {
 Error: Startup(BadValue { line: 2, key: "port", source: ParseIntError { kind: InvalidDigit } })
 ```
 
-개발자에게는 쓸모 있지만 사용자에게 보여 줄 문장은 아닙니다. 그래서 사용자가 보는 프로그램은 `main`에서 에러를 `match`로 받아 보고서를 직접 출력하고, 실패를 뜻하는 종료 코드로 끝냅니다. 종료 코드를 정하는 `ExitCode`와 `process::exit`은 `ch10-env-process-time`에서 다룹니다. 표준 라이브러리에도 이 보고를 해 주는 `std::error::Report`와 체인을 반복자로 내주는 `sources()`가 있지만, 둘 다 아직 nightly 전용 실험 API입니다.
+개발자에게는 쓸모 있지만 사용자에게 보여 줄 문장은 아닙니다. 그래서 사용자가 보는 프로그램은 `main`에서 에러를 `match`로 받아 보고서를 직접 출력하고, 실패를 뜻하는 종료 코드로 끝냅니다. 종료 코드를 정하는 `ExitCode`와 `process::exit`은 [ch10](../ch10-env-process-time/README.md)에서 다룹니다. 표준 라이브러리에도 이 보고를 해 주는 `std::error::Report`와 체인을 반복자로 내주는 `sources()`가 있지만, 둘 다 아직 nightly 전용 실험 API입니다.
 
 ### 2.8 패닉 훅
 
@@ -316,7 +316,7 @@ panic::set_hook(Box::new(move |info| {
 pub fn catch_unwind<F: FnOnce() -> R + UnwindSafe, R>(f: F) -> Result<R>
 ```
 
-반환 타입의 `Result<R>`는 `std::thread::Result<R>`, 즉 `Result<R, Box<dyn Any + Send + 'static>>`의 별칭입니다. Part 0 ch15에서 `JoinHandle::join`이 돌려주던 바로 그 타입입니다. 클로저가 정상적으로 끝나면 `Ok(반환값)`, 패닉하면 `Err(페이로드)`입니다. 페이로드는 `Error`를 구현하지 않으므로 `?`로 전파하지 않고, `downcast_ref`로 문자열을 꺼냅니다. `dyn Any`는 "어떤 `'static` 타입이든"이라는 뜻이고 `downcast_ref::<T>()`는 "안에 든 것이 `T`이면 `Some(&T)`"입니다(`Any` 자체는 `ch14-ffi-any-misc`).
+반환 타입의 `Result<R>`는 `std::thread::Result<R>`, 즉 `Result<R, Box<dyn Any + Send + 'static>>`의 별칭입니다. Part 0 ch15에서 `JoinHandle::join`이 돌려주던 바로 그 타입입니다. 클로저가 정상적으로 끝나면 `Ok(반환값)`, 패닉하면 `Err(페이로드)`입니다. 페이로드는 `Error`를 구현하지 않으므로 `?`로 전파하지 않고, `downcast_ref`로 문자열을 꺼냅니다. `dyn Any`는 "어떤 `'static` 타입이든"이라는 뜻이고 `downcast_ref::<T>()`는 "안에 든 것이 `T`이면 `Some(&T)`"입니다(`Any` 자체는 [ch14](../ch14-ffi-any-misc/README.md)).
 
 ```rust
 fn payload_text(payload: &(dyn Any + Send)) -> String {

@@ -18,7 +18,7 @@
 - 독립 프로젝트: `projects/hello_macro` (derive 매크로를 직접 만드는 세 크레이트 워크스페이스)
 - 기준 문서: [The Book 20장 Advanced Features](https://doc.rust-lang.org/book/ch20-00-advanced-features.html)
 - 사용 크레이트: `projects/hello_macro`에서만 `syn` 3.0.10, `quote` 1.0.47 (챕터 예제는 외부 크레이트를 쓰지 않습니다)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1, Edition 2024, macOS(aarch64)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0, Edition 2024, macOS(aarch64). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -185,7 +185,7 @@ unsafe extern "C" {
 - **블록 안의 함수는 기본적으로 unsafe 함수**입니다. C 함수는 Rust의 규칙을 지킨다는 보장이 없기 때문입니다. `strlen`은 끝에 0 바이트가 있는 문자열의 포인터를 받아야 하고, `abs`도 `abs(INT_MIN)`이 C에서 미정의 동작입니다.
 - **`safe fn`** 으로 선언하면 `unsafe` 블록 없이 부를 수 있습니다. 어떤 인자에도 동작이 정의된 함수에만 붙입니다. `safe`를 붙인다고 함수가 안전해지는 것이 아니라 "안전하다"는 약속을 내가 하는 것입니다. 이 챕터는 음수에도 NaN을 돌려줄 뿐인 `sqrt`에 붙였습니다(The Book은 `abs`에 붙이는 예를 보여 주지만, 위의 이유로 여기서는 `abs`를 unsafe로 두었습니다).
 - `c_int`, `c_char`, `c_double`은 C의 `int`, `char`, `double`에 맞는 Rust 타입의 별칭(2.13절)입니다. 플랫폼마다 C 타입의 크기가 다를 수 있어 이 별칭을 씁니다.
-- `c"hello"`는 끝에 0 바이트가 붙은 C 문자열 리터럴이고, `.as_ptr()`로 `*const c_char`를 얻습니다. `strlen(c"안녕".as_ptr())`이 `6`인 것은 UTF-8로 한글 한 글자가 3바이트이기 때문입니다(ch8). C 문자열 타입은 Part 1 `ch14-ffi-any-misc`에서 다룹니다.
+- `c"hello"`는 끝에 0 바이트가 붙은 C 문자열 리터럴이고, `.as_ptr()`로 `*const c_char`를 얻습니다. `strlen(c"안녕".as_ptr())`이 `6`인 것은 UTF-8로 한글 한 글자가 3바이트이기 때문입니다(ch8). C 문자열 타입은 [Part 1 ch14](../../part1-standard-lib/ch14-ffi-any-misc/README.md)에서 다룹니다.
 
 표준 C 라이브러리는 Rust 프로그램에 기본으로 링크되므로(이 환경의 링커 명령에 `-lc`, `-lm`이 들어 있습니다) 따로 설정하지 않아도 됩니다.
 
@@ -274,7 +274,7 @@ static LOG: Mutex<Vec<&str>> = Mutex::new(Vec::new());
 LOG.lock().unwrap().push("첫 번째"); // unsafe가 필요 없습니다.
 ```
 
-원자 타입(`AtomicU32` 등)과 처음 쓸 때 초기화되는 `OnceLock`/`LazyLock`도 이런 용도이며 Part 1 `ch11-threads-sync`에서 다룹니다.
+원자 타입(`AtomicU32` 등)과 처음 쓸 때 초기화되는 `OnceLock`/`LazyLock`도 이런 용도이며 [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md)에서 다룹니다.
 
 ### 2.6 unsafe 트레이트와 유니언
 
@@ -314,7 +314,7 @@ fn zeroed<T: Zeroable>() -> T {
 | `unsafe fn`의 본문 | 본문 전체가 unsafe 블록처럼 취급됨 | 본문 안의 unsafe 연산도 `unsafe { }`로 감쌈 | 경고: `unsafe_op_in_unsafe_fn` (E0133) |
 | `static mut`의 참조 | 경고(`static_mut_refs`) | 에러(`static_mut_refs`가 deny) | 에러: `creating a shared reference to mutable static` |
 
-위 표의 2021 열은 같은 파일을 `rustc --edition 2021`로 컴파일해 확인했습니다(앞의 세 가지는 아무 메시지 없이 컴파일되고, 마지막은 경고만 납니다). 에디션 사이의 차이와 자동 이전(`cargo fix --edition`)은 Part 2 `ch4-rust-2024-language`에서 자세히 다룹니다.
+위 표의 2021 열은 같은 파일을 `rustc --edition 2021`로 컴파일해 확인했습니다(앞의 세 가지는 아무 메시지 없이 컴파일되고, 마지막은 경고만 납니다). 에디션 사이의 차이와 자동 이전(`cargo fix --edition`)은 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md)에서 자세히 다룹니다.
 
 **Miri**: unsafe 코드가 정말 안전한지는 컴파일러가 확인해 주지 않습니다. Miri는 프로그램을 한 줄씩 해석하며 실행해서, 해제된 메모리 읽기나 에일리어싱 규칙 위반 같은 미정의 동작을 **실행 중에** 찾아 주는 공식 도구입니다. nightly 툴체인의 구성 요소라서 따로 설치해야 합니다.
 
@@ -334,7 +334,7 @@ Miri는 실제로 실행된 경로만 검사하므로, 문제를 보고하면 �
 | --- | --- | --- |
 | `Iterator` | `type Item` — 반복자가 내놓는 값의 타입 | ch13 |
 | `Deref` | `type Target` — `*`로 따라가면 나오는 타입 | ch14 |
-| `Future` | `type Output` — 끝나면 내놓는 값의 타입 | `ch16-async` |
+| `Future` | `type Output` — 끝나면 내놓는 값의 타입 | [ch16](../ch16-async/README.md) |
 
 ```rust
 impl Iterator for Counter {
@@ -407,7 +407,7 @@ impl Add<Meters> for Millimeters { // Rhs를 직접 정해 서로 다른 타입�
 | `a[i]` | `Index`, `IndexMut` |
 | `==`, `<` 등 | `PartialEq`, `PartialOrd` (`std::cmp`, ch10에서 derive) |
 
-`std::ops`의 트레이트 전체와 비교·변환 트레이트는 Part 1 `ch6-core-traits`에서 다룹니다.
+`std::ops`의 트레이트 전체와 비교·변환 트레이트는 [Part 1 ch6](../../part1-standard-lib/ch6-core-traits/README.md)에서 다룹니다.
 
 ### 2.10 완전 정규화 문법: 같은 이름의 메서드 구분하기
 
@@ -517,11 +517,11 @@ let number: u32 = match text.parse() {
 
 반환 타입이 `!`인 함수(`fn fail(message: &str) -> ! { panic!(...) }`)는 절대 돌아오지 않는다는 뜻이며, 이런 함수를 **발산 함수(diverging function)** 라고 부릅니다. 예제 06의 `my_unwrap`은 `Option::unwrap`을 단순하게 흉내 낸 함수로, `Some(v) => v` 갈래는 `T`, `None => fail(...)` 갈래는 `!`이므로 `match` 전체의 타입이 `T`가 됩니다.
 
-현재 stable Rust에서 `!`를 타입으로 직접 적을 수 있는 곳은 함수의 반환 타입뿐입니다. `let x: ! = panic!();`처럼 다른 자리에 쓰면 E0658(`` the `!` type is experimental ``)입니다.
+`!`는 함수의 반환 타입 말고 다른 자리에도 타입으로 적을 수 있습니다. `let x: ! = panic!();`이나 `Vec<!>`(원소를 하나도 가질 수 없는 벡터)가 그 예입니다. 다만 이것은 never 타입이 안정화된 rustc 1.100.0부터입니다. 1.98.1까지는 반환 타입이 아닌 자리에 `!`를 쓰면 E0658(`` the `!` type is experimental ``)이었으므로, 오래된 툴체인이나 예전 글에서는 "반환 타입에만 쓸 수 있다"고 되어 있습니다. 타입을 정하지 못한 자리가 `!`로 정해지는 규칙(never 타입 폴백)은 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md) 2.10절에서 다룹니다.
 
 ### 2.15 동적 크기 타입과 `Sized`
 
-`str`(`&str`이 아니라 `str` 자체)은 길이가 값마다 다릅니다. `"hi"`는 2바이트, `"안녕하세요"`는 15바이트입니다. 이렇게 **크기를 실행 중에야 알 수 있는 타입**을 **동적 크기 타입(dynamically sized type, DST)** 이라고 부릅니다. `str`, 슬라이스 `[T]`, 트레이트 객체 `dyn Trait`(`ch17-trait-objects-oop`)이 대표적입니다.
+`str`(`&str`이 아니라 `str` 자체)은 길이가 값마다 다릅니다. `"hi"`는 2바이트, `"안녕하세요"`는 15바이트입니다. 이렇게 **크기를 실행 중에야 알 수 있는 타입**을 **동적 크기 타입(dynamically sized type, DST)** 이라고 부릅니다. `str`, 슬라이스 `[T]`, 트레이트 객체 `dyn Trait`([ch17](../ch17-trait-objects-oop/README.md))이 대표적입니다.
 
 지역 변수와 함수 인자는 스택에 자리를 미리 잡아야 하므로 크기를 컴파일 시점에 알아야 합니다. 그래서 `let s: str = ...`은 E0277입니다(4.6절). **동적 크기 타입은 항상 포인터 뒤에 둡니다.** `&str`, `&[T]`, `Box<str>`, `Rc<str>`, `&dyn Trait`, `Box<dyn Trait>`가 그런 모양입니다. 이런 포인터는 주소와 함께 **추가 정보**(슬라이스·문자열은 길이, 트레이트 객체는 메서드 표의 주소)를 들고 있어서 크기가 보통 참조의 두 배입니다. 64비트 환경에서 확인한 값입니다.
 
@@ -606,7 +606,7 @@ help: you could change the return type to be a boxed trait object
 4 + fn make_op(kind: &str, n: i32) -> Box<dyn Fn(i32) -> i32> {
 ```
 
-`impl Fn`을 반환하는 함수 두 개의 결과를 한 `Vec`에 담으려 할 때도 같은 이유로 `` expected opaque type, found a different opaque type ``이 납니다. 이럴 때는 `help:`대로 **트레이트 객체** `Box<dyn Fn(i32) -> i32>`(`ch17-trait-objects-oop`)로 감싸 모든 클로저를 같은 타입으로 맞춥니다.
+`impl Fn`을 반환하는 함수 두 개의 결과를 한 `Vec`에 담으려 할 때도 같은 이유로 `` expected opaque type, found a different opaque type ``이 납니다. 이럴 때는 `help:`대로 **트레이트 객체** `Box<dyn Fn(i32) -> i32>`([ch17](../ch17-trait-objects-oop/README.md))로 감싸 모든 클로저를 같은 타입으로 맞춥니다.
 
 | 반환 타입 | 쓸 수 있는 경우 | 비용 |
 | --- | --- | --- |
@@ -1252,7 +1252,7 @@ ch10의 `impl<T> Point<T>`처럼 `impl<T> HelloMacro for Stack<T>`를 만들어�
   - [Unsafe Operations](https://doc.rust-lang.org/rust-by-example/unsafe.html): 원시 포인터 역참조와 `slice::from_raw_parts`. 이 절은 unsafe의 용도를 네 가지로 소개하며 유니언은 빼고 셉니다. 하위 절 [Inline assembly](https://doc.rust-lang.org/rust-by-example/unsafe/asm.html)는 Part 9 `ch10-unsafety-const-asm`의 내용입니다.
   - [Traits > Operator Overloading](https://doc.rust-lang.org/rust-by-example/trait/ops.html): `Foo + Bar`와 `Bar + Foo`를 따로 구현하는 예로, 2.9절의 "순서마다 따로 구현한다"를 보여 줍니다.
   - [Traits > Disambiguating overlapping traits](https://doc.rust-lang.org/rust-by-example/trait/disambiguating.html): 타입 자신의 메서드 없이 두 트레이트가 `get`을 가진 경우(2.10절의 E0034)와 `<Form as UsernameWidget>::get(&form)`.
-  - [Traits > Supertraits](https://doc.rust-lang.org/rust-by-example/trait/supertraits.html): 슈퍼트레이트를 둘 가진 `CompSciStudent: Programmer + Student`. `&dyn CompSciStudent`는 `ch17-trait-objects-oop`의 트레이트 객체입니다.
+  - [Traits > Supertraits](https://doc.rust-lang.org/rust-by-example/trait/supertraits.html): 슈퍼트레이트를 둘 가진 `CompSciStudent: Programmer + Student`. `&dyn CompSciStudent`는 [ch17](../ch17-trait-objects-oop/README.md)의 트레이트 객체입니다.
   - [Generics > New Type Idiom](https://doc.rust-lang.org/rust-by-example/generics/new_types.html): `Miles`와 `Kilometers`로 단위를 구분하는 뉴타입, 구조 분해로 안쪽 값 꺼내기.
   - [Generics > Associated items > Associated types](https://doc.rust-lang.org/rust-by-example/generics/assoc_items/types.html): 앞 절 [The Problem](https://doc.rust-lang.org/rust-by-example/generics/assoc_items/the_problem.html)과 함께 읽으면 제네릭 트레이트를 연관 타입으로 바꿨을 때 바운드가 짧아지는 것을 볼 수 있습니다(2.8절).
   - [Types > Aliasing](https://doc.rust-lang.org/rust-by-example/types/alias.html): 타입 별칭(2.13절).
@@ -1266,7 +1266,7 @@ ch10의 `impl<T> Point<T>`처럼 `impl<T> HelloMacro for Stack<T>`를 만들어�
   - [Unsafe extern blocks](https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-extern.html), [Unsafe attributes](https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-attributes.html), [unsafe_op_in_unsafe_fn warning](https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html), [Disallow references to static mut](https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html)
 - 더 깊이
   - [The Rustonomicon](https://doc.rust-lang.org/nomicon/): unsafe Rust를 올바르게 쓰는 법. Part 10 전체가 이 문서를 다룹니다.
-  - [The Little Book of Rust Macros](https://veykril.github.io/tlborm/): `macro_rules!`를 깊이 다루는 문서로, Rustlings `21_macros`의 README가 추천합니다.
+  - [The Little Book of Rust Macros](https://lukaswirth.dev/tlborm/): `macro_rules!`를 깊이 다루는 문서로, Rustlings `21_macros`의 README가 추천합니다.
   - [`syn` 3.0.10 문서](https://docs.rs/syn/3.0.10/syn/), [`quote` 1.0.47 문서](https://docs.rs/quote/1.0.47/quote/): `DeriveInput`의 필드와 `quote!`의 반복 문법(`#(...)*`).
   - [Miri](https://github.com/rust-lang/miri), [cargo-expand](https://github.com/dtolnay/cargo-expand): 2.7절과 2.18절에서 이름만 소개한 도구입니다.
 - 에러 설명: `rustc --explain E0790`처럼 에러 코드를 넣어 실행하면 터미널에서 설명과 예제를 볼 수 있습니다.

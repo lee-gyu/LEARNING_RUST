@@ -14,7 +14,7 @@
 - 기준 문서: [Edition Guide 4. Rust 2021](https://doc.rust-lang.org/edition-guide/rust-2021/index.html)
 - 확인한 툴체인: rustc 1.100.0, cargo 1.100.0, macOS (aarch64)
 - 실습 자료는 세 종류입니다. `examples/`는 이 저장소의 에디션(2024)으로 컴파일되며 2021에서 들어와 지금도 이어지는 동작을 보여 줍니다. `projects/`는 같은 코드를 2018과 2021로 컴파일해 비교하는 독립 프로젝트이고, `compile_fail/`은 `rustc --edition`으로 에디션을 바꿔 가며 컴파일해 보는 파일입니다.
-- 앞 챕터: Part 2 [`ch1-editions-overview`](../ch1-editions-overview/README.md)(에디션은 크레이트마다 고르고, 에디션이 다른 크레이트도 함께 링크된다), `ch2-rust-2015-2018`(2018 에디션의 변화, raw 식별자 `r#`). ch1의 2.4절은 배열 `into_iter()`와 `use` 없는 `u8::try_from`을 "에디션의 효과"의 예로 한 줄씩 보였고, 이 챕터는 그 원리와 2018/2021 비교를 자세히 다룹니다.
+- 앞 챕터: Part 2 [`ch1-editions-overview`](../ch1-editions-overview/README.md)(에디션은 크레이트마다 고르고, 에디션이 다른 크레이트도 함께 링크된다), [ch2](../ch2-rust-2015-2018/README.md)(2018 에디션의 변화, raw 식별자 `r#`). ch1의 2.4절은 배열 `into_iter()`와 `use` 없는 `u8::try_from`을 "에디션의 효과"의 예로 한 줄씩 보였고, 이 챕터는 그 원리와 2018/2021 비교를 자세히 다룹니다.
 
 ## 1. 학습 목표
 
@@ -51,7 +51,7 @@
 rustc --edition 2018 -W rust-2021-compatibility 파일.rs
 ```
 
-`cargo fix --edition`은 이 그룹을 켜고 린트가 제안하는 자동 수정을 적용하는 명령입니다. 절차는 Part 2 `ch6-migration-practice`에서 다룹니다. 이 챕터에서는 각 항목을 손으로 고치는 방법을 익힙니다. 린트가 모든 변화를 잡지는 못한다는 점도 기억해 둡니다. 3절의 `same_code`에서 6번 구역(`$p:pat`)의 동작 변화는 어떤 린트도 알려 주지 않았습니다.
+`cargo fix --edition`은 이 그룹을 켜고 린트가 제안하는 자동 수정을 적용하는 명령입니다. 절차는 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다. 이 챕터에서는 각 항목을 손으로 고치는 방법을 익힙니다. 린트가 모든 변화를 잡지는 못한다는 점도 기억해 둡니다. 3절의 `same_code`에서 6번 구역(`$p:pat`)의 동작 변화는 어떤 린트도 알려 주지 않았습니다.
 
 **절마다 같은 순서로 설명합니다.** 2018에서는 어땠나 → 2021에서 무엇이 바뀌었나 → 왜 에디션 변경이어야 했나(기존 코드가 깨지는 지점) → 2018 코드를 옮길 때 어떻게 고치나.
 
@@ -105,7 +105,7 @@ warning: trait method `try_into` will become ambiguous in Rust 2021
 
 **옮길 때.** 사용자 트레이트의 메서드를 부르려던 것이라면 트레이트 이름을 경로에 적습니다. `Clamp::try_into(&x)` 또는 완전 정규화 문법 `<i32 as Clamp>::try_into(&x)`입니다(예제 01의 2번 구역). 연관 함수도 마찬가지로, Edition Guide의 예인 `<Vec<i32>>::from_iter(None)`은 2021에서 E0034이고 `<Vec<i32> as MyTrait<()>>::from_iter(None)`으로 고칩니다. `dyn Trait`에서 부르는 경우는 `(&*f).try_into()`처럼 수신자를 `&dyn Trait`로 바꾸면 트레이트 객체의 메서드가 먼저 잡힙니다. 메서드 이름을 바꾸는 것도 방법입니다.
 
-2024 에디션은 프렐류드에 `Future`와 `IntoFuture`를 더했고, 같은 종류의 충돌을 잡는 `rust_2024_prelude_collisions` 린트가 있습니다(Part 2 `ch5-rust-2024-ecosystem`).
+2024 에디션은 프렐류드에 `Future`와 `IntoFuture`를 더했고, 같은 종류의 충돌을 잡는 `rust_2024_prelude_collisions` 린트가 있습니다([Part 2 ch5](../ch5-rust-2024-ecosystem/README.md)).
 
 ### 2.3 기본 기능 리졸버가 2가 되었습니다
 
@@ -161,7 +161,7 @@ app2021 v0.1.0 (…/feature_resolver/app2021)
 └── flags v0.1.0 (…/feature_resolver/flags)
 ```
 
-Edition Guide는 이 밖에 `cargo tree -d`(두 번 빌드되는 패키지), `cargo tree -e features -i 패키지`(기능이 어디서 흘러 들어오는지)를 소개하고, `cargo fix --edition`이 꺼지게 될 기능을 보고한다고 설명합니다. 2024 에디션은 기본값을 `resolver = "3"`(의존성의 `rust-version`을 고려하는 리졸버)으로 바꿨고, 이 저장소의 루트 `Cargo.toml`도 `resolver = "3"`입니다(Part 2 `ch5-rust-2024-ecosystem`).
+Edition Guide는 이 밖에 `cargo tree -d`(두 번 빌드되는 패키지), `cargo tree -e features -i 패키지`(기능이 어디서 흘러 들어오는지)를 소개하고, `cargo fix --edition`이 꺼지게 될 기능을 보고한다고 설명합니다. 2024 에디션은 기본값을 `resolver = "3"`(의존성의 `rust-version`을 고려하는 리졸버)으로 바꿨고, 이 저장소의 루트 `Cargo.toml`도 `resolver = "3"`입니다([Part 2 ch5](../ch5-rust-2024-ecosystem/README.md)).
 
 ### 2.4 배열이 값으로 `IntoIterator`를 구현합니다
 
@@ -193,7 +193,7 @@ help: or use `IntoIterator::into_iter(..)` instead of `.into_iter()` to explicit
 
 참조를 원했다면 `.iter()`로 바꿉니다. 모든 에디션에서 `&T`입니다. 값을 원했다면 `IntoIterator::into_iter(arr)`로 쓰고, 2021로 옮긴 뒤 `arr.into_iter()`로 줄입니다. Clippy도 2018에서 같은 줄을 `into_iter_on_ref`(`this .into_iter() call is equivalent to .iter()`)로 잡습니다.
 
-2024 에디션은 `Box<[T]>`에 같은 일을 했습니다. 2021 에디션에서 `boxed.into_iter()`는 아직 `&T`를 내놓고 `boxed_slice_into_iter` 린트가 경고합니다(Part 2 `ch5-rust-2024-ecosystem`). `IntoIterator` 자체는 [Part 0 ch13](../../part0-getting-started/ch13-closures-iterators/README.md) 2.11절과 [Part 1 ch5](../../part1-standard-lib/ch5-iterators/README.md)에서 다뤘습니다.
+2024 에디션은 `Box<[T]>`에 같은 일을 했습니다. 2021 에디션에서 `boxed.into_iter()`는 아직 `&T`를 내놓고 `boxed_slice_into_iter` 린트가 경고합니다([Part 2 ch5](../ch5-rust-2024-ecosystem/README.md)). `IntoIterator` 자체는 [Part 0 ch13](../../part0-getting-started/ch13-closures-iterators/README.md) 2.11절과 [Part 1 ch5](../../part1-standard-lib/ch5-iterators/README.md)에서 다뤘습니다.
 
 ### 2.5 클로저가 필드 단위로 캡처합니다(분리 캡처)
 
@@ -242,7 +242,7 @@ help: add a dummy let to cause `t` to be fully captured
    |                          +++++++++++++           +
 ```
 
-`help:`의 `let _ = &t;`를 "더미 let"이라고 부릅니다. `&t`는 계산해야 하는 표현식이므로 클로저가 `t` 전체를 캡처하게 되고, 2018과 같은 동작이 됩니다(예제 03의 5번 구역). 비슷해 보이는 `let _ = t;`는 아무것도 캡처하지 않습니다. `_` 패턴은 오른쪽 값을 읽지 않고, `t`는 계산할 것이 없는 "자리"(변수)이기 때문입니다. `cargo fix --edition`은 동작이 바뀔 수 있는 곳에 더미 let을 보수적으로 넣으므로, 넣어 준 줄 중 상당수는 지워도 됩니다. 이 판단은 Part 2 `ch6-migration-practice`에서 다룹니다.
+`help:`의 `let _ = &t;`를 "더미 let"이라고 부릅니다. `&t`는 계산해야 하는 표현식이므로 클로저가 `t` 전체를 캡처하게 되고, 2018과 같은 동작이 됩니다(예제 03의 5번 구역). 비슷해 보이는 `let _ = t;`는 아무것도 캡처하지 않습니다. `_` 패턴은 오른쪽 값을 읽지 않고, `t`는 계산할 것이 없는 "자리"(변수)이기 때문입니다. `cargo fix --edition`은 동작이 바뀔 수 있는 곳에 더미 let을 보수적으로 넣으므로, 넣어 준 줄 중 상당수는 지워도 됩니다. 이 판단은 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다.
 
 ### 2.6 `panic!`이 언제나 서식 문자열을 처리합니다
 
@@ -302,7 +302,7 @@ help: consider inserting whitespace here to avoid this
     |                    +
 ```
 
-2024 에디션은 `#"..."` 모양을 더 예약했습니다(Part 2 `ch4-rust-2024-language`).
+2024 에디션은 `#"..."` 모양을 더 예약했습니다([Part 2 ch4](../ch4-rust-2024-language/README.md)).
 
 ### 2.8 C 문자열 리터럴 `c"..."`, `cr"..."`
 
@@ -322,7 +322,7 @@ error: expected one of `!`, `.`, `::`, `;`, `?`, `else`, `{`, or an operator, fo
 
 **2018에서는.** `'r#a`는 `'r`, `#`, `a` 세 토큰이라 라이프타임 자리에서는 에러입니다(`` expected one of `,`, `:`, or `>`, found `#` ``).
 
-**2021에서는.** 1.83.0부터 `'r#이름`을 라이프타임으로 쓸 수 있습니다. Part 2 `ch2-rust-2015-2018`의 raw 식별자 `r#match`가 식별자에 하는 일을 라이프타임에 합니다. `'r#a`는 `'a`와 같은 라이프타임이고, 키워드와 같은 이름도 쓸 수 있습니다. 예제 05의 3번 구역은 `'r#gen`을 씁니다.
+**2021에서는.** 1.83.0부터 `'r#이름`을 라이프타임으로 쓸 수 있습니다. [Part 2 ch2](../ch2-rust-2015-2018/README.md)의 raw 식별자 `r#match`가 식별자에 하는 일을 라이프타임에 합니다. `'r#a`는 `'a`와 같은 라이프타임이고, 키워드와 같은 이름도 쓸 수 있습니다. 예제 05의 3번 구역은 `'r#gen`을 씁니다.
 
 ```rust
 fn longer<'r#gen>(a: &'r#gen str, b: &'r#gen str) -> &'r#gen str {
@@ -343,7 +343,7 @@ fn longer<'r#gen>(a: &'r#gen str, b: &'r#gen str) -> &'r#gen str {
 | `dyn` 없는 트레이트 객체 `Box<Shape>` | `trait objects without an explicit dyn are deprecated` | E0782 `expected a type, found a trait` (4.1절) | `Box<dyn Shape>` |
 | `...` 범위 패턴 `90...100` | `` `...` range patterns are deprecated `` | E0783 `` `...` range patterns are deprecated `` | `90..=100` |
 
-2018의 경고에는 `this is accepted in the current edition (Rust 2018) but is a hard error in Rust 2021!`이라는 줄이 붙습니다. **왜 에디션이 필요했나**는 간단합니다. 경고를 에러로 바꾸면 경고를 무시하던 코드가 컴파일되지 않기 때문입니다. `dyn`이 생긴 배경은 Part 2 `ch2-rust-2015-2018`에서, 트레이트 객체와 범위 패턴은 [Part 0 ch17](../../part0-getting-started/ch17-trait-objects-oop/README.md)과 [Part 0 ch18](../../part0-getting-started/ch18-patterns/README.md)에서 다뤘습니다.
+2018의 경고에는 `this is accepted in the current edition (Rust 2018) but is a hard error in Rust 2021!`이라는 줄이 붙습니다. **왜 에디션이 필요했나**는 간단합니다. 경고를 에러로 바꾸면 경고를 무시하던 코드가 컴파일되지 않기 때문입니다. `dyn`이 생긴 배경은 [Part 2 ch2](../ch2-rust-2015-2018/README.md)에서, 트레이트 객체와 범위 패턴은 [Part 0 ch17](../../part0-getting-started/ch17-trait-objects-oop/README.md)과 [Part 0 ch18](../../part0-getting-started/ch18-patterns/README.md)에서 다뤘습니다.
 
 ### 2.11 `macro_rules`의 `$p:pat`이 `A | B`를 받습니다
 
@@ -374,17 +374,17 @@ warning: the meaning of the `pat` fragment specifier is changing in Rust 2021, w
    = warning: this is accepted in the current edition (Rust 2018) but is a hard error in Rust 2021!
 ```
 
-다만 이 린트는 `classify!`처럼 받는 규칙이 바뀌는 경우는 짚지 않았습니다. 규칙이 여럿이고 앞 규칙에 `$p:pat`이 있는 매크로는 직접 살펴보고, 2018의 동작이 필요하면 `pat_param`으로 바꿉니다. 프래그먼트 지정자 전체는 Part 9 `ch2-macros`에서, 2024 에디션의 `expr` 프래그먼트 변경은 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+다만 이 린트는 `classify!`처럼 받는 규칙이 바뀌는 경우는 짚지 않았습니다. 규칙이 여럿이고 앞 규칙에 `$p:pat`이 있는 매크로는 직접 살펴보고, 2018의 동작이 필요하면 `pat_param`으로 바꿉니다. 프래그먼트 지정자 전체는 Part 9 `ch2-macros`에서, 2024 에디션의 `expr` 프래그먼트 변경은 [Part 2 ch4](../ch4-rust-2024-language/README.md)에서 다룹니다.
 
 ### 2.12 이 챕터에서 다루지 않는 것
 
 | 주제 | 다루는 곳 |
 | --- | --- |
 | 에디션이라는 제도, 크레이트마다 다른 에디션을 함께 링크하기, 매크로 본문의 에디션 | Part 2 [`ch1-editions-overview`](../ch1-editions-overview/README.md) |
-| 2018 에디션의 변화(경로와 모듈, `async`/`await`/`dyn` 키워드), raw 식별자 | Part 2 `ch2-rust-2015-2018` |
-| 2024 에디션의 언어 변화(`gen` 키워드, `#"..."` 예약, `expr` 프래그먼트, 임시값 범위 등) | Part 2 `ch4-rust-2024-language` |
-| 2024 에디션의 프렐류드(`Future`/`IntoFuture`), `resolver = "3"`, `Box<[T]>`의 `IntoIterator` | Part 2 `ch5-rust-2024-ecosystem` |
-| `cargo fix --edition`의 절차와 자동 수정이 넣어 주는 코드 | Part 2 `ch6-migration-practice` |
+| 2018 에디션의 변화(경로와 모듈, `async`/`await`/`dyn` 키워드), raw 식별자 | [Part 2 ch2](../ch2-rust-2015-2018/README.md) |
+| 2024 에디션의 언어 변화(`gen` 키워드, `#"..."` 예약, `expr` 프래그먼트, 임시값 범위 등) | [Part 2 ch4](../ch4-rust-2024-language/README.md) |
+| 2024 에디션의 프렐류드(`Future`/`IntoFuture`), `resolver = "3"`, `Box<[T]>`의 `IntoIterator` | [Part 2 ch5](../ch5-rust-2024-ecosystem/README.md) |
+| `cargo fix --edition`의 절차와 자동 수정이 넣어 주는 코드 | [Part 2 ch6](../ch6-migration-practice/README.md) |
 | 기능, 의존성 해석의 상세 | Part 3 `ch5-features`, [ch2](../../part3-cargo/ch2-dependencies/README.md) |
 | 매크로 프래그먼트 지정자 전체 | Part 9 `ch2-macros` |
 

@@ -7,7 +7,7 @@
 - 패키지: `p0-ch12-io-project-minigrep`
 - 독립 프로젝트: `projects/minigrep`
 - 기준 문서: [The Book 12장 An I/O Project: Building a Command Line Program](https://doc.rust-lang.org/book/ch12-00-an-io-project.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -45,7 +45,7 @@ How public, like a frog
 | 7 | 〃 | 환경 변수 `IGNORE_CASE`로 대소문자 무시하기 | 12.5 |
 | 8 | 〃 | 에러 메시지를 표준 에러로 보내기 | 12.6 |
 
-앞 챕터에서 배운 것이 이렇게 쓰입니다: 소유권과 복제(ch4), 구조체와 `impl`(ch5), `match`와 `if let`(ch6), 라이브러리와 바이너리를 함께 가진 패키지(ch7), `Vec`과 `String`(ch8), `Result`·`?`·`Box<dyn Error>`(`ch9-error-handling`), 라이프타임(`ch10-generics-traits-lifetimes`), `#[test]`와 `cargo test`(`ch11-testing`).
+앞 챕터에서 배운 것이 이렇게 쓰입니다: 소유권과 복제(ch4), 구조체와 `impl`(ch5), `match`와 `if let`(ch6), 라이브러리와 바이너리를 함께 가진 패키지(ch7), `Vec`과 `String`(ch8), `Result`·`?`·`Box<dyn Error>`([ch9](../ch9-error-handling/README.md)), 라이프타임([ch10](../ch10-generics-traits-lifetimes/README.md)), `#[test]`와 `cargo test`([ch11](../ch11-testing/README.md)).
 
 ### 2.2 명령줄 인자 받기: `std::env::args`
 
@@ -55,7 +55,7 @@ use std::env;
 let args: Vec<String> = env::args().collect();
 ```
 
-- `env::args()`는 프로그램이 받은 인자를 하나씩 꺼내 주는 **반복자(iterator)** 를 돌려줍니다. 반복자는 `ch13-closures-iterators`에서 자세히 다루고, 지금은 "값을 차례로 꺼내 주는 것"으로 보면 됩니다.
+- `env::args()`는 프로그램이 받은 인자를 하나씩 꺼내 주는 **반복자(iterator)** 를 돌려줍니다. 반복자는 [ch13](../ch13-closures-iterators/README.md)에서 자세히 다루고, 지금은 "값을 차례로 꺼내 주는 것"으로 보면 됩니다.
 - `collect()`는 반복자가 내놓는 값을 모아 컬렉션 하나로 만듭니다. 벡터, 해시 맵 등 여러 컬렉션을 만들 수 있어서 무엇을 만들지 스스로 정하지 못하므로 `Vec<String>`이라고 타입을 적어 줍니다.
 - **0번 자리는 실행 파일 경로**입니다. 사용자가 넘긴 인자는 1번부터 들어 있습니다. 그래서 인자 없이 실행해도 길이는 1입니다. 0번 값은 실행한 위치에 따라 달라집니다(3절 예제 01).
 - 인자는 셸이 공백으로 나눠 넘깁니다. 공백이 든 값을 인자 하나로 넘기려면 따옴표로 감쌉니다. 한글 인자도 그대로 `String`이 됩니다.
@@ -64,7 +64,7 @@ let args: Vec<String> = env::args().collect();
   ```console
   $ cargo run -q -p p0-ch12-io-project-minigrep --example 01_args -- $'\xff'
 
-  thread 'main' (6290064) panicked at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/env.rs:878:51:
+  thread 'main' (6290064) panicked at /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/std/src/env.rs:877:51:
   called `Result::unwrap()` on an `Err` value: "\xFF"
   note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
   ```
@@ -115,7 +115,7 @@ struct Config {
 Config { query: args[1], file_path: args[2] } // E0508: cannot move out of type `[String]`
 ```
 
-방법은 두 가지입니다. `Config`의 필드를 `&str` 참조로 만들면 복사는 없지만, `Config`가 `args`보다 오래 살 수 없다는 라이프타임 관계를 구조체에 적어야 합니다. `args[1].clone()`으로 복제하면 메모리와 시간이 조금 더 들지만 `Config`가 자기 값을 소유하므로 라이프타임을 신경 쓸 필요가 없습니다. 인자 두 개를 실행할 때 한 번 복사하는 비용은 무시할 만하므로, 이 프로젝트는 단순한 쪽인 `clone`을 택합니다. 처음부터 완벽하게 최적화하려 하기보다 먼저 동작하는 코드를 만드는 것이 낫습니다. 복제 없이 처리하는 방법은 `ch13-closures-iterators`에서 반복자로 다시 다룹니다.
+방법은 두 가지입니다. `Config`의 필드를 `&str` 참조로 만들면 복사는 없지만, `Config`가 `args`보다 오래 살 수 없다는 라이프타임 관계를 구조체에 적어야 합니다. `args[1].clone()`으로 복제하면 메모리와 시간이 조금 더 들지만 `Config`가 자기 값을 소유하므로 라이프타임을 신경 쓸 필요가 없습니다. 인자 두 개를 실행할 때 한 번 복사하는 비용은 무시할 만하므로, 이 프로젝트는 단순한 쪽인 `clone`을 택합니다. 처음부터 완벽하게 최적화하려 하기보다 먼저 동작하는 코드를 만드는 것이 낫습니다. 복제 없이 처리하는 방법은 [ch13](../ch13-closures-iterators/README.md)에서 반복자로 다시 다룹니다.
 
 ### 2.5 리팩터링 ②: 패닉 대신 `Result`로 알리기
 
@@ -136,7 +136,7 @@ impl Config {
 }
 ```
 
-- **왜 `panic!`이 아니라 `Result`인가?** 패닉은 "프로그램에 버그가 있다"는 신호입니다. 인자를 빠뜨리는 것은 버그가 아니라 사용자가 충분히 저지를 수 있는 실수이므로, 실패를 값(`Err`)으로 돌려주고 어떻게 알릴지는 호출한 쪽이 정하게 합니다(`ch9-error-handling`의 "패닉과 `Result`의 선택 기준").
+- **왜 `panic!`이 아니라 `Result`인가?** 패닉은 "프로그램에 버그가 있다"는 신호입니다. 인자를 빠뜨리는 것은 버그가 아니라 사용자가 충분히 저지를 수 있는 실수이므로, 실패를 값(`Err`)으로 돌려주고 어떻게 알릴지는 호출한 쪽이 정하게 합니다([ch9](../ch9-error-handling/README.md)의 "패닉과 `Result`의 선택 기준").
 - **왜 `new`가 아니라 `build`인가?** Rust에서는 `new`라는 이름의 생성자는 실패하지 않는다고 기대하는 관례가 있습니다. 실패할 수 있으므로 다른 이름을 붙입니다.
 - **에러 타입 `&'static str`**: 문자열 리터럴의 타입입니다. 리터럴은 프로그램 바이너리에 들어 있어 프로그램이 끝날 때까지 유효하므로 라이프타임이 `'static`입니다.
 
@@ -165,9 +165,9 @@ let config = match Config::build(&args) {
 
 `process::exit`의 반환 타입은 "절대 돌아오지 않음"을 뜻하는 `!`입니다. 그래서 `Err` 갈래가 `Config` 값을 만들지 않아도 `match` 전체의 타입이 `Config`로 맞습니다. ch6에서 `let...else`의 `else`가 흐름을 끊어야 한다고 했던 것과 같은 원리입니다. 단, `process::exit`는 즉시 끝나므로 아직 살아 있는 값이 drop되지 않습니다. 메모리는 프로세스가 끝나면 운영체제가 회수하므로 지금처럼 `main`에서 끝낼 때는 문제가 없지만, drop될 때 마무리 작업을 해야 하는 값이 살아 있다면 주의해야 합니다.
 
-> **The Book의 `unwrap_or_else`**: The Book은 같은 일을 `Config::build(&args).unwrap_or_else(|err| { ... })`로 씁니다. `|err| { ... }`는 이름 없는 함수인 **클로저(closure)** 로, `unwrap_or_else`는 값이 `Ok`면 안의 값을 꺼내고 `Err`일 때만 클로저에 에러 값을 넘겨 실행합니다. 위의 `match`와 같은 동작입니다. 클로저는 `ch13-closures-iterators`에서 배우며, 거기서 이 프로젝트를 반복자와 클로저로 개선합니다.
+> **The Book의 `unwrap_or_else`**: The Book은 같은 일을 `Config::build(&args).unwrap_or_else(|err| { ... })`로 씁니다. `|err| { ... }`는 이름 없는 함수인 **클로저(closure)** 로, `unwrap_or_else`는 값이 `Ok`면 안의 값을 꺼내고 `Err`일 때만 클로저에 에러 값을 넘겨 실행합니다. 위의 `match`와 같은 동작입니다. 클로저는 [ch13](../ch13-closures-iterators/README.md)에서 배우며, 거기서 이 프로젝트를 반복자와 클로저로 개선합니다.
 
-**`main`이 `Result`를 돌려주면 되지 않을까?** `ch9-error-handling`에서처럼 `fn main() -> Result<(), &'static str>`로 쓰고 `?`를 써도 종료 코드 1로 끝나기는 합니다. 하지만 에러가 디버그 형식으로 `Error: "인자가 부족합니다"`처럼 따옴표째 출력되고, 사용법 같은 안내를 덧붙일 수 없습니다. 사용자에게 보여 줄 메시지를 직접 정하고 싶어서 `match`와 `process::exit`를 씁니다.
+**`main`이 `Result`를 돌려주면 되지 않을까?** [ch9](../ch9-error-handling/README.md)에서처럼 `fn main() -> Result<(), &'static str>`로 쓰고 `?`를 써도 종료 코드 1로 끝나기는 합니다. 하지만 에러가 디버그 형식으로 `Error: "인자가 부족합니다"`처럼 따옴표째 출력되고, 사용법 같은 안내를 덧붙일 수 없습니다. 사용자에게 보여 줄 메시지를 직접 정하고 싶어서 `match`와 `process::exit`를 씁니다.
 
 ### 2.6 리팩터링 ③: 로직을 `run`으로 빼기
 
@@ -184,7 +184,7 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
 ```
 
 - 성공했을 때 돌려줄 값이 없으므로 `Ok` 쪽은 유닛 타입 `()`이고, 마지막에 `Ok(())`를 돌려줍니다. "부수 효과(출력)를 위해 불렀고 돌려줄 값은 없다"는 뜻입니다.
-- `Box<dyn Error>`는 "`Error` 트레이트를 구현한 타입이면 무엇이든"이라는 뜻의 에러 타입입니다. `?`는 `io::Error`를 이 타입으로 바꿔서 돌려줍니다. 에러 타입을 `&'static str`로 정하면 `io::Error`를 `&str`로 바꿀 방법이 없어 E0277이 납니다(4.3절). `dyn`과 트레이트 객체는 `ch17-trait-objects-oop`에서 자세히 다룹니다.
+- `Box<dyn Error>`는 "`Error` 트레이트를 구현한 타입이면 무엇이든"이라는 뜻의 에러 타입입니다. `?`는 `io::Error`를 이 타입으로 바꿔서 돌려줍니다. 에러 타입을 `&'static str`로 정하면 `io::Error`를 `&str`로 바꿀 방법이 없어 E0277이 납니다(4.3절). `dyn`과 트레이트 객체는 [ch17](../ch17-trait-objects-oop/README.md)에서 자세히 다룹니다.
 
 `main`에서는 `if let`으로 `Err`인 경우만 골라냅니다. 성공하면 꺼낼 값이 `()`뿐이므로 `match`로 두 갈래를 다 쓸 필요가 없습니다.
 
@@ -231,7 +231,7 @@ help: use `let _ = ...` to ignore the resulting value
 **왜 나누는가?**
 
 - **테스트하기 쉬워집니다.** `main`은 인자를 받지도 값을 돌려주지도 않고, `env::args()`를 읽고 `process::exit`로 끝나 버리므로 테스트에서 부르기 어렵습니다. 반면 `Config::build(&args)`나 `search(query, contents)`처럼 값을 받아 값을 돌려주는 함수는 `#[test]`에서 바로 부르고 결과를 비교할 수 있습니다.
-- **통합 테스트는 라이브러리 크레이트만 쓸 수 있습니다.** `ch11-testing`에서 본 `tests/` 디렉터리의 통합 테스트는 `use`로 라이브러리 크레이트의 공개 항목을 가져와 씁니다. 바이너리 크레이트(`src/main.rs`)의 함수는 가져올 수 없습니다. 중요한 기능을 라이브러리에 두면 통합 테스트로 검사할 수 있고, 남은 `main.rs`는 눈으로 확인할 수 있을 만큼 작아집니다.
+- **통합 테스트는 라이브러리 크레이트만 쓸 수 있습니다.** [ch11](../ch11-testing/README.md)에서 본 `tests/` 디렉터리의 통합 테스트는 `use`로 라이브러리 크레이트의 공개 항목을 가져와 씁니다. 바이너리 크레이트(`src/main.rs`)의 함수는 가져올 수 없습니다. 중요한 기능을 라이브러리에 두면 통합 테스트로 검사할 수 있고, 남은 `main.rs`는 눈으로 확인할 수 있을 만큼 작아집니다.
 - **다시 쓸 수 있습니다.** 라이브러리에 둔 `search`는 다른 프로그램에서도 가져다 쓸 수 있습니다.
 
 `projects/minigrep`은 이렇게 나눕니다.
@@ -338,7 +338,7 @@ warning: build failed, waiting for other jobs to finish...
 error: could not compile `minigrep` (lib test) due to 1 previous error
 ```
 
-**왜 라이프타임이 필요한가?** `search`가 돌려주는 `Vec<&str>` 안의 `&str`은 새로 만든 문자열이 아니라 `contents`의 일부를 가리키는 슬라이스입니다. 반환값이 참조이면 컴파일러는 "그 참조가 어느 매개변수에서 빌려 온 것인지"를 알아야, 호출한 쪽에서 결과를 쓰는 동안 원본이 살아 있는지 검사할 수 있습니다. 참조 매개변수가 하나뿐이면 라이프타임 생략 규칙이 알아서 이어 주지만, `query`와 `contents` 두 개라서 정할 수 없습니다(`ch10-generics-traits-lifetimes`의 `longest`와 같은 상황). 그래서 다음처럼 **`contents`와 반환값만** 같은 라이프타임 `'a`로 묶습니다.
+**왜 라이프타임이 필요한가?** `search`가 돌려주는 `Vec<&str>` 안의 `&str`은 새로 만든 문자열이 아니라 `contents`의 일부를 가리키는 슬라이스입니다. 반환값이 참조이면 컴파일러는 "그 참조가 어느 매개변수에서 빌려 온 것인지"를 알아야, 호출한 쪽에서 결과를 쓰는 동안 원본이 살아 있는지 검사할 수 있습니다. 참조 매개변수가 하나뿐이면 라이프타임 생략 규칙이 알아서 이어 주지만, `query`와 `contents` 두 개라서 정할 수 없습니다([ch10](../ch10-generics-traits-lifetimes/README.md)의 `longest`와 같은 상황). 그래서 다음처럼 **`contents`와 반환값만** 같은 라이프타임 `'a`로 묶습니다.
 
 ```rust
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -406,7 +406,7 @@ test tests::one_result ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-**③ 리팩터링**: 지금 코드는 충분히 짧아서 더 고칠 것이 없습니다. 이 반복문은 `ch13-closures-iterators`에서 반복자 어댑터로 더 짧게 바꿉니다. 이제 `run`이 `search`를 써서 찾은 줄만 출력하게 합니다.
+**③ 리팩터링**: 지금 코드는 충분히 짧아서 더 고칠 것이 없습니다. 이 반복문은 [ch13](../ch13-closures-iterators/README.md)에서 반복자 어댑터로 더 짧게 바꿉니다. 이제 `run`이 `search`를 써서 찾은 줄만 출력하게 합니다.
 
 ```rust
 for line in search(&config.query, &contents) {
@@ -942,7 +942,7 @@ $ cargo run -q -- 바람 poem_euckr.txt
 
 - 반환 타입은 튜플의 벡터 `Vec<(usize, &'a str)>`로 할 수 있습니다. 줄은 여전히 `contents`의 일부이므로 라이프타임 `'a`가 그대로 필요합니다.
 - 테스트는 `assert_eq!(vec![(2, "safe, fast, productive.")], search_with_numbers("duct", contents));`처럼 씁니다.
-- 반복문 밖에 `let mut number = 0;`을 두고, 줄마다 1씩 늘린 뒤 일치하면 `(number, line)`을 넣습니다. `ch13-closures-iterators`에서 배우는 `enumerate`를 쓰면 번호를 직접 세지 않아도 됩니다.
+- 반복문 밖에 `let mut number = 0;`을 두고, 줄마다 1씩 늘린 뒤 일치하면 `(number, line)`을 넣습니다. [ch13](../ch13-closures-iterators/README.md)에서 배우는 `enumerate`를 쓰면 번호를 직접 세지 않아도 됩니다.
 - 출력은 `run`에서 `println!("{number}: {line}")`처럼 바꿉니다.
 
 </details>
@@ -1002,7 +1002,7 @@ $ cargo run -q -- 바람 poem_euckr.txt
   - [Program arguments](https://doc.rust-lang.org/rust-by-example/std_misc/arg.html): `env::args()`로 0번 인자(실행 경로)와 나머지 인자를 출력하는 예제 01과 같은 내용입니다. 본격적인 명령줄 프로그램에는 `clap` 같은 크레이트를 쓴다는 안내도 있습니다.
   - [Argument parsing](https://doc.rust-lang.org/rust-by-example/std_misc/arg/matching.html): `match args.len()`으로 인자 개수에 따라 동작을 나누고, 잘못된 입력에는 `eprintln!`으로 사용법을 알리는 예제입니다. 연습 2를 풀 때 참고가 됩니다.
   - [File I/O](https://doc.rust-lang.org/rust-by-example/std_misc/file.html)와 [open](https://doc.rust-lang.org/rust-by-example/std_misc/file/open.html): `File::open`과 `read_to_string`으로 파일을 읽고, 실패를 `match`로 처리합니다. `fs::read_to_string`이 한 번에 해 주는 일을 두 단계로 나눠 볼 수 있습니다.
-  - [read_lines](https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html): 파일 전체를 읽는 대신 `BufReader`로 한 줄씩 읽는 방법입니다. 반복자 어댑터와 제네릭을 쓰므로 `ch13-closures-iterators` 뒤에 읽으면 좋습니다.
+  - [read_lines](https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html): 파일 전체를 읽는 대신 `BufReader`로 한 줄씩 읽는 방법입니다. 반복자 어댑터와 제네릭을 쓰므로 [ch13](../ch13-closures-iterators/README.md) 뒤에 읽으면 좋습니다.
 - Rustlings: 명령줄 인자, 파일, 환경 변수를 다루는 연습이 없어 이 챕터에서는 안내하지 않습니다.
 - API 문서
   - [`std::env::args`](https://doc.rust-lang.org/std/env/fn.args.html): 0번 인자는 관례상 실행 파일 경로일 뿐 무엇이든 될 수 있다는 점과, 유니코드가 아닌 인자에서 패닉한다는 점이 적혀 있습니다.

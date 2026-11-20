@@ -6,7 +6,7 @@ Java, C#, Python 같은 언어에서 프로그램을 클래스와 상속으로 �
 
 - 패키지: `p0-ch17-trait-objects-oop`
 - 기준 문서: [The Book 18장 Object-Oriented Programming Features](https://doc.rust-lang.org/book/ch18-00-oop.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -280,11 +280,11 @@ fn parse_port(text: &str) -> Result<u16, Box<dyn Error>> {
 }
 ```
 
-- `?`는 `ParseIntError`를 `Box`에 담아 `Box<dyn Error>`로 바꿔 돌려줍니다. 이 변환은 `From` 트레이트가 하며 Part 1 `ch6-core-traits`에서 다룹니다. ch9에서 쓴 `"메시지".into()`도 같은 변환입니다.
-- 직접 만든 `ReservedPort`도 `Error`를 구현하면 `Box::new`로 감싸 같은 자리에 넣을 수 있습니다. `Error`는 `Debug`와 `Display`를 먼저 구현한 타입에만 구현할 수 있는데(이런 관계를 슈퍼트레이트라고 하며 `ch19-advanced-features`에서 다룹니다), `Error`의 메서드는 모두 기본 구현이 있으므로 `impl Error for ReservedPort {}`처럼 빈 블록이면 충분합니다.
+- `?`는 `ParseIntError`를 `Box`에 담아 `Box<dyn Error>`로 바꿔 돌려줍니다. 이 변환은 `From` 트레이트가 하며 [Part 1 ch6](../../part1-standard-lib/ch6-core-traits/README.md)에서 다룹니다. ch9에서 쓴 `"메시지".into()`도 같은 변환입니다.
+- 직접 만든 `ReservedPort`도 `Error`를 구현하면 `Box::new`로 감싸 같은 자리에 넣을 수 있습니다. `Error`는 `Debug`와 `Display`를 먼저 구현한 타입에만 구현할 수 있는데(이런 관계를 슈퍼트레이트라고 하며 [ch19](../ch19-advanced-features/README.md)에서 다룹니다), `Error`의 메서드는 모두 기본 구현이 있으므로 `impl Error for ReservedPort {}`처럼 빈 블록이면 충분합니다.
 - `println!("{e}")`는 `Box` 안에 든 실제 에러 타입의 `Display` 구현을 부릅니다. 이것도 vtable을 거친 동적 디스패치입니다. [`04_box_dyn_and_enum.rs`](examples/04_box_dyn_and_enum.rs)의 2번 구역에서 `"abc"`는 `ParseIntError`의 메시지를, `"80"`은 `ReservedPort`의 메시지를 출력합니다.
 
-에러 타입마다 다르게 처리해야 한다면 `Box<dyn Error>`로는 부족합니다. 안에 무엇이 들었는지 타입으로 알 수 없기 때문입니다. 그럴 때는 에러 종류를 배리언트로 가진 열거형을 직접 만듭니다(Part 1 `ch8-errors-panic`). 이것도 다음 절의 "트레이트 객체냐 열거형이냐"와 같은 선택입니다.
+에러 타입마다 다르게 처리해야 한다면 `Box<dyn Error>`는 불편합니다. 안에 무엇이 들었는지가 타입에 드러나지 않아, 실행 중에 "이 타입이 맞는가"를 하나씩 물어봐야(다운캐스트) 하기 때문입니다. 그럴 때는 에러 종류를 배리언트로 가진 열거형을 직접 만듭니다. 두 방법 모두 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md)에서 다룹니다. 이것도 다음 절의 "트레이트 객체냐 열거형이냐"와 같은 선택입니다.
 
 ### 2.9 dyn 호환성: 트레이트 객체로 만들 수 없는 트레이트
 
@@ -600,7 +600,7 @@ cargo run -p p0-ch17-trait-objects-oop --example 03_dynamic_dispatch
 
 ### 04_box_dyn_and_enum — `Box<dyn Trait>`의 쓰임새와 열거형
 
-1번 구역은 ch10 4.6절에서 E0308로 막혔던 `returns_summarizable`을 `Box<dyn Summary>`로 고친 것입니다. 2번 구역의 `{input:>5}`는 입력을 5칸에 오른쪽 정렬하는 서식 지정입니다. `ParseIntError`의 메시지는 표준 라이브러리가 정한 영어 문장입니다. 3번 구역의 `Cell` 크기 24바이트는 64비트 환경 값이며, 배리언트를 구분하는 정보가 `String` 안의 쓰지 않는 자리에 들어가서 `String`과 같은 크기가 됩니다(그 원리는 Part 1 `ch7-smart-pointers-memory`에서 다룹니다).
+1번 구역은 ch10 4.6절에서 E0308로 막혔던 `returns_summarizable`을 `Box<dyn Summary>`로 고친 것입니다. 2번 구역의 `{input:>5}`는 입력을 5칸에 오른쪽 정렬하는 서식 지정입니다. `ParseIntError`의 메시지는 표준 라이브러리가 정한 영어 문장입니다. 3번 구역의 `Cell` 크기 24바이트는 64비트 환경 값이며, 배리언트를 구분하는 정보가 `String` 안의 쓰지 않는 자리에 들어가서 `String`과 같은 크기가 됩니다(그 원리는 [Part 1 ch7](../../part1-standard-lib/ch7-smart-pointers-memory/README.md)에서 다룹니다).
 
 ```sh
 cargo run -p p0-ch17-trait-objects-oop --example 04_box_dyn_and_enum

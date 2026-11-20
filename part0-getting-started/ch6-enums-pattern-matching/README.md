@@ -4,7 +4,7 @@
 
 - 패키지: `p0-ch6-enums-pattern-matching`
 - 기준 문서: [The Book 6장 Enums and Pattern Matching](https://doc.rust-lang.org/book/ch06-00-enums.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -197,7 +197,7 @@ enum Option<T> {
 }
 ```
 
-- `<T>`는 "T 자리에 어떤 타입이든 올 수 있다"는 표시입니다. `Some(5)`는 `Option<i32>`, `Some('가')`는 `Option<char>`가 됩니다. 이런 문법을 제네릭(generic)이라고 하며 `ch10-generics-traits-lifetimes`에서 배웁니다.
+- `<T>`는 "T 자리에 어떤 타입이든 올 수 있다"는 표시입니다. `Some(5)`는 `Option<i32>`, `Some('가')`는 `Option<char>`가 됩니다. 이런 문법을 제네릭(generic)이라고 하며 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배웁니다.
 - `Option`, `Some`, `None`은 모든 프로그램에 자동으로 가져와지는 이름들(prelude)에 들어 있어서, `Option::Some`이라고 쓰지 않고 `Some`, `None`으로 바로 씁니다.
 - `None`만 보고는 무엇의 "없음"인지 알 수 없으므로, `let absent: Option<i32> = None;`처럼 타입을 적어 줘야 합니다. 적지 않으면 E0282(`` type annotations needed for `Option<_>` ``)가 납니다.
 
@@ -244,7 +244,7 @@ fn first_even(numbers: &[i32]) -> Option<i32> {
 | `opt.unwrap()`, `opt.expect("메시지")` | `v` | 패닉으로 프로그램 종료 | 이 절 |
 | `opt.is_some()`, `opt.is_none()` | `true`, `false` (값은 꺼내지 않음) | `false`, `true` | 이 절 |
 
-`unwrap()`은 `None`이면 ``called `Option::unwrap()` on a `None` value``라는 메시지와 함께 패닉합니다. ch2에서 `Result`에 쓴 `expect`처럼, "여기서는 절대 `None`일 수 없다"고 확신할 때만 씁니다. `map`, `and_then`, `ok_or` 같은 더 많은 메서드는 Part 1 `ch2-option-result`에서 다룹니다. 예제는 [`03_option.rs`](examples/03_option.rs)에 있습니다.
+`unwrap()`은 `None`이면 ``called `Option::unwrap()` on a `None` value``라는 메시지와 함께 패닉합니다. ch2에서 `Result`에 쓴 `expect`처럼, "여기서는 절대 `None`일 수 없다"고 확신할 때만 씁니다. `map`, `and_then`, `ok_or` 같은 더 많은 메서드는 [Part 1 ch2](../../part1-standard-lib/ch2-option-result/README.md)에서 다룹니다. 예제는 [`03_option.rs`](examples/03_option.rs)에 있습니다.
 
 ### 2.8 완전성 검사와 포괄 패턴
 
@@ -344,7 +344,7 @@ println!("{status:?}"); // 아무것도 이동하지 않았으므로 쓸 수 있
 - **값을 옮기는 `match`도 쓸모가 있습니다.** 원본이 더 필요 없고 안의 데이터만 가져오고 싶다면, 값을 받아 `match`하는 것이 `clone()` 없이 데이터를 꺼내는 방법입니다. [`05_match_ownership.rs`](examples/05_match_ownership.rs)의 `into_cancel_reason`이 그 예입니다.
 - **`&self` 메서드의 `match self`는 참조를 `match`하는 것입니다.** 2.6절에서 `shots`가 `&u32`였던 이유가 이것이고, `&mut self` 메서드라면 바인딩은 가변 참조가 됩니다.
 
-참조를 `OrderStatus::Shipped { ... }`처럼 참조가 아닌 패턴과 맞춰도 되는 것은, 컴파일러가 참조를 따라가 맞춰 본 뒤 바인딩을 참조로 만들어 주기 때문입니다. 이 규칙을 기본 바인딩 모드(default binding mode)라고 하며, 패턴 문법 전체와 함께 `ch18-patterns`에서 다룹니다. E0382 메시지의 `help:`가 제안하는 `Some(ref n)`의 `ref`는 "이 바인딩은 값을 옮기지 말고 참조로 빌려라"라는 키워드로, `match &name`과 같은 효과를 냅니다.
+참조를 `OrderStatus::Shipped { ... }`처럼 참조가 아닌 패턴과 맞춰도 되는 것은, 컴파일러가 참조를 따라가 맞춰 본 뒤 바인딩을 참조로 만들어 주기 때문입니다. 이 규칙을 기본 바인딩 모드(default binding mode)라고 하며, 패턴 문법 전체와 함께 [ch18](../ch18-patterns/README.md)에서 다룹니다. E0382 메시지의 `help:`가 제안하는 `Some(ref n)`의 `ref`는 "이 바인딩은 값을 옮기지 말고 참조로 빌려라"라는 키워드로, `match &name`과 같은 효과를 냅니다.
 
 ### 2.10 `if let`: 한 가지 패턴만 관심 있을 때
 
@@ -405,7 +405,7 @@ fn apply_nested(line: &str) {
 ```
 
 - `split_once('=')`는 처음 나오는 `=`의 앞뒤를 `(앞, 뒤)` 튜플로 나눠 `Some`에 담아 돌려주고, `=`가 없으면 `None`을 돌려줍니다. 그래서 패턴 `Some((key, value))`로 튜플까지 한 번에 풀 수 있습니다.
-- `parse::<u16>()`의 `::<u16>`은 "u16으로 바꿔라"라고 타입을 직접 알려 주는 문법입니다. ch2에서는 `let guess: u32`처럼 변수 쪽에 타입을 적었습니다. `parse`는 성공하면 `Ok(값)`, 실패하면 `Err(에러)`를 돌려주는 `Result`이고, `Ok(port)`도 같은 방식으로 패턴에 쓸 수 있습니다(`Result`는 `ch9-error-handling`에서 다룹니다).
+- `parse::<u16>()`의 `::<u16>`은 "u16으로 바꿔라"라고 타입을 직접 알려 주는 문법입니다. ch2에서는 `let guess: u32`처럼 변수 쪽에 타입을 적었습니다. `parse`는 성공하면 `Ok(값)`, 실패하면 `Err(에러)`를 돌려주는 `Result`이고, `Ok(port)`도 같은 방식으로 패턴에 쓸 수 있습니다(`Result`는 [ch9](../ch9-error-handling/README.md)에서 다룹니다).
 
 #### `let...else`로 펴기
 
@@ -447,7 +447,7 @@ error[E0308]: `else` clause of `let...else` does not diverge
    = help: try adding a diverging expression, such as `return` or `panic!(..)`
 ```
 
-`` expected `!` ``의 `!`는 "값을 만들지 않고 흐름이 끝난다"는 것을 나타내는 타입(never 타입, `ch19-advanced-features`)입니다. `else` 블록이 `println!`으로 끝나 `()`를 내므로, 흐름이 끊기지 않는다는 뜻입니다.
+`` expected `!` ``의 `!`는 "값을 만들지 않고 흐름이 끝난다"는 것을 나타내는 타입(never 타입, [ch19](../ch19-advanced-features/README.md))입니다. `else` 블록이 `println!`으로 끝나 `()`를 내므로, 흐름이 끊기지 않는다는 뜻입니다.
 
 실패하는 경우를 그 자리에서 처리하고 빠져나가므로, 확인을 통과한 뒤의 코드, 즉 값이 제대로 있는 정상 흐름이 들여쓰기 없이 위에서 아래로 이어집니다. 이 정상 흐름을 **행복한 경로(happy path)** 라고 부릅니다. ch3에서 배운 조기 반환을 패턴과 결합한 것이라고 볼 수 있고, Swift의 `guard let ... else { return }`과 같은 발상입니다.
 
@@ -777,7 +777,7 @@ help: you might want to use `let...else` to handle the variant that isn't matche
    |                                                  ++++++++++++++++
 ```
 
-- **읽는 법**: "refutable pattern"은 반박 가능한 패턴, "irrefutable pattern"은 반박 불가능한 패턴입니다(2.11절). ``pattern `None` not covered``는 E0004와 같은 표현으로, 값이 `None`인 경우를 이 `let`이 처리하지 못한다는 뜻입니다. 링크된 The Book 19.2절은 이 저장소의 `ch18-patterns`에 해당합니다.
+- **읽는 법**: "refutable pattern"은 반박 가능한 패턴, "irrefutable pattern"은 반박 불가능한 패턴입니다(2.11절). ``pattern `None` not covered``는 E0004와 같은 표현으로, 값이 `None`인 경우를 이 `let`이 처리하지 못한다는 뜻입니다. 링크된 The Book 19.2절은 이 저장소의 [ch18](../ch18-patterns/README.md)에 해당합니다.
 - **원인**: 일반 `let`의 패턴은 어떤 값이 와도 맞아야 하는데, `Some(port)`는 `None`과 맞지 않습니다.
 - **해결**: `help:`대로 `let...else`를 쓰고, `todo!()` 대신 실제로 할 일을 적습니다. 예를 들어 `else { println!("포트 설정이 없습니다"); return; }`처럼 씁니다. 값이 있을 때만 무언가를 하면 된다면 `if let Some(port) = ... { ... }`, 기본값으로 충분하다면 `let port = find_port(...).unwrap_or(80);`도 해결책입니다.
 
@@ -860,11 +860,11 @@ let records = ["김철수:85", "이영희:92", "박민수", "최지우:백"];
   - [6.2 The match Control Flow Construct](https://doc.rust-lang.org/book/ch06-02-match.html): `match`, 바인딩, 완전성 검사, 포괄 패턴
   - [6.3 Concise Control Flow with if let and let...else](https://doc.rust-lang.org/book/ch06-03-if-let.html): `if let`, `let...else`
 - Rust By Example
-  - [Custom Types > Enums](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html): 세 가지 모양의 배리언트를 가진 `WebEvent`와 `match`. `to_owned()`는 `String::from`처럼 `&str`에서 `String`을 만드는 메서드입니다. 아래쪽의 타입 별칭(`type`)은 `ch19-advanced-features`에서 다룹니다.
+  - [Custom Types > Enums](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html): 세 가지 모양의 배리언트를 가진 `WebEvent`와 `match`. `to_owned()`는 `String::from`처럼 `&str`에서 `String`을 만드는 메서드입니다. 아래쪽의 타입 별칭(`type`)은 [ch19](../ch19-advanced-features/README.md)에서 다룹니다.
   - [Flow of Control > match](https://doc.rust-lang.org/rust-by-example/flow_control/match.html)와 그 하위 절 [Destructuring > enums](https://doc.rust-lang.org/rust-by-example/flow_control/match/destructuring/destructure_enum.html): 정수와 열거형에 대한 `match`, 배리언트 구조 분해
-  - [Flow of Control > if let](https://doc.rust-lang.org/rust-by-example/flow_control/if_let.html): `if let`과 `else`, `else if`. 예제의 `value @ 100` 같은 `@` 바인딩은 `ch18-patterns`에서 다룹니다.
+  - [Flow of Control > if let](https://doc.rust-lang.org/rust-by-example/flow_control/if_let.html): `if let`과 `else`, `else if`. 예제의 `value @ 100` 같은 `@` 바인딩은 [ch18](../ch18-patterns/README.md)에서 다룹니다.
   - [Flow of Control > let-else](https://doc.rust-lang.org/rust-by-example/flow_control/let_else.html): `let...else`와 `else` 블록이 흐름을 끊어야 한다는 규칙
 - Rustlings (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)
   - [`08_enums`](https://github.com/rust-lang/rustlings/tree/main/exercises/08_enums): 열거형 정의와 `match`. `enums3.rs`는 메시지 열거형의 배리언트마다 구조체의 메서드를 호출하도록 `match`를 작성하는 문제입니다.
-  - [`12_options`](https://github.com/rust-lang/rustlings/tree/main/exercises/12_options): `Option` 다루기. `options3.rs`는 이 챕터 4.3절의 E0382와 같은 문제로, `match` 대상에 `&`를 붙이거나 `ref`를 쓰면 풀립니다. `options1.rs`의 테스트(`#[test]`, `assert_eq!`)는 `ch11-testing`, `options2.rs`의 `Vec`과 `while let`은 `ch8-collections`와 `ch18-patterns`에서 다루지만, `while let`은 "패턴이 맞는 동안 반복하는 `if let`"이라고 보면 이 챕터의 내용으로 풀 수 있습니다.
+  - [`12_options`](https://github.com/rust-lang/rustlings/tree/main/exercises/12_options): `Option` 다루기. `options3.rs`는 이 챕터 4.3절의 E0382와 같은 문제로, `match` 대상에 `&`를 붙이거나 `ref`를 쓰면 풀립니다. `options1.rs`의 테스트(`#[test]`, `assert_eq!`)는 [ch11](../ch11-testing/README.md), `options2.rs`의 `Vec`과 `while let`은 [ch8](../ch8-collections/README.md)와 [ch18](../ch18-patterns/README.md)에서 다루지만, `while let`은 "패턴이 맞는 동안 반복하는 `if let`"이라고 보면 이 챕터의 내용으로 풀 수 있습니다.
 - 에러 설명: `rustc --explain E0004`처럼 에러 코드를 넣어 실행하면 터미널에서 설명과 예제를 볼 수 있습니다.

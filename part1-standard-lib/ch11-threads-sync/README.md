@@ -125,7 +125,7 @@ CALLS.set(CALLS.get() + 1); // LocalKey<Cell<T>>의 get/set (1.73.0)
 
 초기값이 상수라면 `const { }`로 감싸는 것이 권장되며, 감싸지 않으면 Clippy가 `missing_const_for_thread_local`로 알려 줍니다. 예제 02의 5번 구역에서 `main`이 세 번 부른 값(3)과 새 스레드가 한 번 부른 값(1)이 서로 영향을 주지 않는 것을 확인합니다. `RefCell`이 든 스레드 지역 변수에는 `with_borrow`/`with_borrow_mut`(1.73.0)이 있습니다.
 
-**그 밖의 함수.** `thread::sleep(d)`는 최소 `d`만큼 잠들고, `thread::yield_now()`는 이번 실행 시간을 다른 스레드에 양보합니다. `thread::park()`는 다른 스레드가 `Thread::unpark()`로 깨울 때까지 잠드는 저수준 도구로, 비동기 실행기를 만들 때 쓰이므로 `ch13-async-primitives`에서 다룹니다. 이 챕터에서 "기다리기"는 `Condvar`와 채널로 합니다.
+**그 밖의 함수.** `thread::sleep(d)`는 최소 `d`만큼 잠들고, `thread::yield_now()`는 이번 실행 시간을 다른 스레드에 양보합니다. `thread::park()`는 다른 스레드가 `Thread::unpark()`로 깨울 때까지 잠드는 저수준 도구로, 비동기 실행기를 만들 때 쓰이므로 [ch13](../ch13-async-primitives/README.md)에서 다룹니다. 이 챕터에서 "기다리기"는 `Condvar`와 채널로 합니다.
 
 **스레드의 패닉과 패닉 훅.** [Part 1 ch8](../ch8-errors-panic/README.md) 2.8절에서 패닉 훅이 프로세스 전체에 하나뿐이라서 `Send + Sync + 'static`이어야 한다고 했습니다. 훅은 **패닉한 스레드에서** 실행되므로, 훅 안에서 `thread::current().name()`을 부르면 패닉한 스레드의 이름을 얻습니다. 예제 02의 6번 구역은 이름을 붙인 스레드 `'계산기'`가 0으로 나누어 패닉하게 하고, 바꿔 둔 훅이 그 이름을 출력하며, `main`은 `join`의 `Err`에서 페이로드를 꺼냅니다. 패닉은 그 스레드만 멈추고, `join`의 `Err`는 [Part 1 ch8](../ch8-errors-panic/README.md)의 `catch_unwind`와 같은 `Box<dyn Any + Send>` 페이로드를 담습니다.
 
@@ -288,7 +288,7 @@ while !*started {
 | `notify_one()` | — | 기다리는 스레드 하나를 깨움 |
 | `notify_all()` | — | 기다리는 스레드를 모두 깨움 |
 
-`notify_one`과 `notify_all`은 깨워야 할 상대가 몇인지로 고릅니다. 출발 신호처럼 모두가 진행해야 하면 `notify_all`, 대기열에 일감 하나가 들어왔다면 그것을 가져갈 소비자 하나만 깨우면 되므로 `notify_one`입니다. 시간 제한이 있는 대기에 쓰는 `Duration`은 `ch10-env-process-time`에서 다뤘습니다.
+`notify_one`과 `notify_all`은 깨워야 할 상대가 몇인지로 고릅니다. 출발 신호처럼 모두가 진행해야 하면 `notify_all`, 대기열에 일감 하나가 들어왔다면 그것을 가져갈 소비자 하나만 깨우면 되므로 `notify_one`입니다. 시간 제한이 있는 대기에 쓰는 `Duration`은 [ch10](../ch10-env-process-time/README.md)에서 다뤘습니다.
 
 **`Condvar` 하나에는 `Mutex` 하나.** 문서는 한 `Condvar`를 시간을 두고 여러 `Mutex`와 쓰면 패닉할 수 있다고 경고합니다. 이 챕터의 예제를 작성하는 동안 실제로 만났는데, 앞에서 쓴 `Condvar`를 다른 `Mutex`와 함께 쓰자 이 환경(macOS)에서 `attempted to use a condition variable with two mutexes`로 패닉했습니다. 그래서 `Condvar`는 보통 지키는 `Mutex`와 같은 구조체에 나란히 둡니다.
 
@@ -431,7 +431,7 @@ CONFIG.set(Config { name: "주문 서버".to_string(), workers: 4 }); // 프로�
 let c: &'static Config = CONFIG.get().unwrap();                  // 어디서든 읽기
 ```
 
-`OnceLock`은 **실행 중에야 알 수 있는 값**(명령줄 인자나 설정 파일에서 읽은 값)을 한 번 정해 두고 계속 읽는 전역에 맞습니다. `static`에 든 값의 참조라서 `&'static Config`를 얻는다는 점도 편리합니다. 스레드에 넘길 때 `Arc`가 필요 없습니다. 구조체 필드에 두면 ch7의 `OnceCell` 캐시를 여러 스레드가 함께 쓰는 판이 됩니다. [`08_once_lazy.rs`](examples/08_once_lazy.rs)의 2번 구역에서 8개 스레드가 동시에 `summary()`를 불러도 요약은 한 번만 계산되고, 모두 같은 `String`을 가리키는 `&str`을 받습니다.
+`OnceLock`은 **실행 중에야 알 수 있는 값**(명령줄 인자나 설정 파일에서 읽은 값)을 한 번 정해 두고 계속 읽는 전역에 맞습니다. `static`에 든 값의 참조라서 `&'static Config`를 얻는다는 점도 편리합니다. 스레드에 넘길 때 `Arc`가 필요 없습니다. 구조체 필드에 두면 ch7의 `OnceCell` 캐시를 여러 스레드가 함께 쓰는 판이 됩니다. [`08_once_lock_lazy_lock.rs`](examples/08_once_lock_lazy_lock.rs)의 2번 구역에서 8개 스레드가 동시에 `summary()`를 불러도 요약은 한 번만 계산되고, 모두 같은 `String`을 가리키는 `&str`을 받습니다.
 
 **`LazyLock<T, F>`** 는 초기화 함수를 만들 때 함께 넘겨 두는 판입니다. 처음 역참조할 때(메서드 호출, 인덱싱, `*`) 그 함수가 불립니다.
 
@@ -462,7 +462,7 @@ let price = UNIT_PRICES["커피"]; // 이 줄에서 처음이면 초기화
 | `Mutex::new(vec![String::from("관리자")])` | 불가(E0015 등) | 힙 할당과 `String::from`은 컴파일할 때 실행할 수 없음 → `LazyLock` |
 | `OnceCell::new()`, `Cell::new(0)`, `RefCell::new(..)` | 불가(E0277) | `Sync`가 아님 → `OnceLock`, 원자 타입, `Mutex` |
 
-예제 08의 `ORDER_LOG`(`Mutex<Vec<String>>`)는 초기값이 `const`로 만들어지므로 `LazyLock` 없이 `static`에 바로 둡니다. 반면 `UNIT_PRICES`는 `HashMap`이라 `LazyLock`이 필요합니다. 이 저장소에서 `static mut`를 쓸 일은 없습니다. 여기 나온 도구들이 같은 일을 `unsafe` 없이 해 주기 때문입니다. `static mut`의 참조를 금지한 2024 에디션의 규칙은 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+예제 08의 `ORDER_LOG`(`Mutex<Vec<String>>`)는 초기값이 `const`로 만들어지므로 `LazyLock` 없이 `static`에 바로 둡니다. 반면 `UNIT_PRICES`는 `HashMap`이라 `LazyLock`이 필요합니다. 이 저장소에서 `static mut`를 쓸 일은 없습니다. 여기 나온 도구들이 같은 일을 `unsafe` 없이 해 주기 때문입니다. `static mut`의 참조를 금지한 2024 에디션의 규칙은 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md)에서 다룹니다.
 
 ### 2.10 이럴 때 이 도구
 
@@ -501,9 +501,9 @@ ch7의 표를 이어서 단일 스레드 도구와 스레드 안전한 짝을 �
 | 메모리 순서의 정확한 의미, `Acquire`/`Release`로 동기화 만들기, 스핀락 | 원자 연산 주변의 메모리 접근이 다른 스레드에 보이는 순서 | Part 10 `ch9-concurrency` |
 | `Send`/`Sync` 직접 구현 | `unsafe impl`로 컴파일러 대신 스레드 안전성을 보증 | Part 10 `ch9-concurrency` |
 | 포이즈닝과 예외 안전성 | 패닉이 남긴 반쯤 바뀐 상태를 다루는 설계 | Part 10 `ch8-unwinding` |
-| `park`/`unpark`, `Waker`로 실행기 만들기 | 비동기 태스크를 깨우는 원리 | `ch13-async-primitives` |
-| 소켓 서버에서 연결마다 스레드 쓰기 | TCP 리스너와 스레드 | `ch12-net` |
-| `static mut` 참조 금지 | 2024 에디션의 `static_mut_refs` | Part 2 `ch4-rust-2024-language` |
+| `park`/`unpark`, `Waker`로 실행기 만들기 | 비동기 태스크를 깨우는 원리 | [ch13](../ch13-async-primitives/README.md) |
+| 소켓 서버에서 연결마다 스레드 쓰기 | TCP 리스너와 스레드 | [ch12](../ch12-net/README.md) |
+| `static mut` 참조 금지 | 2024 에디션의 `static_mut_refs` | [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md) |
 
 ## 3. 예제 안내
 
@@ -516,7 +516,7 @@ ch7의 표를 이어서 단일 스레드 도구와 스레드 안전한 짝을 �
 | [`05_condvar.rs`](examples/05_condvar.rs) | `notify_all` 출발 신호, 쌓이지 않는 알림과 `wait_timeout_while`, 용량이 정해진 대기열의 생산자-소비자 | 3 |
 | [`06_sync_channel.rs`](examples/06_sync_channel.rs) | `try_send`와 `Full`, 배압, 랑데부 채널, `try_iter`, `&Sender` 공유 | 3 |
 | [`07_atomics.rs`](examples/07_atomics.rs) | `fetch_add`와 `load` 후 `store`, `compare_exchange`, `try_update`, `AtomicBool`, `static` 원자 변수 | 4 |
-| [`08_once_lazy.rs`](examples/08_once_lazy.rs) | `OnceLock` 전역 설정과 `wait`, 필드에 둔 `OnceLock`, `LazyLock` `static` | 5 |
+| [`08_once_lock_lazy_lock.rs`](examples/08_once_lock_lazy_lock.rs) | `OnceLock` 전역 설정과 `wait`, 필드에 둔 `OnceLock`, `LazyLock` `static` | 5 |
 | [`compile_fail/`](compile_fail) | 스코프 스레드·가드·수신자·`static` 초기값에서 만나는 컴파일 에러 4개(4절) | 1, 2, 3, 5 |
 
 모든 명령은 저장소 루트에서 실행합니다. 모든 예제는 종료 코드 0으로 끝나고 몇 초 안에 끝납니다. 스레드 안에서 출력하지 않고 결과를 돌려받아 `main`에서 출력하거나, 순서와 무관한 합계·개수만 출력하므로 실행할 때마다 같은 출력이 나옵니다. 예외는 07의 경쟁 조건 줄과 02의 `available_parallelism` 값입니다. 01과 03은 일부러 패닉하는 스레드가 있어 표준 에러에 기본 패닉 훅의 메시지가 나옵니다. 그 메시지의 스레드 ID는 실행할 때마다 달라지며, 예제 파일의 `// 출력:` 주석은 표준 출력만 적었습니다.
@@ -725,10 +725,10 @@ cargo run -p p1-ch11-threads-sync --example 07_atomics
 - **2번 구역**: 어느 스레드가 이겼는지는 실행마다 다르므로 번호 대신 성공한 수를 출력합니다.
 - **4번 구역**: 작업자가 몇 번 반복했는지는 실행마다 다릅니다.
 
-### 08_once_lazy — 한 번만 초기화
+### 08_once_lock_lazy_lock — 한 번만 초기화
 
 ```sh
-cargo run -p p1-ch11-threads-sync --example 08_once_lazy
+cargo run -p p1-ch11-threads-sync --example 08_once_lock_lazy_lock
 ```
 
 ```text

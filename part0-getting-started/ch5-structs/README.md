@@ -6,7 +6,7 @@ ch4에서 drop 시점을 관찰하려고 만든 `Noisy`가 바로 구조체였�
 
 - 패키지: `p0-ch5-structs`
 - 기준 문서: [The Book 5장 Using Structs to Structure Related Data](https://doc.rust-lang.org/book/ch05-00-structs.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -103,7 +103,7 @@ let user2 = User {
 
 `User`의 필드가 `&str`이 아니라 `String`인 것은 의도한 선택입니다. 인스턴스가 자기 데이터를 모두 **소유**하면, 인스턴스가 살아 있는 동안 데이터도 반드시 살아 있습니다. 인스턴스가 drop될 때 필드도 함께 drop됩니다.
 
-필드에 참조를 넣을 수도 있지만, 그러려면 "이 구조체는 참조가 가리키는 값보다 오래 살 수 없다"는 관계를 **라이프타임(lifetime)** 으로 적어야 합니다. 적지 않으면 E0106으로 거부됩니다(4.5절). 그렇지 않으면 구조체가 남아 있는 동안 참조가 가리키던 값이 먼저 drop되어 ch4의 댕글링 참조가 생길 수 있기 때문입니다. 라이프타임은 `ch10-generics-traits-lifetimes`에서 배우고, 그전까지는 구조체 필드에 `String`처럼 데이터를 소유하는 타입을 씁니다.
+필드에 참조를 넣을 수도 있지만, 그러려면 "이 구조체는 참조가 가리키는 값보다 오래 살 수 없다"는 관계를 **라이프타임(lifetime)** 으로 적어야 합니다. 적지 않으면 E0106으로 거부됩니다(4.5절). 그렇지 않으면 구조체가 남아 있는 동안 참조가 가리키던 값이 먼저 drop되어 ch4의 댕글링 참조가 생길 수 있기 때문입니다. 라이프타임은 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배우고, 그전까지는 구조체 필드에 `String`처럼 데이터를 소유하는 타입을 씁니다.
 
 ### 2.6 구조체 출력하기: `derive(Debug)`, `{:?}`, `{:#?}`, `dbg!`
 
@@ -135,7 +135,7 @@ struct Point {
 }
 ```
 
-`#[...]`는 바로 아래 항목에 붙는 **속성(attribute)** 이고, `derive`는 "이 기능의 구현을 컴파일러가 자동으로 만들어 달라"는 뜻입니다. `Debug`와 `Display`는 트레이트(trait)라고 부르는 "타입이 가진 기능"의 이름이며, 트레이트 자체는 `ch10-generics-traits-lifetimes`에서 배웁니다. 지금은 `#[derive(Debug)]`를 붙이면 `{:?}`를 쓸 수 있다고 기억하면 충분합니다. 필드의 타입도 모두 디버그 형식을 지원해야 derive할 수 있는데, 표준 라이브러리의 타입은 대부분 지원하고 직접 만든 구조체는 각각 derive하면 됩니다.
+`#[...]`는 바로 아래 항목에 붙는 **속성(attribute)** 이고, `derive`는 "이 기능의 구현을 컴파일러가 자동으로 만들어 달라"는 뜻입니다. `Debug`와 `Display`는 트레이트(trait)라고 부르는 "타입이 가진 기능"의 이름이며, 트레이트 자체는 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배웁니다. 지금은 `#[derive(Debug)]`를 붙이면 `{:?}`를 쓸 수 있다고 기억하면 충분합니다. 필드의 타입도 모두 디버그 형식을 지원해야 derive할 수 있는데, 표준 라이브러리의 타입은 대부분 지원하고 직접 만든 구조체는 각각 derive하면 됩니다.
 
 | 쓰는 법 | 결과 | 쓰임 |
 | --- | --- | --- |
@@ -189,7 +189,7 @@ struct AlwaysEqual;          // 정의: 세미콜론으로 끝납니다.
 let marker = AlwaysEqual;    // 생성: 이름만 씁니다.
 ```
 
-크기가 0바이트이고 담는 데이터가 없습니다. 데이터 없이 타입에 기능(트레이트)만 붙이고 싶을 때 쓰는데, 그 쓰임은 `ch10-generics-traits-lifetimes`에서 보게 됩니다.
+크기가 0바이트이고 담는 데이터가 없습니다. 데이터 없이 타입에 기능(트레이트)만 붙이고 싶을 때 쓰는데, 그 쓰임은 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 보게 됩니다.
 
 | 종류 | 정의 | 생성 | 필드 접근 |
 | --- | --- | --- | --- |
@@ -304,7 +304,7 @@ error[E0599]: no method named `square` found for struct `Rectangle` in the curre
 
 ### 2.12 `impl` 블록 여러 개
 
-한 타입에 `impl` 블록을 여러 개 둘 수 있고, 모두 합쳐 하나의 타입 기능이 됩니다. [`07_associated_functions.rs`](examples/07_associated_functions.rs)는 생성자(`new`, `square`)와 메서드(`area`, `is_square`, `scaled`)를 두 블록으로 나눴지만, 쓰는 쪽에서는 어느 블록에 있는지 구분되지 않습니다. 지금은 나눌 이유가 크지 않지만, 제네릭과 트레이트를 배우는 `ch10-generics-traits-lifetimes`에서 블록을 나누는 것이 필요한 경우를 만나게 됩니다.
+한 타입에 `impl` 블록을 여러 개 둘 수 있고, 모두 합쳐 하나의 타입 기능이 됩니다. [`07_associated_functions.rs`](examples/07_associated_functions.rs)는 생성자(`new`, `square`)와 메서드(`area`, `is_square`, `scaled`)를 두 블록으로 나눴지만, 쓰는 쪽에서는 어느 블록에 있는지 구분되지 않습니다. 지금은 나눌 이유가 크지 않지만, 제네릭과 트레이트를 배우는 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 블록을 나누는 것이 필요한 경우를 만나게 됩니다.
 
 ## 3. 예제 안내
 
@@ -624,7 +624,7 @@ help: consider introducing a named lifetime parameter
 `email: &str`에 대해서도 같은 에러가 한 번 더 나옵니다.
 
 - **원인**: 참조 필드를 가진 구조체는 참조가 가리키는 값보다 오래 살면 안 됩니다. 컴파일러가 이 관계를 확인하려면 라이프타임 표기(`'a`)가 필요합니다(2.5절).
-- **해결**: 지금 단계에서는 필드를 `String`으로 바꾸고, 인스턴스를 만들 때 `String::from("ferris")`처럼 소유한 값을 넣습니다. `help:`가 제안하는 `User<'a>`, `&'a str` 방식은 `ch10-generics-traits-lifetimes`에서 배웁니다.
+- **해결**: 지금 단계에서는 필드를 `String`으로 바꾸고, 인스턴스를 만들 때 `String::from("ferris")`처럼 소유한 값을 넣습니다. `help:`가 제안하는 `User<'a>`, `&'a str` 방식은 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배웁니다.
 
 ## 5. 연습 문제
 
@@ -717,7 +717,7 @@ fn can_hold(&self, other: &Rectangle) -> bool {
   - [5.2 An Example Program Using Structs](https://doc.rust-lang.org/book/ch05-02-example-structs.html)
   - [5.3 Method Syntax](https://doc.rust-lang.org/book/ch05-03-method-syntax.html)
 - [Rust By Example](https://doc.rust-lang.org/rust-by-example/)
-  - [Custom Types > Structures](https://doc.rust-lang.org/rust-by-example/custom_types/structs.html): 세 가지 구조체, 필드 초기화 축약, 갱신 문법, 구조 분해. 맨 위의 `#![allow(dead_code)]`는 2.6절의 "읽지 않은 필드" 같은 경고를 파일 전체에서 끄는 속성입니다. `let Point { x: left_edge, y: top_edge } = point;`는 이름 있는 필드의 구조 분해로, 패턴은 `ch18-patterns`에서 자세히 다룹니다. 끝의 활동 과제(`rect_area`, `square` 함수 만들기)는 이 챕터의 복습으로 좋습니다.
+  - [Custom Types > Structures](https://doc.rust-lang.org/rust-by-example/custom_types/structs.html): 세 가지 구조체, 필드 초기화 축약, 갱신 문법, 구조 분해. 맨 위의 `#![allow(dead_code)]`는 2.6절의 "읽지 않은 필드" 같은 경고를 파일 전체에서 끄는 속성입니다. `let Point { x: left_edge, y: top_edge } = point;`는 이름 있는 필드의 구조 분해로, 패턴은 [ch18](../ch18-patterns/README.md)에서 자세히 다룹니다. 끝의 활동 과제(`rect_area`, `square` 함수 만들기)는 이 챕터의 복습으로 좋습니다.
   - [Functions > Methods](https://doc.rust-lang.org/rust-by-example/fn/methods.html): 연관 함수와 `&self`/`&mut self`/`self` 메서드. `Pair(Box<i32>, Box<i32>)`가 나오는데, `Box<i32>`는 `String`처럼 힙 데이터를 소유하는 타입(ch14)으로 보고 읽으면 됩니다.
   - [Formatted print > Debug](https://doc.rust-lang.org/rust-by-example/hello/print/print_debug.html): `derive(Debug)`와 `{:#?}`. 마지막 예제의 `Person<'a>`와 `&'a str`가 4.5절에서 미뤄 둔 라이프타임 표기입니다(ch10).
 - Rustlings [`07_structs`](https://github.com/rust-lang/rustlings/tree/main/exercises/07_structs) (설치와 실행 방법은 [Rustlings 저장소](https://github.com/rust-lang/rustlings/)에서 링크하는 공식 사이트에 안내되어 있습니다)

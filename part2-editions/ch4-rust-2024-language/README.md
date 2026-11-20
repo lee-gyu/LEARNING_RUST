@@ -1,6 +1,6 @@
 # ch4. 2024 에디션의 언어 변경: RPIT 캡처, 임시값 범위, let 체인, unsafe 표시, never 타입 폴백, `gen`
 
-Part 2의 네 번째 챕터입니다. [ch1](../ch1-editions-overview/README.md)에서 에디션이 무엇인지 보았고, `ch2-rust-2015-2018`과 `ch3-rust-2021`에서 앞선 에디션들의 변경을 보았습니다. 이 챕터는 2024 에디션(공식 이름 "Rust 2024", rustc 1.85.0과 함께 나왔습니다)이 **언어**에서 바꾼 것을 Edition Guide 5.1절의 순서대로 모두 다룹니다.
+Part 2의 네 번째 챕터입니다. [ch1](../ch1-editions-overview/README.md)에서 에디션이 무엇인지 보았고, [ch2](../ch2-rust-2015-2018/README.md)과 [ch3](../ch3-rust-2021/README.md)에서 앞선 에디션들의 변경을 보았습니다. 이 챕터는 2024 에디션(공식 이름 "Rust 2024", rustc 1.85.0과 함께 나왔습니다)이 **언어**에서 바꾼 것을 Edition Guide 5.1절의 순서대로 모두 다룹니다.
 
 이 저장소는 처음부터 2024 에디션으로 써 왔습니다. 그래서 이 챕터의 방향은 앞 챕터들과 반대입니다. 지금까지 당연하게 써 온 규칙이 2021 에디션에서는 어땠는지 보고, 2021 에디션 코드를 읽거나 옮길 때 **무엇이 컴파일되지 않고, 무엇이 조용히 다르게 동작하는지** 직접 확인합니다. 앞 챕터들이 이 챕터로 미뤄 둔 것도 여기서 정리합니다.
 
@@ -29,7 +29,7 @@ Part 2의 네 번째 챕터입니다. [ch1](../ch1-editions-overview/README.md)�
 
 ### 2.1 이 챕터의 지도
 
-Edition Guide 5.1절의 14개 항목입니다. "2021 코드에 생기는 일"은 2021 에디션 코드를 그대로 2024 에디션으로 컴파일했을 때의 결과입니다. "옮기기 전 린트"는 2021 에디션에서 켜면 바뀔 곳을 미리 알려 주는 린트(lint)로, 모두 에디션 호환성 린트 그룹 `rust-2024-compatibility`에 들어 있습니다(`rustc --edition 2021 -W help`로 확인). `cargo fix --edition`이 이 린트 그룹으로 코드를 자동 수정하는 절차는 Part 2 `ch6-migration-practice`에서 다룹니다. 표의 "ch1 4.4절"처럼 적은 것은 [Part 2 ch1](../ch1-editions-overview/README.md) README의 절이고, 거기에 같은 에러를 내는 `compile_fail/` 파일이 있습니다.
+Edition Guide 5.1절의 14개 항목입니다. "2021 코드에 생기는 일"은 2021 에디션 코드를 그대로 2024 에디션으로 컴파일했을 때의 결과입니다. "옮기기 전 린트"는 2021 에디션에서 켜면 바뀔 곳을 미리 알려 주는 린트(lint)로, 모두 에디션 호환성 린트 그룹 `rust-2024-compatibility`에 들어 있습니다(`rustc --edition 2021 -W help`로 확인). `cargo fix --edition`이 이 린트 그룹으로 코드를 자동 수정하는 절차는 [Part 2 ch6](../ch6-migration-practice/README.md)에서 다룹니다. 표의 "ch1 4.4절"처럼 적은 것은 [Part 2 ch1](../ch1-editions-overview/README.md) README의 절이고, 거기에 같은 에러를 내는 `compile_fail/` 파일이 있습니다.
 
 | 절 | 항목 | 2021 코드에 생기는 일 | 옮기기 전 린트 (2021 기본 수준) | 확인하는 곳 |
 | --- | --- | --- | --- | --- |
@@ -408,7 +408,7 @@ return_type_of(|| panic!()) // R은 무엇인가?
 
 **2021에서는.** `gen`은 평범한 식별자였습니다. 함수, 메서드, 변수 이름으로 쓸 수 있었습니다.
 
-**2024에서는.** `gen`은 **예약 키워드**입니다. 이름으로 쓰면 `` expected identifier, found reserved keyword `gen` `` 에러이고, 정의하는 곳과 부르는 곳 모두에서 납니다(에러 전문은 [ch1](../ch1-editions-overview/README.md) 4.2절의 `compile_fail/reserved_keyword_gen.rs`). raw 식별자 `r#gen`으로 쓰면 됩니다(raw 식별자는 Part 2 `ch2-rust-2015-2018`에서 배웠습니다).
+**2024에서는.** `gen`은 **예약 키워드**입니다. 이름으로 쓰면 `` expected identifier, found reserved keyword `gen` `` 에러이고, 정의하는 곳과 부르는 곳 모두에서 납니다(에러 전문은 [ch1](../ch1-editions-overview/README.md) 4.2절의 `compile_fail/reserved_keyword_gen.rs`). raw 식별자 `r#gen`으로 쓰면 됩니다(raw 식별자는 [Part 2 ch2](../ch2-rust-2015-2018/README.md)에서 배웠습니다).
 
 ```rust
 impl Counter {
@@ -513,15 +513,15 @@ error: missing fragment specifier
 
 #### 예약 문법 `#"..."#`와 `##`
 
-2021 에디션은 `ident##"foo"##`처럼 접두사가 붙은 모양을 예약했습니다(Part 2 `ch3-rust-2021`). 2024는 접두사 없는 `#"foo"#`(앞에 `#`가 하나 이상 붙은 문자열 리터럴)와, 공백 없이 이어진 `#` 두 개 이상(`##`)을 앞으로의 문법을 위해 예약합니다. 2021에서는 `#"foo"#`가 토큰 세 개(`#`, `"foo"`, `#`)였으므로 매크로 입력으로 쓸 수 있었지만, 2024에서는 `invalid string literal`과 `reserved multi-hash token is forbidden` 에러입니다(4.6절). help대로 공백을 넣어 `# "foo" #`, `# # #`로 쓰면 예전처럼 토큰 세 개가 됩니다. raw 문자열 `r#"foo"#`는 영향이 없습니다(예제 07의 4번 구역). `rust_2024_guarded_string_incompatible_syntax` 린트가 공백을 넣어 줍니다.
+2021 에디션은 `ident##"foo"##`처럼 접두사가 붙은 모양을 예약했습니다([Part 2 ch3](../ch3-rust-2021/README.md)). 2024는 접두사 없는 `#"foo"#`(앞에 `#`가 하나 이상 붙은 문자열 리터럴)와, 공백 없이 이어진 `#` 두 개 이상(`##`)을 앞으로의 문법을 위해 예약합니다. 2021에서는 `#"foo"#`가 토큰 세 개(`#`, `"foo"`, `#`)였으므로 매크로 입력으로 쓸 수 있었지만, 2024에서는 `invalid string literal`과 `reserved multi-hash token is forbidden` 에러입니다(4.6절). help대로 공백을 넣어 `# "foo" #`, `# # #`로 쓰면 예전처럼 토큰 세 개가 됩니다. raw 문자열 `r#"foo"#`는 영향이 없습니다(예제 07의 4번 구역). `rust_2024_guarded_string_incompatible_syntax` 린트가 공백을 넣어 줍니다.
 
 ### 2.13 이 챕터에서 다루지 않는 것
 
 | 주제 | 한 줄 소개 | 다루는 곳 |
 | --- | --- | --- |
 | 에디션의 개념, 에디션이 다른 크레이트 함께 쓰기 | 에디션 제도 자체 | [Part 2 ch1](../ch1-editions-overview/README.md) |
-| 2024의 표준 라이브러리·Cargo·rustdoc·rustfmt 변경 | `set_var`의 unsafe화, 프렐류드의 `Future`/`IntoFuture`, `Box<[T]>`의 `IntoIterator`, 스타일 에디션 등 | Part 2 `ch5-rust-2024-ecosystem` |
-| `cargo fix --edition`과 에디션 호환성 린트 그룹(`rust-2024-compatibility`)으로 옮기는 절차 | 이 챕터의 린트들을 한 번에 적용하기 | Part 2 `ch6-migration-practice` |
+| 2024의 표준 라이브러리·Cargo·rustdoc·rustfmt 변경 | `set_var`의 unsafe화, 프렐류드의 `Future`/`IntoFuture`, `Box<[T]>`의 `IntoIterator`, 스타일 에디션 등 | [Part 2 ch5](../ch5-rust-2024-ecosystem/README.md) |
+| `cargo fix --edition`과 에디션 호환성 린트 그룹(`rust-2024-compatibility`)으로 옮기는 절차 | 이 챕터의 린트들을 한 번에 적용하기 | [Part 2 ch6](../ch6-migration-practice/README.md) |
 | 기본 바인딩 모드 규칙 상세 | 패턴이 참조를 맞출 때의 규칙 | Part 9 `ch6-patterns` |
 | 매크로 프래그먼트 지정자 전체 | `expr`, `tt`, `pat_param` 등 | Part 9 `ch2-macros` |
 | 임시값 수명 규칙 전체 | 임시값 범위, 수명 연장, 승격 | Part 9 `ch5-statements-expressions` |

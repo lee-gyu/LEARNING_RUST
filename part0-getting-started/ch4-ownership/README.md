@@ -4,7 +4,7 @@
 
 - 패키지: `p0-ch4-ownership`
 - 기준 문서: [The Book 4장 Understanding Ownership](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
-- 확인한 툴체인: rustc 1.98.1, Edition 2024
+- 확인한 툴체인: rustc 1.100.0, Edition 2024. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 

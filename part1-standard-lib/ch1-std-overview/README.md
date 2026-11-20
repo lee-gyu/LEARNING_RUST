@@ -8,7 +8,7 @@ Part 0에서는 언어를 배우면서 `Vec`, `String`, `Option` 같은 표준 �
 
 - 패키지: `p1-ch1-std-overview`
 - 기준 문서: [std 크레이트 첫 페이지](https://doc.rust-lang.org/std/index.html), 원시 타입 페이지([`i32`](https://doc.rust-lang.org/std/primitive.i32.html), [`f64`](https://doc.rust-lang.org/std/primitive.f64.html), [`char`](https://doc.rust-lang.org/std/primitive.char.html), [`bool`](https://doc.rust-lang.org/std/primitive.bool.html), [`array`](https://doc.rust-lang.org/std/primitive.array.html), [`slice`](https://doc.rust-lang.org/std/primitive.slice.html), [`tuple`](https://doc.rust-lang.org/std/primitive.tuple.html)), [`std::prelude`](https://doc.rust-lang.org/std/prelude/index.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024). 문서 화면은 같은 버전의 로컬 문서로 확인했습니다.
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 문서 화면은 같은 버전의 로컬 문서로 확인했습니다. 1.98.1에서 작성했고, 2026-11-20에 예제 출력, `compile_fail/`의 에러 메시지, 버전을 밝혀 둔 문서 관련 서술을 1.100.0에서 다시 확인했습니다.
 
 ## 1. 학습 목표
 
@@ -55,7 +55,7 @@ error[E0433]: cannot find module or crate `alloc` in this scope
 
 **문서에서도 층이 보입니다.** `core` 크레이트의 문서(<https://doc.rust-lang.org/core/>)에도 `f64`, `slice` 같은 원시 타입 페이지가 있는데, `std` 판보다 메서드가 적습니다.
 
-- `f64`: `std` 판 페이지에는 `impl f64` 블록이 두 개 있습니다. `sqrt`, `powi`, `floor`, `round`, `sin` 같은 메서드가 든 블록은 `std`에서 추가한 것이라 `core` 판 페이지에는 없습니다(1.98.1 문서 기준). 대상 플랫폼에 따라 수학 라이브러리 호출로 구현될 수 있는 연산들입니다. `abs`, `is_nan`, `total_cmp`, `clamp`는 `core`에 있습니다.
+- `f64`: `std` 판 페이지에는 `impl f64` 블록이 두 개 있습니다. `sqrt`, `powi`, `floor`, `round`, `sin` 같은 메서드가 든 블록은 `std`에서 추가한 것이라 `core` 판 페이지에는 없습니다(1.100.0 문서 기준). 대상 플랫폼에 따라 수학 라이브러리 호출로 구현될 수 있는 연산들입니다. `abs`, `is_nan`, `total_cmp`, `clamp`는 `core`에 있습니다.
 - `slice`: 정렬 `sort`는 보조 버퍼를 할당하므로 `alloc`에서 추가됩니다. 문서는 `sort_unstable`이 "보조 메모리를 할당하지 않는다"고 설명하며, 이쪽은 `core`에 있습니다. `to_vec`(`Vec`을 만듦), `concat`, `join`도 `alloc`에서 옵니다.
 
 → [`examples/01_std_layers.rs`](examples/01_std_layers.rs)
@@ -98,7 +98,7 @@ error[E0433]: cannot find module or crate `alloc` in this scope
 
 `cmp` 메서드 자체는 프렐류드의 `Ord` 트레이트에 있으므로 바로 부를 수 있지만, 돌려받은 `Ordering::Less` 같은 배리언트 이름을 쓰려면 `Ordering`을 가져와야 합니다(예제 02의 5번 구역).
 
-**다른 프렐류드.** 표준 라이브러리에는 `std::io::prelude`처럼 자주 함께 쓰는 항목을 모아 둔 모듈이 더 있고, 외부 크레이트도 자기 프렐류드를 만듭니다([Part 0 ch2](../../part0-getting-started/ch2-guessing-game/README.md)의 `use rand::prelude::*;`). 문서는 이것들이 "자동으로 가져와지지 않으며 직접 가져와야 한다"는 점에서 "그 프렐류드"와 다르다고 설명합니다. 에디션마다 프렐류드가 달라진 배경과 영향은 Part 2 `ch3-rust-2021`, `ch5-rust-2024-ecosystem`에서 다룹니다.
+**다른 프렐류드.** 표준 라이브러리에는 `std::io::prelude`처럼 자주 함께 쓰는 항목을 모아 둔 모듈이 더 있고, 외부 크레이트도 자기 프렐류드를 만듭니다([Part 0 ch2](../../part0-getting-started/ch2-guessing-game/README.md)의 `use rand::prelude::*;`). 문서는 이것들이 "자동으로 가져와지지 않으며 직접 가져와야 한다"는 점에서 "그 프렐류드"와 다르다고 설명합니다. 에디션마다 프렐류드가 달라진 배경과 영향은 [Part 2 ch3](../../part2-editions/ch3-rust-2021/README.md), `ch5-rust-2024-ecosystem`에서 다룹니다.
 
 → [`examples/02_prelude.rs`](examples/02_prelude.rs)
 
@@ -111,18 +111,18 @@ API 문서는 두 곳에서 볼 수 있습니다.
 
 ```console
 $ rustup doc --std --path
-/Users/<사용자>/.rustup/toolchains/1.98.1-aarch64-apple-darwin/share/doc/rust/html/std/index.html
+/Users/<사용자>/.rustup/toolchains/1.100.0-aarch64-apple-darwin/share/doc/rust/html/std/index.html
 ```
 
 로컬 문서는 `rust-docs` 컴포넌트에 들어 있습니다. `rustup component list --installed`의 목록에 `rust-docs-…`가 있으면 쓸 수 있습니다.
 
-**버전이 다르면 문서와 컴파일러가 어긋납니다.** 온라인 1.100.0 문서의 `bool` 페이지에는 1.100.0에 추가된 `toggle` 메서드가 있지만, 이 저장소의 1.98.1에서 그 메서드를 부르면 컴파일되지 않습니다.
+**버전이 다르면 문서와 컴파일러가 어긋납니다.** 온라인 문서는 최신 안정판 기준이라 내 툴체인보다 앞설 수 있습니다. `bool` 페이지의 `toggle` 메서드는 1.100.0에 추가됐습니다. 이 저장소가 1.98.1을 쓰던 때에는 온라인 문서에 보이는 이 메서드를 불러도 컴파일되지 않았습니다(1.98.1의 메시지).
 
 ```text
 error[E0599]: no method named `toggle` found for type `bool` in the current scope
 ```
 
-반대로 같은 페이지의 `ok_or`는 1.98.0에 추가되었으므로 1.98.1에서 쓸 수 있습니다(예제 06). 문서 왼쪽 위의 크레이트 이름 옆에 문서 버전이 나오므로(로컬 문서는 `std 1.98.1`), `rustc --version`과 비교해 봅니다. 메서드 오른쪽의 안정화 버전 읽는 법은 2.6절에서 봅니다.
+반대로 같은 페이지의 `ok_or`는 1.98.0에 추가되었으므로 1.98.1에서도 쓸 수 있었습니다(예제 06). 문서 왼쪽 위의 크레이트 이름 옆에 문서 버전이 나오므로(지금 로컬 문서는 `std 1.100.0`), `rustc --version`과 비교해 봅니다. 메서드 오른쪽의 안정화 버전 읽는 법은 2.6절에서 봅니다.
 
 ### 2.4 크레이트 페이지와 모듈 페이지
 
@@ -147,7 +147,7 @@ std 첫 페이지도 이 차이를 설명합니다. `char` 원시 타입 페이�
 
 **맨 위.** 제목(`Primitive Type i32`, `Struct Vec`)과 경로를 복사하는 `Copy item path` 버튼이 있고, 오른쪽에 안정화 버전과 소스 코드로 가는 `Source` 링크가 있습니다. 도구 막대의 `Summary` 버튼을 누르면 긴 설명을 접고 항목 이름만 보여 줍니다(다시 누르면 `Show all`). 구조체 페이지에는 정의가 나옵니다. `Vec`은 `pub struct Vec<T, A = Global> where A: Allocator`입니다. `A = Global`은 기본값이 정해진 타입 매개변수입니다. 할당기를 바꾸는 `Allocator` 트레이트는 nightly 전용이므로, 평소에는 `A`를 지우고 `Vec<T>`로 읽으면 됩니다.
 
-**본문과 사이드바의 절.** 페이지 본문은 설명 다음에 아래 절들이 이어지고, 왼쪽 사이드바에 같은 이름의 목차가 있습니다(1.98.1 문서에서 확인).
+**본문과 사이드바의 절.** 페이지 본문은 설명 다음에 아래 절들이 이어지고, 왼쪽 사이드바에 같은 이름의 목차가 있습니다(1.100.0 문서에서 확인).
 
 | 절 | 들어 있는 것 | 예 |
 | --- | --- | --- |
@@ -167,11 +167,11 @@ std 첫 페이지도 이 차이를 설명합니다. `char` 원시 타입 페이�
 
 배열은 사정이 조금 다릅니다. 배열은 `Deref`를 구현하지 않고, 컴파일러가 배열을 슬라이스로 바꿔(coerce) 슬라이스의 메서드를 부릅니다. 배열 문서는 이것이 "배열을 다루는 API의 대부분"이라고 적고 있으므로, 배열의 메서드를 찾을 때는 [`slice`](https://doc.rust-lang.org/std/primitive.slice.html) 페이지를 봅니다.
 
-**Trait Implementations: 연산자, 변환, 비교, 출력이 여기서 옵니다.** 1.98.1 문서의 `i32` 페이지에는 이 절의 항목이 수백 개 있습니다. 전부 읽을 필요는 없고 무엇이 있는지, 무엇이 없는지를 봅니다.
+**Trait Implementations: 연산자, 변환, 비교, 출력이 여기서 옵니다.** 1.100.0 문서의 `i32` 페이지에는 이 절의 항목이 수백 개 있습니다. 전부 읽을 필요는 없고 무엇이 있는지, 무엇이 없는지를 봅니다.
 
 - 연산자: `Add`, `Sub`, `BitAnd`, `Shl` 등. `a + b`, `a & b`, `a << 2`가 되는 이유입니다. `bool` 페이지에 `BitAnd`, `Not`이 있어서 `bool`에 `&`, `!`를 쓸 수 있습니다.
 - 변환: `From<u8> for i32`(손실 없는 변환), `TryFrom<i64> for i32`(실패할 수 있는 변환), `FromStr`(`parse`). 이 절에는 `impl From<i32> for f64`처럼 이 타입이 다른 타입으로 변환되는 구현도 함께 나옵니다.
-- 비교와 해시: `PartialEq`, `Eq`, `PartialOrd`, `Ord`, `Hash`. **없는 것도 정보입니다.** `f64` 페이지에는 `Eq`와 `Ord`가 없습니다. NaN 때문에(2.10절) 실수는 전체 순서가 정해지지 않기 때문이고, 그래서 `f64`는 `Ord`를 요구하는 곳(예: 슬라이스의 `sort`, `ch4-collections`)에 그대로 쓸 수 없습니다.
+- 비교와 해시: `PartialEq`, `Eq`, `PartialOrd`, `Ord`, `Hash`. **없는 것도 정보입니다.** `f64` 페이지에는 `Eq`와 `Ord`가 없습니다. NaN 때문에(2.10절) 실수는 전체 순서가 정해지지 않기 때문이고, 그래서 `f64`는 `Ord`를 요구하는 곳(예: 슬라이스의 `sort`, [ch4](../ch4-collections/README.md))에 그대로 쓸 수 없습니다.
 - 출력: `Display`, `Debug`, `LowerHex`(`{:x}`) 등.
 
 **Auto Trait Implementations.** `Send`, `Sync`([Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)), `Unpin`([Part 0 ch16](../../part0-getting-started/ch16-async/README.md)), `UnwindSafe`, `RefUnwindSafe`처럼 타입의 구성 요소를 보고 컴파일러가 자동으로 구현 여부를 정하는 트레이트입니다. 스레드 사이에 보낼 수 있는지 확인할 때 봅니다. 목록의 나머지(`Freeze`, `UnsafeUnpin`)는 지금은 넘어가도 됩니다.
@@ -195,7 +195,7 @@ std 첫 페이지도 이 차이를 설명합니다. `char` 원시 타입 페이�
 | `1.0.0 (const: 1.50.0)` | `u32::pow` | 1.0.0부터 안정이고, 1.50.0부터 `const` 문맥에서도 쓸 수 있습니다. |
 | `1.62.0 (const: unstable)` | `bool::then_some` | 안정이지만 `const` 문맥에서는 아직 못 씁니다. |
 | 👎 Deprecated since 1.3.0: renamed to join | 슬라이스의 `connect` | 쓰지 말라는 표시입니다. 쓰면 경고가 납니다. |
-| 👎 Deprecating in a future version | `i32::min_value`, `std::i32::MAX` | 앞으로 Deprecated가 될 예정입니다. 목록에서는 `Deprecation planned`로 보입니다. |
+| 👎 Deprecating in a future version | `std::char::MAX`, `std::char::from_u32` | 앞으로 Deprecated가 될 예정입니다. 목록에서는 `Deprecation planned`로 보입니다. |
 | 🔬 This is a nightly-only experimental API. (int_roundings #88581) | `i32::div_ceil` | nightly 툴체인에서만 쓸 수 있는 실험 API입니다. 괄호 안은 기능 이름과 추적 이슈 번호입니다. 목록에서는 `Experimental`로 보입니다. |
 
 **`const`.** `const` 표시가 있는 메서드는 상수의 값을 계산하는 데 쓸 수 있습니다. 예제 03은 `const KIB: u32 = 2u32.pow(10);`을 씁니다. `f64::sqrt`처럼 `const`가 아닌 메서드를 상수에 쓰면 거부됩니다.
@@ -204,7 +204,7 @@ std 첫 페이지도 이 차이를 설명합니다. `char` 원시 타입 페이�
 error[E0015]: cannot call non-const method `f64::<impl f64>::sqrt` in constants
 ```
 
-**Deprecated.** 1.98.1에서 슬라이스의 `connect`를 쓰면 경고와 함께 바꿀 이름을 알려 줍니다. 반면 "Deprecating in a future version"인 `std::i32::MAX`는 지금은 경고가 나지 않지만(1.98.1에서 확인), 새 코드에서는 문서가 권하는 `i32::MAX`를 씁니다.
+**Deprecated.** 슬라이스의 `connect`를 쓰면 경고와 함께 바꿀 이름을 알려 줍니다. 반면 "Deprecating in a future version"인 `std::char::MAX`는 지금은 경고가 나지 않지만(1.100.0에서 확인), 새 코드에서는 문서가 권하는 `char::MAX`를 씁니다. 이 표시는 실제로 Deprecated로 바뀝니다. `std::i32::MAX`와 `i32::min_value`는 1.98.1 문서에서 "Deprecating in a future version"이었는데 1.99.0부터 Deprecated가 되어, 1.100.0에서 쓰면 `use of deprecated constant` 경고가 납니다.
 
 ```text
 warning: use of deprecated method `std::slice::<impl [T]>::connect`: renamed to join
@@ -255,7 +255,7 @@ where I: SliceIndex<[T]>
 - `Result<T, E>`: 왜 실패했는지 에러 값으로 알려 줄 때입니다. `i32::from_str_radix("1fz", 16)`은 `Err(ParseIntError { kind: InvalidDigit })`입니다.
 - 둘 다 아니면 실패하지 않거나, 실패할 때 패닉합니다. 패닉 조건은 §Panics 절에 있습니다.
 
-이름에도 규칙이 있습니다. `checked_*`와 `*_checked`는 `Option`을, `try_*`는 `Result`를 돌려주는 경우가 많고, 같은 일을 하는 접두사 없는 메서드는 패닉할 수 있습니다(`split_at`과 `split_at_checked`). 이 챕터에서는 돌려받은 `Option`을 Part 0에서 배운 `match`, `if let`, `unwrap_or`로만 다룹니다. `map`, `and_then`, `ok_or` 같은 `Option`/`Result`의 콤비네이터(combinator)는 `ch2-option-result`에서 다룹니다.
+이름에도 규칙이 있습니다. `checked_*`와 `*_checked`는 `Option`을, `try_*`는 `Result`를 돌려주는 경우가 많고, 같은 일을 하는 접두사 없는 메서드는 패닉할 수 있습니다(`split_at`과 `split_at_checked`). 이 챕터에서는 돌려받은 `Option`을 Part 0에서 배운 `match`, `if let`, `unwrap_or`로만 다룹니다. `map`, `and_then`, `ok_or` 같은 `Option`/`Result`의 콤비네이터(combinator)는 [ch2](../ch2-option-result/README.md)에서 다룹니다.
 
 **라이프타임 `'_`.** 슬라이스의 `pub fn iter(&self) -> Iter<'_, T>`에서 `'_`는 생략된 라이프타임입니다. 돌려받은 반복자가 `self`를 빌리고 있다는 뜻이므로, 반복자를 쓰는 동안 원본을 바꿀 수 없습니다([Part 0 ch10](../../part0-getting-started/ch10-generics-traits-lifetimes/README.md)의 생략 규칙).
 
@@ -315,9 +315,9 @@ rustdoc Book은 타입 기반 검색이 아직 실험적이고 버그가 있을 
 | 부호 없는 정수 전용 | `is_power_of_two`, `next_power_of_two`, `is_multiple_of`, `div_ceil` | `i32` 페이지에는 없거나 nightly 전용입니다. |
 | 비트 | `count_ones`, `leading_zeros`, `trailing_zeros`, `rotate_left`, `reverse_bits`, `swap_bytes` | `<<`는 밀려난 비트를 버리고, `rotate_left`는 반대쪽으로 돌려 넣습니다. |
 | 바이트 | `to_be_bytes`, `to_le_bytes`, `to_ne_bytes`, `from_be_bytes` 등 | be는 빅 엔디언, le는 리틀 엔디언입니다. `ne`(네이티브)는 CPU에 따라 결과가 다릅니다. |
-| 문자열 | `from_str_radix` | 2~36진수 문자열을 읽습니다. 10진수는 `parse`(`ch3-strings-fmt`)를 씁니다. |
+| 문자열 | `from_str_radix` | 2~36진수 문자열을 읽습니다. 10진수는 `parse`([ch3](../ch3-strings-fmt/README.md))를 씁니다. |
 
-**`as` 변환은 조용히 잘라 냅니다.** 넓은 타입을 좁은 타입으로 `as` 변환하면 넘치는 위쪽 비트를 버립니다. `300_i32 as u8`은 `44`, `-1_i32 as u8`은 `255`이고 에러도 패닉도 없습니다. 값이 바뀌면 안 되는 변환에는 `u8::try_from(300_i32)`처럼 `Result`를 돌려주는 `try_from`을 씁니다(`Err(TryFromIntError(PosOverflow))`). `From`/`TryFrom` 트레이트 자체는 `ch6-core-traits`에서 다룹니다.
+**`as` 변환은 조용히 잘라 냅니다.** 넓은 타입을 좁은 타입으로 `as` 변환하면 넘치는 위쪽 비트를 버립니다. `300_i32 as u8`은 `44`, `-1_i32 as u8`은 `255`이고 에러도 패닉도 없습니다. 값이 바뀌면 안 되는 변환에는 `u8::try_from(300_i32)`처럼 `Result`를 돌려주는 `try_from`을 씁니다(`Err(TryFromIntError(PosOverflow))`). `From`/`TryFrom` 트레이트 자체는 [ch6](../ch6-core-traits/README.md)에서 다룹니다.
 
 → [`examples/04_integers.rs`](examples/04_integers.rs)
 
@@ -362,9 +362,9 @@ rustdoc Book은 타입 기반 검색이 아직 실험적이고 버그가 있을 
 
 **왜 `to_uppercase`는 반복자를 돌려줄까요?** 유니코드에서는 대문자로 바꾸면 글자 수가 달라지는 문자가 있기 때문입니다. 독일어 `'ß'`는 대문자로 `"SS"` 두 글자가 됩니다. 시그니처 옆의 ⓘ가 이것이 반복자라고 알려 줍니다. 다행히 `ToUppercase`는 `Display`도 구현하므로(`std::char::ToUppercase` 페이지의 Trait Implementations) `println!("{}", c.to_uppercase())`로 바로 출력할 수 있습니다. 한글처럼 대소문자가 없는 문자는 `is_uppercase()`와 `is_lowercase()`가 모두 `false`입니다.
 
-**정수에서 `char`로.** `char`는 유니코드 스칼라 값만 담을 수 있으므로, 서로게이트 영역(0xD800~0xDFFF)이나 0x10FFFF보다 큰 수는 `char`가 될 수 없습니다. 그래서 `char::from_u32`는 `Option<char>`를 돌려주고, `u32 as char`는 컴파일 에러입니다(4.2절). 0~255는 모두 올바른 문자이므로 `u8 as char`만은 허용됩니다. 문자열 안의 `char`를 다루는 일(`chars()`, 검색 패턴)은 `ch3-strings-fmt`에서 다룹니다.
+**정수에서 `char`로.** `char`는 유니코드 스칼라 값만 담을 수 있으므로, 서로게이트 영역(0xD800~0xDFFF)이나 0x10FFFF보다 큰 수는 `char`가 될 수 없습니다. 그래서 `char::from_u32`는 `Option<char>`를 돌려주고, `u32 as char`는 컴파일 에러입니다(4.2절). 0~255는 모두 올바른 문자이므로 `u8 as char`만은 허용됩니다. 문자열 안의 `char`를 다루는 일(`chars()`, 검색 패턴)은 [ch3](../ch3-strings-fmt/README.md)에서 다룹니다.
 
-**`bool`의 메서드.** `bool` 페이지의 Implementations에는 메서드가 네 개뿐입니다(1.98.1).
+**`bool`의 메서드.** `bool` 페이지의 Implementations에는 메서드가 다섯 개뿐입니다(1.100.0).
 
 | 메서드 | 시그니처 | 볼 점 |
 | --- | --- | --- |
@@ -372,6 +372,7 @@ rustdoc Book은 타입 기반 검색이 아직 실험적이고 버그가 있을 
 | `then` (1.50.0) | `fn then<T, F>(self, f: F) -> Option<T> where F: FnOnce() -> T` | `true`일 때만 클로저를 부릅니다(게으른 평가). |
 | `ok_or` (1.98.0) | `fn ok_or<E>(self, err: E) -> Result<(), E>` | `false`면 `Err(err)`입니다. |
 | `ok_or_else` (1.98.0) | `fn ok_or_else<E, F>(self, f: F) -> Result<(), E> where F: FnOnce() -> E` | `ok_or`의 게으른 판입니다. |
+| `toggle` (1.100.0) | `fn toggle(&mut self)` | 값을 뒤집습니다(`value = !value`와 같음). 1.100.0에 추가됐습니다. |
 
 `then_some`과 `then`의 차이는 시그니처에 그대로 드러납니다. `then_some`은 값 `t: T`를 받으므로 호출하기 전에 값이 이미 계산되어 있어야 하고, `then`은 클로저 `f: F`를 받으므로 필요할 때만 부를 수 있습니다. 문서도 "함수 호출 결과를 넘긴다면 게으르게 평가하는 `then`을 권한다"고 적고 있습니다. 예제 06에서 `false.then_some(make_value(..))`는 `false`인데도 `make_value`를 부르고, `false.then(|| make_value(..))`는 부르지 않습니다.
 
@@ -393,7 +394,7 @@ rustdoc Book은 타입 기반 검색이 아직 실험적이고 버그가 있을 
 | 제자리 수정 | `swap`, `reverse`, `fill`, `rotate_left` | `&mut self`이므로 `mut` 변수에서만 부릅니다. `cards[1..4].fill(0)`처럼 부분 슬라이스에도 씁니다. |
 | 반복 | `iter`, `iter_mut` | `iter().rev()`로 거꾸로 돌고, `iter().sum()`으로 더합니다([Part 0 ch13](../../part0-getting-started/ch13-closures-iterators/README.md)). |
 
-슬라이스의 정렬·이진 탐색·`dedup`·`retain`과 `Vec`의 용량 관리는 `ch4-collections`에서, `concat`/`join`은 `ch3-strings-fmt`에서, 반복자 어댑터 전반은 `ch5-iterators`에서 다룹니다.
+슬라이스의 정렬·이진 탐색·`dedup`·`retain`과 `Vec`의 용량 관리는 [ch4](../ch4-collections/README.md)에서, `concat`/`join`은 [ch3](../ch3-strings-fmt/README.md)에서, 반복자 어댑터 전반은 [ch5](../ch5-iterators/README.md)에서 다룹니다.
 
 배열과 슬라이스는 원소가 비교 가능하면 `==`, `<`로 비교할 수 있고, 앞에서부터 처음 다른 원소로 결과가 정해집니다(`[1, 2, 9] < [1, 3, 0]`은 `true`). 원소가 `Copy`면 배열도 `Copy`라서 대입하면 통째로 복사됩니다.
 
@@ -444,7 +445,7 @@ sort = [1, 2, 3], sort_unstable = [1, 2, 3]
 볼 점:
 
 - `core` 경로로 만든 값을 `std` 경로로 적은 매개변수에 그대로 넘깁니다. 같은 타입이 아니었다면 E0308입니다.
-- `type_name`의 출력은 rustc 1.98.1 기준입니다. 형식이 보장되지 않으므로 버전에 따라 다르게 보일 수 있습니다.
+- `type_name`의 출력은 rustc 1.100.0 기준입니다(1.98.1과 같습니다). 형식이 보장되지 않으므로 버전에 따라 다르게 보일 수 있습니다.
 - `HashMap`이 `std`에 정의된 것은 기본 해시 함수의 시드를 실행 환경(운영체제)이 주는 난수로 만들기 때문입니다(`HashMap` 문서의 HashDoS 설명).
 - 파일 맨 위의 `extern crate alloc;`을 지우면 `alloc::vec::Vec`에서 E0433이 납니다.
 
@@ -549,7 +550,7 @@ Ok(44) Err(TryFromIntError(PosOverflow))
 - `usize::BITS = 64`는 64비트 환경 기준입니다. 32비트 환경에서는 32입니다.
 - `checked_mul`이 돌려준 `Option`을 `match`로 꺼내 `None`일 때 대체값을 정합니다. `unwrap_or(0)`도 같은 일을 짧게 합니다.
 - `0시에서 30시간 전`처럼 음수의 나머지가 필요할 때 `%`와 `rem_euclid`의 차이가 드러납니다.
-- `{:08b}`, `{:02x?}`, `{:#x}`는 각각 2진수 8자리, 16진수 디버그 형식, `0x`가 붙은 16진수로 출력하는 서식입니다. 서식 문법은 `ch3-strings-fmt`에서 다룹니다.
+- `{:08b}`, `{:02x?}`, `{:#x}`는 각각 2진수 8자리, 16진수 디버그 형식, `0x`가 붙은 16진수로 출력하는 서식입니다. 서식 문법은 [ch3](../ch3-strings-fmt/README.md)에서 다룹니다.
 
 ### 05_floats — NaN, 비교, 반올림
 
@@ -582,7 +583,7 @@ sin(PI/2) = 1
 - `nan == nan`은 Clippy가 `eq_op`로 막는 코드입니다. 일부러 보여 주는 비교라서 `#[expect(clippy::eq_op, reason = "…")]`를 붙였습니다.
 - `let sum: f64 = 0.1 + 0.2;`에서 `: f64`를 지우면 `.abs()`를 부르는 줄에서 E0689가 납니다(4.1절).
 - `Less Less true` 줄은 `total_cmp`가 `-0.0`을 `0.0`보다 작다고 보지만 `==`는 둘을 같다고 본다는 것을 보여 줍니다.
-- `{:e}`는 지수 표기, `{:>2}`는 오른쪽 정렬 서식입니다(`ch3-strings-fmt`).
+- `{:e}`는 지수 표기, `{:>2}`는 오른쪽 정렬 서식입니다([ch3](../ch3-strings-fmt/README.md)).
 
 ### 06_char_bool — `char`와 `bool`의 메서드
 
@@ -758,11 +759,9 @@ error[E0277]: the type `[{integer}]` cannot be indexed by `i32`
 help: `usize` implements trait `SliceIndex<T>`
    ...
    = note: required for `[{integer}]` to implement `Index<i32>`
-   = note: 1 redundant requirement hidden
-   = note: required for `[{integer}; 3]` to implement `Index<i32>`
 ```
 
-- **읽는 법**: 밑줄 옆의 설명 "slice indices are of type `usize` or ranges of `usize`"가 핵심입니다. `help:`의 `SliceIndex`는 2.7절에서 `get`의 시그니처로 읽은 그 트레이트입니다. `note:`는 배열 인덱싱이 슬라이스 인덱싱으로 이어진다는 것을 거슬러 올라가며 보여 줍니다. (중간의 소스 위치 줄은 줄였습니다.)
+- **읽는 법**: 밑줄 옆의 설명 "slice indices are of type `usize` or ranges of `usize`"가 핵심입니다. `help:`의 `SliceIndex`는 2.7절에서 `get`의 시그니처로 읽은 그 트레이트입니다. `note:`는 슬라이스가 `Index<i32>`를 구현하려면 이 조건이 필요하다는 것을 알려 줍니다(배열 인덱싱은 슬라이스 인덱싱으로 이어집니다). 중간의 소스 위치 줄은 줄였습니다.
 - **원인**: 인덱스로 쓸 수 있는 타입은 `usize`와 `usize`의 범위뿐입니다. `i32`는 음수일 수 있으므로 Rust는 인덱스로 쓰기 전에 직접 변환하게 합니다. 이것은 [Part 0 ch8](../../part0-getting-started/ch8-collections/README.md)의 "문자열을 정수로 인덱싱"과는 다른 상황입니다. 그쪽은 인덱스 타입이 아니라 `String`이 정수 인덱싱을 아예 지원하지 않는 것이었습니다.
 - **해결**: 인덱스 변수를 처음부터 `usize`로 선언합니다. 다른 계산 때문에 `i32`여야 한다면 `usize::try_from(i)`로 바꾸고 음수인 경우를 처리합니다. 음수가 아님을 확신할 때만 `i as usize`를 씁니다. 음수를 `as usize`로 바꾸면 아주 큰 수가 되어(2.9절의 잘림) 결국 범위 밖 패닉이 납니다.
 
@@ -780,7 +779,7 @@ error[E0308]: mismatched types
    |                        arguments to this method are incorrect
    |
 note: method defined here
-  --> /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/num/int_macros.rs:3136:21
+  --> /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/core/src/num/int_macros.rs:3142:21
    ...
 help: you can convert a `usize` to a `u32` and panic if the converted value doesn't fit
    |
@@ -834,7 +833,7 @@ help: consider importing one of these functions
 - 3은 메서드 제목 오른쪽의 `1.x.0 (const: 1.y.0)` 표시를 읽습니다(2.6절).
 - 4는 사이드바의 절 목록에서 찾습니다. `Vec`이 어떤 `Deref`를 구현하는지 떠올려 보세요(2.5절).
 - 5는 각 타입 페이지의 Trait Implementations에서 `impl Eq for …`, `impl Ord for …`가 있는지 봅니다. 없다면 왜 없는지 2.10절에서 확인합니다.
-- 1.98.1 문서 기준 답: 65535 / `self == MIN`일 때 / 1.24.0, const 1.47.0 / Methods from Deref<Target = [T]> / `f64`는 `Eq` 없음, `bool`은 `Ord` 있음.
+- 1.100.0 문서 기준 답: 65535 / `self == MIN`일 때 / 1.24.0, const 1.47.0 / Methods from Deref<Target = [T]> / `f64`는 `Eq` 없음, `bool`은 `Ord` 있음.
 
 </details>
 
@@ -847,7 +846,7 @@ help: consider importing one of these functions
 
 - 정수 페이지에서 곱셈과 나눗셈의 검사 연산을 찾습니다. 둘 다 `Option`을 돌려줍니다.
 - 첫 번째 결과를 `match`로 꺼내 `Some(scaled)`일 때 `scaled.checked_div(total)`을 돌려주고, `None`일 때 `None`을 돌려줍니다. `checked_div`는 0으로 나누면 `None`이므로 `total == 0`을 따로 검사할 필요가 없습니다.
-- 두 `Option`을 이어 붙이는 더 짧은 방법(`and_then`)은 `ch2-option-result`에서 배웁니다.
+- 두 `Option`을 이어 붙이는 더 짧은 방법(`and_then`)은 [ch2](../ch2-option-result/README.md)에서 배웁니다.
 
 </details>
 

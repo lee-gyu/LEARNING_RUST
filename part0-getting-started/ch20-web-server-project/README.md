@@ -7,7 +7,7 @@ Part 0의 마지막 챕터입니다. 지금까지 배운 것을 모아 브라우
 - 패키지: `p0-ch20-web-server-project`
 - 독립 프로젝트: `projects/hello-server` (라이브러리 크레이트의 `ThreadPool` + 바이너리 크레이트의 서버)
 - 기준 문서: [The Book 21장 Final Project: Building a Multithreaded Web Server](https://doc.rust-lang.org/book/ch21-00-final-project-a-web-server.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024), macOS
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024), macOS. 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 - 챕터 번호: 이 저장소는 The Book 14장을 Part 3으로 옮겼기 때문에 Book 21장이 `ch20`입니다. 이 문서에서 "N장"은 The Book의 장을, `chN`은 이 저장소의 챕터를 가리킵니다.
 - 네트워크: 모든 예제와 프로젝트는 이 컴퓨터 자신을 가리키는 주소 `127.0.0.1`에서만 동작합니다. 다른 컴퓨터에서는 접속할 수 없습니다.
 
@@ -67,7 +67,7 @@ $ curl http://127.0.0.1:7878/
 | --- | --- | --- |
 | `TcpStream`을 넘겨받은 함수가 끝나면 연결이 닫힘 | 소유권, drop | [ch4](../ch4-ownership/README.md), [ch14](../ch14-smart-pointers/README.md) |
 | `&request_line[..]`로 요청 줄 비교 | 문자열 슬라이스 | [ch4](../ch4-ownership/README.md) |
-| 요청 줄로 응답 고르기, `let...else` | `match`, 패턴 | [ch6](../ch6-enums-pattern-matching/README.md), `ch18-patterns` |
+| 요청 줄로 응답 고르기, `let...else` | `match`, 패턴 | [ch6](../ch6-enums-pattern-matching/README.md), [ch18](../ch18-patterns/README.md) |
 | 서버(바이너리)와 `ThreadPool`(라이브러리) 나누기 | 라이브러리 + 바이너리 패키지 | [ch7](../ch7-modules/README.md), [ch12](../ch12-io-project-minigrep/README.md) |
 | `Content-Length`는 바이트 수 | `String`과 UTF-8 | [ch8](../ch8-collections/README.md) |
 | `unwrap`, `ThreadPool::build` | `Result`, 패닉과 `Result`의 선택 기준 | [ch9](../ch9-error-handling/README.md) |
@@ -76,8 +76,8 @@ $ curl http://127.0.0.1:7878/
 | `lines().map(..).take_while(..).collect()`, `FnOnce` | 반복자, 클로저 | [ch13](../ch13-closures-iterators/README.md) |
 | `Box<dyn ..>`, `impl Drop`, `drop(..)` | 스마트 포인터, `Drop` | [ch14](../ch14-smart-pointers/README.md) |
 | 작업자 스레드, 채널, `Arc<Mutex<T>>`, `Send` | 스레드와 동기화 | [ch15](../ch15-concurrency/README.md) |
-| `dyn FnOnce()` | 트레이트 객체 | `ch17-trait-objects-oop` |
-| `type Job = ..`, 예제의 `fn(TcpListener)` | 별칭, 함수 포인터 | `ch19-advanced-features` |
+| `dyn FnOnce()` | 트레이트 객체 | [ch17](../ch17-trait-objects-oop/README.md) |
+| `type Job = ..`, 예제의 `fn(TcpListener)` | 별칭, 함수 포인터 | [ch19](../ch19-advanced-features/README.md) |
 
 ### 2.2 TCP와 HTTP, 그리고 연결 받기
 
@@ -242,7 +242,7 @@ B가 더는 A를 기다리지 않습니다. 하지만 이 방식에는 **상한�
 - 새 요청이 오면 그 처리를 **작업(job)** 으로 만들어 대기열(queue)에 넣고, 손이 빈 작업자가 하나씩 꺼내 처리합니다.
 - 동시에 처리하는 요청은 많아야 작업자 수만큼이고, 나머지는 대기열에서 차례를 기다립니다. 느린 요청이 작업자 하나를 붙잡고 있어도 다른 작업자가 빠른 요청을 처리합니다.
 
-작업자 4개가 모두 느린 요청을 처리 중이면 다섯 번째 요청은 기다려야 합니다(3절 프로젝트의 두 번째 실행에서 확인합니다). 그래도 스레드 수가 늘지 않으므로 서버가 자원을 다 써 버리지는 않습니다. The Book은 처리량을 높이는 다른 방법으로 fork/join 모델, 단일 스레드 비동기 I/O 모델, 멀티스레드 비동기 I/O 모델을 소개하고, 많은 비동기 런타임이 안에서 스레드 풀을 쓴다고 설명합니다. 비동기는 `ch16-async`에서 다뤘습니다.
+작업자 4개가 모두 느린 요청을 처리 중이면 다섯 번째 요청은 기다려야 합니다(3절 프로젝트의 두 번째 실행에서 확인합니다). 그래도 스레드 수가 늘지 않으므로 서버가 자원을 다 써 버리지는 않습니다. The Book은 처리량을 높이는 다른 방법으로 fork/join 모델, 단일 스레드 비동기 I/O 모델, 멀티스레드 비동기 I/O 모델을 소개하고, 많은 비동기 런타임이 안에서 스레드 풀을 쓴다고 설명합니다. 비동기는 [ch16](../ch16-async/README.md)에서 다뤘습니다.
 
 ### 2.6 컴파일러가 이끄는 설계: 쓰고 싶은 API부터
 
@@ -398,11 +398,11 @@ type Job = Box<dyn FnOnce() + Send + 'static>;
 
 | 부분 | 왜 필요한가 |
 | --- | --- |
-| `dyn FnOnce()` | 서로 다른 클로저 타입을 하나의 타입으로 다루는 트레이트 객체(`ch17-trait-objects-oop`). 실제로 어떤 클로저인지는 실행 중에 정해집니다. |
+| `dyn FnOnce()` | 서로 다른 클로저 타입을 하나의 타입으로 다루는 트레이트 객체([ch17](../ch17-trait-objects-oop/README.md)). 실제로 어떤 클로저인지는 실행 중에 정해집니다. |
 | `Box<..>` | 트레이트 객체는 크기를 컴파일할 때 알 수 없으므로, 크기가 정해진 포인터 뒤에 둡니다(ch14의 `Box`, ch12의 `Box<dyn Error>`와 같은 이유). |
 | `+ Send` | 이 상자를 꺼낼 수 있는 수신자를 작업자 스레드로 보내야 하므로 필요합니다. 빠뜨리면 E0277(4.2절)이 납니다. |
 | `+ 'static` | 작업은 채널 안에서 언제까지든 기다릴 수 있으므로, 빌린 참조를 품으면 안 됩니다. |
-| `type Job = ..` | 긴 타입에 이름을 붙이는 별칭(type alias, `ch19-advanced-features`)입니다. `Sender<Job>`, `Receiver<Job>`처럼 여러 곳에 쓰는 타입을 짧게 씁니다. 새 타입을 만드는 것은 아닙니다. |
+| `type Job = ..` | 긴 타입에 이름을 붙이는 별칭(type alias, [ch19](../ch19-advanced-features/README.md))입니다. `Sender<Job>`, `Receiver<Job>`처럼 여러 곳에 쓰는 타입을 짧게 씁니다. 새 타입을 만드는 것은 아닙니다. |
 
 `execute`는 받은 클로저를 상자에 담아 보냅니다.
 
@@ -477,7 +477,7 @@ while let Ok(job) = receiver.lock().unwrap().recv() {
 
 `while let`과 `match`로 쓴 반복문은 작업자가 둘인데도 작업을 **하나씩만** 실행했습니다. 스레드 풀을 만든 의미가 사라진 것입니다. 이 버그는 컴파일러도, 정상적인 응답도 알려 주지 않으므로 특히 조심해야 합니다.
 
-- Rust 2024 에디션은 `if let`에서 임시값이 버려지는 시점을 바꿨지만, 바뀐 것은 `else` 블록 쪽입니다. 이 환경(2024 에디션)에서 확인한 결과, `while let`, `match`, `if let`의 본문에서는 여전히 잠금이 유지되었습니다. 2021 에디션으로 컴파일해도 결과가 같았습니다. 에디션별 차이는 Part 2 `ch4-rust-2024-language`에서 다룹니다.
+- Rust 2024 에디션은 `if let`에서 임시값이 버려지는 시점을 바꿨지만, 바뀐 것은 `else` 블록 쪽입니다. 이 환경(2024 에디션)에서 확인한 결과, `while let`, `match`, `if let`의 본문에서는 여전히 잠금이 유지되었습니다. 2021 에디션으로 컴파일해도 결과가 같았습니다. 에디션별 차이는 [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md)에서 다룹니다.
 - clippy는 3번처럼 `loop` 안에 `match`와 `break`만 있는 모양을 보면 `while let`으로 바꾸라고 제안합니다(`clippy::while_let_loop`). 그렇게 바꿔도 2번과 같아질 뿐 잠금 문제는 그대로입니다. 1번처럼 `let`으로 받아 두는 모양에는 이 제안이 나오지 않습니다. 예제는 비교를 위해 3번에 `#[expect(clippy::while_let_loop)]`를 붙여 두었습니다.
 - The Book의 Listing 21-20은 `let job = receiver.lock().unwrap().recv().unwrap();`처럼 `let` 문으로 받습니다. 잠금 문제는 없지만, 채널이 닫히면 `recv()`의 `Err`를 `unwrap`해 패닉합니다. 완성판은 2.9절처럼 `match`로 `Err`를 처리합니다.
 
@@ -603,7 +603,7 @@ pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
 }
 ```
 
-검사를 통과한 뒤 `new`를 부르므로 `new`의 `assert!`는 절대 실패하지 않고, 스레드를 만드는 코드는 `new` 한 곳에만 있습니다. `PoolCreationError`에는 `Display`를 구현해(ch10) `"스레드 풀의 크기는 1 이상이어야 합니다"`라는 메시지를 낼 수 있게 했습니다. 에러 타입에 `std::error::Error` 트레이트까지 구현하는 방법은 Part 1 `ch8-errors-panic`에서 다룹니다.
+검사를 통과한 뒤 `new`를 부르므로 `new`의 `assert!`는 절대 실패하지 않고, 스레드를 만드는 코드는 `new` 한 곳에만 있습니다. `PoolCreationError`에는 `Display`를 구현해(ch10) `"스레드 풀의 크기는 1 이상이어야 합니다"`라는 메시지를 낼 수 있게 했습니다. 에러 타입에 `std::error::Error` 트레이트까지 구현하는 방법은 [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md)에서 다룹니다.
 
 스레드를 만드는 일 자체도 실패할 수 있습니다. `thread::spawn`은 운영체제가 스레드를 만들지 못하면 패닉합니다. 표준 라이브러리 문서는 이 실패에서 회복하고 싶다면, 같은 일을 하되 `io::Result<JoinHandle<T>>`를 돌려주는 `std::thread::Builder`의 `spawn`을 쓰라고 안내합니다(연습 문제 3).
 
@@ -631,11 +631,11 @@ fn page_path(filename: &str) -> PathBuf {
 | 주제 | 한 줄 소개 | 다루는 곳 |
 | --- | --- | --- |
 | HTTP의 나머지 | 헤더 해석, `Content-Type`, 연결 재사용(keep-alive), `POST` 본문 등. 실제 서비스에는 crates.io의 HTTP 크레이트를 씀 | 이 저장소에서는 다루지 않음 |
-| TCP·UDP 소켓 자세히 | 클라이언트 쪽 `TcpStream`, 타임아웃, UDP 송수신 | Part 1 `ch12-net` |
-| `thread::Builder`, `Condvar`, 원자 타입 | 스레드 이름과 생성 실패 처리, 조건을 기다리는 동기화, `Mutex` 없는 카운터 | Part 1 `ch11-threads-sync`, 연습 문제 3 |
+| TCP·UDP 소켓 자세히 | 클라이언트 쪽 `TcpStream`, 타임아웃, UDP 송수신 | [Part 1 ch12](../../part1-standard-lib/ch12-net/README.md) |
+| `thread::Builder`, `Condvar`, 원자 타입 | 스레드 이름과 생성 실패 처리, 조건을 기다리는 동기화, `Mutex` 없는 카운터 | [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md), 연습 문제 3 |
 | `Ctrl+C`로 우아하게 종료하기 | 시그널을 받아 반복문을 끝내고 `Drop`이 실행되게 하기 | Part 7 `ch6-signals-config-exit-codes` |
-| 사용자 정의 에러 타입 | `std::error::Error` 구현, 에러 변환 | Part 1 `ch8-errors-panic` |
-| 비동기 I/O 서버 | 스레드 대신 태스크로 수많은 연결을 처리 | `ch16-async`, 비동기 런타임 크레이트 |
+| 사용자 정의 에러 타입 | `std::error::Error` 구현, 에러 변환 | [Part 1 ch8](../../part1-standard-lib/ch8-errors-panic/README.md) |
+| 비동기 I/O 서버 | 스레드 대신 태스크로 수많은 연결을 처리 | [ch16](../ch16-async/README.md), 비동기 런타임 크레이트 |
 
 ## 3. 예제 안내
 
@@ -1030,7 +1030,7 @@ note: required because it appears within the type `Box<(dyn FnOnce() + 'static)>
    = note: required for `std::sync::Mutex<std::sync::mpsc::Receiver<Box<(dyn FnOnce() + 'static)>>>` to implement `Sync`
    = note: 1 redundant requirement hidden
    = note: required for `Arc<std::sync::Mutex<std::sync::mpsc::Receiver<Box<(dyn FnOnce() + 'static)>>>>` to implement `Send`
-note: required because it's used within this closure
+note: required because `receiver` is used within this closure
 note: required by a bound in `spawn`
 help: use parentheses to call this trait object
    |
@@ -1083,8 +1083,8 @@ error[E0507]: cannot move out of `worker.thread` which is behind a mutable refer
    |             |
    |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
    |
-note: `JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
-  --> /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/thread/join_handle.rs:149:16
+note: `std::thread::JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
+  --> /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/std/src/thread/join_handle.rs:149:16
 ```
 
 - **읽는 법**: "가변 참조 뒤에 있는 `worker.thread`를 옮길 수 없다"는 뜻입니다. `note`가 이유를 알려 줍니다. `join`은 `self`를 값으로 받아 소유권을 가져갑니다. `/rustc/...` 경로는 표준 라이브러리 소스의 위치로, 내 코드의 위치가 아닙니다.

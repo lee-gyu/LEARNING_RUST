@@ -10,7 +10,7 @@ Rust는 함수를 값처럼 다루는 함수형 프로그래밍의 아이디어�
 - 패키지: `p0-ch13-closures-iterators`
 - 독립 프로젝트: `projects/minigrep` (ch12 판을 복사해 개선한 것)
 - 기준 문서: [The Book 13장 Functional Language Features: Iterators and Closures](https://doc.rust-lang.org/book/ch13-00-functional-features.html)
-- 확인한 툴체인: rustc 1.98.1, cargo 1.98.1 (Edition 2024)
+- 확인한 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/`의 에러 메시지를 1.100.0에서 다시 확인했습니다(파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력은 작성 당시 그대로입니다).
 
 ## 1. 학습 목표
 
@@ -137,7 +137,7 @@ note: closure is returned here
 help: to force the closure to take ownership of `count` (and any other referenced variables), use the `move` keyword
 ```
 
-반환 타입의 `impl FnMut() -> u32`는 `ch10-generics-traits-lifetimes`에서 본 반환 위치의 `impl Trait`입니다. 클로저 타입에는 이름이 없으므로 이 문법이 꼭 필요합니다. `make_counter()`를 두 번 부르면 클로저마다 자기 `count`를 소유하므로 두 카운터는 서로 영향을 주지 않습니다. 다른 스레드에 클로저를 넘길 때도 같은 이유로 `move`가 필요하며, 이것은 `ch15-concurrency`에서 다룹니다.
+반환 타입의 `impl FnMut() -> u32`는 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 본 반환 위치의 `impl Trait`입니다. 클로저 타입에는 이름이 없으므로 이 문법이 꼭 필요합니다. `make_counter()`를 두 번 부르면 클로저마다 자기 `count`를 소유하므로 두 카운터는 서로 영향을 주지 않습니다. 다른 스레드에 클로저를 넘길 때도 같은 이유로 `move`가 필요하며, 이것은 [ch15](../ch15-concurrency/README.md)에서 다룹니다.
 
 **`Copy` 타입을 `move`하면 복사본이 들어갑니다.** `i32` 같은 `Copy` 타입은 이동 대신 복사되므로, `move` 뒤에도 원래 변수를 쓸 수 있습니다. 대신 클로저 안에서 바꾼 값은 클로저 안의 복사본이라 바깥 변수에는 반영되지 않습니다. 예제 02의 5번 구역에서 클로저를 두 번 불러 `2`가 나온 뒤에도 바깥의 `count`는 `0`입니다.
 
@@ -155,7 +155,7 @@ help: to force the closure to take ownership of `count` (and any other reference
 
 - **`FnOnce`**: "한 번은 부를 수 있다"는 뜻이라 모든 클로저가 구현합니다. 캡처한 값을 밖으로 옮기는 클로저는 이것만 구현합니다. 한 번 부르고 나면 옮길 값이 남아 있지 않기 때문입니다. `|| { let owned = name; ... }`처럼 `name`을 옮기는 클로저를 두 번 부르면 E0382와 함께 ``closure cannot be invoked more than once because it moves the variable `name` out of its environment``라는 설명이 나옵니다.
 - **`FnMut`**: 여러 번 부를 수 있지만 부를 때마다 캡처한 값을 바꿀 수 있습니다. 그래서 부르는 동안 클로저를 가변으로 빌려야 하고, 클로저 변수나 매개변수에 `mut`이 필요합니다.
-- **`Fn`**: 여러 번 불러도 아무것도 바꾸지 않습니다. 같은 클로저를 여러 곳에서 동시에 불러도 안전하다는 보장이 됩니다(동시성은 `ch15-concurrency`).
+- **`Fn`**: 여러 번 불러도 아무것도 바꾸지 않습니다. 같은 클로저를 여러 곳에서 동시에 불러도 안전하다는 보장이 됩니다(동시성은 [ch15](../ch15-concurrency/README.md)).
 
 세 트레이트는 포함 관계입니다. `Fn`을 구현하면 `FnMut`도, `FnMut`을 구현하면 `FnOnce`도 구현합니다. 그래서 `Fn` 클로저는 `FnMut`이나 `FnOnce`를 요구하는 자리 어디에나 넘길 수 있습니다. 환경을 캡처하지 않는 보통 함수도 세 트레이트를 모두 구현하므로, 클로저 자리에 함수 이름을 넘길 수 있습니다(예제 03의 `call_twice(say_hello)`).
 
@@ -163,7 +163,7 @@ help: to force the closure to take ownership of `count` (and any other reference
 
 ### 2.6 클로저를 받는 함수 작성하기
 
-클로저의 타입에는 이름이 없으므로, 클로저를 받는 함수는 `ch10-generics-traits-lifetimes`에서 배운 트레이트 바운드로 "어떤 `Fn` 트레이트를 구현한 타입"을 요구합니다. 트레이트 이름 뒤에 함수처럼 매개변수 타입과 반환 타입을 적습니다(`Fn(i32) -> i32`, `FnOnce() -> T`, 반환값이 없으면 `Fn()`).
+클로저의 타입에는 이름이 없으므로, 클로저를 받는 함수는 [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배운 트레이트 바운드로 "어떤 `Fn` 트레이트를 구현한 타입"을 요구합니다. 트레이트 이름 뒤에 함수처럼 매개변수 타입과 반환 타입을 적습니다(`Fn(i32) -> i32`, `FnOnce() -> T`, 반환값이 없으면 `Fn()`).
 
 ```rust
 fn call_once(f: impl FnOnce()) {            // impl Trait 문법
@@ -249,7 +249,7 @@ pub trait Iterator {
 }
 ```
 
-- `type Item`은 "이 반복자가 내놓는 값의 타입"을 구현하는 쪽이 정하는 자리입니다. 이런 것을 연관 타입(associated type)이라 부르며 자세한 내용은 `ch19-advanced-features`에서 다룹니다.
+- `type Item`은 "이 반복자가 내놓는 값의 타입"을 구현하는 쪽이 정하는 자리입니다. 이런 것을 연관 타입(associated type)이라 부르며 자세한 내용은 [ch19](../ch19-advanced-features/README.md)에서 다룹니다.
 - 구현하는 쪽이 만들어야 하는 메서드는 `next` 하나뿐입니다. `map`, `filter`, `sum` 같은 수십 개의 메서드는 모두 `next`를 써서 만든 기본 구현(ch10)으로 따라옵니다.
 - `next`는 `&mut self`를 받습니다. 반복자는 "지금 어디까지 꺼냈는지"를 상태로 들고 있고, `next`를 부를 때마다 그 상태가 한 칸 나아가기 때문입니다. 그래서 `next`를 직접 부르려면 반복자 변수에 `mut`이 필요합니다.
 
@@ -332,7 +332,7 @@ loop {
 }
 ```
 
-`for` 문에서는 반복자 변수에 `mut`을 붙이지 않았습니다. `for`가 반복자의 소유권을 가져가 안에서 가변으로 쓰기 때문입니다. (clippy는 이 `loop`를 `while let`으로 줄여 쓰라고 제안합니다. `while let`은 `if let`을 조건이 맞는 동안 되풀이하는 문법으로 `ch18-patterns`에서 다룹니다.)
+`for` 문에서는 반복자 변수에 `mut`을 붙이지 않았습니다. `for`가 반복자의 소유권을 가져가 안에서 가변으로 쓰기 때문입니다. (clippy는 이 `loop`를 `while let`으로 줄여 쓰라고 제안합니다. `while let`은 `if let`을 조건이 맞는 동안 되풀이하는 문법으로 [ch18](../ch18-patterns/README.md)에서 다룹니다.)
 
 ### 2.11 `iter`, `iter_mut`, `into_iter`
 
@@ -356,7 +356,7 @@ for name in names.into_iter() {
 // 이제 names를 쓰면 E0382
 ```
 
-`for x in &v`가 `v.iter()`와 같은 이유는, `for`가 부르는 `into_iter()`가 무엇에 부르느냐에 따라 다르게 동작하기 때문입니다. `Vec`에 부르면 원소를, `&Vec`에 부르면 참조를, `&mut Vec`에 부르면 가변 참조를 내놓습니다. 이 동작을 정하는 `IntoIterator` 트레이트는 Part 1 `ch5-iterators`에서 다룹니다. 배열도 마찬가지라서, 2021 에디션부터는 `[a, b, c].into_iter()`가 원소 값을 내놓습니다. 예제는 [`05_iter_ownership.rs`](examples/05_iter_ownership.rs)입니다.
+`for x in &v`가 `v.iter()`와 같은 이유는, `for`가 부르는 `into_iter()`가 무엇에 부르느냐에 따라 다르게 동작하기 때문입니다. `Vec`에 부르면 원소를, `&Vec`에 부르면 참조를, `&mut Vec`에 부르면 가변 참조를 내놓습니다. 이 동작을 정하는 `IntoIterator` 트레이트는 [Part 1 ch5](../../part1-standard-lib/ch5-iterators/README.md)에서 다룹니다. 배열도 마찬가지라서, 2021 에디션부터는 `[a, b, c].into_iter()`가 원소 값을 내놓습니다. 예제는 [`05_iter_ownership.rs`](examples/05_iter_ownership.rs)입니다.
 
 ### 2.12 어댑터와 소비 메서드
 
@@ -617,7 +617,7 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
 **왜 비용이 없을까?**
 
 - **클로저는 캡처한 값을 담은 이름 없는 구조체입니다.** 힙에 할당하지 않고, 호출은 실행 중에 무엇을 부를지 찾는 과정 없이 정해진 함수를 바로 부르는 것입니다.
-- **어댑터는 클로저의 타입을 제네릭 매개변수로 받습니다.** `filter`는 `filter<P>(self, predicate: P)` 모양의 제네릭 메서드라서, `ch10-generics-traits-lifetimes`에서 배운 단형성화(monomorphization)로 클로저마다 전용 코드가 만들어집니다. 그러면 컴파일러가 클로저 본문을 호출하는 자리에 펼쳐 넣을(인라이닝) 수 있고, 체인 전체가 하나의 반복문처럼 최적화됩니다.
+- **어댑터는 클로저의 타입을 제네릭 매개변수로 받습니다.** `filter`는 `filter<P>(self, predicate: P)` 모양의 제네릭 메서드라서, [ch10](../ch10-generics-traits-lifetimes/README.md)에서 배운 단형성화(monomorphization)로 클로저마다 전용 코드가 만들어집니다. 그러면 컴파일러가 클로저 본문을 호출하는 자리에 펼쳐 넣을(인라이닝) 수 있고, 체인 전체가 하나의 반복문처럼 최적화됩니다.
 - The Book은 반복문 펼치기(loop unrolling)나 배열 접근의 범위 검사 제거 같은 최적화도 적용되어, 반복자 코드가 손으로 쓴 것과 같은 기계어로 컴파일되는 경우가 많다고 설명합니다.
 
 **직접 재 보기**: [`08_performance.rs`](examples/08_performance.rs)는 같은 일을 하는 `for` 판과 반복자 판의 시간을 잽니다. 두 가지로 실행해 비교해 보세요.
@@ -1084,7 +1084,7 @@ error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` clos
    |                              ^^^^^ `value` is moved here
    |
 help: `Fn` and `FnMut` closures require captured values to be able to be consumed multiple times, but `FnOnce` closures may consume them only once
-  --> /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/alloc/src/slice.rs:249:11
+  --> /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/alloc/src/slice.rs:249:11
 help: consider cloning the value if the performance cost is acceptable
    |
 41 |         sort_operations.push(value.clone());
@@ -1170,7 +1170,7 @@ note: `std::iter::Iterator::sum` takes ownership of the receiver `self`, which m
 <summary>힌트</summary>
 
 - 먼저 `filter`의 클로저에서 E0373(`closure may outlive the current function, but it borrows query`)이 납니다. 돌려준 반복자는 함수가 끝난 뒤에 쓰이는데 클로저가 매개변수 `query`를 빌리고 있기 때문입니다. 2.4절처럼 `move`를 붙입니다.
-- 다음으로 `run`의 `if`/`else`에서 E0308이 납니다. 두 함수가 돌려주는 `impl Iterator`는 서로 다른 타입이라 한 변수에 담을 수 없습니다(`ch10-generics-traits-lifetimes`에서 본 반환 위치 `impl Trait`의 제약과 같습니다). 각 갈래 안에서 바로 `for line in search(...) { println!("{line}"); }`로 출력하면 됩니다.
+- 다음으로 `run`의 `if`/`else`에서 E0308이 납니다. 두 함수가 돌려주는 `impl Iterator`는 서로 다른 타입이라 한 변수에 담을 수 없습니다([ch10](../ch10-generics-traits-lifetimes/README.md)에서 본 반환 위치 `impl Trait`의 제약과 같습니다). 각 갈래 안에서 바로 `for line in search(...) { println!("{line}"); }`로 출력하면 됩니다.
 - 테스트의 비교는 `search(query, contents).collect::<Vec<_>>()`처럼 모은 뒤에 합니다.
 
 </details>
@@ -1195,7 +1195,7 @@ note: `std::iter::Iterator::sum` takes ownership of the receiver `self`, which m
 - Rustlings
   - [`18_iterators`](https://github.com/rust-lang/rustlings/tree/main/exercises/18_iterators): `iterators1.rs`~`iterators5.rs`. `next`, `map`, `collect`, 해시 맵 값의 반복 등을 연습합니다. 클로저만 따로 다루는 연습 디렉터리는 없습니다.
 - API 문서
-  - [`std::iter::Iterator`](https://doc.rust-lang.org/std/iter/trait.Iterator.html): 필수 메서드 `next`와 기본 구현 메서드 전체 목록입니다. 이 챕터에서 다루지 않은 어댑터(`fold`, `chain`, `peekable` 등)는 Part 1 `ch5-iterators`에서 다룹니다.
+  - [`std::iter::Iterator`](https://doc.rust-lang.org/std/iter/trait.Iterator.html): 필수 메서드 `next`와 기본 구현 메서드 전체 목록입니다. 이 챕터에서 다루지 않은 어댑터(`fold`, `chain`, `peekable` 등)는 [Part 1 ch5](../../part1-standard-lib/ch5-iterators/README.md)에서 다룹니다.
   - [`std::ops::FnMut`](https://doc.rust-lang.org/std/ops/trait.FnMut.html): `FnOnce`, `Fn`과의 포함 관계와 바운드를 고르는 기준이 적혀 있습니다. [`FnOnce`](https://doc.rust-lang.org/std/ops/trait.FnOnce.html), [`Fn`](https://doc.rust-lang.org/std/ops/trait.Fn.html)도 함께 보세요.
   - [`move` 키워드](https://doc.rust-lang.org/std/keyword.move.html): `move` 클로저도 본문이 하는 일에 따라 `Fn`이나 `FnMut`을 구현할 수 있다고 설명합니다.
   - [`Option::unwrap_or_else`](https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else), [`slice::sort_by_key`](https://doc.rust-lang.org/std/primitive.slice.html#method.sort_by_key): 2.7절의 바운드를 확인할 수 있습니다.
