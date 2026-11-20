@@ -22,5 +22,6 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | --- | --- |
 | [ch1-getting-started](ch1-getting-started/) | Cargo가 `rustc` 위에서 하는 일, `cargo new`/`cargo init`, 패키지 레이아웃 관례와 타깃 고르기, `Cargo.toml`과 `Cargo.lock`(`--locked`), 이미 있는 패키지 빌드하기, Cargo home — 관례대로 놓은 패키지(`text-stat`) |
 | [ch2-dependencies](ch2-dependencies/) | 버전 요구 사항 문법(기본·캐럿, 틸드, 와일드카드, 비교, 프리릴리스), crates.io·git·path 세 출처와 잠금 파일의 `source`, 의존성 표의 종류와 이름 바꾸기, `cargo add`·`remove`·`update`·`tree`, 의존성 해석 규칙과 해석 실패 읽기, `[patch]` — 세 출처를 쓰는 패키지(`three-sources`), 연습용 레지스트리(`resolver-lab`) |
+| [ch3-manifest-targets](ch3-manifest-targets/) | 매니페스트의 표 지도, `[package]`의 키와 모르는 키 경고·`[package.metadata]`, 타깃 표(`[lib]`·`[[bin]]`·`[[example]]`·`[[test]]`)와 `default-run`·`test`·`harness`·자동 탐색, `rust-version`의 효과, `[lints]`의 수준과 `priority`·Cargo 자신의 린트 — 타깃을 직접 구성한 패키지(`unit-tools`) |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

@@ -1,0 +1,61 @@
+# 이 파일의 표를 종류별로 훑어보려면 챕터의 예제 01_manifest_map을 실행합니다.
+
+# ── 1. 패키지 정보 ─────────────────────────────────────────────
+[package]
+name = "unit-tools"
+version = "0.1.0"
+edition = "2024"
+# 이 패키지를 컴파일할 수 있는 가장 낮은 Rust 버전입니다(2024 에디션은 1.85부터).
+rust-version = "1.85"
+description = "섭씨·화씨, 킬로미터·마일을 바꾸는 작은 도구 모음"
+# 바이너리가 셋이므로 `cargo run`이 실행할 것을 정해 둡니다.
+default-run = "unit-tools"
+# 실수로 레지스트리에 게시하지 못하게 막습니다.
+publish = false
+
+# Cargo는 `package.metadata` 아래를 읽지 않습니다. 다른 도구가 쓰는 자리입니다.
+[package.metadata.unit-tools]
+default-precision = 1
+
+# ── 2. 타깃 ────────────────────────────────────────────────────
+# 라이브러리: 위치는 관례(src/lib.rs) 그대로 두고 크레이트 이름만 바꿉니다.
+[lib]
+name = "units"
+
+# 바이너리: 관례 밖의 경로에 둔 소스를 타깃으로 선언합니다.
+[[bin]]
+name = "c2f"
+path = "tools/c2f.rs"
+# 이 바이너리에는 단위 테스트가 없으므로 `cargo test`가 테스트용으로 빌드하지 않게 합니다.
+test = false
+
+# 예제: 관례 밖의 디렉터리(demos/)에 둔 예제입니다.
+[[example]]
+name = "table"
+path = "demos/table.rs"
+
+# 통합 테스트: 관례가 찾아낸 tests/report.rs의 설정만 바꿉니다.
+# harness = false면 #[test]를 모으는 테스트 러너 없이 이 파일의 main이 그대로 실행됩니다.
+[[test]]
+name = "report"
+harness = false
+
+# ── 3. 의존성 ──────────────────────────────────────────────────
+[dependencies]
+
+# ── 4. 린트 ────────────────────────────────────────────────────
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[lints.clippy]
+# 그룹은 priority를 낮춰 먼저 적용되게 하고, 그 위에 개별 린트를 덮어씁니다.
+pedantic = { level = "warn", priority = -1 }
+must_use_candidate = "allow"
+
+[lints.cargo]
+non_kebab_case_bins = "warn"
+
+# ── 그 밖 ──────────────────────────────────────────────────────
+# 이 학습 저장소의 루트 워크스페이스와 분리하는 빈 `[workspace]` 표입니다.
+[workspace]

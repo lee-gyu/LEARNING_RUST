@@ -1065,6 +1065,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "p3-ch3-manifest-targets"
+version = "0.0.0"
+
+[[package]]
 name = "parking_lot"
 version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
