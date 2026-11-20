@@ -1,0 +1,5 @@
+[package]
+name = "p3-ch1-getting-started"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

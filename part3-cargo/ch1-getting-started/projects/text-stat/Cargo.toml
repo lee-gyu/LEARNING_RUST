@@ -1,0 +1,11 @@
+[package]
+name = "text-stat"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+unicode-segmentation = "1.13.3"
+
+# 이 학습 저장소의 루트 워크스페이스에 속하지 않게 하는 빈 테이블입니다.
+# 저장소 밖에서 만든 패키지에는 필요 없습니다(Part 0 ch1 "자주 하는 실수" 4번).
+[workspace]

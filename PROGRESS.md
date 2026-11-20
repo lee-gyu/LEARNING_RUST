@@ -2,7 +2,7 @@
 
 [로드맵](docs/roadmap.md)의 챕터별 작업 상태를 기록합니다. 챕터 하나가 끝날 때마다 이 문서와 로드맵의 상태 칸을 함께 갱신합니다.
 
-- 마지막 갱신: 2026-11-20 (부록 A ch27~ch35 추가, 부록 A 35개 챕터 완료)
+- 마지막 갱신: 2026-11-20 (Part 3 ch1 추가)
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (Edition 2024). 2026-11-18에 1.98.1에서 올렸습니다. Part 0과 Part 1 ch1~ch4의 본문과 예제 출력은 1.98.1에서 작성·검증했고, 1.100.0에서는 아래 "툴체인 1.100.0 확인"의 범위만 다시 확인했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료(비고 참고)
@@ -15,7 +15,8 @@
 | Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
-| Part 3~11 | 0 / 69 |
+| Part 3. Cargo | 1 / 11 |
+| Part 4~11 | 0 / 58 |
 | 부록 A. Effective Rust (본편 합계와 별도) | 35 / 35 |
 
 ## 사전 작업
@@ -93,7 +94,15 @@
 - Part 2 전체 확인(2026-11-19, rustc 1.100.0): 저장소 루트에서 `cargo fmt --all --check`, `cargo build --workspace --examples`, `cargo clippy --workspace --examples -- -D warnings`가 경고 없이 통과했고, `compile_fail` 파일 31개가 머리말에 적힌 에디션별 결과대로 실패·통과하며, `projects/` 아래 독립 프로젝트는 각 디렉터리에서 `cargo fmt --check`, `cargo clippy -- -D warnings`, 실행(테스트가 있으면 `cargo test`)을 확인했습니다. `web/`의 사이트 빌드도 깨진 링크 경고 없이 통과했습니다. Part 2 합계는 예제 24 / 에러 31 / 프로젝트 8입니다(ch3·ch5는 프로젝트 2개, ch6의 프로젝트는 스냅숏 3벌).
 - Part 2는 모두 1.100.0에서 작성·검증했습니다. 에디션에 따른 동작 차이는 툴체인이 올라가면 달라질 수 있습니다(예: never 타입 폴백은 1.100부터 모든 에디션에 적용). nightly가 필요한 내용(`gen` 블록, `edition = "future"`)은 확인하지 못했습니다.
 
-## Part 3~11
+## Part 3. Cargo — `part3-cargo/`
+
+| 상태 | 챕터 | 산출물 | 검증 | 완료일 | 비고 |
+| --- | --- | --- | --- | --- | --- |
+| ✅ | `ch1-getting-started` | 예제 2 / 에러 2 / 프로젝트 1 | 통과 | 2026-11-20 | `projects/text-stat`(라이브러리 + 바이너리 3개 + 예제 + 통합 테스트, 관례가 정하는 위치를 거의 다 쓰는 패키지). **crates.io의 `unicode-segmentation` 1.13.3에 의존**(2026-11-20 기준, `Cargo.lock`이 고정). `01`은 `rustc`를 자식 프로세스로 세 번 실행(첫 번째는 일부러 실패, 예제의 종료 코드는 0). `02`의 출력은 Cargo home의 내용에 따라 컴퓨터마다 다름. `cargo run`(바이너리가 셋이라 종료 코드 101)과 `--locked` 실패는 일부러 보이는 에러. Cargo Book과 다른 실제 동작: `registry/index`는 git 저장소가 아니라 sparse 프로토콜의 캐시 파일. Cargo Book 1.1(설치)은 Part 0 ch1로 넘기고, 2.6절의 git 의존성 설명은 crates.io 의존성과 `--locked` 실험으로 바꿈. `compile_fail`은 2개뿐이고 나머지 실수는 Cargo의 에러라 표로 실음. 검증 2회(첫 보고에서 "레지스트리" 정의와 영어 병기 누락을 고침). README 633줄 |
+
+- Part 3부터는 메인 세션이 챕터를 하나씩 직접 쓰고 `reviewer` 서브 에이전트의 검증을 통과한 뒤 다음 챕터로 넘어갑니다. 사실 확인은 툴체인과 함께 설치된 1.100.0의 Cargo Book(`rustc --print sysroot` 아래 `share/doc/rust/html/cargo/`)과 직접 실행으로 했습니다.
+
+## Part 4~11
 
 아직 시작하지 않았습니다. 챕터 목록은 [로드맵 3절](docs/roadmap.md#3-파트별-챕터-계획)을 따르며, 파트를 시작할 때 이 문서에 표를 추가합니다.
 
@@ -237,6 +246,9 @@
 - bindgen 관련(부록 ch35): `bindgen` 0.73.2는 기본 대상 판 1.82에서 `unsafe extern "C"`를 생성해 2024 에디션에서 그대로 컴파일되고, 레이아웃 검사는 `#[test]`가 아니라 `const _` 블록입니다(0.69.5는 `extern "C"`와 `#[test]`를 생성). `clang-sys` 1.9.1은 `LIBCLANG_PATH`가 없으면 찾은 libclang 가운데 가장 높은 버전을 고릅니다(이 환경에서는 명령줄 도구가 아니라 Homebrew LLVM 23.1.2). allowlist가 없으면 libclang 버전에 따라 생성 결과가 달라집니다. 같은 `links` 값을 가진 패키지 둘은 서로 의존하지 않아도 한 워크스페이스에서 해석 단계 에러가 납니다. `-sys` 쪽의 `cargo::metadata`가 바뀌면 의존하는 쪽 빌드 스크립트도 다시 실행됩니다. `match` 패턴에 없는 상수를 쓰면 E0425가 아니라 E0531입니다. `#[repr(C)]` 구조체는 `non_camel_case_types`가 면제되지만 `pub type` 별칭은 면제되지 않습니다. 생성 코드의 린트 억제를 `#[expect]`로 하면 생성 옵션을 바꿀 때 `unfulfilled_lint_expectations`가 나므로 `#[allow]`를 씁니다. `include!`로 끌어오는 커밋된 생성 결과는 `cargo fmt`가 건드리지 않습니다(손으로 고치면 비교 테스트가 실패). 선언이 어긋난 빌드 가운데 실행해도 되는 것(같은 크기의 필드 순서, 상수 값)과 미정의 동작이라 실행하면 안 되는 것(인자 수·폭)을 나누고, 뒤쪽은 데모가 스스로 멈추게 합니다.
 - 메인 세션(부록 ch27~ch35): 이 컴퓨터의 시스템 Python(3.9)은 한글이 든 아주 긴 줄이 소스 파일이나 표준 입력에 있으면 `SyntaxError: Non-UTF-8 code`로 실패합니다(파일은 올바른 UTF-8인데 줄을 읽는 버퍼 경계에서 글자가 잘림). `PROGRESS.md`의 긴 행처럼 긴 문자열은 JSON 같은 데이터 파일에 두고 스크립트가 읽게 합니다. 동시에 쓰는 챕터끼리 프로젝트 이름이 겹칠 수 있으므로(ch32와 ch34가 둘 다 `tally`를 골라 ch32를 `pollcount`로 바꿈) 위임 메시지에 이미 쓰인 프로젝트 이름을 적습니다. 위임 메시지의 공통 부분(환경, 설치 금지, 부록 공통 규칙, 보고 형식)은 파일 하나에 적어 두고 챕터마다 읽게 하면 챕터 사이의 조건이 어긋나지 않습니다. 버전 비교가 필요한 챕터는 이미 설치된 다른 툴체인(1.98.1)을 쓰게 하고, 미설치 툴체인 이름을 쓰면 내려받는다는 점을 위임 메시지에 적습니다.
 
+- Cargo 실습(Part 3 ch1): `cargo new`·`cargo init`과 독립 프로젝트를 고쳐 보는 실험은 저장소 밖 사본에서 합니다. 이 셸은 `CARGO_HOME`을 이미 정해 두고 있어서 "rustup 프록시가 넣어 준다"를 확인하려면 `env -u CARGO_HOME`으로 실행합니다(프록시는 자식에게 `CARGO_HOME`과 `RUSTUP_TOOLCHAIN`을 넣고, 툴체인 디렉터리의 `cargo`를 직접 실행하면 넣지 않음). `CARGO_HOME`을 빈 임시 디렉터리로 주면 `Downloaded` 줄과 새 Cargo home의 구조를 볼 수 있고, Cargo는 고른 패키지의 의존성만 내려받습니다(의존성 없는 패키지는 `Updating crates.io index`만 나옴). cargo 1.100.0의 `target/debug/`에는 `deps/`가 없고 크레이트별 결과는 `build/<패키지>/<해시>/out/`에 있으며, `target/debug/` 바로 아래의 실행 파일과 `.rlib`은 그 사본입니다. `cargo init`은 `src/lib.rs`만 있어도 `Creating binary (application) package`라고 출력하고, 기존 `.gitignore` 끝에 `# Added by cargo`와 `/target`을 덧붙입니다. 패키지 자신의 `version`을 바꿔도 `Cargo.lock`이 다시 쓰입니다. `--locked` 실패의 종료 코드는 101이고, 파이프 뒤의 `$?`는 cargo의 종료 코드가 아니므로 따로 받습니다. cargo 1.100.0은 쓰지 않는 의존성에 `cargo::unused_dependencies` 경고를 냅니다. `rustc`는 컴파일에 실패해도 `--out-dir` 디렉터리를 만듭니다. `cargo build -v`로 `rustc` 명령을 보이는 장면은 Part 0 ch7 2.2절, Part 2 ch1 2.3절, Part 3 ch1 2.1절에 있으므로 뒤 챕터는 가리키기만 합니다.
+- reviewer 운영(Part 3): reviewer가 사용량 한도로 중단되면 한도가 풀린 뒤 같은 reviewer에게 메시지를 보내 이어서 실행합니다. reviewer가 도는 동안 저장소 밖에서 다음 챕터의 초안 파일을 써 두는 것은 괜찮지만 cargo는 실행하지 않습니다(Cargo home의 내용이 바뀌면 reviewer가 보는 출력이 달라짐).
+
 ## 후속 조치
 
 챕터 작성 중 발견한, 다른 파일에 반영해야 할 사항을 적습니다.
@@ -292,6 +304,7 @@
 - 부록 A ch27~ch35 → 본편: 다음 파트를 쓸 때 겹치는 부록 챕터와 서로 링크합니다. Part 3 `ch3-manifest-targets`(`[lints]` 전반 ↔ ch29), `ch8-build-scripts`(↔ ch34·ch35), `ch9-testing-ci`(↔ ch30·ch32), `ch10-publishing-semver`(게시할 때 패키지에 들어가는 파일 ↔ ch30), `ch11-commands-tools`(사용자 정의 하위 명령과 `cargo metadata` 전체 ↔ ch31). Part 4 전체(rustdoc 기능, 숨김 줄과 코드 블록 속성 ↔ ch27·ch30). Part 5 `ch3-lints`(린트 수준의 우선순위 ↔ ch29), `ch4-targets-cross-compilation`(↔ ch32·ch33), `ch6-optimization-instrumentation`(커버리지 ↔ ch31·ch32). Part 8 `ch1-intro-no-std`·`ch7-collections-design-patterns`(↔ ch33). Part 9 `ch2-macros`(↔ ch28), `ch9-memory-panic-linkage`(↔ ch34). Part 10 `ch2-data-layout`·`ch12-ffi-beneath-std`(↔ ch34·ch35). Part 11 `ch2-compiler-flags`(새니타이저 ↔ ch31).
 - Part 0 ch19: README 참고 자료의 The Little Book of Rust Macros 링크(`veykril.github.io/tlborm/`)가 `lukaswirth.dev/tlborm/`으로 리다이렉트됩니다(2026-11-20 확인). 새 주소로 고칩니다.
 - Part 1 ch14: README 2.5절 끝이 `CString::into_raw`/`from_raw`와 C 라이브러리 링크를 Part 10·Part 3으로만 넘깁니다. 부록 A ch34가 일부를 다루므로 함께 가리키도록 고칠지 정합니다(선택 사항). 부록 A ch16의 "`[lints]`는 Part 3 `ch3-manifest-targets`에서"라는 문장에도 ch29를 덧붙일 수 있습니다.
+- Part 3 ch1 → 뒤 챕터: `ch2-dependencies`(버전 요구 사항 문법, 의존성 출처, `cargo update`·`cargo tree`, 해석 규칙, "라이브러리는 잠금 파일이 아니라 `Cargo.toml`의 범위로 쓰인다"는 점의 뒷이야기), `ch3-manifest-targets`(타깃을 `Cargo.toml`에 직접 적기, `default-run`), `ch4-workspaces`, `ch6-profiles-build-performance`(`target/` 안의 구조, 프로필), `ch7-configuration-env`(`config.toml`, Cargo가 설정하는 환경 변수), `ch9-testing-ci`(`benches/`, CI에서 Cargo home 캐시), `ch10-publishing-semver`(레지스트리에 게시, `cargo install`), Part 5 `ch1-rustc-basics`(`rustc` 옵션). ch1 README는 이 챕터들을 아직 이름으로만 가리킵니다.
 
 ## 용어 메모
 
@@ -508,3 +521,5 @@
 | opaque type·pointer / out-parameter / borrowed·transferred (C 문자열의 소유권 방향) | 불투명 타입·불투명 포인터 / 출력 매개변수 / 빌려줌·넘겨줌 |
 | hand-written·generated declarations / committed bindings / layout check / target version (`rust_target`) / bless | 손으로 쓴 선언·생성한 선언("손으로 쓴 판"·"생성판") / 커밋해 둔 생성 결과(↔ 빌드 때 생성) / 레이아웃 검사 / 대상 판 / 덮어쓰기 |
 | (선언이 어긋났지만 메모리는 망가지지 않아 값만 틀리게 읽힌 것) | 잘못 해석한 값(미정의 동작과 구별) |
+| (Part 3) target / auto-discovery / convention over configuration | 타깃 / 관례로 찾아냄(자동 탐색) / 설정보다 관례 |
+| (Part 3) registry / index / Cargo home / lockfile / `.crate` 파일 | 레지스트리 / 색인 / Cargo home(영어 그대로) / 잠금 파일 / 압축 파일. 저장소 밖으로 복사해 실험하는 것은 "사본" |
