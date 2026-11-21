@@ -47,6 +47,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | --- | --- |
 | [ch1-why-rust](ch1-why-rust/) | Rust가 풀려는 문제(GC 없는 메모리 안전성, 비용 없는 추상화, 검사되는 스레드 공유), 조직들이 옮기는 이유와 근거(보안 보고서, 도입 사례), 쓰이는 분야와 사용 현황, 맞지 않는 곳, 기존 코드를 다시 써야 하는지, Go·C++와 고르는 기준 |
 | [ch2-memory-safety](ch2-memory-safety/) | 메모리 안전성의 다섯 종류(공간·시간·타입·초기화·데이터 경쟁)와 Rust가 막는 장치와 시점, 메모리 버그가 취약점이 되는 과정(Heartbleed 모양의 버그), "70%"를 읽는 법, GC 언어와의 차이, 패닉의 안전성, 정수 실수를 드러내는 장치, Android의 감소 자료를 읽는 법 |
+| [ch3-safety-limits](ch3-safety-limits/) | Rust가 보장하지 않는 것(논리 오류, 메모리 누수, 교착 상태와 경쟁 조건, 정수 오버플로, 패닉과 스택 오버플로로 인한 중단), `unsafe`의 범위와 안전한 API 안에 가두기, 표준 라이브러리의 검증, Rust 코드의 CVE 사례, 공급망과 컴파일러의 건전성 버그 |
 
 ## 질문 색인
 
@@ -70,5 +71,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q2.6](ch2-memory-safety/) | 패닉으로 프로그램이 죽는 것도 안전한 건가요? |
 | [Q2.7](ch2-memory-safety/) | 메모리 안전성 말고 보안에 도움이 되는 것은 무엇인가요? |
 | [Q2.8](ch2-memory-safety/) | 실제로 취약점이 줄었나요? |
+| [Q3.1](ch3-safety-limits/) | Rust로 쓰면 버그가 없어지나요? |
+| [Q3.2](ch3-safety-limits/) | `unsafe`가 있으면 결국 C와 같지 않나요? |
+| [Q3.3](ch3-safety-limits/) | 표준 라이브러리도 `unsafe`를 쓰는데 믿을 수 있나요? |
+| [Q3.4](ch3-safety-limits/) | 메모리 누수는 왜 막지 않나요? |
+| [Q3.5](ch3-safety-limits/) | 교착 상태와 경쟁 조건은 막아 주나요? |
+| [Q3.6](ch3-safety-limits/) | 정수 오버플로는 어떻게 되나요? |
+| [Q3.7](ch3-safety-limits/) | 패닉은 서비스 거부 공격이 될 수 있지 않나요? |
+| [Q3.8](ch3-safety-limits/) | Rust로 쓴 코드에서도 CVE가 나오나요? |
+| [Q3.9](ch3-safety-limits/) | 의존하는 크레이트가 많은데 공급망은 안전한가요? |
+| [Q3.10](ch3-safety-limits/) | 컴파일러에 버그가 있으면 보장이 깨지나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

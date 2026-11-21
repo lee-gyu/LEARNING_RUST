@@ -393,6 +393,10 @@ name = "faq-ch2-memory-safety"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch3-safety-limits"
+version = "0.0.0"
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"

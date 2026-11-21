@@ -1,0 +1,5 @@
+[package]
+name = "faq-ch3-safety-limits"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

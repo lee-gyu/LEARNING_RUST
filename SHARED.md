@@ -76,6 +76,9 @@
 
 - Stack Overflow 설문 페이지는 WebFetch가 중간에서 잘라(2025 technology 페이지는 약 3 MB) 뒤쪽 절(Admired and Desired 등)을 읽지 못합니다. `curl -sL -A 'Mozilla/5.0'`로 받아 HTML을 걷어 내고 봅니다. 2026 설문은 `/2026/technology/data/<항목>` 페이지에 Markdown 표와 JSON(항목별 응답 수 `n`, "16 of 14,099 respondents" 같은 설명)이 함께 들어 있어 대조하기 좋습니다. Microsoft MSRC 블로그는 curl에 403을 주지만 WebFetch로는 열립니다.
 - 설문 표를 스크립트로 읽을 때 `<1%`처럼 표시된 행이 숫자 정규식에서 빠져 순위가 틀린 적이 있습니다(부록 B ch1, 2026 admired 1위를 잘못 씀). "1위"처럼 순위를 쓸 때는 표본이 작은 항목까지 포함한 전체 표를 보고, 몇 명이 답한 숫자인지 함께 적습니다.
+- 부록 B 독자는 Part 0을 마쳤으므로, 예제와 `compile_fail/`을 쓰기 전에 Part 0(과 링크로 가리킬 앞 챕터)에 같은 시연이 있는지 찾습니다. 부록 B ch3 검증에서 Part 0 ch3 예제 04(정수 오버플로), ch15 예제 05·2.10절(`try_lock`, 경쟁 조건), ch19 2.1절(`unsafe` 안의 E0499)과 겹쳤습니다. 겹치면 인용하고 무엇을 더하는지 밝히고, 같은 상황의 `compile_fail/`은 만들지 않습니다.
+- CVE가 "어디서 났는가"(예: `unsafe` 블록 안인지)를 쓸 때는 NVD 등이 가리키는 수정 커밋의 diff를 엽니다(`gh api repos/<저장소>/commits/<sha> --jq '.files[].patch'`). 부록 B ch3에서 `VecDeque` CVE의 수정은 `unsafe` 블록이 아니라 그 위의 안전한 비교였습니다. 원문이 밝히지 않은 것(예: Android CVE-2025-48530이 `unsafe` 코드였는지)은 추측해 쓰지 않습니다.
+- 원문의 목록(분류, 항목)을 옮길 때는 항목 수를 원문과 맞춰 봅니다.
 - 회사 블로그의 "N% 절감" 같은 수치는 바로 뒤 문장이 그 원인을 무엇으로 드는지 확인합니다. 같은 글의 다른 지표(지연 시간 등)에 붙은 원인 설명을 옮겨 붙인 적이 있습니다(부록 B ch1, Cloudflare). 한정어("중간 크기 이상의 변경에서" 등)가 어느 수치에 붙는지도 봅니다.
 
 ## 2. 후속 조치
@@ -98,7 +101,6 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch3-safety-limits` | Android의 `unsafe` Rust 버퍼 오버플로 CVE-2025-48530(공개 릴리스 전에 잡힘. Android의 "1000배" 추정의 근거가 된 1건), 메모리 안전성 밖의 취약점(부록 B ch1 Q1.1·Q1.3, ch2 Q2.8). 패닉을 이용한 서비스 거부, 릴리스 빌드의 정수 오버플로(ch2 Q2.6·Q2.7) |
 | 부록 B `ch5-no-null-no-exceptions` | 파일·잠금 같은 메모리 밖 자원의 정리를 `try`/`finally`·`defer`·`with`와 비교(부록 B ch1 Q1.1) |
 | 부록 B `ch8-concurrency-async` | ch1 예제 03 끝 주석의 두 변형: 스코프 스레드가 `Mutex` 없이 합계를 빌려 고치면 E0499, `move` 클로저로 고치면 `usize`가 복사되어 합계 0(경고 ``value captured by `total` is never read``). `move` 없는 클로저가 `&T` 타입 지역 변수를 쓰면 그 변수가 아니라 `*x`를 캡처하므로, 스코프 스레드에서 `chunk: &[T]`만 쓰는 클로저는 `move` 없이 컴파일됨(값 변수를 빌리면 E0373). Go 경쟁 검출기와 메모리 모델 비교(부록 B ch1 Q1.8) |
 | 부록 B `ch10-undefined-behavior` | ch2가 확인한 타입 안전성 사실(1.100.0): `&u32 as &f32`는 E0605(ch2 4.2절의 compile_fail), 원시 포인터로 거친 캐스트는 컴파일되고 역참조만 E0133, `unsafe { transmute(u32) }`는 `unnecessary_transmutes` 경고와 `f32::from_bits` 제안. C의 미초기화 변수 읽기(ch2 4.1절 E0381이 미룸) |
