@@ -393,6 +393,10 @@ name = "faq-ch10-undefined-behavior"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch11-cpp-raii-move"
+version = "0.0.0"
+
+[[package]]
 name = "faq-ch2-memory-safety"
 version = "0.0.0"
 

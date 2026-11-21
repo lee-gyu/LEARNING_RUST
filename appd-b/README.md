@@ -55,6 +55,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch8-concurrency-async](ch8-concurrency-async/) | 동시성과 비동기: 겁 없는 동시성이 약속하는 것, `Send`·`Sync`와 대여 규칙, 데이터를 소유한 `Mutex`(C의 데이터 경쟁과 ThreadSanitizer), GIL·경쟁 검출기와의 차이, 고루틴과 태스크, 표준 라이브러리에 없는 비동기 런타임, 게으른 퓨처와 Promise, 일반 함수와 `async`, 스레드와 `async` 고르기, 전역 상태 |
 | [ch9-c-memory-errors](ch9-c-memory-errors/) | C의 메모리 오류와 Rust: 해제 후 사용, 이중 해제, 댕글링 포인터, 경계 밖 읽기·쓰기, 초기화하지 않은 메모리, 널 역참조, 반복자 무효화, C 문자열 버그, 크기 계산을 C·C++ 비교 코드(새니타이저)와 Rust의 장치로 나란히, 누수와 실행 비용 |
 | [ch10-undefined-behavior](ch10-undefined-behavior/) | 미정의 동작: 틀린 결과보다 위험한 이유, "안전한 Rust에는 미정의 동작이 없다"의 뜻, 오버플로·시프트·나눗셈·정수 승격·부호 비교·평가 순서·전역 초기화·별칭 규칙·잘못된 값을 C·C++(UBSan, 경고)과 Rust로 비교, `unsafe`의 미정의 동작 |
+| [ch11-cpp-raii-move](ch11-cpp-raii-move/) | C++의 RAII와 이동: 파괴적 이동과 `std::move`, 복사 생성자와 `Copy`·`Clone`, Rule of three/five/zero와 `Drop`, `const`·`mutable`과 불변 기본·내부 가변성, C++ 표준 타입(스마트 포인터·`optional`·`variant`·`expected`·`span`) 대응, 예외 안전성, RVO, `Pin` |
 
 ## 질문 색인
 
@@ -158,5 +159,14 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q10.7](ch10-undefined-behavior/) | 엄격한 별칭 규칙(strict aliasing)과 `restrict`에 해당하는 것은 무엇인가요? |
 | [Q10.8](ch10-undefined-behavior/) | `bool`이나 열거형에 잘못된 값이 들어가는 것, 유니언으로 타입을 바꿔 읽는 것은 어떻게 되나요? |
 | [Q10.9](ch10-undefined-behavior/) | `unsafe` Rust에서는 미정의 동작이 가능한가요? C보다 쉬운가요, 어려운가요? |
+| [Q11.1](ch11-cpp-raii-move/) | C++에도 RAII와 `unique_ptr`·`shared_ptr`가 있는데 소유권은 무엇이 다른가요? |
+| [Q11.2](ch11-cpp-raii-move/) | Rust의 이동은 `std::move`와 무엇이 다른가요? |
+| [Q11.3](ch11-cpp-raii-move/) | 복사 생성자가 없나요? 값은 언제 복사되나요? |
+| [Q11.4](ch11-cpp-raii-move/) | 생성자와 소멸자, Rule of three/five/zero는 어떻게 되나요? |
+| [Q11.5](ch11-cpp-raii-move/) | `const` 정확성과 불변 기본은 어떻게 다른가요? `mutable`에 해당하는 것은 무엇인가요? |
+| [Q11.6](ch11-cpp-raii-move/) | `unique_ptr`, `shared_ptr`, `weak_ptr`, `optional`, `variant`, `expected`, `string_view`, `span`은 무엇에 대응하나요? |
+| [Q11.7](ch11-cpp-raii-move/) | 예외 안전성은 어떻게 되나요? |
+| [Q11.8](ch11-cpp-raii-move/) | 값 반환 최적화(RVO)와 out 매개변수는 어떻게 되나요? |
+| [Q11.9](ch11-cpp-raii-move/) | placement new, 이동할 수 없는 타입, 자기를 가리키는 객체는 어떻게 하나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

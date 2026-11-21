@@ -85,7 +85,7 @@
 - `&T`는 용어 메모대로 "불변 참조"로 씁니다. 컴파일러 메시지에는 "shared reference"로 나오므로, 메시지를 인용하는 곳에서 둘을 이어 줍니다.
 - 회사 블로그의 "N% 절감" 같은 수치는 바로 뒤 문장이 그 원인을 무엇으로 드는지 확인합니다. 같은 글의 다른 지표(지연 시간 등)에 붙은 원인 설명을 옮겨 붙인 적이 있습니다(부록 B ch1, Cloudflare). 한정어("중간 크기 이상의 변경에서" 등)가 어느 수치에 붙는지도 봅니다.
 - 질문 표의 한 줄 답과 짧은 답에 "다른 점"을 쓸 때는 같은 소절의 비교 표와 칸마다 대조합니다. 부록 B ch5 검증에서 짧은 답이 자기 표와 어긋난 곳이 둘 있었습니다(Kotlin `T?`도 컴파일 에러인데 "경고가 아니라 에러"를 다른 점으로 듦, Java checked exception보다 약한 강제를 "무시하기 어렵다"고 씀).
-- 겹치는 시연을 찾을 때는 Part 0만이 아니라 앞 부록 B 챕터의 예제, Part 1·부록 A의 같은 주제 챕터도 봅니다. 부록 B ch5에서 ch1 예제 01, Part 0 ch9 예제 05, Part 0 ch14 예제 04, Part 0 ch15 예제 05와 겹친 시연을 검증에서야 찾았습니다.
+- 겹치는 시연을 찾을 때는 Part 0만이 아니라 앞 부록 B 챕터의 예제, Part 1·부록 A의 같은 주제 챕터도 봅니다. 부록 B ch5에서 ch1 예제 01, Part 0 ch9 예제 05, Part 0 ch14 예제 04, Part 0 ch15 예제 05와 겹친 시연을 검증에서야 찾았습니다. 주제어만이 아니라 구조체 이름(`Buffer` 등)과 출력 라벨로도 `grep`합니다(부록 B ch11에서 ch9 예제 01과 겹친 이동·해제 시연을 검증에서 찾음).
 - `compile_fail`이 겹치는지 볼 때는 앞 챕터의 `compile_fail/` 파일만이 아니라, 같은 에러 코드를 다룬 README 4절의 본문 문장도 봅니다(`grep -rn "E0277" part0-getting-started/*/README.md`처럼 에러 코드로 훑음). 부록 B ch6 검증에서 파일은 달라도 같은 교훈을 Part 0 ch10 4.2절이 이미 문장으로 적어 둔 것을 놓쳤습니다.
 - 다른 언어의 규칙을 옮긴 칸(예: "Go는 제약이 반드시 필요")을 Rust 칸에 그대로 쓰지 않습니다. 부록 B ch6에서 Go FAQ의 "constraints are mandatory"를 Rust에도 적었다가 틀렸습니다(Rust는 바운드 없이도 컴파일되고, 본문에서 쓰는 능력만 바운드로 밝힘).
 - 앞 챕터를 "N절"로 가리킬 때는 그 README의 번호 체계를 확인합니다. Part 0 초기 챕터(ch3 등)는 핵심 개념의 소절에만 "1.", "4." 같은 번호가 있고 "자주 하는 실수"에는 번호가 없어서, "4절"이 엉뚱한 곳(ch3에서는 오버플로 절)을 가리킵니다. 그럴 때는 "'자주 하는 실수' 1"처럼 씁니다(부록 B ch7).
@@ -95,6 +95,7 @@
 - 실행 중의 오버플로·시프트·0으로 나누기를 보이려는 코드에 상수를 쓰면 `arithmetic_overflow`·`unconditional_panic` 린트(둘 다 기본 deny)가 컴파일 에러로 막습니다. 실행 동작은 `std::hint::black_box`로 감싼 값이나 입력값으로 확인합니다. 릴리스 빌드의 `<<`는 시프트 양을 폭으로 나눈 나머지만큼 밀고, 0으로 나누기와 `MIN / -1`은 빌드와 상관없이 패닉합니다(부록 B ch10).
 - (compare) UBSan은 대부분의 검사에서 보고한 뒤 실행을 계속하므로 종료 상태가 0이고(`-fsanitize=return`은 멈춰서 134), 이 환경에서는 같은 소스 위치의 두 번째 보고를 내지 않았습니다(한 함수에서 두 경우를 보이려면 위치를 나눔). `-fsanitize=enum`은 C 코드에서는 보고하지 않고 C++에서만 보고했습니다. `-Wsign-compare`는 `-Wextra`, `-Wsometimes-uninitialized`는 `-Wall`이 있어야 나오고, `-Wunsequenced`·`-Wreturn-type`은 기본으로 켜져 있습니다(부록 B ch10).
 - 완성된 챕터가 README에 한 번이라도 상대 링크로 걸렸는지는 사람이 훑으면 놓치기 쉽습니다(부록 B ch9·ch10 검증에서 반복). README의 `chN`·`Part N chM`·`부록 A chN` 이름과 링크 텍스트를 스크립트로 대조해 확인합니다(코드 서식 이름 `chN-slug`와 링크 경로 안의 이름은 제외).
+- `&self` 메서드 안에서 필드에 대입하면 E0594(``cannot assign to `self.n`, which is behind a `&` reference``), `&mut self` 메서드를 부르면 E0596입니다. "불변 참조로 고치려 함"을 한 코드로 묶어 적지 않습니다(1.100.0, 부록 B ch11).
 - `compare/`의 명령: `cc`·`c++`의 `-o`는 rustc의 `--out-dir`와 달리 디렉터리를 만들지 않으므로 README와 파일 머리의 명령 앞에 `mkdir -p target/tmp/<패키지>`를 둡니다. 메인 세션에는 디렉터리가 이미 있어 드러나지 않으므로, `target/`이 없는 새 디렉터리에서 README 블록을 그대로 실행해 확인합니다. macOS Apple clang의 TSan은 `abort_on_error`가 기본 true(보고가 있으면 종료 134, 끄면 `exitcode` 66)이고 `halt_on_error`가 false라서 보고 뒤에도 끝까지 실행되어 일반 출력이 함께 나옵니다(부록 B ch8). ASan도 macOS에서는 `abort_on_error`가 기본 true라서 보고하면 134로 끝나고(끄면 1), `stack-use-after-return` 검출은 macOS에서 기본으로 꺼져 있어 `ASAN_OPTIONS=detect_stack_use_after_return=1`이 필요합니다(Clang 문서는 Linux에서는 기본으로 켜져 있다고 적음). 이 Apple clang은 MemorySanitizer(`-fsanitize=memory`)를 거부하고 LeakSanitizer(`detect_leaks=1`)도 지원하지 않습니다. `return &local;`(-Wreturn-stack-address), 상수 문자열의 `strcpy` 넘침(-Wfortify-source)은 clang이 기본으로 경고하므로, 새니타이저 보고를 보이려는 비교 코드는 포인터 변수나 함수 인자를 거쳐 씁니다(부록 B ch9).
 
 ## 2. 후속 조치

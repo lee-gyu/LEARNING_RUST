@@ -1,0 +1,5 @@
+[package]
+name = "faq-ch11-cpp-raii-move"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
