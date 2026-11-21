@@ -72,6 +72,12 @@
 
 - reviewer가 사용량 한도로 중단되면 한도가 풀린 뒤 같은 reviewer에게 메시지를 보내 이어서 실행합니다.
 
+### 1.6 부록 B의 자료 확인 (2026-11-21)
+
+- Stack Overflow 설문 페이지는 WebFetch가 중간에서 잘라(2025 technology 페이지는 약 3 MB) 뒤쪽 절(Admired and Desired 등)을 읽지 못합니다. `curl -sL -A 'Mozilla/5.0'`로 받아 HTML을 걷어 내고 봅니다. 2026 설문은 `/2026/technology/data/<항목>` 페이지에 Markdown 표와 JSON(항목별 응답 수 `n`, "16 of 14,099 respondents" 같은 설명)이 함께 들어 있어 대조하기 좋습니다. Microsoft MSRC 블로그는 curl에 403을 주지만 WebFetch로는 열립니다.
+- 설문 표를 스크립트로 읽을 때 `<1%`처럼 표시된 행이 숫자 정규식에서 빠져 순위가 틀린 적이 있습니다(부록 B ch1, 2026 admired 1위를 잘못 씀). "1위"처럼 순위를 쓸 때는 표본이 작은 항목까지 포함한 전체 표를 보고, 몇 명이 답한 숫자인지 함께 적습니다.
+- 회사 블로그의 "N% 절감" 같은 수치는 바로 뒤 문장이 그 원인을 무엇으로 드는지 확인합니다. 같은 글의 다른 지표(지연 시간 등)에 붙은 원인 설명을 옮겨 붙인 적이 있습니다(부록 B ch1, Cloudflare). 한정어("중간 크기 이상의 변경에서" 등)가 어느 수치에 붙는지도 봅니다.
+
 ## 2. 후속 조치
 
 ### 2.1 뒤 챕터가 이어받을 내용
@@ -92,6 +98,12 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
+| 부록 B `ch2-memory-safety` | 메모리 버그가 취약점이 되는 이유와 "70%"(MSRC·Chromium·Android)를 읽는 법(부록 B ch1 Q1.3) |
+| 부록 B `ch3-safety-limits` | Android의 `unsafe` Rust 버퍼 오버플로 CVE-2025-48530(공개 릴리스 전에 잡힘), 메모리 안전성 밖의 취약점(부록 B ch1 Q1.1·Q1.3) |
+| 부록 B `ch5-no-null-no-exceptions` | 파일·잠금 같은 메모리 밖 자원의 정리를 `try`/`finally`·`defer`·`with`와 비교(부록 B ch1 Q1.1) |
+| 부록 B `ch8-concurrency-async` | ch1 예제 03 끝 주석의 두 변형: 스코프 스레드가 `Mutex` 없이 합계를 빌려 고치면 E0499, `move` 클로저로 고치면 `usize`가 복사되어 합계 0(경고 ``value captured by `total` is never read``). `move` 없는 클로저가 `&T` 타입 지역 변수를 쓰면 그 변수가 아니라 `*x`를 캡처하므로, 스코프 스레드에서 `chunk: &[T]`만 쓰는 클로저는 `move` 없이 컴파일됨(값 변수를 빌리면 E0373). Go 경쟁 검출기와 메모리 모델 비교(부록 B ch1 Q1.8) |
+| 부록 B `ch14-performance` | 디버그 빌드로 속도를 비교하는 실수, Discord·Cloudflare 사례를 읽는 법(구조 변경을 함께 함)(부록 B ch1 4절, Q1.3) |
+| 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7) |
 
 ### 2.2 nightly와 Miri를 준비하면 다시 확인할 것
 
@@ -121,6 +133,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 - 2026-11-19: Part 2 ch5 `projects/msrv_resolver`, 부록 A ch25 `projects/real_graph`(2026-11-20에 다시 확인, 변화 없음), 부록 A ch15·ch16이 소개한 크레이트 버전
 - 2026-11-20: 부록 A ch27~ch35의 프로젝트, Part 3 ch1 `text-stat`, ch2 `three-sources`(GitHub `rust-lang/cfg-if`의 태그 `v1.0.4` 포함), ch4 `bookshelf`, 챕터 패키지의 dev-dependency(`rand`, `trpl`, `thiserror`, `anyhow`, `derive_builder`, `semver`)
 - 2026-11-21: Part 3 ch6 `collatz`(`thiserror` 2.0.21, 그 아래 `syn` 3.0.10 등), ch8 `fletcher`(`cc` 1.11.3, `find-msvc-tools` 0.1.15, `shlex` 2.0.1)
+- 2026-11-21(crates.io 밖의 시점): 부록 B ch1의 보안 통계, 도입 사례, Stack Overflow 2025·2026 설문 수치, Linux 커널의 Rust 상태. README 6절에 확인일을 적었습니다.
 
 ## 3. 용어 메모
 
@@ -352,3 +365,5 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (Part 3) build script / instruction (`cargo::…`) / code generation / overriding build scripts / job slot / static·shared library | 빌드 스크립트 / 지시문 / 코드 생성 / 빌드 스크립트 재정의 / 작업 자리(job slot) / 정적 라이브러리·공유 라이브러리 |
 | (Part 3) configuration / config file / alias / config-relative path / command-line override | 설정 / 설정 파일 / 별칭 / 설정 기준 상대 경로 / 명령줄 `--config` |
 | (Part 3) build cache / target directory / build directory / final·intermediate artifact / dep-info / unit (timings) / critical path / frontend | 빌드 캐시 / target 디렉터리 / build 디렉터리 / 최종 산출물·중간 산출물 / `.d` 파일(dep-info) / 단위 / 가장 긴 의존 경로(critical path) / 프런트엔드 |
+| (부록 B) memory safety / garbage collector / null pointer optimization | 메모리 안전성 / 가비지 컬렉터(GC) / 널 포인터 최적화 |
+| (부록 B) admired / desired (Stack Overflow 설문) | admired / desired(번역하지 않고 처음에 뜻을 풀어 씀) |

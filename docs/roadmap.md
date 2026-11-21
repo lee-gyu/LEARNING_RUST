@@ -440,7 +440,7 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 근거 자료 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch1-why-rust` | Rust가 풀려는 문제(안전성·속도·동시성을 함께), 쓰이는 분야, 조직들이 옮기는 이유(보안·자원·생산성), 사용 현황, 맞지 않는 곳 | 세 가지 약속 맛보기: GC 없이 정해진 때 해제, 비용 없는 추상화, 검사되는 스레드 공유 | 보안 보고서(Microsoft, Chromium, Android), 정부 권고(CISA, ONCD), 도입 사례(Discord, Cloudflare, Linux 커널), 개발자 설문 |
+| ✅ | `ch1-why-rust` | Rust가 풀려는 문제(안전성·속도·동시성을 함께), 쓰이는 분야, 조직들이 옮기는 이유(보안·자원·생산성), 사용 현황, 맞지 않는 곳 | 세 가지 약속 맛보기: GC 없이 정해진 때 해제, 비용 없는 추상화, 검사되는 스레드 공유 | 보안 보고서(Microsoft, Chromium, Android), 정부 권고(CISA, ONCD), 도입 사례(Discord, Cloudflare, Linux 커널), 개발자 설문 |
 | ⬜ | `ch2-memory-safety` | 메모리 안전성의 뜻(공간적·시간적), 메모리 버그가 취약점이 되는 이유, "70%"의 출처, Rust가 막는 방법(컴파일 시간과 실행 시간), GC 언어와의 차이, 메모리 밖의 안전장치 | 경계 밖 접근이 패닉으로 멈춤, 해제 후 사용과 초기화하지 않은 변수가 컴파일되지 않음, 명시적 변환 | 보안 보고서, Book 4장 |
 | ⬜ | `ch3-safety-limits` | Rust가 보장하지 않는 것: 논리 버그, 누수, 교착 상태, 오버플로, 패닉. `unsafe`의 범위와 책임, Rust 코드의 취약점, 공급망 | 안전한 코드로 만든 누수, 교착 상태 관찰, 오버플로의 디버그·릴리스 동작, 컴파일되는 논리 버그, `unsafe` 안에서도 유지되는 검사 | Reference "Behavior not considered unsafe", Rustonomicon, Android 보안 블로그 |
 
@@ -494,4 +494,4 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **51 / 109 챕터** |
 | 부록 A. Effective Rust (합계와 별도) | 35 / 35 |
-| 부록 B. Rust FAQ (합계와 별도) | 0 / 17 |
+| 부록 B. Rust FAQ (합계와 별도) | 1 / 17 |

@@ -385,6 +385,10 @@ name = "er-ch9-iterator-transforms"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch1-why-rust"
+version = "0.0.0"
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"

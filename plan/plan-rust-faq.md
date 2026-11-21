@@ -65,7 +65,7 @@
 | R9 | Cloudflare, [How we built Pingora](https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet/) (2022-09-14) | NGINX 기반 프록시를 대체. 같은 트래픽에서 CPU 약 70%, 메모리 약 67% 감소. C가 메모리 안전하지 않다는 점을 동기로 듦 | 확인 | Q1.3, Q14.6 |
 | R10 | DARPA, [TRACTOR](https://www.darpa.mil/research/programs/translating-all-c-to-rust) (날짜 없음) | C 코드를 숙련된 Rust 개발자 수준의 Rust로 자동 번역하는 연구 프로그램 | 확인 | Q17.6 |
 | R11 | Linux 커널: LWN의 2025년 Maintainers Summit 기사([1](https://lwn.net/Articles/1050308/), [2](https://lwn.net/Articles/1049831/)), 문서 [docs.kernel.org/rust](https://docs.kernel.org/rust/index.html) | LWN "The (successful) end of the kernel Rust experiment"(2025-12-10): 2025 Maintainers Summit의 합의는 커널의 Rust가 더는 실험이 아니라는 것. Miguel Ojeda의 패치 "rust: conclude the Rust experiment"(2025-12-13). 커널 문서 첫 페이지에는 "experimental"이라는 표현이 없음 | 확인 | Q1.4, Q12.7 |
-| R12 | Stack Overflow Developer Survey [2025](https://survey.stackoverflow.co/2025/technology), [2026 언어 데이터](https://survey.stackoverflow.co/2026/technology/data/languages), [2026 Admired and Desired](https://survey.stackoverflow.co/2026/technology/data/da-language) | 2025년: admired 1위 72%(Gleam 70%, Elixir 66%, Zig 64%), 사용률 전체 14.8%·전문 개발자 14.5%. 2026년: admired 1위 67%(Elixir 62%, Zig 58%), desired 26%, 사용률 18.0% | 확인 | Q1.5 |
+| R12 | Stack Overflow Developer Survey [2025](https://survey.stackoverflow.co/2025/technology), [2026 언어 데이터](https://survey.stackoverflow.co/2026/technology/data/languages), [2026 Admired and Desired](https://survey.stackoverflow.co/2026/technology/data/da-language) | 2025년: admired 1위 72%(Gleam 70%, Elixir 66%, Zig 64%), 사용률 전체 14.8%·전문 개발자 14.5%. 2026년: admired 67%(Rust보다 높은 것은 사용자 17명·34명뿐인 Elm 94%·Odin 82%. 다음은 Elixir 62%, Zig 58%), desired 26%, 사용률 18.0% | 확인 | Q1.5 |
 | R13 | 2025 State of Rust Survey (F6과 같음) | 불편과 걱정의 순위 | 본문 확인, 수치 미확인 | Q15.1, Q15.6 |
 | R14 | Rust 블로그, [Adopting the FLS](https://blog.rust-lang.org/2025/03/26/adopting-the-fls/) (2025-03-26) | Rust 프로젝트가 Ferrocene Language Specification을 명세 작업의 일부로 받아들임 | 확인 | Q16.7 |
 | R15 | [gccrs](https://rust-gcc.github.io/) 첫 페이지 | 아직 초기 단계이고 대여 검사기가 없다고 밝힘 | 확인 | Q16.8 |
@@ -188,7 +188,7 @@ LEARNING_RUST/
 | ✅ | P4 | `.claude/skills/writing-guide/SKILL.md`: "부록을 쓸 때"에 부록 B 문단을 더합니다. 범위 표기(`/writing-guide appd-b ch1~ch3`), 패키지 접두사 `faq-`, 이 문서 6절 블록을 작성 규칙에 더하고 검증 요청에도 넣는다는 것, `compare/`의 자체 검증 명령, 검증 요청에 더 볼 것(8절) | ch1 하나로 시험 |
 | ✅ | P5 | `web/scripts/sync-content.mjs`: `CODE_LANGS`에 `c`, `h`, `cpp`, `hpp`를 더합니다. 지금은 이 확장자가 코드 페이지가 되지 않아 `compare/` 파일 링크가 GitHub로 나갑니다. | `cd web && pnpm build` 후 비교 코드 페이지 |
 | ✅ | P6 | `appd-b/README.md`: 개요(독자, 본편·부록 A와의 관계), 읽는 법(묶음, 질문 번호), 근거 자료 원칙(시점 표기, 비교 코드를 확인한 환경), 질문 색인(완료된 챕터의 질문만 행으로 추가) | — |
-| ⬜ | P7 | 루트 `README.md`의 "구성" 표에 부록 B 행(첫 챕터가 완료될 때) | — |
+| ✅ | P7 | 루트 `README.md`의 "구성" 표에 부록 B 행(첫 챕터가 완료될 때) | — |
 | ✅ | P8 | F1~F5의 라이선스 확인(2026-11-21, 1.2절 표) | — |
 | ✅ | P9 | 9절의 네 가지 확정(2026-11-21) | — |
 

@@ -37,5 +37,6 @@ rustc --edition 2024 compile_fail/<파일>.rs
 | Part 1. 표준 라이브러리 | [part1-standard-lib/](part1-standard-lib/) | The standard library |
 | Part 2. 에디션 | [part2-editions/](part2-editions/) | Edition Guide |
 | 부록 A. Effective Rust | [appd-a/](appd-a/) | Effective Rust (David Drysdale) |
+| 부록 B. Rust FAQ | [appd-b/](appd-b/) | 다른 언어를 써 온 프로그래머가 자주 묻는 질문 |
 
-나머지 파트(Part 3~11)는 [로드맵](docs/roadmap.md)의 계획에 따라 순서대로 추가됩니다. 부록은 본편과 별도로, Part 0과 Part 1을 마친 뒤 언제든 읽을 수 있습니다.
+나머지 파트(Part 3~11)는 [로드맵](docs/roadmap.md)의 계획에 따라 순서대로 추가됩니다. 부록은 본편과 별도로, 부록 A는 Part 0과 Part 1을, 부록 B는 Part 0을 마친 뒤 언제든 읽을 수 있습니다.
