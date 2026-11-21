@@ -54,7 +54,7 @@ Rust를 소개하는 글은 거의 언제나 "메모리 안전하다"는 말로 
 | 시간적 안전성(temporal safety) | 객체의 수명 밖에서 닿지 않음 | 해제 후 사용(use after free), 끝난 함수의 지역 변수 가리키기 | 컴파일 시간 대여 검사 | [Part 0 ch8](../../part0-getting-started/ch8-collections/README.md) 2.6·4.1절(E0502), [Part 0 ch4](../../part0-getting-started/ch4-ownership/README.md) 4.5절(E0106) |
 | 타입 안전성(type safety) | 그 타입의 값이 들어 있지 않은 메모리를 그 타입으로 읽지 않음 | 잘못된 포인터 캐스트 | 안전한 코드에서는 메모리를 다른 타입으로 다시 읽을 수 없음 | `compile_fail/e0605_…`, 예제 04 |
 | 초기화 안전성(initialization safety) | 초기화하기 전에 읽지 않음 | 초기화하지 않은 변수·버퍼 읽기 | 컴파일 시간 검사 | `compile_fail/e0381_…` |
-| 데이터 경쟁 안전성(data-race safety) | 동기화 없이 여러 스레드가 같은 값을 읽고 쓰지 않음 | 반쯤 고친 값을 다른 스레드가 읽음 | 컴파일 시간 대여 규칙과 `Send`/`Sync` | [ch1](../ch1-why-rust/README.md) 예제 03, ch8 `ch8-concurrency-async` |
+| 데이터 경쟁 안전성(data-race safety) | 동기화 없이 여러 스레드가 같은 값을 읽고 쓰지 않음 | 반쯤 고친 값을 다른 스레드가 읽음 | 컴파일 시간 대여 규칙과 `Send`/`Sync` | [ch1](../ch1-why-rust/README.md) 예제 03, [ch8](../ch8-concurrency-async/README.md) |
 
 같은 보고서는 데이터 경쟁을 "엄밀한 메모리 안전성"의 범위에서 일단 뺍니다. 메모리 안전성과 일부만 겹치는 별개의 종류라는 이유이고, 예로 Java는 데이터 경쟁을 막아 주지 않지만 데이터 경쟁이 힙을 망가뜨리지는 않는다는 점을 듭니다. Rust는 안전한 코드에서 데이터 경쟁까지 막으므로, 이 챕터는 다섯 종류를 모두 다룹니다.
 
@@ -128,7 +128,7 @@ Rust를 소개하는 글은 거의 언제나 "메모리 안전하다"는 말로 
 | 소유권, 대여 규칙, 라이프타임(lifetime) | 시간적, 데이터 경쟁 | 컴파일 | E0382, E0499, E0502, E0106, E0597, E0515 등 | Part 0 ch4 4절, [Part 0 ch10](../../part0-getting-started/ch10-generics-traits-lifetimes/README.md) 4.4·4.5절 |
 | 확정 초기화 검사(definite initialization) | 초기화 | 컴파일 | E0381 | 4.1절 |
 | 참조를 다른 타입으로 캐스트할 수 없음, `transmute`는 `unsafe` | 타입 | 컴파일 | E0605, E0133 | 4.2절, [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 4절 |
-| 참조는 널이 될 수 없고 `Option`으로 부재를 표시 | 널 역참조 | 컴파일 | E0308 등 | ch5 `ch5-no-null-no-exceptions` |
+| 참조는 널이 될 수 없고 `Option`으로 부재를 표시 | 널 역참조 | 컴파일 | E0308 등 | [ch5](../ch5-no-null-no-exceptions/README.md) |
 | `Send`/`Sync` | 데이터 경쟁 | 컴파일 | E0277 | [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md) 4절 |
 | 경계 검사 | 공간적 | 실행 중 | 패닉, 또는 `get`이 `None` | 예제 01, 03 |
 | `Rc`/`Arc`의 참조 카운트, `RefCell`의 대여 검사 | 시간적(소유자가 여럿), 대여 규칙 | 실행 중 | `RefCell`은 패닉 | Part 0 ch14 2.7·2.8절, 4.6절 |
@@ -162,9 +162,9 @@ Rust를 소개하는 글은 거의 언제나 "메모리 안전하다"는 말로 
 
 공간적 안전성은 GC 언어도 Rust와 같은 방식으로 지킵니다. Go 명세는 범위를 벗어난 인덱스가 실행 중에 패닉을 일으킨다고, Java 언어 명세는 `ArrayIndexOutOfBoundsException`을 던진다고, Python 문서는 `IndexError`를, .NET 문서는 `IndexOutOfRangeException`을 낸다고 적습니다. 차이는 나머지 줄에 있습니다.
 
-- **시간적 안전성의 비용**: GC는 실행 중에 돌며 시간과 메모리를 쓰고, 해제 시점을 프로그래머가 정하지 않습니다(ch1 Q1.1, ch4 `ch4-memory-without-gc`).
-- **데이터 경쟁**: Java의 경우는 앞의 Google 보고서가, Go의 경우는 Go 메모리 모델 문서가 밝힌 내용입니다. 어느 쪽이든 틀린 값이 나오는 것을 컴파일러가 미리 막지는 않습니다(ch8 `ch8-concurrency-async`).
-- **null**: Java 문서는 `NullPointerException`을 "객체가 필요한 곳에 null을 쓰려 할 때 던진다"고 설명합니다. 메모리를 망가뜨리지는 않지만 실행 중에야 드러납니다. C#의 nullable 참조 형식(`string?`)은 이 문제를 컴파일 시간에 잡으려는 장치로, 최근 .NET 템플릿은 기본으로 켭니다. 다만 Microsoft 문서가 밝히듯 컴파일러의 경고일 뿐 실행 동작은 그대로이고, `!` 연산자로 경고를 무시할 수 있습니다. Rust에서는 `Option<T>`를 `T`처럼 쓰는 코드가 경고가 아니라 타입 에러입니다(ch5 `ch5-no-null-no-exceptions`).
+- **시간적 안전성의 비용**: GC는 실행 중에 돌며 시간과 메모리를 쓰고, 해제 시점을 프로그래머가 정하지 않습니다(ch1 Q1.1, [ch4](../ch4-memory-without-gc/README.md)).
+- **데이터 경쟁**: Java의 경우는 앞의 Google 보고서가, Go의 경우는 Go 메모리 모델 문서가 밝힌 내용입니다. 어느 쪽이든 틀린 값이 나오는 것을 컴파일러가 미리 막지는 않습니다([ch8](../ch8-concurrency-async/README.md)).
+- **null**: Java 문서는 `NullPointerException`을 "객체가 필요한 곳에 null을 쓰려 할 때 던진다"고 설명합니다. 메모리를 망가뜨리지는 않지만 실행 중에야 드러납니다. C#의 nullable 참조 형식(`string?`)은 이 문제를 컴파일 시간에 잡으려는 장치로, 최근 .NET 템플릿은 기본으로 켭니다. 다만 Microsoft 문서가 밝히듯 컴파일러의 경고일 뿐 실행 동작은 그대로이고, `!` 연산자로 경고를 무시할 수 있습니다. Rust에서는 `Option<T>`를 `T`처럼 쓰는 코드가 경고가 아니라 타입 에러입니다([ch5](../ch5-no-null-no-exceptions/README.md)).
 
 **오해와 한계** GC 언어로 충분히 안전하고 생산적인 경우가 많습니다(ch1 Q1.6). 또 어느 언어든 메모리 안전하지 않은 코드를 부르는 부분은 그 언어의 보장 밖에 있습니다. Google 보고서에 따르면 Java·Kotlin은 JNI, Go는 `unsafe` 패키지, Rust는 `unsafe` 블록으로 그런 코드의 경계가 분명히 드러납니다. 경계를 표시하는 것 자체는 Rust만의 특징이 아닙니다(ch3, ch17 `ch17-interop-migration`).
 
@@ -219,7 +219,7 @@ range end index 64 out of range for slice of length 4
 - 잘라 내는 변환(`300_i32 as u8`은 44)은 `as`로 코드에 적어야만 일어납니다.
 - 비트를 다른 타입으로 읽을 때는 `f32::from_bits`, `u32::from_le_bytes`처럼 뜻이 정해진 함수를 씁니다. 참조를 다른 타입으로 캐스트하는 코드는 컴파일되지 않습니다(4.2절).
 
-`Option`, `Result`, `match`는 ch5 `ch5-no-null-no-exceptions`와 ch7 `ch7-syntax-type-surprises`에서 다룹니다.
+`Option`, `Result`, `match`는 [ch5](../ch5-no-null-no-exceptions/README.md)와 [ch7](../ch7-syntax-type-surprises/README.md)에서 다룹니다.
 
 **오해와 한계** 그냥 `*`나 `+`로 계산하면 디버그 빌드는 오버플로가 나면 패닉하지만 릴리스 빌드는 기본적으로 래핑합니다([ch3](../ch3-safety-limits/README.md) Q3.6). `as`는 여전히 조용히 잘라 냅니다. 그리고 인증을 빠뜨리거나 권한을 잘못 검사하는 논리 오류는 어떤 타입 검사로도 막지 못합니다.
 

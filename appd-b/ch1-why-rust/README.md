@@ -65,7 +65,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 
 이 설계는 2015년 5월 15일의 1.0 발표로 안정 버전이 되었고, 발표문은 그 뒤로 기존 코드를 깨는 변경을 대부분 하지 않겠다고 약속했습니다. 그 약속을 지키면서 언어를 바꾸는 장치가 에디션입니다([Part 2](../../part2-editions/)).
 
-**다른 언어에서는** GC 언어도 메모리 안전하지만, 해제 시점을 GC가 정하므로 메모리를 다 쓴 객체가 다음 수거 때까지 남습니다. Python은 조금 다릅니다. 기본 구현은 참조 카운팅(reference counting)으로 객체를 해제하고, GC는 참조 카운팅이 거두지 못하는 순환 참조(reference cycle)를 위한 보조 장치입니다(Python `gc` 모듈 문서). C++는 RAII(자원 획득은 초기화, 자원을 객체의 수명에 묶어 소멸자가 해제하는 방식)와 스마트 포인터로 Rust와 비슷한 해제 시점을 얻을 수 있지만, 그 규칙을 지키는지 검사하는 것은 프로그래머의 몫입니다(ch11 `ch11-cpp-raii-move`, ch12 `ch12-modern-cpp-enough`). 파일·잠금 같은 메모리 밖의 자원을 정리하는 방식(`try`/`finally`, `defer`, `with`)과의 비교는 ch5 `ch5-no-null-no-exceptions`에서 합니다.
+**다른 언어에서는** GC 언어도 메모리 안전하지만, 해제 시점을 GC가 정하므로 메모리를 다 쓴 객체가 다음 수거 때까지 남습니다. Python은 조금 다릅니다. 기본 구현은 참조 카운팅(reference counting)으로 객체를 해제하고, GC는 참조 카운팅이 거두지 못하는 순환 참조(reference cycle)를 위한 보조 장치입니다(Python `gc` 모듈 문서). C++는 RAII(자원 획득은 초기화, 자원을 객체의 수명에 묶어 소멸자가 해제하는 방식)와 스마트 포인터로 Rust와 비슷한 해제 시점을 얻을 수 있지만, 그 규칙을 지키는지 검사하는 것은 프로그래머의 몫입니다(ch11 `ch11-cpp-raii-move`, ch12 `ch12-modern-cpp-enough`). 파일·잠금 같은 메모리 밖의 자원을 정리하는 방식(`try`/`finally`, `defer`, `with`)과의 비교는 [ch5](../ch5-no-null-no-exceptions/README.md)에서 합니다.
 
 **오해와 한계**
 
@@ -73,7 +73,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 - 모든 검사가 컴파일 시간에 끝나는 것은 아닙니다. 배열 인덱싱의 경계 검사처럼 실행 중에 하는 검사가 있고, 비용도 있습니다(02의 [3], ch14 `ch14-performance`).
 - 이 설계의 값은 배우는 비용과 컴파일 시간으로 치릅니다(Q1.6).
 
-**더 읽기** Part 0 ch4 2.1절, ch13 2.15절, ch15 2.1절 / [ch2](../ch2-memory-safety/README.md)(메모리 안전성의 뜻), ch4 `ch4-memory-without-gc`(GC 없는 메모리 관리), ch8 `ch8-concurrency-async`(데이터 경쟁) / Q1.8
+**더 읽기** Part 0 ch4 2.1절, ch13 2.15절, ch15 2.1절 / [ch2](../ch2-memory-safety/README.md)(메모리 안전성의 뜻), [ch4](../ch4-memory-without-gc/README.md)(GC 없는 메모리 관리), [ch8](../ch8-concurrency-async/README.md)(데이터 경쟁) / Q1.8
 
 ### Q1.2 "시스템 프로그래밍 언어"라는데 웹 백엔드나 CLI 도구에도 쓰나요?
 
@@ -84,7 +84,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 | 분야 | 이 저장소에서 | 덧붙일 것 |
 | --- | --- | --- |
 | 명령줄 도구 | [Part 0 ch12](../../part0-getting-started/ch12-io-project-minigrep/README.md)의 `minigrep`, Part 7 `part7-cli`(미작성) | 실행 파일 하나로 배포하기 쉽습니다(아래) |
-| 네트워크 서비스 | [Part 0 ch20](../../part0-getting-started/ch20-web-server-project/README.md)의 멀티스레드 웹 서버, [Part 1 ch12](../../part1-standard-lib/ch12-net/README.md) | 비동기 런타임(tokio 등)은 표준 라이브러리 밖에 있습니다(ch8 `ch8-concurrency-async`) |
+| 네트워크 서비스 | [Part 0 ch20](../../part0-getting-started/ch20-web-server-project/README.md)의 멀티스레드 웹 서버, [Part 1 ch12](../../part1-standard-lib/ch12-net/README.md) | 비동기 런타임(tokio 등)은 표준 라이브러리 밖에 있습니다([ch8](../ch8-concurrency-async/README.md)) |
 | 임베디드 | [부록 A ch33](../../appd-a/ch33-no-std/README.md)의 `no_std`, Part 8 `part8-embedded`(미작성) | 표준 라이브러리 없이 `core`만으로 씁니다 |
 | WebAssembly | 이 저장소는 다루지 않습니다 | — |
 
@@ -186,7 +186,7 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 | 비용 | 내용 | 더 읽기 |
 | --- | --- | --- |
 | 컴파일 시간과 디스크 | 2025 State of Rust 설문 결과에서도 느린 컴파일과 저장 공간 사용이 여전히 상위의 불편으로 꼽혔습니다. 컴파일러가 검사하고 최적화하는 일이 많고, 제네릭을 쓰인 타입마다 따로 컴파일(단형성화, monomorphization)하기 때문입니다. | [Part 3 ch6](../../part3-cargo/ch6-profiles-build-performance/README.md), [부록 A ch12](../../appd-a/ch12-generics-vs-trait-objects/README.md), ch15 `ch15-pain-points` |
-| 배우는 비용 | 소유권과 라이프타임은 다른 언어에 대응하는 개념이 없어 처음에 시간이 듭니다. 같은 설문에서 언어가 점점 복잡해진다는 걱정도 이어졌습니다. | ch4 `ch4-memory-without-gc`, ch15 `ch15-pain-points` |
+| 배우는 비용 | 소유권과 라이프타임은 다른 언어에 대응하는 개념이 없어 처음에 시간이 듭니다. 같은 설문에서 언어가 점점 복잡해진다는 걱정도 이어졌습니다. | [ch4](../ch4-memory-without-gc/README.md), ch15 `ch15-pain-points` |
 | 설계를 먼저 정해야 함 | 누가 데이터를 소유하고 누가 빌리는지를 코드에 적어야 하므로, 구조를 자주 뒤엎는 탐색 단계에서는 고칠 곳이 늘어납니다. | ch15 `ch15-pain-points` |
 | 라이브러리 | 분야에 따라 다른 언어보다 성숙한 라이브러리가 적을 수 있습니다. 필요한 크레이트가 있는지 먼저 확인합니다. | ch16 `ch16-tooling-ecosystem` |
 | 기존 코드와의 연결 | 큰 C++·Java 코드베이스와 섞으면 경계를 만드는 비용이 듭니다. | ch17 `ch17-interop-migration` |
@@ -231,9 +231,9 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 | 큰 C++ 코드베이스나 C++ 전용 라이브러리에 깊게 묶여 있음 | C++를 유지하면서 새 구성 요소부터 Rust를 검토(ch12 `ch12-modern-cpp-enough`, ch17 `ch17-interop-migration`) |
 | 커널, 임베디드, 브라우저 엔진처럼 GC를 둘 수 없음 | Rust 또는 C/C++. 메모리 안전성이 필요하면 Rust |
 
-**오해와 한계** 언어 비교 표는 출발점일 뿐입니다. 실제 결정은 팀이 무엇을 잘 아는지, 어떤 라이브러리가 필요한지, 기존 코드와 어떻게 이어야 하는지에 더 크게 좌우됩니다. C++와의 더 자세한 비교는 ch11 `ch11-cpp-raii-move`와 ch12 `ch12-modern-cpp-enough`에서, Go를 포함한 동시성 모델의 비교는 ch8 `ch8-concurrency-async`에서 합니다.
+**오해와 한계** 언어 비교 표는 출발점일 뿐입니다. 실제 결정은 팀이 무엇을 잘 아는지, 어떤 라이브러리가 필요한지, 기존 코드와 어떻게 이어야 하는지에 더 크게 좌우됩니다. C++와의 더 자세한 비교는 ch11 `ch11-cpp-raii-move`와 ch12 `ch12-modern-cpp-enough`에서, Go를 포함한 동시성 모델의 비교는 [ch8](../ch8-concurrency-async/README.md)에서 합니다.
 
-**더 읽기** ch8 `ch8-concurrency-async`, ch11 `ch11-cpp-raii-move`, ch12 `ch12-modern-cpp-enough`, ch17 `ch17-interop-migration` / Q1.6
+**더 읽기** [ch8](../ch8-concurrency-async/README.md), ch11 `ch11-cpp-raii-move`, ch12 `ch12-modern-cpp-enough`, ch17 `ch17-interop-migration` / Q1.6
 
 ## 3. 예제 안내
 
@@ -313,11 +313,11 @@ cargo run -p faq-ch1-why-rust --example 03_checked_thread_sharing
 - `thread::scope`는 스코프가 끝나기 전에 안에서 만든 스레드가 모두 끝난다고 보장합니다. 그래서 스레드가 지역 변수 `lines`를 `Arc`나 복사 없이 빌릴 수 있습니다. Part 0 ch15 2.11절이 [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md)로 넘긴 내용입니다.
 - `chunks(2)`는 원본을 복사하지 않고 두 줄씩 가리키는 슬라이스를 만듭니다. 스레드마다 다른 조각을 읽기만 하므로 동기화가 필요 없습니다.
 - 결과는 스레드가 돌려준 값을 `main`에서 모아 출력하므로, 스레드가 끝나는 순서와 상관없이 출력은 실행마다 같습니다.
-- 합계를 `Mutex` 없이 고치면 어떻게 되는지는 파일 끝의 주석에 적었습니다. 빌려서 고치면 E0499(``cannot borrow `total` as mutable more than once at a time``)로 컴파일되지 않고(같은 에러를 내는 파일은 [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md) 4.1절의 `compile_fail/e0499_scoped_threads_mut_borrow.rs`), `move` 클로저로 고치면 `usize` 값이 스레드마다 복사되어 합계가 0으로 남습니다(컴파일러가 ``value captured by `total` is never read`` 경고를 냅니다). 어느 쪽이든 두 스레드가 같은 메모리를 동시에 고치는 데이터 경쟁은 생기지 않습니다. 자세한 것은 ch8 `ch8-concurrency-async`에서 다룹니다.
+- 합계를 `Mutex` 없이 고치면 어떻게 되는지는 파일 끝의 주석에 적었습니다. 빌려서 고치면 E0499(``cannot borrow `total` as mutable more than once at a time``)로 컴파일되지 않고(같은 에러를 내는 파일은 [Part 1 ch11](../../part1-standard-lib/ch11-threads-sync/README.md) 4.1절의 `compile_fail/e0499_scoped_threads_mut_borrow.rs`), `move` 클로저로 고치면 `usize` 값이 스레드마다 복사되어 합계가 0으로 남습니다(컴파일러가 ``value captured by `total` is never read`` 경고를 냅니다). 어느 쪽이든 두 스레드가 같은 메모리를 동시에 고치는 데이터 경쟁은 생기지 않습니다. 자세한 것은 [ch8](../ch8-concurrency-async/README.md)에서 다룹니다.
 
 ## 4. 자주 하는 실수
 
-이 챕터의 실수는 컴파일 에러가 아니라 Rust를 평가하는 방식에서 나오므로 `compile_fail/`을 두지 않았습니다. 컴파일러가 거부하는 코드는 [ch2](../ch2-memory-safety/README.md)(메모리)와 ch8 `ch8-concurrency-async`(스레드)에서 봅니다.
+이 챕터의 실수는 컴파일 에러가 아니라 Rust를 평가하는 방식에서 나오므로 `compile_fail/`을 두지 않았습니다. 컴파일러가 거부하는 코드는 [ch2](../ch2-memory-safety/README.md)(메모리)와 [ch8](../ch8-concurrency-async/README.md)(스레드)에서 봅니다.
 
 | 실수 | 왜 틀렸나 | 바로잡기 | 관련 |
 | --- | --- | --- | --- |

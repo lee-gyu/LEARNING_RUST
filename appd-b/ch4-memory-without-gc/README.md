@@ -52,7 +52,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **다른 언어에서는** Java·C#·Go·JavaScript의 추적(tracing) GC는 실행 중에 닿을 수 없는 객체를 찾아 해제하므로, 해제 시점은 GC가 정합니다. Python의 기본 구현은 참조 카운팅으로 해제하고 GC로 순환 참조를 거둡니다(ch1 Q1.1). C는 `free`, C++는 `delete`나 RAII로 해제하며, Rust의 방식은 C++의 RAII를 언어 전체의 기본 규칙으로 삼고 컴파일러가 검사하게 만든 것에 가깝습니다(ch11 `ch11-cpp-raii-move`).
 
-**오해와 한계** 메모리 말고도 파일·소켓·잠금이 같은 규칙으로 정리됩니다(ch5 `ch5-no-null-no-exceptions` Q5.6). 반대로 `mem::forget`이나 `Rc` 순환 참조처럼 소멸자가 실행되지 않는 길도 있습니다([ch3](../ch3-safety-limits/README.md) Q3.4).
+**오해와 한계** 메모리 말고도 파일·소켓·잠금이 같은 규칙으로 정리됩니다([ch5](../ch5-no-null-no-exceptions/README.md) Q5.6). 반대로 `mem::forget`이나 `Rc` 순환 참조처럼 소멸자가 실행되지 않는 길도 있습니다([ch3](../ch3-safety-limits/README.md) Q3.4).
 
 **더 읽기** Part 0 ch4 2.1·2.4절 / ch1 Q1.1 / Q4.7
 
@@ -135,7 +135,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **오해와 한계** 이 규칙은 보수적이라, 서로 다른 필드나 슬라이스의 겹치지 않는 부분을 동시에 고치는 것처럼 실제로는 안전한 코드도 거부할 때가 있습니다. `split_at_mut`처럼 겹치지 않음을 보증하는 API나 필드를 나눠 빌리는 방법으로 풉니다([부록 A ch15](../../appd-a/ch15-borrow-checker/README.md), ch15 `ch15-pain-points`).
 
-**더 읽기** Part 0 ch4 2.9절, 4.2절(가변 참조 둘, E0499), ch8 2.6절 / ch8 `ch8-concurrency-async`(스레드 사이의 같은 규칙)
+**더 읽기** Part 0 ch4 2.9절, 4.2절(가변 참조 둘, E0499), ch8 2.6절 / [ch8](../ch8-concurrency-async/README.md)(스레드 사이의 같은 규칙)
 
 ### Q4.6 `clone()`을 많이 쓰면 나쁜 코드인가요?
 
