@@ -56,7 +56,7 @@
 | --- | --- | --- | --- | --- |
 | R1 | Microsoft MSRC, [A proactive approach to more secure code](https://www.microsoft.com/en-us/msrc/blog/2019/07/a-proactive-approach-to-more-secure-code) (2019-07-16) | Microsoft가 매년 CVE를 부여하는 취약점의 약 70%가 메모리 안전성 문제 | 확인 | Q1.3, Q2.3 |
 | R2 | Chromium, [Memory safety](https://www.chromium.org/Home/chromium-security/memory-safety/) (날짜 없음) | 심각도 높은 보안 버그의 약 70%가 메모리 안전성 문제이고 그 절반이 해제 후 사용. 2015년 이후 안정 채널의 버그 912건 분석 | 확인 | Q2.3, Q9.1 |
-| R3 | Google, [Rust in Android: move fast and fix things](https://blog.google/security/rust-in-android-move-fast-fix-things/) (2025-11-13) | 메모리 안전성 취약점이 처음으로 전체의 20% 아래로. C/C++ 코드 대비 취약점 밀도 1000배 감소. Rust 변경의 롤백률은 약 4배 낮고 코드 리뷰 시간은 약 25% 짧음. unsafe Rust의 버퍼 오버플로(CVE-2025-48530)는 공개 릴리스 전에 잡힘 | 확인 | Q1.3, Q2.8, Q3.8, Q17.1 |
+| R3 | Google, [Rust in Android: move fast and fix things](https://blog.google/security/rust-in-android-move-fast-fix-things/) (2025-11-13) | 메모리 안전성 취약점이 처음으로 전체의 20% 아래로. C/C++ 코드 대비 취약점 밀도 1000배 감소. Rust 변경의 롤백률은 약 4배 낮고 코드 리뷰 시간은 약 25% 짧음. CrabbyAVIF의 버퍼 오버플로(CVE-2025-48530, 원문은 unsafe 코드였는지 밝히지 않음)는 공개 릴리스 전에 잡힘 | 확인 | Q1.3, Q2.8, Q3.8, Q17.1 |
 | R4 | Google, [Eliminating Memory Safety Vulnerabilities at the Source](https://security.googleblog.com/2024/09/eliminating-memory-safety-vulnerabilities-Android.html) (2024-09-25) | Android 취약점 가운데 메모리 안전성 문제의 비율 76%(2019) → 24%(2024). 취약점은 코드가 오래될수록 지수적으로 줄어든다(반감기). 새 코드를 메모리 안전 언어로 쓰는 Safe Coding | 확인 | Q1.3, Q1.7, Q17.1 |
 | R5 | CISA·NSA, [Memory Safe Languages: Reducing Vulnerabilities in Modern Software Development](https://www.cisa.gov/resources-tools/resources/memory-safe-languages-reducing-vulnerabilities-modern-software-development) (2025-06-24) | 메모리 안전 언어 도입의 장애물과 해법을 다룬 합동 지침 | 제목·날짜·기관 확인. 본문은 미확인 | Q1.3, Q17.8 |
 | R6 | CISA, [The Case for Memory Safe Roadmaps](https://www.cisa.gov/resources-tools/resources/case-memory-safe-roadmaps) (2023-12-06) | 소프트웨어 제조사에 메모리 안전 로드맵을 요구 | 제목·날짜 확인 | Q1.3 |
@@ -538,7 +538,7 @@ P2를 마친 뒤에는 **챕터 상태의 기준이 `docs/roadmap.md`와 `PROGRE
 | 상태 | 묶음 | 범위 | 챕터 수 | 실행 | 비고 |
 | --- | --- | --- | --- | --- | --- |
 | ✅ | 0 | 사전 작업 P1~P8 | — | 메인 세션이 직접 | 2026-11-21 완료(P7은 ch1 완료 때) |
-| ⬜ | 1 | 왜 Rust인가 | 3 | `/writing-guide appd-b ch1~ch3` | ch1은 자료 확인이 먼저 |
+| ✅ | 1 | 왜 Rust인가 | 3 | `/writing-guide appd-b ch1~ch3` | 2026-11-21 완료. ch1은 2회, ch2는 3회, ch3는 2회 검증 |
 | ⬜ | 2 | 다른 언어와 무엇이 다른가 | 5 | `… ch4~ch8` | 추가 도구 없이 가능 |
 | ⬜ | 3 | C/C++의 문제를 어떻게 풀었나 | 5 | `… ch9~ch13` | `compare/`가 가장 많음. ch12는 ch9·ch11 뒤에 |
 | ⬜ | 4 | 실무에서 묻는 것 | 4 | `… ch14~ch17` | ch17은 부록 A ch34를 전제 |
