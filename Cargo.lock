@@ -409,6 +409,10 @@ name = "faq-ch6-no-classes-inheritance"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch7-syntax-type-surprises"
+version = "0.0.0"
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -51,6 +51,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch4-memory-without-gc](ch4-memory-without-gc/) | GC 없는 메모리 관리: Java식 공유를 이동·빌림·복제·`Rc<RefCell<T>>`로 옮기기, `Copy`의 기준, 참조와 C 포인터·Java 참조의 차이, 가변 참조가 하나뿐인 이유, `clone`의 비용, `Rc`/`Arc`와 추적 GC, 라이프타임 표기, GC가 없어서 얻고 잃는 것, 값이 그 자리에 놓이는 메모리 배치 |
 | [ch5-no-null-no-exceptions](ch5-no-null-no-exceptions/) | null도 예외도 없이: Kotlin·TS의 null 연산자를 `Option`으로 옮기기, Java `Optional`·Kotlin `T?`와의 차이, `Result`와 checked exception·Go `error`, `?`, `finally`·`defer`·`with` 자리의 `Drop`(파일·잠금), 패닉과 예외, `unwrap`의 자리, 에러 타입 고르기, 스택 추적 |
 | [ch6-no-classes-inheritance](ch6-no-classes-inheritance/) | 클래스도 상속도 없이: 구조체와 `impl`, 생성자 관례, Java 계층을 조합·위임·기본 메서드로 옮기기, 트레이트와 Java·Go 인터페이스, 제네릭과 Java 타입 소거·C++ 템플릿·Go, 오버로딩·기본 인자·가변 인자의 대안, 열거형과 트레이트 객체로 옮기는 계층, 리플렉션 대신 매크로, 모듈 단위 공개 범위 |
+| [ch7-syntax-type-surprises](ch7-syntax-type-surprises/) | 문법과 타입에서 낯선 것: 불변 기본과 섀도잉, 표현식과 `++`·삼항 연산자, 정수의 폭과 `usize`, 암묵적 변환이 없는 수 타입, `String`과 `&str`, 언어마다 다른 문자열 길이와 `s[0]`, 시그니처의 타입 표기, 매크로 `!`, 완전한 `match`, 실수와 `Eq`·`Hash` |
 
 ## 질문 색인
 
@@ -114,5 +115,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q6.8](ch6-no-classes-inheritance/) | `instanceof`와 다운캐스트, 추상 클래스 계층은 어떻게 옮기나요? |
 | [Q6.9](ch6-no-classes-inheritance/) | 리플렉션, 어노테이션, 데코레이터에 해당하는 것은 무엇인가요? |
 | [Q6.10](ch6-no-classes-inheritance/) | `private`, `protected`는 어떻게 되나요? |
+| [Q7.1](ch7-syntax-type-surprises/) | 변수가 왜 기본으로 불변인가요? 같은 이름으로 `let`을 다시 쓰는 것은 왜 허용하나요? |
+| [Q7.2](ch7-syntax-type-surprises/) | 세미콜론이 없는 마지막 줄은 무엇인가요? 삼항 연산자와 `++`는 왜 없나요? |
+| [Q7.3](ch7-syntax-type-surprises/) | 정수 타입이 왜 이렇게 많고 `usize`는 무엇인가요? |
+| [Q7.4](ch7-syntax-type-surprises/) | `i32` 값을 `i64` 변수에 왜 그냥 넣지 못하나요? |
+| [Q7.5](ch7-syntax-type-surprises/) | 문자열 타입이 왜 `String`과 `&str` 둘인가요? 무엇을 쓰나요? |
+| [Q7.6](ch7-syntax-type-surprises/) | 문자열을 왜 `s[0]`으로 읽을 수 없나요? |
+| [Q7.7](ch7-syntax-type-surprises/) | 타입 추론이 되는데 함수 시그니처에는 왜 타입을 다 써야 하나요? |
+| [Q7.8](ch7-syntax-type-surprises/) | `println!`의 `!`는 무엇이고 왜 함수가 아닌가요? |
+| [Q7.9](ch7-syntax-type-surprises/) | `match`는 왜 모든 경우를 다뤄야 하나요? `switch`와 무엇이 다른가요? |
+| [Q7.10](ch7-syntax-type-surprises/) | 실수는 왜 `HashMap`의 키로 쓰거나 바로 정렬할 수 없나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
