@@ -86,6 +86,8 @@
 - 회사 블로그의 "N% 절감" 같은 수치는 바로 뒤 문장이 그 원인을 무엇으로 드는지 확인합니다. 같은 글의 다른 지표(지연 시간 등)에 붙은 원인 설명을 옮겨 붙인 적이 있습니다(부록 B ch1, Cloudflare). 한정어("중간 크기 이상의 변경에서" 등)가 어느 수치에 붙는지도 봅니다.
 - 질문 표의 한 줄 답과 짧은 답에 "다른 점"을 쓸 때는 같은 소절의 비교 표와 칸마다 대조합니다. 부록 B ch5 검증에서 짧은 답이 자기 표와 어긋난 곳이 둘 있었습니다(Kotlin `T?`도 컴파일 에러인데 "경고가 아니라 에러"를 다른 점으로 듦, Java checked exception보다 약한 강제를 "무시하기 어렵다"고 씀).
 - 겹치는 시연을 찾을 때는 Part 0만이 아니라 앞 부록 B 챕터의 예제, Part 1·부록 A의 같은 주제 챕터도 봅니다. 부록 B ch5에서 ch1 예제 01, Part 0 ch9 예제 05, Part 0 ch14 예제 04, Part 0 ch15 예제 05와 겹친 시연을 검증에서야 찾았습니다.
+- `compile_fail`이 겹치는지 볼 때는 앞 챕터의 `compile_fail/` 파일만이 아니라, 같은 에러 코드를 다룬 README 4절의 본문 문장도 봅니다(`grep -rn "E0277" part0-getting-started/*/README.md`처럼 에러 코드로 훑음). 부록 B ch6 검증에서 파일은 달라도 같은 교훈을 Part 0 ch10 4.2절이 이미 문장으로 적어 둔 것을 놓쳤습니다.
+- 다른 언어의 규칙을 옮긴 칸(예: "Go는 제약이 반드시 필요")을 Rust 칸에 그대로 쓰지 않습니다. 부록 B ch6에서 Go FAQ의 "constraints are mandatory"를 Rust에도 적었다가 틀렸습니다(Rust는 바운드 없이도 컴파일되고, 본문에서 쓰는 능력만 바운드로 밝힘).
 
 ## 2. 후속 조치
 
@@ -374,6 +376,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (Part 3) build cache / target directory / build directory / final·intermediate artifact / dep-info / unit (timings) / critical path / frontend | 빌드 캐시 / target 디렉터리 / build 디렉터리 / 최종 산출물·중간 산출물 / `.d` 파일(dep-info) / 단위 / 가장 긴 의존 경로(critical path) / 프런트엔드 |
 | (부록 B) memory safety / garbage collector / null pointer optimization | 메모리 안전성 / 가비지 컬렉터(GC) / 널 포인터 최적화 |
 | (부록 B) platform type (Kotlin) / union type (TypeScript) / stack trace | 플랫폼 타입(처음에 "Java에서 온 값이라 Kotlin이 null 여부를 모르는 타입"으로 풀어 씀) / 합집합 타입 / 스택 추적(Rust에서는 백트레이스) |
+| (부록 B) composition / delegation / structural typing / type erasure (Java 제네릭) / subtyping | 조합 / 위임 / 구조적 타이핑 / 타입 소거(에러 타입을 지우는 일은 위의 "종류를 지우다") / 하위 타입 관계 |
 | (부록 B) admired / desired (Stack Overflow 설문) | admired / desired(번역하지 않고 처음에 뜻을 풀어 씀) |
 | (부록 B) spatial / temporal / type / initialization / data-race safety, class (of memory safety bugs) | 공간적 / 시간적 / 타입 / 초기화 / 데이터 경쟁 안전성, 종류("갈래"는 match arm이므로 쓰지 않음) |
 | overflow (정수) | 오버플로("넘침"은 쓰지 않음. 부록 A ch18 등에 "넘침"이 남아 있음) |

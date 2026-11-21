@@ -50,6 +50,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch3-safety-limits](ch3-safety-limits/) | Rust가 보장하지 않는 것(논리 오류, 메모리 누수, 교착 상태와 경쟁 조건, 정수 오버플로, 패닉과 스택 오버플로로 인한 중단), `unsafe`의 범위와 안전한 API 안에 가두기, 표준 라이브러리의 검증, Rust 코드의 CVE 사례, 공급망과 컴파일러의 건전성 버그 |
 | [ch4-memory-without-gc](ch4-memory-without-gc/) | GC 없는 메모리 관리: Java식 공유를 이동·빌림·복제·`Rc<RefCell<T>>`로 옮기기, `Copy`의 기준, 참조와 C 포인터·Java 참조의 차이, 가변 참조가 하나뿐인 이유, `clone`의 비용, `Rc`/`Arc`와 추적 GC, 라이프타임 표기, GC가 없어서 얻고 잃는 것, 값이 그 자리에 놓이는 메모리 배치 |
 | [ch5-no-null-no-exceptions](ch5-no-null-no-exceptions/) | null도 예외도 없이: Kotlin·TS의 null 연산자를 `Option`으로 옮기기, Java `Optional`·Kotlin `T?`와의 차이, `Result`와 checked exception·Go `error`, `?`, `finally`·`defer`·`with` 자리의 `Drop`(파일·잠금), 패닉과 예외, `unwrap`의 자리, 에러 타입 고르기, 스택 추적 |
+| [ch6-no-classes-inheritance](ch6-no-classes-inheritance/) | 클래스도 상속도 없이: 구조체와 `impl`, 생성자 관례, Java 계층을 조합·위임·기본 메서드로 옮기기, 트레이트와 Java·Go 인터페이스, 제네릭과 Java 타입 소거·C++ 템플릿·Go, 오버로딩·기본 인자·가변 인자의 대안, 열거형과 트레이트 객체로 옮기는 계층, 리플렉션 대신 매크로, 모듈 단위 공개 범위 |
 
 ## 질문 색인
 
@@ -103,5 +104,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q5.8](ch5-no-null-no-exceptions/) | `unwrap()`은 써도 되나요? |
 | [Q5.9](ch5-no-null-no-exceptions/) | 에러 타입을 매번 직접 만들어야 하나요? |
 | [Q5.10](ch5-no-null-no-exceptions/) | 에러가 난 위치(스택 추적)는 어떻게 보나요? |
+| [Q6.1](ch6-no-classes-inheritance/) | Rust는 객체 지향 언어인가요? |
+| [Q6.2](ch6-no-classes-inheritance/) | 클래스가 없으면 데이터와 메서드를 어떻게 묶나요? |
+| [Q6.3](ch6-no-classes-inheritance/) | 생성자가 없나요? |
+| [Q6.4](ch6-no-classes-inheritance/) | 상속이 없는데 코드 재사용과 다형성은 어떻게 하나요? |
+| [Q6.5](ch6-no-classes-inheritance/) | 트레이트는 Java·C#의 인터페이스, Go의 인터페이스와 무엇이 다른가요? |
+| [Q6.6](ch6-no-classes-inheritance/) | 제네릭은 Java(타입 소거), C++(템플릿), Go와 어떻게 다른가요? |
+| [Q6.7](ch6-no-classes-inheritance/) | 함수 오버로딩, 기본 인자, 가변 인자가 없나요? 대신 무엇을 쓰나요? |
+| [Q6.8](ch6-no-classes-inheritance/) | `instanceof`와 다운캐스트, 추상 클래스 계층은 어떻게 옮기나요? |
+| [Q6.9](ch6-no-classes-inheritance/) | 리플렉션, 어노테이션, 데코레이터에 해당하는 것은 무엇인가요? |
+| [Q6.10](ch6-no-classes-inheritance/) | `private`, `protected`는 어떻게 되나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
