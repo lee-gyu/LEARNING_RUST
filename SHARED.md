@@ -97,6 +97,10 @@
 - 완성된 챕터가 README에 한 번이라도 상대 링크로 걸렸는지는 사람이 훑으면 놓치기 쉽습니다(부록 B ch9·ch10 검증에서 반복). README의 `chN`·`Part N chM`·`부록 A chN` 이름과 링크 텍스트를 스크립트로 대조해 확인합니다(코드 서식 이름 `chN-slug`와 링크 경로 안의 이름은 제외). 이름 앞의 공백을 경계로 빼면 "…, ch8"이나 "/ ch10" 같은 이름을 놓칩니다(부록 B ch12에서 찾은 대조 스크립트의 버그).
 - `unsafe`를 "검사를 끈다", "검사를 피한다"로 쓰지 않습니다. `unsafe`는 정해진 연산(원시 포인터 역참조, `unsafe` 함수 호출 등)을 허락할 뿐이고 대여 검사는 그 안에서도 그대로입니다(부록 B ch3 Q3.2·4.1). 부록 B ch12 초고에서 이 표현이 다시 나와 검증에서 고쳤습니다.
 - `Box<dyn Trait>`의 기본 라이프타임은 구조체 필드와 함수 시그니처에서는 `'static`이고, 함수 본문의 `let` 타입 표기에서는 추론됩니다. 기본 객체 라이프타임에서 생긴 `'static` 요구로 E0597이 나면 rustc가 ``due to object lifetime defaults, `Box<dyn FnMut()>` actually means `Box<(dyn FnMut() + 'static)>` `` note를 붙입니다(1.100.0, 부록 B ch12).
+- 크레이트 사이의 `#[unsafe(no_mangle)]`·`export_name` 이름 충돌은 macOS 링커에서 경고(`linker_messages`, 기본 warn)만 나고 빌드가 성공하며 한쪽 정의가 쓰입니다. 같은 크레이트 안은 ``symbol `…` is already defined`` 컴파일 에러입니다(1.100.0, 부록 B ch13).
+- 인라인 `const { assert!(…) }`처럼 const 매개변수에 기대는 검사의 에러(E0080)는 단형성화할 때 나므로 `cargo build`에서만 나고 `cargo check`로는 드러나지 않습니다(1.100.0, 부록 B ch13).
+- 코드 밖에 남은 백틱 수를 세는 검사는, 짝은 맞지만 안쪽 백틱 때문에 잘못 끊긴 인라인 코드를 잡지 못합니다. 백틱 런의 길이를 맞춰 코드 구간을 찾고, 구간이 공백으로 시작하거나 끝나는지도 봅니다(부록 B ch13 검증). 안쪽에 백틱이 있는 메시지는 백틱 두 개와 공백으로 감쌉니다.
+- C 전처리기를 "글자를 바꿔 끼운다"고 쓰지 않습니다. 전처리 토큰 단위로 바꾸며, Rust 매크로와의 실제 차이는 인자를 `expr` 같은 문법 단위로 받아 우선순위가 지켜진다는 점입니다(부록 B ch13 검증. 부록 A ch28 2.1절에 같은 표현이 남아 있었음).
 - `&self` 메서드 안에서 필드에 대입하면 E0594(``cannot assign to `self.n`, which is behind a `&` reference``), `&mut self` 메서드를 부르면 E0596입니다. "불변 참조로 고치려 함"을 한 코드로 묶어 적지 않습니다(1.100.0, 부록 B ch11).
 - `compare/`의 명령: `cc`·`c++`의 `-o`는 rustc의 `--out-dir`와 달리 디렉터리를 만들지 않으므로 README와 파일 머리의 명령 앞에 `mkdir -p target/tmp/<패키지>`를 둡니다. 메인 세션에는 디렉터리가 이미 있어 드러나지 않으므로, `target/`이 없는 새 디렉터리에서 README 블록을 그대로 실행해 확인합니다. macOS Apple clang의 TSan은 `abort_on_error`가 기본 true(보고가 있으면 종료 134, 끄면 `exitcode` 66)이고 `halt_on_error`가 false라서 보고 뒤에도 끝까지 실행되어 일반 출력이 함께 나옵니다(부록 B ch8). ASan도 macOS에서는 `abort_on_error`가 기본 true라서 보고하면 134로 끝나고(끄면 1), `stack-use-after-return` 검출은 macOS에서 기본으로 꺼져 있어 `ASAN_OPTIONS=detect_stack_use_after_return=1`이 필요합니다(Clang 문서는 Linux에서는 기본으로 켜져 있다고 적음). 이 Apple clang은 MemorySanitizer(`-fsanitize=memory`)를 거부하고 LeakSanitizer(`detect_leaks=1`)도 지원하지 않습니다. `return &local;`(-Wreturn-stack-address), 상수 문자열의 `strcpy` 넘침(-Wfortify-source)은 clang이 기본으로 경고하므로, 새니타이저 보고를 보이려는 비교 코드는 포인터 변수나 함수 인자를 거쳐 씁니다(부록 B ch9).
 
@@ -108,6 +112,7 @@
 
 | 맡을 챕터 | 이어받을 내용 (넘긴 곳) |
 | --- | --- |
+| Part 9 `ch2-macros` | `macro_rules!`를 이름만으로 부르면 정의보다 아래에서만 쓸 수 있지만(텍스트 스코프), `#[macro_export]` 매크로를 `crate::이름!`처럼 경로로 부르면 순서와 상관없음(1.100.0, 부록 B ch13 검증) |
 | Part 4 전체 | rustdoc 기능, 숨김 줄과 코드 블록 속성(부록 A ch27·ch30과 서로 링크). docs.rs가 문서를 만들 때 켤 기능(`[package.metadata.docs.rs]`)과 문서의 기능 표시(`doc_cfg`, nightly), 꺼진 기능 뒤 항목으로 가는 문서 링크가 깨지는 문제(Part 3 ch5) |
 | Part 5 `ch1-rustc-basics` | `rustc` 옵션(Part 3 ch1), `crate-type`의 종류(ch3) |
 | Part 5 `ch3-lints` | 린트 수준이 여러 곳에서 정해질 때의 우선순위(`--force-warn`, `-W`, `#[allow]`, `[lints]`)(Part 2 ch6, Part 3 ch3). 부록 A ch29와 서로 링크 |
@@ -390,3 +395,4 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (부록 B) admired / desired (Stack Overflow 설문) | admired / desired(번역하지 않고 처음에 뜻을 풀어 씀) |
 | (부록 B) spatial / temporal / type / initialization / data-race safety, class (of memory safety bugs) | 공간적 / 시간적 / 타입 / 초기화 / 데이터 경쟁 안전성, 종류("갈래"는 match arm이므로 쓰지 않음) |
 | overflow (정수) | 오버플로("넘침"은 쓰지 않음. 부록 A ch18 등에 "넘침"이 남아 있음) |
+| (부록 B ch13) forward declaration / translation unit / preprocessing translation unit / preprocessor / specialization / variadic template / linkage / const generics | 전방 선언 / 번역 단위 / 전처리 번역 단위 / 전처리기 / 특수화 / 가변 인자 템플릿 / 링키지 / const 제네릭 |

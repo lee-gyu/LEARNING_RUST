@@ -1,0 +1,5 @@
+[package]
+name = "faq-ch13-headers-build-templates"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

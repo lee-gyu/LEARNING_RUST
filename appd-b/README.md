@@ -57,6 +57,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch10-undefined-behavior](ch10-undefined-behavior/) | 미정의 동작: 틀린 결과보다 위험한 이유, "안전한 Rust에는 미정의 동작이 없다"의 뜻, 오버플로·시프트·나눗셈·정수 승격·부호 비교·평가 순서·전역 초기화·별칭 규칙·잘못된 값을 C·C++(UBSan, 경고)과 Rust로 비교, `unsafe`의 미정의 동작 |
 | [ch11-cpp-raii-move](ch11-cpp-raii-move/) | C++의 RAII와 이동: 파괴적 이동과 `std::move`, 복사 생성자와 `Copy`·`Clone`, Rule of three/five/zero와 `Drop`, `const`·`mutable`과 불변 기본·내부 가변성, C++ 표준 타입(스마트 포인터·`optional`·`variant`·`expected`·`span`) 대응, 예외 안전성, RVO, `Pin` |
 | [ch12-modern-cpp-enough](ch12-modern-cpp-enough/) | 모던 C++로 충분하지 않은가: 스마트 포인터·뷰·람다에 남는 수명 버그와 같은 구조의 Rust 컴파일 에러, `std::function`과 `Box<dyn FnMut()>`의 `'static`, 새니타이저·정적 분석·libc++ 하드닝이 잡는 것과 놓치는 것, C++26의 안전성 작업, 안전이 기본값이라는 뜻, C++가 더 나은 점, 커널·임베디드의 C |
+| [ch13-headers-build-templates](ch13-headers-build-templates/) | 헤더·빌드·템플릿: 헤더와 전방 선언이 없는 이유(크레이트가 컴파일 단위), 전처리기의 대체물, C 매크로의 중복 평가·이름 가로채기와 `macro_rules!`, Cargo, 템플릿과 제네릭(검사 시점, concept, const 제네릭과 한계, 가변 인자), ODR과 `no_mangle` 충돌, 네임스페이스·`friend`, 조건부 컴파일 |
 
 ## 질문 색인
 
@@ -176,5 +177,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q12.5](ch12-modern-cpp-enough/) | 안전이 "기본값"이라는 것이 왜 중요한가요? |
 | [Q12.6](ch12-modern-cpp-enough/) | 반대로 C++가 더 나은 점은 무엇인가요? |
 | [Q12.7](ch12-modern-cpp-enough/) | C는 어떤가요? 커널이나 임베디드에서 C 대신 쓸 만한가요? |
+| [Q13.1](ch13-headers-build-templates/) | 헤더 파일이 없나요? 선언과 정의를 나누지 않나요? |
+| [Q13.2](ch13-headers-build-templates/) | `#include`, `#define`, `#ifdef`는 무엇으로 대신하나요? |
+| [Q13.3](ch13-headers-build-templates/) | Rust의 매크로는 C의 매크로와 무엇이 다른가요? |
+| [Q13.4](ch13-headers-build-templates/) | Make나 CMake, 별도의 패키지 관리자 없이 어떻게 빌드하나요? |
+| [Q13.5](ch13-headers-build-templates/) | 템플릿과 제네릭은 무엇이 다른가요? |
+| [Q13.6](ch13-headers-build-templates/) | ODR 위반, 링크 순서 같은 문제는 어떻게 되나요? |
+| [Q13.7](ch13-headers-build-templates/) | 네임스페이스, `friend`, 익명 네임스페이스와 `static` 함수에 해당하는 것은 무엇인가요? |
+| [Q13.8](ch13-headers-build-templates/) | 컴파일 단위는 무엇인가요? |
+| [Q13.9](ch13-headers-build-templates/) | 테스트, 문서, 포매터, 린터를 따로 골라야 하나요? |
+| [Q13.10](ch13-headers-build-templates/) | 플랫폼별 코드와 조건부 컴파일은 어떻게 하나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
