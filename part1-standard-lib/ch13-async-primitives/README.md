@@ -1,4 +1,4 @@
-# ch13. 비동기의 부품: `Future`, `Poll`, `Context`/`Waker`, `Pin`
+# ch13. 비동기 부품: `Future`와 `Pin`
 
 [Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서는 `trpl` 크레이트의 런타임 위에서 `async`/`.await`를 썼고, `Future`·`Pin`·`Unpin`은 "읽을 수 있을 정도"로만 들여다봤습니다. 그 뒤로 여러 챕터가 비동기의 밑바닥을 이 챕터로 미뤄 두었습니다.
 

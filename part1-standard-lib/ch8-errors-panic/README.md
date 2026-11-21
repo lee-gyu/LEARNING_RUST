@@ -1,4 +1,4 @@
-# ch8. 에러와 패닉: `Error` 트레이트, 에러 타입 설계, 패닉 훅, 백트레이스
+# ch8. 에러와 패닉: 에러 타입 설계
 
 [Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md)에서 `panic!`과 `Result`, `?`, 그리고 "어떤 에러든 담는" `Box<dyn Error>`를 배웠습니다. 그 뒤로 여러 챕터가 이 챕터로 일을 미뤄 두었습니다.
 

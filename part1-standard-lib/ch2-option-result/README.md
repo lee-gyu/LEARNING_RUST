@@ -1,4 +1,4 @@
-# ch2. Option과 Result: 콤비네이터, 상호 변환, `?`
+# ch2. Option과 Result 콤비네이터
 
 `Option<T>`와 `Result<T, E>`는 Part 0에서 이미 여러 번 썼습니다. [Part 0 ch6](../../part0-getting-started/ch6-enums-pattern-matching/README.md)에서는 `match`, `if let`, `let...else`로 `Option`을 열었고, [Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md)에서는 `Result`와 `?`, `unwrap_or_else`로 에러를 다뤘습니다. 두 챕터 모두 "`map`, `and_then`, `ok_or` 같은 더 많은 메서드는 Part 1 `ch2-option-result`에서 다룬다"고 미뤄 두었고, ch9의 Rustlings 안내는 `map_err`도 이 챕터로 넘겼습니다. 이 챕터가 그 약속을 지킵니다.
 

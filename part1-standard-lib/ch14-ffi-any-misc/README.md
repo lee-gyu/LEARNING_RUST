@@ -1,4 +1,4 @@
-# ch14. FFI 문자열, `Any`, 수치 래퍼: `CString`/`CStr`, `OsString`, 다운캐스트, `NonZero`/`Wrapping`
+# ch14. FFI 문자열, `Any`, 수치 래퍼
 
 Part 1의 마지막 챕터입니다. 서로 다른 세 주제를 다루지만, 모두 앞 챕터들이 "나중에 다룬다"고 미뤄 둔 것입니다.
 

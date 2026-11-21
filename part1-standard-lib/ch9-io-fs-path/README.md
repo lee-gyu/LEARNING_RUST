@@ -1,4 +1,4 @@
-# ch9. 입출력·파일·경로: `Read`/`Write`/`BufRead`/`Seek`, `std::fs`, `Path`/`PathBuf`
+# ch9. 입출력·파일·경로
 
 앞 챕터들은 입출력을 필요한 만큼만 썼습니다. [Part 0 ch2](../../part0-getting-started/ch2-guessing-game/README.md)에서 `stdin().read_line`으로 한 줄을 읽었고, [Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md)에서 `File::open`의 에러를 `ErrorKind`로 나눴고, [Part 0 ch12](../../part0-getting-started/ch12-io-project-minigrep/README.md)에서 `fs::read_to_string`과 `eprintln!`을, [Part 0 ch20](../../part0-getting-started/ch20-web-server-project/README.md)에서 `TcpStream`을 `BufReader`로 감싸 줄 단위로 읽었습니다. 그리고 몇 가지를 이 챕터로 미뤄 두었습니다.
 

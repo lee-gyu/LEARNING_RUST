@@ -1,4 +1,4 @@
-# ch4. 2024 에디션의 언어 변경: RPIT 캡처, 임시값 범위, let 체인, unsafe 표시, never 타입 폴백, `gen`
+# ch4. 2024 에디션의 언어 변경
 
 Part 2의 네 번째 챕터입니다. [ch1](../ch1-editions-overview/README.md)에서 에디션이 무엇인지 보았고, [ch2](../ch2-rust-2015-2018/README.md)과 [ch3](../ch3-rust-2021/README.md)에서 앞선 에디션들의 변경을 보았습니다. 이 챕터는 2024 에디션(공식 이름 "Rust 2024", rustc 1.85.0과 함께 나왔습니다)이 **언어**에서 바꾼 것을 Edition Guide 5.1절의 순서대로 모두 다룹니다.
 

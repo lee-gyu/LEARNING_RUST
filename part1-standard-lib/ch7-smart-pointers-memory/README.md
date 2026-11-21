@@ -1,4 +1,4 @@
-# ch7. 스마트 포인터와 메모리: 크기를 재고, 값을 옮기고, 내부 가변성을 고르기
+# ch7. 스마트 포인터와 메모리
 
 [Part 0 ch14](../../part0-getting-started/ch14-smart-pointers/README.md)에서 `Box<T>`로 재귀 타입을 만들고, `Deref`/`Drop`을 구현하고, `Rc<T>`와 `RefCell<T>`로 여러 소유자가 함께 바꾸는 값을 만들고, `Weak<T>`로 순환 참조를 끊었습니다. 이 챕터는 그 위에서 세 방향으로 넓힙니다.
 

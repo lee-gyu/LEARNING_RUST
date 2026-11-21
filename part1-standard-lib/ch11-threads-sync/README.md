@@ -1,4 +1,4 @@
-# ch11. 스레드와 동기화: 스코프 스레드, 잠금, 조건 변수, 채널, 원자 타입, 한 번만 초기화
+# ch11. 스레드와 동기화
 
 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)에서 `thread::spawn`과 `join`, `move` 클로저, 채널, `Arc<Mutex<T>>`, `Send`/`Sync`를 배웠습니다. 그 뒤로 여러 챕터가 스레드와 동기화에 관한 일을 이 챕터로 미뤄 두었습니다.
 

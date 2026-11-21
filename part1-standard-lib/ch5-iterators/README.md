@@ -1,4 +1,4 @@
-# ch5. 반복자: `Iterator`, `IntoIterator`, `FromIterator`와 어댑터
+# ch5. 반복자: 트레이트와 어댑터
 
 [Part 0 ch13](../../part0-getting-started/ch13-closures-iterators/README.md)에서 반복자의 기초를 배웠습니다. `Iterator` 트레이트와 `next`, 반복자가 게으르다는 것, `for` 문이 `next`를 되풀이해 부른다는 것, `iter`/`iter_mut`/`into_iter`의 차이, `map`·`filter`·`collect` 같은 기본 어댑터와 소비 메서드, `next` 하나로 직접 만든 반복자가 그것입니다. 이 챕터는 그 위에서 세 방향으로 넓힙니다.
 

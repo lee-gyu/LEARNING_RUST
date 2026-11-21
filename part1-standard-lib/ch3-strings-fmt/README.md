@@ -1,4 +1,4 @@
-# ch3. 문자열과 서식: `String`, `&str`, `std::fmt`, `FromStr`
+# ch3. 문자열·서식·파싱
 
 [Part 0 ch8](../../part0-getting-started/ch8-collections/README.md)에서 `String`과 `&str`의 차이, 이어 붙이기, UTF-8 때문에 정수 인덱스를 쓸 수 없는 이유를 배웠습니다. [Part 0 ch1](../../part0-getting-started/ch1-hello-cargo/README.md)에서는 `println!`의 서식 지정을, [Part 0 ch10](../../part0-getting-started/ch10-generics-traits-lifetimes/README.md)에서는 `Display`를 `write!`로 구현하는 방법을 배웠습니다. 이 챕터는 그 위에 세 가지를 넓힙니다.
 
