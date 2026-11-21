@@ -1,0 +1,9 @@
+# ci/ 디렉터리 안에서 cargo를 실행할 때만 위의 설정에 더해 읽힙니다.
+
+[env]
+# force = true: 셸에 같은 이름의 변수가 있어도 이 값으로 덮어씁니다.
+APP_MODE = { value = "ci", force = true }
+
+[build]
+# 배열은 덮어쓰지 않고 이어 붙입니다.
+rustflags = ["--cfg", "from_ci"]

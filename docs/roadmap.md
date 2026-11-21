@@ -212,7 +212,7 @@ publish.workspace = true
 | ✅ | `ch4-workspaces` | 워크스페이스, 가상 매니페스트, 설정 상속, 멤버 간 의존 | 라이브러리 2개 + 바이너리 1개 워크스페이스 | Cargo 3.2 |
 | ✅ | `ch5-features` | 기능 플래그, 선택적 의존성, 기능 통합, `cfg(feature)` | 기능으로 구현을 바꾸는 라이브러리 | Cargo 3.4 |
 | ✅ | `ch6-profiles-build-performance` | 프로필(dev/release/사용자 정의), 빌드 캐시, 빌드 시간 분석과 단축 | 프로필별 바이너리 크기·속도 비교, `cargo build --timings` | Cargo 2.11, 3.5, 3.9, 3.15 |
-| ⬜ | `ch7-configuration-env` | `.cargo/config.toml`, 별칭, Cargo가 읽고 설정하는 환경 변수 | 별칭 정의, `env!`/`CARGO_PKG_*` 사용 | Cargo 3.6, 3.7 |
+| ✅ | `ch7-configuration-env` | `.cargo/config.toml`, 별칭, Cargo가 읽고 설정하는 환경 변수 | 별칭 정의, `env!`/`CARGO_PKG_*` 사용 | Cargo 3.6, 3.7 |
 | ⬜ | `ch8-build-scripts` | `build.rs`, `cargo::` 지시문, 코드 생성, 네이티브 라이브러리 링크 | 빌드 시 코드 생성, C 코드 컴파일·링크(`cc`) | Cargo 3.8 |
 | ⬜ | `ch9-testing-ci` | `cargo test`/`bench`, 테스트 종류별 위치, CI 구성 | 단위·통합·문서 테스트 프로젝트, GitHub Actions 워크플로 | Cargo 2.7, 2.8 |
 | ⬜ | `ch10-publishing-semver` | 게시 절차, `cargo package`, 레지스트리, SemVer 호환성 규칙, `cargo install` | `cargo publish --dry-run`, 호환/비호환 변경 사례 | Cargo 2.9, 3.12, 3.13 |
@@ -426,7 +426,7 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 0. 시작하기 | 20 / 20 |
 | Part 1. 표준 라이브러리 | 14 / 14 |
 | Part 2. 에디션 | 6 / 6 |
-| Part 3. Cargo | 6 / 11 |
+| Part 3. Cargo | 7 / 11 |
 | Part 4. rustdoc | 0 / 4 |
 | Part 5. rustc | 0 / 7 |
 | Part 6. 컴파일러 에러 색인 | 0 / 6 |
@@ -435,5 +435,5 @@ nightly 전용 기능을 사용하는 방법과 대표 기능을 살펴봅니다
 | Part 9. 레퍼런스 | 0 / 10 |
 | Part 10. Rustonomicon | 0 / 12 |
 | Part 11. 불안정 기능 | 0 / 4 |
-| **합계** | **46 / 109 챕터** |
+| **합계** | **47 / 109 챕터** |
 | 부록 A. Effective Rust (합계와 별도) | 35 / 35 |

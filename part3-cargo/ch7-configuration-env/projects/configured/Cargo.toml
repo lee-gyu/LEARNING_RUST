@@ -1,0 +1,10 @@
+[package]
+name = "configured"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(from_config)", "cfg(from_ci)", "cfg(from_env)"] }

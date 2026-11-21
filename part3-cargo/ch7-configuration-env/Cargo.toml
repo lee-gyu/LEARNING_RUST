@@ -1,0 +1,6 @@
+[package]
+name = "p3-ch7-configuration-env"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+description = "Part 3 ch7: Cargo 설정과 환경 변수"

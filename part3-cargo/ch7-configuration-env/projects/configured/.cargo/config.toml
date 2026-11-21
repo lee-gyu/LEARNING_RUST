@@ -1,0 +1,20 @@
+# 이 디렉터리(또는 그 아래)에서 cargo를 실행하면 읽히는 프로젝트 설정입니다.
+
+[alias]
+# cargo hello 이름  →  cargo run --quiet -- 이름
+hello = "run --quiet --"
+# 별칭은 다른 별칭을 부를 수 있습니다.
+hi = "hello 친구"
+lint = "clippy --all-targets -- -D warnings"
+
+[env]
+# cargo가 실행하는 rustc, cargo run, cargo test에 넣어 줄 환경 변수입니다.
+APP_MODE = { value = "local" }
+# relative = true: 이 .cargo 디렉터리의 부모(프로젝트 디렉터리)를 기준으로 한 절대 경로가 됩니다.
+APP_DATA = { value = "data", relative = true }
+
+[build]
+rustflags = ["--cfg", "from_config"]
+
+[profile.dev]
+opt-level = 1
