@@ -56,6 +56,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch9-c-memory-errors](ch9-c-memory-errors/) | C의 메모리 오류와 Rust: 해제 후 사용, 이중 해제, 댕글링 포인터, 경계 밖 읽기·쓰기, 초기화하지 않은 메모리, 널 역참조, 반복자 무효화, C 문자열 버그, 크기 계산을 C·C++ 비교 코드(새니타이저)와 Rust의 장치로 나란히, 누수와 실행 비용 |
 | [ch10-undefined-behavior](ch10-undefined-behavior/) | 미정의 동작: 틀린 결과보다 위험한 이유, "안전한 Rust에는 미정의 동작이 없다"의 뜻, 오버플로·시프트·나눗셈·정수 승격·부호 비교·평가 순서·전역 초기화·별칭 규칙·잘못된 값을 C·C++(UBSan, 경고)과 Rust로 비교, `unsafe`의 미정의 동작 |
 | [ch11-cpp-raii-move](ch11-cpp-raii-move/) | C++의 RAII와 이동: 파괴적 이동과 `std::move`, 복사 생성자와 `Copy`·`Clone`, Rule of three/five/zero와 `Drop`, `const`·`mutable`과 불변 기본·내부 가변성, C++ 표준 타입(스마트 포인터·`optional`·`variant`·`expected`·`span`) 대응, 예외 안전성, RVO, `Pin` |
+| [ch12-modern-cpp-enough](ch12-modern-cpp-enough/) | 모던 C++로 충분하지 않은가: 스마트 포인터·뷰·람다에 남는 수명 버그와 같은 구조의 Rust 컴파일 에러, `std::function`과 `Box<dyn FnMut()>`의 `'static`, 새니타이저·정적 분석·libc++ 하드닝이 잡는 것과 놓치는 것, C++26의 안전성 작업, 안전이 기본값이라는 뜻, C++가 더 나은 점, 커널·임베디드의 C |
 
 ## 질문 색인
 
@@ -168,5 +169,12 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q11.7](ch11-cpp-raii-move/) | 예외 안전성은 어떻게 되나요? |
 | [Q11.8](ch11-cpp-raii-move/) | 값 반환 최적화(RVO)와 out 매개변수는 어떻게 되나요? |
 | [Q11.9](ch11-cpp-raii-move/) | placement new, 이동할 수 없는 타입, 자기를 가리키는 객체는 어떻게 하나요? |
+| [Q12.1](ch12-modern-cpp-enough/) | C++를 조심해서 잘 쓰고 있는데 Rust가 무엇을 더 주나요? |
+| [Q12.2](ch12-modern-cpp-enough/) | 스마트 포인터와 Core Guidelines를 지키면 메모리 안전하지 않나요? |
+| [Q12.3](ch12-modern-cpp-enough/) | AddressSanitizer, 정적 분석, 퍼징으로 잡으면 되지 않나요? |
+| [Q12.4](ch12-modern-cpp-enough/) | C++ 표준도 안전성을 강화하고 있지 않나요? |
+| [Q12.5](ch12-modern-cpp-enough/) | 안전이 "기본값"이라는 것이 왜 중요한가요? |
+| [Q12.6](ch12-modern-cpp-enough/) | 반대로 C++가 더 나은 점은 무엇인가요? |
+| [Q12.7](ch12-modern-cpp-enough/) | C는 어떤가요? 커널이나 임베디드에서 C 대신 쓸 만한가요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

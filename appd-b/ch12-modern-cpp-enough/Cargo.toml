@@ -1,0 +1,5 @@
+[package]
+name = "faq-ch12-modern-cpp-enough"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
