@@ -80,7 +80,6 @@
 
 | 맡을 챕터 | 이어받을 내용 (넘긴 곳) |
 | --- | --- |
-| 범위 정리(Part 3 ch9~ch11) | 이름으로만 가리키는 곳을 링크로: `ch9-testing-ci`(부록 A ch30:19·ch32:21, Part 3 ch1·ch3·ch5, Part 0 ch11. ch32:21의 "GitHub Actions 문법 전반"은 ch9 2.6절 "워크플로 파일 읽기"의 범위로 고침), `ch10-publishing-semver`(부록 A ch21·ch30 2.9절·ch32, Part 3 ch1·ch2·ch3·ch5·ch7·ch8), `ch11-commands-tools`. 끝나면 이 행을 지움 |
 | Part 4 전체 | rustdoc 기능, 숨김 줄과 코드 블록 속성(부록 A ch27·ch30과 서로 링크). docs.rs가 문서를 만들 때 켤 기능(`[package.metadata.docs.rs]`)과 문서의 기능 표시(`doc_cfg`, nightly), 꺼진 기능 뒤 항목으로 가는 문서 링크가 깨지는 문제(Part 3 ch5) |
 | Part 5 `ch1-rustc-basics` | `rustc` 옵션(Part 3 ch1), `crate-type`의 종류(ch3) |
 | Part 5 `ch3-lints` | 린트 수준이 여러 곳에서 정해질 때의 우선순위(`--force-warn`, `-W`, `#[allow]`, `[lints]`)(Part 2 ch6, Part 3 ch3). 부록 A ch29와 서로 링크 |

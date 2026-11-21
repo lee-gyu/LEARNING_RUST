@@ -176,7 +176,7 @@ text-stat/
 | `tests/이름.rs`, `tests/이름/main.rs` | 통합 테스트 | 파일 또는 디렉터리 이름 | 여럿 |
 | `benches/이름.rs`, `benches/이름/main.rs` | 벤치마크 | 파일 또는 디렉터리 이름 | 여럿 |
 
-이 저장소의 챕터 패키지가 `examples/01_….rs` 파일만으로 이뤄진 것도 이 표의 다섯째 줄 덕분입니다. `tests/`는 [Part 0 ch11](../../part0-getting-started/ch11-testing/README.md)에서 썼고, `benches/`는 Part 3 `ch9-testing-ci`에서 다룹니다. 관례와 다른 위치나 이름을 쓰려면 `Cargo.toml`에 타깃을 직접 적어야 하며, 이것은 [ch3](../ch3-manifest-targets/README.md)의 주제입니다.
+이 저장소의 챕터 패키지가 `examples/01_….rs` 파일만으로 이뤄진 것도 이 표의 다섯째 줄 덕분입니다. `tests/`는 [Part 0 ch11](../../part0-getting-started/ch11-testing/README.md)에서 썼고, `benches/`는 [ch9](../ch9-testing-ci/README.md)에서 다룹니다. 관례와 다른 위치나 이름을 쓰려면 `Cargo.toml`에 타깃을 직접 적어야 하며, 이것은 [ch3](../ch3-manifest-targets/README.md)의 주제입니다.
 
 **여러 파일로 된 타깃.** 타깃 하나가 여러 파일로 이뤄지면 `이름/main.rs`와 모듈 파일을 한 디렉터리에 둡니다. `top-words/main.rs`는 `mod rank;`로 같은 디렉터리의 `rank.rs`를 자기 모듈로 선언합니다. `src/bin/` 바로 아래에 `rank.rs`를 두면 안 됩니다. 그 자리의 `.rs` 파일은 모두 바이너리로 취급되어 `rank`라는 실행 파일을 만들려다 `main` 함수가 없다는 에러가 납니다.
 
@@ -285,7 +285,7 @@ checksum = "c6f5d3c3b1bf09027a88a6bc961fc00497d651009560b5463668dc81b0fa87a8"
 
 - 맨 위의 `version = 4`는 잠금 파일 형식의 버전입니다. 패키지의 버전과는 관계가 없습니다.
 - `[[package]]`는 빌드에 들어가는 패키지마다 하나씩 있습니다. 자기 자신(`text-stat`)도 들어 있고 `dependencies`로 서로의 관계가 적힙니다.
-- `source`는 받아 온 곳입니다. 레지스트리(registry)는 크레이트를 게시하고 내려받는 저장소이고, Cargo가 기본으로 쓰는 레지스트리가 crates.io입니다(게시는 Part 3 `ch10-publishing-semver`). `registry+…crates.io-index`는 crates.io에서 받았다는 뜻입니다. 내 디스크에 있는 `text-stat`에는 `source`가 없습니다.
+- `source`는 받아 온 곳입니다. 레지스트리(registry)는 크레이트를 게시하고 내려받는 저장소이고, Cargo가 기본으로 쓰는 레지스트리가 crates.io입니다(게시는 [ch10](../ch10-publishing-semver/README.md)). `registry+…crates.io-index`는 crates.io에서 받았다는 뜻입니다. 내 디스크에 있는 `text-stat`에는 `source`가 없습니다.
 - `checksum`은 내려받은 `.crate` 파일의 SHA-256 값입니다. 2.6절에서 찾을 파일에 `shasum -a 256`을 실행하면 같은 값이 나옵니다. 누군가 같은 버전 번호로 다른 내용을 내려보내면 Cargo가 알아챕니다.
 
 **잠금 파일은 언제 바뀌는가.** 잠금 파일에 적힌 버전이 `Cargo.toml`의 요구 사항을 만족하는 동안에는 Cargo가 다시 고르지 않습니다. Cargo가 의존성의 버전을 다시 고르는 것은 잠금 파일이 없을 때, 의존성이 추가·삭제됐을 때, 요구 사항이 잠긴 버전을 벗어났을 때, 그리고 `cargo update`를 실행했을 때입니다. 잠금 파일에는 패키지 자신도 적혀 있으므로 `[package]`의 `version`을 바꿔도 그 줄이 바뀝니다.
@@ -358,7 +358,7 @@ error: could not find `Cargo.toml` in `…` or any parent directory
 
 ### 2.6 Cargo home
 
-`target/`이 "이 패키지의 빌드 결과"를 두는 곳이라면, **Cargo home**은 "이 컴퓨터의 모든 패키지가 함께 쓰는 것"을 두는 곳입니다. 내려받은 크레이트와 `cargo install`로 설치한 실행 파일이 여기에 있습니다. `cargo install`은 crates.io에 게시된 프로그램을 내려받아 빌드하고 실행 파일을 `bin/`에 넣는 명령입니다(Part 3 `ch10-publishing-semver`). 위치는 환경 변수 `CARGO_HOME`이 정하고, 없으면 홈 디렉터리의 `.cargo`입니다.
+`target/`이 "이 패키지의 빌드 결과"를 두는 곳이라면, **Cargo home**은 "이 컴퓨터의 모든 패키지가 함께 쓰는 것"을 두는 곳입니다. 내려받은 크레이트와 `cargo install`로 설치한 실행 파일이 여기에 있습니다. `cargo install`은 crates.io에 게시된 프로그램을 내려받아 빌드하고 실행 파일을 `bin/`에 넣는 명령입니다([ch10](../ch10-publishing-semver/README.md)). 위치는 환경 변수 `CARGO_HOME`이 정하고, 없으면 홈 디렉터리의 `.cargo`입니다.
 
 | 경로 | 내용 |
 | --- | --- |
@@ -405,7 +405,7 @@ $ CARGO_HOME=/tmp/fresh-home cargo fetch --locked
 
 **지워도 되는가.** Cargo Book에 따르면 캐시의 어느 부분을 지워도 Cargo가 필요할 때 다시 풀거나 다시 내려받습니다. `cargo clean`은 패키지의 `target/`만 지우고 Cargo home은 건드리지 않습니다. 그리고 Cargo는 오래 쓰지 않은 캐시를 스스로 지웁니다. 설정 문서의 `[cache]` 절에 따르면 네트워크에서 다시 받아야 하는 파일은 3개월, 네트워크 없이 다시 만들 수 있는 파일(`.crate`를 푼 소스 등)은 1개월 동안 쓰이지 않으면 `cargo build` 같은 명령을 실행할 때 지워집니다.
 
-CI에서 Cargo home을 캐시할 때는 통째로 넣지 않습니다. `registry/cache/`와 `registry/src/`에는 같은 소스가 압축본과 푼 것으로 두 번 들어 있기 때문입니다. Cargo Book이 권하는 목록은 `.crates.toml`, `.crates2.json`, `bin/`, `registry/index/`, `registry/cache/`, `git/db/`입니다. CI는 Part 3 `ch9-testing-ci`에서 다룹니다.
+CI에서 Cargo home을 캐시할 때는 통째로 넣지 않습니다. `registry/cache/`와 `registry/src/`에는 같은 소스가 압축본과 푼 것으로 두 번 들어 있기 때문입니다. Cargo Book이 권하는 목록은 `.crates.toml`, `.crates2.json`, `bin/`, `registry/index/`, `registry/cache/`, `git/db/`입니다. CI는 [ch9](../ch9-testing-ci/README.md)에서 다룹니다.
 
 ## 3. 예제 안내
 

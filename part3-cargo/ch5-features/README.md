@@ -123,7 +123,7 @@ textfmt = { workspace = true, default-features = false, features = ["csv"] }
 
 `report-cli`는 [ch4](../ch4-workspaces/README.md)의 방식대로 의존성을 `[workspace.dependencies]`에서 물려받으면서 기능을 덧붙였습니다. 2024 에디션 패키지에서는 멤버의 `default-features = false`가 워크스페이스 쪽 설정을 덮어씁니다(cargo 1.99부터. 에디션과 버전에 따른 차이는 [Part 2 ch5](../../part2-editions/ch5-rust-2024-ecosystem/README.md) 2.7절의 표).
 
-**기본 기능은 신중하게.** `default-features = false`는 "나는 기본 기능이 필요 없다"는 뜻이지 "기본 기능을 꺼 달라"는 보장이 아닙니다. 같은 크레이트를 기본 기능과 함께 쓰는 패키지가 그래프 어딘가에 하나라도 있으면 켜집니다(2.5절). 그리고 기본 기능에서 무언가를 빼면 그 기능을 기대하던 사용자의 빌드가 깨질 수 있습니다. Cargo Book은 기본 기능을 정할 때 오래 유지할 수 있는 것만 넣으라고 권합니다. 어떤 변경이 호환되지 않는지는 Part 3 `ch10-publishing-semver`에서 다룹니다.
+**기본 기능은 신중하게.** `default-features = false`는 "나는 기본 기능이 필요 없다"는 뜻이지 "기본 기능을 꺼 달라"는 보장이 아닙니다. 같은 크레이트를 기본 기능과 함께 쓰는 패키지가 그래프 어딘가에 하나라도 있으면 켜집니다(2.5절). 그리고 기본 기능에서 무언가를 빼면 그 기능을 기대하던 사용자의 빌드가 깨질 수 있습니다. Cargo Book은 기본 기능을 정할 때 오래 유지할 수 있는 것만 넣으라고 권합니다. 어떤 변경이 호환되지 않는지는 [ch10](../ch10-publishing-semver/README.md)에서 다룹니다.
 
 **`required-features`.** ch3 2.3절의 타깃 표 키입니다. 적은 기능이 켜지지 않으면 그 타깃을 빌드하지 않습니다. 이 챕터의 `Cargo.toml`에 다음이 있습니다.
 
@@ -295,9 +295,9 @@ cargo clippy --all-targets --all-features           # 전부
 
 워크스페이스에서는 라이브러리 멤버를 `-p`로 골라 따로 검사합니다. 루트에서 `cargo clippy --workspace --no-default-features`를 실행해도, `report-web`처럼 의존성 선언으로 `textfmt`의 기본 기능을 요청하는 멤버가 있으면 통합 때문에 `textfmt`는 기본 기능이 켜진 채 검사됩니다. `textfmt`를 기본 기능 없이 검사하려면 `cargo clippy -p textfmt --all-targets --no-default-features`처럼 씁니다. 이렇게 검사해 보니 `textfmt`의 테스트 모듈에서 쓰이지 않는 함수 경고가 나서, 모듈을 `#[cfg(all(test, any(feature = "csv", feature = "markdown")))]`로 가렸습니다.
 
-조합을 자동으로 돌려 주는 도구와 CI 구성은 Part 3 `ch9-testing-ci`에서 다룹니다.
+조합을 자동으로 돌려 주는 도구와 CI 구성은 [ch9](../ch9-testing-ci/README.md)에서 다룹니다.
 
-**그 밖에.** 빌드 스크립트는 환경 변수 `CARGO_FEATURE_<이름>`(대문자, `-`는 `_`)으로 켜진 기능을 압니다([ch8](../ch8-build-scripts/README.md)). 기능을 더하거나 빼는 것이 어떤 버전 변경에 해당하는지는 `ch10-publishing-semver`에서 다룹니다. crates.io는 새로 게시하는 크레이트의 기능을 300개까지로 제한합니다.
+**그 밖에.** 빌드 스크립트는 환경 변수 `CARGO_FEATURE_<이름>`(대문자, `-`는 `_`)으로 켜진 기능을 압니다([ch8](../ch8-build-scripts/README.md)). 기능을 더하거나 빼는 것이 어떤 버전 변경에 해당하는지는 [ch10](../ch10-publishing-semver/README.md)에서 다룹니다. crates.io는 새로 게시하는 크레이트의 기능을 300개까지로 제한합니다.
 
 ## 3. 예제 안내
 

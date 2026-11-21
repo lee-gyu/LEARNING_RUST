@@ -18,7 +18,7 @@ ch25부터 ch33까지 여러 챕터가 "이 검사는 CI에서 돌린다"고 말
 - [ch21](../ch21-semver/README.md) 2.7절과 [ch25](../ch25-dependency-graph/README.md) 2.4·2.5절: MSRV, `Cargo.lock`, 의존성 점검 도구
 - [Part 1 ch10](../../part1-standard-lib/ch10-env-process-time/README.md): 예제가 `Command`로 cargo와 bash를 실행하고 종료 상태를 받음
 
-GitHub Actions 문법 전반과 Cargo 쪽 테스트 명령의 상세는 Part 3 `ch9-testing-ci`에서, 크로스 컴파일은 Part 5 `ch4-targets-cross-compilation`에서, 코드 커버리지는 Part 5 `ch6-optimization-instrumentation`에서, 게시 절차는 Part 3 `ch10-publishing-semver`에서 다룹니다.
+GitHub Actions 워크플로 파일을 읽는 데 필요한 기본 문법과 Cargo 쪽 테스트 명령의 상세는 [Part 3 ch9](../../part3-cargo/ch9-testing-ci/README.md) 2.6절에서, 크로스 컴파일은 Part 5 `ch4-targets-cross-compilation`에서, 코드 커버리지는 Part 5 `ch6-optimization-instrumentation`에서, 게시 절차는 [Part 3 ch10](../../part3-cargo/ch10-publishing-semver/README.md)에서 다룹니다.
 
 ## 1. 학습 목표
 

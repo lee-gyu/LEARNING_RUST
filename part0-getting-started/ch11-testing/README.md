@@ -121,7 +121,7 @@ test result: ok. 6 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; fini
   | `ok.` / `FAILED.` | 이 구역 전체의 결과입니다. 하나라도 실패하면 `FAILED.`입니다. |
   | `passed` / `failed` | 통과한 테스트 수와 실패한 테스트 수입니다. |
   | `ignored` | `#[ignore]`가 붙어 건너뛴 테스트 수입니다. |
-  | `measured` | 성능 측정(벤치마크) 수입니다. 벤치마크는 Part 3 `ch9-testing-ci`에서 다룹니다. |
+  | `measured` | 성능 측정(벤치마크) 수입니다. 벤치마크는 [Part 3 ch9](../../part3-cargo/ch9-testing-ci/README.md)에서 다룹니다. |
   | `filtered out` | 이름 필터 등으로 이번 실행에서 걸러진 테스트 수입니다(2.7절). |
   | `finished in` | 이 구역의 실행 시간입니다. 실행마다 다릅니다. |
 

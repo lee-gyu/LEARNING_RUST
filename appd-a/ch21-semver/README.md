@@ -143,7 +143,7 @@ pub fn summarize<T: Display + Ord>(weights: &[T]) -> String { /* .. */ }
 
 의존하는 크레이트가 나중에 구현을 더할 자리를 일관성 규칙이 미리 비워 두는 것입니다. 반대로 떼는 쪽에는 그런 보호가 없으므로, [ch10](../ch10-standard-traits/README.md)의 말대로 구현을 떼는 것이 더하는 것보다 훨씬 큰 변경입니다.
 
-Cargo Book의 [SemVer Compatibility](https://doc.rust-lang.org/cargo/reference/semver.html)는 이런 변경을 메이저, 마이너, "깨질 수도 있음(possibly-breaking)" 세 종류로 나눈 목록입니다. 기본 메서드 추가와 고유 메서드 추가처럼 이름 충돌로만 깨지는 변경, MSRV 올리기가 세 번째 종류이며, 보통 마이너로 내되 프로젝트가 정합니다. 목록 전체와 게시 절차는 Part 3 `ch10-publishing-semver`에서 다룹니다. 이 목록을 사람이 릴리스마다 대조하기는 어려우므로, 두 릴리스의 공개 API를 rustdoc JSON으로 비교해 규칙 위반을 찾는 `cargo-semver-checks`(`cargo install cargo-semver-checks --locked`로 설치, 게시 전에 `cargo semver-checks` 실행) 같은 도구가 있습니다. 이 저장소에서는 설치하지 않아 실행해 확인하지 못했습니다. 저장소의 설명에 따르면 기본으로 crates.io의 직전 버전과 비교하고, 모든 호환성 문제를 잡지는 못합니다.
+Cargo Book의 [SemVer Compatibility](https://doc.rust-lang.org/cargo/reference/semver.html)는 이런 변경을 메이저, 마이너, "깨질 수도 있음(possibly-breaking)" 세 종류로 나눈 목록입니다. 기본 메서드 추가와 고유 메서드 추가처럼 이름 충돌로만 깨지는 변경, MSRV 올리기가 세 번째 종류이며, 보통 마이너로 내되 프로젝트가 정합니다. 목록 전체와 게시 절차는 [Part 3 ch10](../../part3-cargo/ch10-publishing-semver/README.md)에서 다룹니다. 이 목록을 사람이 릴리스마다 대조하기는 어려우므로, 두 릴리스의 공개 API를 rustdoc JSON으로 비교해 규칙 위반을 찾는 `cargo-semver-checks`(`cargo install cargo-semver-checks --locked`로 설치, 게시 전에 `cargo semver-checks` 실행) 같은 도구가 있습니다. 이 저장소에서는 설치하지 않아 실행해 확인하지 못했습니다. 저장소의 설명에 따르면 기본으로 crates.io의 직전 버전과 비교하고, 모든 호환성 문제를 잡지는 못합니다.
 
 **지침을 따르지 않아도 되는 경우.** 사용자를 모두 내가 고칠 수 있다면 버전 규칙은 짐일 뿐입니다. 워크스페이스 안에서만 쓰는 `publish = false` 크레이트는 호환되지 않는 변경을 하고 컴파일 에러가 가리키는 곳을 함께 고치면 됩니다. 실행 파일(애플리케이션)도 Cargo Book이 고정된 규칙을 두지 않고 SemVer의 취지를 따르라고만 안내합니다. 또 공개 API를 줄여 두면 따질 변경 자체가 줄어듭니다. 가시성으로 약속을 줄이는 방법은 [ch22](../ch22-minimize-visibility/README.md)에서 다룹니다.
 

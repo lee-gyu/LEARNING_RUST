@@ -154,7 +154,7 @@ $ cargo --list
 - **별칭은 다른 별칭을 부를 수 있습니다.** `hi`는 `hello 친구`로, 다시 `run --quiet -- 친구`로 펼쳐집니다. 서로를 부르는 고리가 생기면 에러입니다(4절).
 - **내장 명령은 덮을 수 없습니다.** `build = "run"`처럼 적으면 경고와 함께 무시됩니다(4절). 누가 설정 파일에 무엇을 적었든 `cargo build`가 늘 같은 뜻이어야 하기 때문입니다.
 
-별칭은 `cargo` 뒤에 쓸 수 있는 명령만 부릅니다. 셸 명령을 이어 실행하는 스크립트가 필요하면 별칭이 아니라 별도 도구나 사용자 정의 하위 명령을 씁니다(Part 3 `ch11-commands-tools`).
+별칭은 `cargo` 뒤에 쓸 수 있는 명령만 부릅니다. 셸 명령을 이어 실행하는 스크립트가 필요하면 별칭이 아니라 별도 도구나 사용자 정의 하위 명령을 씁니다([ch11](../ch11-commands-tools/README.md)).
 
 ### 2.5 자주 쓰는 설정 키
 
@@ -169,7 +169,7 @@ Cargo Book 3.6절에는 설정 키가 표 단위로 모여 있습니다. 이 챕
 | `[term]` | `quiet`, `verbose`, `color` | 이 절 |
 | `[net]`, `[http]` | `offline`, `retry`, 프록시, 제한 시간 | 표만 |
 | `[source.<이름>]`, `paths`, `[patch.<레지스트리>]` | 소스 교체, 의존성 바꿔 끼우기 | [ch2](../ch2-dependencies/README.md) 2.6·2.7절 |
-| `[registry]`, `[registries.<이름>]` | 기본 레지스트리, 토큰 | Part 3 `ch10-publishing-semver` |
+| `[registry]`, `[registries.<이름>]` | 기본 레지스트리, 토큰 | [ch10](../ch10-publishing-semver/README.md) |
 | `[target.<타깃>]`, `[target.<cfg>]` | `linker`, `runner`, `rustflags` | Part 5 |
 | `[install]`, `[cargo-new]`, `[doc]`, `[cache]`, `[resolver]` | `cargo install` 위치, `cargo new`의 VCS, 문서를 열 브라우저, 캐시 자동 정리, 리졸버 동작 | 표만 |
 
@@ -194,7 +194,7 @@ Cargo Book 3.6절에는 설정 키가 표 단위로 모여 있습니다. 이 챕
 
 **`[term]`.** `cargo`의 출력 방식입니다. `CARGO_TERM_VERBOSE=true`는 매번 `-v`를 붙인 것과 같고, `CARGO_TERM_QUIET=true`는 `-q`와 같습니다.
 
-**비밀 값은 따로 둡니다.** 레지스트리 토큰 같은 값은 설정 파일이 아니라 Cargo home의 `credentials.toml`에 둡니다. `cargo login`이 이 파일을 만들고 고칩니다. 프로젝트의 `.cargo/config.toml`은 버전 관리에 넣는 경우가 많아서 섞이면 안 되기 때문입니다(Part 3 `ch10-publishing-semver`).
+**비밀 값은 따로 둡니다.** 레지스트리 토큰 같은 값은 설정 파일이 아니라 Cargo home의 `credentials.toml`에 둡니다. `cargo login`이 이 파일을 만들고 고칩니다. 프로젝트의 `.cargo/config.toml`은 버전 관리에 넣는 경우가 많아서 섞이면 안 되기 때문입니다([ch10](../ch10-publishing-semver/README.md)).
 
 ### 2.6 Cargo가 읽는 환경 변수
 

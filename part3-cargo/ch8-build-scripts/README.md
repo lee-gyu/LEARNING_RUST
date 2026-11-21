@@ -342,7 +342,7 @@ $ cargo build -v --locked
 | 입력 파일을 `rerun-if-changed`에 빠뜨림 | (메시지 없음) | 그 파일을 고쳐도 빌드 스크립트가 다시 실행되지 않아 옛 결과가 남습니다. 읽는 파일은 모두 적습니다(연습 2). |
 | 빌드 스크립트에서 `cfg!(target_os = …)`로 대상 플랫폼을 판단함 | (메시지 없음) | 호스트를 가리킵니다. `CARGO_CFG_TARGET_OS`를 읽습니다(2.2절). |
 | `rustc-cfg`로 켠 이름을 `rustc-check-cfg`로 알리지 않음 | ``warning: unexpected `cfg` condition name: `fletcher_v2` `` | `cargo::rustc-check-cfg=cfg(fletcher_v2)`를 출력합니다(연습 3). |
-| 빌드 스크립트가 `OUT_DIR` 밖(패키지 디렉터리)에 파일을 씀 | (메시지 없음) | 빌드할 때는 메시지가 없지만, crates.io에서 받은 의존성이면 소스를 고치는 셈이라 문제가 됩니다. Cargo Book은 패키징할 때 이런 빌드 스크립트를 허용하지 않는다고 적습니다(`cargo package`는 Part 3 `ch10-publishing-semver`). `OUT_DIR`에만 씁니다. |
+| 빌드 스크립트가 `OUT_DIR` 밖(패키지 디렉터리)에 파일을 씀 | (메시지 없음) | 빌드할 때는 메시지가 없지만, crates.io에서 받은 의존성이면 소스를 고치는 셈이라 문제가 됩니다. Cargo Book은 패키징할 때 이런 빌드 스크립트를 허용하지 않는다고 적습니다(`cargo package`는 [ch10](../ch10-publishing-semver/README.md)). `OUT_DIR`에만 씁니다. |
 
 ## 5. 연습 문제
 

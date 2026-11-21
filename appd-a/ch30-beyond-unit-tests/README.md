@@ -16,7 +16,7 @@
 - [ch21](../ch21-semver/README.md) 2.4절: 컴파일러가 잡지 못하는 동작 변경
 - [ch23](../ch23-avoid-wildcard-imports/README.md), [ch26](../ch26-feature-creep/README.md) 2.6절: 테스트 모듈의 `use super::*`, 기능 조합 검사
 
-`cargo test`·`cargo bench`의 Cargo 쪽 상세는 Part 3 `ch9-testing-ci`, 문서 테스트 코드 블록의 속성과 숨긴 줄(`#`)은 Part 4 `ch3-doc-tests`, 문서 주석에 무엇을 쓸지는 [`ch27-document-public-interfaces`](../ch27-document-public-interfaces/README.md), CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md), 도구 전반은 [`ch31-tooling-ecosystem`](../ch31-tooling-ecosystem/README.md)에서 다룹니다. 이 README에서 "예제 01"처럼 번호로 부르는 것은 챕터 패키지의 `examples/` 파일이고, **예제 프로그램**은 라이브러리 패키지의 `examples/`에 두는 프로그램(이 챕터에서는 `projects/tinytlv/examples/`)입니다.
+`cargo test`·`cargo bench`의 Cargo 쪽 상세는 [Part 3 ch9](../../part3-cargo/ch9-testing-ci/README.md), 문서 테스트 코드 블록의 속성과 숨긴 줄(`#`)은 Part 4 `ch3-doc-tests`, 문서 주석에 무엇을 쓸지는 [`ch27-document-public-interfaces`](../ch27-document-public-interfaces/README.md), CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md), 도구 전반은 [`ch31-tooling-ecosystem`](../ch31-tooling-ecosystem/README.md)에서 다룹니다. 이 README에서 "예제 01"처럼 번호로 부르는 것은 챕터 패키지의 `examples/` 파일이고, **예제 프로그램**은 라이브러리 패키지의 `examples/`에 두는 프로그램(이 챕터에서는 `projects/tinytlv/examples/`)입니다.
 
 ## 1. 학습 목표
 

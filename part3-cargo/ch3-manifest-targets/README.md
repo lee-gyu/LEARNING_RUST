@@ -73,7 +73,7 @@
 | 꼭 필요한 것 | `name` | Cargo가 요구하는 키는 이것 하나뿐입니다. |
 | 컴파일에 영향 | `version`, `edition`, `rust-version` | `version`을 빼면 `0.0.0`이 됩니다. `edition`을 빼면 2015입니다([Part 2 ch1](../../part2-editions/ch1-editions-overview/README.md)). `rust-version`은 2.4절 |
 | 타깃 고르기 | `default-run`, `autolib`, `autobins`, `autoexamples`, `autotests`, `autobenches` | 2.3절 |
-| 게시할 때 쓰는 정보 | `description`, `license`, `license-file`, `repository`, `homepage`, `documentation`, `readme`, `keywords`, `categories`, `include`, `exclude`, `publish` | Part 3 `ch10-publishing-semver`. `authors`는 더는 권장하지 않는(deprecated) 키입니다. |
+| 게시할 때 쓰는 정보 | `description`, `license`, `license-file`, `repository`, `homepage`, `documentation`, `readme`, `keywords`, `categories`, `include`, `exclude`, `publish` | [ch10](../ch10-publishing-semver/README.md). `authors`는 더는 권장하지 않는(deprecated) 키입니다. |
 | 빌드 스크립트 | `build`, `links` | [ch8](../ch8-build-scripts/README.md) |
 | 워크스페이스 | `workspace`, `resolver` | [ch4](../ch4-workspaces/README.md) |
 | 다른 도구 | `metadata` | 아래 설명 |
@@ -180,7 +180,7 @@ test     report      tests/report.rs    O     -        -
 | `proc-macro` | 절차적 매크로 라이브러리인가(`[lib]`에만) | `false` |
 | `required-features` | 이 타깃을 빌드하는 데 필요한 기능(`[lib]`에는 효과 없음) | 없음 |
 
-위 출력의 `test`, `doctest`, `doc` 열이 이 표의 기본값 그대로입니다. `c2f`만 `test`가 `-`인 것은 `test = false`를 적었기 때문입니다. `proc-macro`는 [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md)의 `hello_macro`에서 썼고, `required-features`는 [ch5](../ch5-features/README.md)에서, `bench`와 벤치마크의 `harness`는 `ch9-testing-ci`에서, `crate-type`의 종류(`cdylib`, `staticlib` 등)는 Part 5 `ch1-rustc-basics`에서 다룹니다.
+위 출력의 `test`, `doctest`, `doc` 열이 이 표의 기본값 그대로입니다. `c2f`만 `test`가 `-`인 것은 `test = false`를 적었기 때문입니다. `proc-macro`는 [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md)의 `hello_macro`에서 썼고, `required-features`는 [ch5](../ch5-features/README.md)에서, `bench`와 벤치마크의 `harness`는 [ch9](../ch9-testing-ci/README.md)에서, `crate-type`의 종류(`cdylib`, `staticlib` 등)는 Part 5 `ch1-rustc-basics`에서 다룹니다.
 
 **`[lib] name`: 크레이트 이름을 패키지 이름과 다르게.** 패키지 이름은 `unit-tools`이지만 코드에서는 `units::c_to_f`로 씁니다. 만들어지는 파일도 `libunits.rlib`이고, `cargo test`의 문서 테스트 줄도 `Doc-tests units`입니다. 다만 **다른 패키지가 이 패키지를 의존성으로 적을 때는 패키지 이름을 씁니다**(`unit-tools = "0.1"`). 이름이 둘이면 사용자가 헷갈리므로 꼭 필요할 때만 바꿉니다.
 
@@ -249,7 +249,7 @@ warning: current MSRV (Minimum Supported Rust Version) is `1.85.0` but this item
   = note: `#[warn(clippy::incompatible_msrv)]` on by default
 ```
 
-이 린트가 보는 것은 표준 라이브러리 API의 안정화 버전입니다. 새 문법까지 확인하려면 실제로 그 버전의 툴체인으로 빌드해 봐야 하고, 그것은 CI의 일입니다(Part 3 `ch9-testing-ci`).
+이 린트가 보는 것은 표준 라이브러리 API의 안정화 버전입니다. 새 문법까지 확인하려면 실제로 그 버전의 툴체인으로 빌드해 봐야 하고, 그것은 CI의 일입니다([ch9](../ch9-testing-ci/README.md)).
 
 **어떤 값을 적을까.** 낮게 적을수록 더 많은 사용자가 쓸 수 있지만, 그만큼 새 기능을 쓰지 못합니다. Cargo Book은 정책을 정해 두기를 권합니다. 가장 단순한 정책은 "항상 최신 stable"이고, 그다음으로 단순한 방법은 옛 Rust를 지원하는 내 패키지의 이전 메이저·마이너 버전을 계속 관리해 주는 것입니다. 정책의 예로는 "N-2"(최신 버전과 그 앞의 두 릴리스까지 지원)를 듭니다. `rust-version`을 올리는 것은 사용자의 빌드를 막을 수 있는 변경이므로 Cargo Book은 마이너 버전을 올릴 만한 변경으로 봅니다. 값을 적었다면 효과 3과 CI로 지켜지는지 확인해야 합니다. 라이브러리 작성자의 지침은 [부록 A ch21](../../appd-a/ch21-semver/README.md) 2.7절에 있습니다.
 
@@ -367,7 +367,7 @@ cargo run -p p3-ch3-manifest-targets --example 01_manifest_map
 cargo run -p p3-ch3-manifest-targets --example 02_targets_from_cargo
 ```
 
-`cargo metadata --no-deps --format-version 1`을 자식 프로세스로 실행하고 JSON 출력에서 타깃 목록을 문자열 검색으로 꺼냅니다. 출력은 2.3절에 실었습니다. `kind`, `name`, `test`, `doctest`, `doc`은 JSON의 필드 이름 그대로이고, `path`는 절대 경로인 `src_path`에서 프로젝트 디렉터리 부분을 떼어 낸 것입니다. `cargo metadata`는 Part 3 `ch11-commands-tools`에서 다룹니다.
+`cargo metadata --no-deps --format-version 1`을 자식 프로세스로 실행하고 JSON 출력에서 타깃 목록을 문자열 검색으로 꺼냅니다. 출력은 2.3절에 실었습니다. `kind`, `name`, `test`, `doctest`, `doc`은 JSON의 필드 이름 그대로이고, `path`는 절대 경로인 `src_path`에서 프로젝트 디렉터리 부분을 떼어 낸 것입니다. `cargo metadata`는 [ch11](../ch11-commands-tools/README.md)에서 다룹니다.
 
 ### projects/unit-tools — 타깃을 직접 구성한 패키지
 

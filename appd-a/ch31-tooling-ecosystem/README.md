@@ -14,7 +14,7 @@ Rust로 일하는 데 필요한 것은 컴파일러만이 아닙니다. 지금�
 - [ch25](../ch25-dependency-graph/README.md): `cargo tree -d`/`-i`, `cargo update`, 쓰지 않는 의존성과 그래프 점검 도구
 - [ch27](../ch27-document-public-interfaces/README.md), [ch29](../ch29-listen-to-clippy/README.md), [ch30](../ch30-beyond-unit-tests/README.md): `cargo doc`, Clippy, 테스트·벤치마크·퍼즈 테스트
 
-CI에 도구를 올리는 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서, Cargo 명령의 분류와 `cargo metadata` JSON 전체, 사용자 정의 하위 명령(`cargo-<이름>`) 만들기는 Part 3 `ch11-commands-tools`에서, `bindgen`은 [`ch35-bindgen`](../ch35-bindgen/README.md)에서 다룹니다. 이 챕터는 "무엇을 어디에 둘지"의 기준까지만 다룹니다.
+CI에 도구를 올리는 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서, Cargo 명령의 분류와 `cargo metadata` JSON 전체, 사용자 정의 하위 명령(`cargo-<이름>`) 만들기는 [Part 3 ch11](../../part3-cargo/ch11-commands-tools/README.md)에서, `bindgen`은 [`ch35-bindgen`](../ch35-bindgen/README.md)에서 다룹니다. 이 챕터는 "무엇을 어디에 둘지"의 기준까지만 다룹니다.
 
 ## 1. 학습 목표
 
@@ -89,7 +89,7 @@ CI에 도구를 올리는 구성은 [`ch32-continuous-integration`](../ch32-cont
 
 고치는 모드는 사람이 있는 곳, 즉 로컬이나 편집기(저장할 때 서식 맞추기)에 둡니다. 다른 도구도 같은 짝을 가집니다. Clippy는 `cargo clippy -- -D warnings`나 `build.warnings = "deny"`가 검사 모드이고 `cargo clippy --fix`가 고치는 모드입니다([ch29](../ch29-listen-to-clippy/README.md) 2.2·2.4절). `cargo doc`은 `RUSTDOCFLAGS='-D warnings'`를 주어야 경고가 실패가 됩니다([ch27](../ch27-document-public-interfaces/README.md) 2.6절). 이 저장소가 챕터마다 돌리는 검증 명령(`cargo fmt --check`, `cargo clippy -- -D warnings`)도 모두 검사 모드입니다.
 
-**책 이후에 생긴 내장 명령.** 책에 없는 하위 명령 두 가지도 알아 둡니다. `cargo info`(1.82)는 크레이트의 버전, `rust-version`, 라이선스, 저장소, 기능 목록을 보여 줍니다. 저장소 밖에서 `cargo info criterion --offline`을 실행하자 로컬 캐시에 있는 0.8.2의 정보(`rust-version: 1.86`, `license: Apache-2.0 OR MIT`, 기능 목록 등)가 나왔습니다. `--offline`이면 로컬 캐시에 있는 버전만 볼 수 있습니다. `cargo report future-incompatibilities`는 의존성이 받은 장래 호환성 경고를 다시 보여 주며, 보고서가 없으면 `error: no reports are currently available`(종료 코드 101)로 끝났습니다. 자세한 쓰임은 Part 3 `ch11-commands-tools`에서 다룹니다.
+**책 이후에 생긴 내장 명령.** 책에 없는 하위 명령 두 가지도 알아 둡니다. `cargo info`(1.82)는 크레이트의 버전, `rust-version`, 라이선스, 저장소, 기능 목록을 보여 줍니다. 저장소 밖에서 `cargo info criterion --offline`을 실행하자 로컬 캐시에 있는 0.8.2의 정보(`rust-version: 1.86`, `license: Apache-2.0 OR MIT`, 기능 목록 등)가 나왔습니다. `--offline`이면 로컬 캐시에 있는 버전만 볼 수 있습니다. `cargo report future-incompatibilities`는 의존성이 받은 장래 호환성 경고를 다시 보여 주며, 보고서가 없으면 `error: no reports are currently available`(종료 코드 101)로 끝났습니다. 자세한 쓰임은 [Part 3 ch11](../../part3-cargo/ch11-commands-tools/README.md)에서 다룹니다.
 
 **따르지 않아도 되는 경우.** CI가 고친 결과를 커밋이나 PR로 되돌려 주도록 구성했다면 CI에서 고치는 모드를 돌릴 수도 있습니다. 다만 저장소에 쓰기 권한이 필요하고 그 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)의 몫입니다. 또 실행 파일이 필요할 때(테스트, 실행, 배포)는 당연히 `cargo check`가 아니라 `cargo build`입니다.
 
@@ -472,7 +472,7 @@ meta-lint: sample_ws/Cargo.toml (멤버 3개)
 위반 2건
 ```
 
-`cargo run -- Cargo.toml`은 `meta-lint      건너뜀 (publish = false)`와 `위반 없음`을 출력합니다. `ledger-cli`에도 version 없는 path 의존성이 있지만 `publish = false`라 규칙을 적용하지 않습니다. 위반이 있으면 종료 코드 1로 끝나므로 그대로 CI의 검사 단계가 될 수 있습니다(지침 1). sample_ws 자체도 정상적인 워크스페이스입니다. `cd sample_ws && cargo run -p ledger-cli`는 `월급: 2500000원`, `월세: -700000원`, `항목 2개, 잔액 1800000원`을 출력합니다. 이 프로그램을 `cargo meta-lint`처럼 부르는 하위 명령으로 만드는 방법은 Part 3 `ch11-commands-tools`에서 다룹니다.
+`cargo run -- Cargo.toml`은 `meta-lint      건너뜀 (publish = false)`와 `위반 없음`을 출력합니다. `ledger-cli`에도 version 없는 path 의존성이 있지만 `publish = false`라 규칙을 적용하지 않습니다. 위반이 있으면 종료 코드 1로 끝나므로 그대로 CI의 검사 단계가 될 수 있습니다(지침 1). sample_ws 자체도 정상적인 워크스페이스입니다. `cd sample_ws && cargo run -p ledger-cli`는 `월급: 2500000원`, `월세: -700000원`, `항목 2개, 잔액 1800000원`을 출력합니다. 이 프로그램을 `cargo meta-lint`처럼 부르는 하위 명령으로 만드는 방법은 [Part 3 ch11](../../part3-cargo/ch11-commands-tools/README.md)에서 다룹니다.
 
 ## 4. 자주 하는 실수
 
