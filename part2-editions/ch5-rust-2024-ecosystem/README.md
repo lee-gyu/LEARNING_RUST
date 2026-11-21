@@ -407,7 +407,7 @@ pub fn greeting(formal: bool) -> … {      pub fn greeting(formal: bool) -> …
 | 2021의 프렐류드 추가, 기능 리졸버 2, 배열 `IntoIterator` | [Part 2 ch3](../ch3-rust-2021/README.md) |
 | `cargo fix --edition`으로 이 챕터의 변경을 자동으로 고치는 절차 | [Part 2 ch6](../ch6-migration-practice/README.md) |
 | 의존성 해석, 매니페스트와 타깃, 워크스페이스 상속의 상세 | [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md), [ch3](../../part3-cargo/ch3-manifest-targets/README.md), [ch4](../../part3-cargo/ch4-workspaces/README.md) |
-| 기능(feature)의 상세 | Part 3 `ch5-features` |
+| 기능(feature)의 상세 | [Part 3 ch5](../../part3-cargo/ch5-features/README.md) |
 | 문서 주석과 문서 테스트 작성법, rustdoc 상세 | Part 4 (`ch3-doc-tests` 등) |
 | unsafe와 비동기 시그널 안전성의 깊은 내용 | Part 10 |
 

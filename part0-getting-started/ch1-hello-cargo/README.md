@@ -239,7 +239,7 @@ $ ./target/release/hello_cargo
 Hello, world!
 ```
 
-`Finished` 줄의 `dev`와 `release`는 빌드 설정 묶음인 프로필(profile)의 이름입니다(Part 3에서 자세히 다룹니다). 개발 중에는 코드를 고치고 다시 빌드하는 일이 잦으므로 `dev` 프로필은 최적화를 하지 않고(`unoptimized`) 디버깅 정보를 넣어(`debuginfo`) 빨리 컴파일합니다. 완성된 프로그램을 배포하거나 성능을 잴 때는 컴파일이 더 오래 걸리더라도 빠르게 실행되는 `release` 프로필을 씁니다.
+`Finished` 줄의 `dev`와 `release`는 빌드 설정 묶음인 프로필(profile)의 이름입니다([Part 3 ch6](../../part3-cargo/ch6-profiles-build-performance/README.md)에서 자세히 다룹니다). 개발 중에는 코드를 고치고 다시 빌드하는 일이 잦으므로 `dev` 프로필은 최적화를 하지 않고(`unoptimized`) 디버깅 정보를 넣어(`debuginfo`) 빨리 컴파일합니다. 완성된 프로그램을 배포하거나 성능을 잴 때는 컴파일이 더 오래 걸리더라도 빠르게 실행되는 `release` 프로필을 씁니다.
 
 | 명령 | 하는 일 | 실행 파일 위치 |
 | --- | --- | --- |

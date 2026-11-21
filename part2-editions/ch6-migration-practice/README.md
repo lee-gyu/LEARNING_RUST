@@ -648,8 +648,8 @@ process requires following these steps:
 | 주제 | 다루는 곳 |
 | --- | --- |
 | 각 에디션 변경의 원리 | Part 2 [ch2](../ch2-rust-2015-2018/README.md)~[ch5](../ch5-rust-2024-ecosystem/README.md) |
-| 매니페스트, 워크스페이스, 기능의 상세 | [Part 3 ch3](../../part3-cargo/ch3-manifest-targets/README.md), [ch4](../../part3-cargo/ch4-workspaces/README.md), `ch5-features` |
-| 빌드 스크립트 | Part 3 `ch8-build-scripts` |
+| 매니페스트, 워크스페이스, 기능의 상세 | [Part 3 ch3](../../part3-cargo/ch3-manifest-targets/README.md), [ch4](../../part3-cargo/ch4-workspaces/README.md), [ch5](../../part3-cargo/ch5-features/README.md) |
+| 빌드 스크립트 | [Part 3 ch8](../../part3-cargo/ch8-build-scripts/README.md) |
 | CI에서 마이그레이션 확인하기 | Part 3 `ch9-testing-ci` |
 | 린트 수준과 우선순위, `[lints]` 테이블 | Part 5 `ch3-lints` |
 | 에디션과 상관없는 `cargo fix`, 진단 메시지 읽기 | Part 6 `ch1-reading-diagnostics` |

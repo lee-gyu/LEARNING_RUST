@@ -243,7 +243,7 @@ examples         libtext_stat.rlib  text-stat       top-words.d
 incremental      longest-line       text-stat.d
 ```
 
-실행 파일 셋과 라이브러리 파일(`libtext_stat.rlib`)이 있습니다. `.d` 파일은 그 산출물이 어느 소스 파일로 만들어졌는지 적은 목록입니다. `build/`에는 크레이트마다의 컴파일 결과가 들어 있습니다. 2.1절의 `--extern`이 가리키던 `…/target/debug/build/<패키지>/<해시>/out/` 아래의 파일이 그것이고, 위 목록의 실행 파일과 `.rlib`은 거기서 꺼내 놓은 것입니다. `incremental/`은 `rustc`가 다음 컴파일을 빠르게 하려고 남기는 캐시입니다. 예제의 실행 파일은 `cargo build --examples`나 `cargo run --example`을 실행하면 `target/debug/examples/` 아래에 생깁니다. `target/` 안의 구조는 Part 3 `ch6-profiles-build-performance`에서 다시 봅니다.
+실행 파일 셋과 라이브러리 파일(`libtext_stat.rlib`)이 있습니다. `.d` 파일은 그 산출물이 어느 소스 파일로 만들어졌는지 적은 목록입니다. `build/`에는 크레이트마다의 컴파일 결과가 들어 있습니다. 2.1절의 `--extern`이 가리키던 `…/target/debug/build/<패키지>/<해시>/out/` 아래의 파일이 그것이고, 위 목록의 실행 파일과 `.rlib`은 거기서 꺼내 놓은 것입니다. `incremental/`은 `rustc`가 다음 컴파일을 빠르게 하려고 남기는 캐시입니다. 예제의 실행 파일은 `cargo build --examples`나 `cargo run --example`을 실행하면 `target/debug/examples/` 아래에 생깁니다. `target/` 안의 구조는 [ch6](../ch6-profiles-build-performance/README.md)에서 다시 봅니다.
 
 ### 2.4 `Cargo.toml`과 `Cargo.lock`
 
@@ -362,7 +362,7 @@ error: could not find `Cargo.toml` in `…` or any parent directory
 
 | 경로 | 내용 |
 | --- | --- |
-| `config.toml` | 모든 패키지에 적용되는 Cargo 설정(Part 3 `ch7-configuration-env`) |
+| `config.toml` | 모든 패키지에 적용되는 Cargo 설정([ch7](../ch7-configuration-env/README.md)) |
 | `credentials.toml` | `cargo login`으로 저장한 레지스트리 토큰. 남에게 보이면 안 되는 파일 |
 | `.crates.toml`, `.crates2.json` | `cargo install`로 설치한 크레이트의 기록. 손으로 고치지 않음 |
 | `bin/` | `cargo install`과 `rustup`이 넣은 실행 파일. `PATH`에 넣어 둘 디렉터리 |

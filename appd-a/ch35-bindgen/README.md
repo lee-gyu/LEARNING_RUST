@@ -23,7 +23,7 @@ libclang은 bindgen 문서의 요구 사항 절대로 설치합니다(macOS는 H
 - [Part 2 ch4](../../part2-editions/ch4-rust-2024-language/README.md) 2.7~2.8절: `unsafe extern` 블록과 `safe fn`/`unsafe fn` 항목
 - [ch26](../ch26-feature-creep/README.md): 기능과 `dep:`, [ch25](../ch25-dependency-graph/README.md) 2.3절: `links` 충돌, [ch29](../ch29-listen-to-clippy/README.md) 2.3절: `#[expect]`와 `#[allow]`
 
-빌드 스크립트 전반은 Part 3 `ch8-build-scripts`에서, FFI의 깊은 내용(콜백, 불투명 타입)은 Part 10 `ch12-ffi-beneath-std`에서, 레이아웃 규칙은 Part 10 `ch2-data-layout`에서, CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서 다룹니다.
+빌드 스크립트 전반은 [Part 3 ch8](../../part3-cargo/ch8-build-scripts/README.md)에서, FFI의 깊은 내용(콜백, 불투명 타입)은 Part 10 `ch12-ffi-beneath-std`에서, 레이아웃 규칙은 Part 10 `ch2-data-layout`에서, CI 구성은 [`ch32-continuous-integration`](../ch32-continuous-integration/README.md)에서 다룹니다.
 
 ## 1. 학습 목표
 

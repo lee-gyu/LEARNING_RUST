@@ -14,7 +14,7 @@
 - [ch4](../ch4-idiomatic-errors/README.md)와 [ch7](../ch7-builders/README.md): 실습에 쓰는 `thiserror`, `anyhow`, `derive_builder`
 - [ch26](../ch26-feature-creep/README.md): 기능 통합과 `cargo tree -e features`
 
-Cargo가 의존성을 해석하는 규칙 전반과 path·git 의존성, `[patch]`는 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서, 빌드 스크립트를 쓰는 법은 Part 3 `ch8-build-scripts`에서 다룹니다. 여기서는 판단에 필요한 만큼만 씁니다.
+Cargo가 의존성을 해석하는 규칙 전반과 path·git 의존성, `[patch]`는 [Part 3 ch2](../../part3-cargo/ch2-dependencies/README.md)에서, 빌드 스크립트를 쓰는 법은 [Part 3 ch8](../../part3-cargo/ch8-build-scripts/README.md)에서 다룹니다. 여기서는 판단에 필요한 만큼만 씁니다.
 
 ## 1. 학습 목표
 
@@ -270,7 +270,7 @@ help: try to adjust your dependencies so that only one package uses the `links =
 failed to select a version for `chime-sys` which could resolve this conflict
 ```
 
-0.2와 0.3은 호환되지 않으므로 보통이면 함께 들어올 두 버전인데, `links` 때문에 해석 단계에서 거절되었습니다. 실험해 보니 `ring-tone`을 `[dev-dependencies]`로 옮겨도 같은 에러가 났습니다. 고치려면 두 쪽이 같은 버전을 쓰게 맞춥니다(연습 3). C 라이브러리를 링크하는 일 자체는 Part 3 `ch8-build-scripts`와 [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)에서 다룹니다.
+0.2와 0.3은 호환되지 않으므로 보통이면 함께 들어올 두 버전인데, `links` 때문에 해석 단계에서 거절되었습니다. 실험해 보니 `ring-tone`을 `[dev-dependencies]`로 옮겨도 같은 에러가 났습니다. 고치려면 두 쪽이 같은 버전을 쓰게 맞춥니다(연습 3). C 라이브러리를 링크하는 일 자체는 [Part 3 ch8](../../part3-cargo/ch8-build-scripts/README.md)와 [`ch34-ffi-boundaries`](../ch34-ffi-boundaries/README.md)에서 다룹니다.
 
 ### 2.4 지침 3: `Cargo.lock`을 커밋하고, 정해 둔 때에 올린다
 

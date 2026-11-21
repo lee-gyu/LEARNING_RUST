@@ -115,7 +115,6 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 ### 2.4 고칠 문서
 
 - Part 0과 Part 1 ch1~ch4에서 **파일 없이 본문에만 인용한 에러 메시지와 `cargo` 출력**은 1.98.1에서 확인한 그대로입니다. 2026-11-20의 재확인은 예제 출력(두 툴체인에서 같음)과 `compile_fail/`의 메시지(문구가 바뀐 곳을 고침), 독립 프로젝트의 빌드·테스트만 다뤘습니다. 해당 챕터를 다시 손볼 때 1.100.0에서 재현해 확인합니다.
-- 범위 정리(writing-guide 7절)에서 상대 링크로 바꿀 곳: `ch5-features`를 이름으로만 가리키는 Part 3 ch2·ch3·ch4, Part 2 ch3, 부록 A ch26. `ch6-profiles-build-performance`를 이름으로만 가리키는 Part 3 ch1(2.3절)·ch3·ch4(2.7절 표), Part 1 ch8, 부록 A ch18·ch20, 그리고 Part 0 ch1의 "(Part 3에서 자세히 다룹니다)". `ch7-configuration-env`를 이름으로만 가리키는 Part 3 ch1·ch2·ch6, Part 0 ch20. `ch8-build-scripts`를 이름으로만 가리키는 Part 1 ch14, Part 2 ch6, Part 3 ch2·ch3·ch5·ch6·ch7, 부록 A ch25·ch34·ch35. Part 3 ch7 2.7절 표의 `OUT_DIR` 행("실행할 때도 있음: 아니요")을 "빌드 스크립트가 있으면 `cargo run`에서도 있음"으로 고칠 것. 바꾼 뒤 이 항목을 지웁니다.
 - 정할 것(선택 사항): 분량이 목표를 넘은 README(Part 0의 여러 챕터, Part 1 ch2·ch4, Part 2 ch4)를 줄일지. Part 1 ch12 `03_split_read_write`가 주고받는 64 MiB를 줄일지. 부록 A의 "책에 없는 지침"을 둘지.
 
 ### 2.5 crates.io의 시점에 기대는 것

@@ -217,7 +217,7 @@ Cargo Book 3.6절에는 설정 키가 표 단위로 모여 있습니다. 이 챕
 
 ### 2.7 Cargo가 크레이트에 알려 주는 환경 변수
 
-방향이 반대인 환경 변수도 있습니다. Cargo는 크레이트를 **컴파일할 때** `rustc` 프로세스에 패키지 정보를 환경 변수로 넣어 줍니다. 코드는 `env!`로 그 값을 읽어 실행 파일에 넣을 수 있습니다. `cargo run`과 `cargo test`로 **실행할 때**는 이 가운데 일부만 들어옵니다(표의 오른쪽 열). Cargo Book 3.7절은 실행할 때도 이 변수들이 들어온다고 적지만, 1.100.0에서 프로그램이 실행 중에 본 것은 `CARGO`, `CARGO_MANIFEST_DIR`·`CARGO_MANIFEST_PATH`, `CARGO_PKG_*`, 그리고 `cargo test`의 통합 테스트에서 `CARGO_BIN_EXE_<이름>`뿐이었습니다.
+방향이 반대인 환경 변수도 있습니다. Cargo는 크레이트를 **컴파일할 때** `rustc` 프로세스에 패키지 정보를 환경 변수로 넣어 줍니다. 코드는 `env!`로 그 값을 읽어 실행 파일에 넣을 수 있습니다. `cargo run`과 `cargo test`로 **실행할 때**는 이 가운데 일부만 들어옵니다(표의 오른쪽 열). Cargo Book 3.7절은 실행할 때도 이 변수들이 들어온다고 적지만, 1.100.0에서 프로그램이 실행 중에 본 것은 `CARGO`, `CARGO_MANIFEST_DIR`·`CARGO_MANIFEST_PATH`, `CARGO_PKG_*`, 그리고 `cargo test`의 통합 테스트에서 `CARGO_BIN_EXE_<이름>`뿐이었습니다. 빌드 스크립트가 없는 패키지에서 잰 것이고, 빌드 스크립트가 있는 패키지는 `OUT_DIR`과 빌드 스크립트가 넣은 값도 실행할 때 들어옵니다([ch8](../ch8-build-scripts/README.md) 2.4절).
 
 | 환경 변수 | 값 | 실행할 때도 있음 |
 | --- | --- | --- |
@@ -232,7 +232,7 @@ Cargo Book 3.6절에는 설정 키가 표 단위로 모여 있습니다. 이 챕
 | `CARGO_PRIMARY_PACKAGE` | 명령줄에서 고른 패키지(`-p` 또는 현재 디렉터리)일 때만 있음 | 아니요 |
 | `CARGO_BIN_EXE_<이름>` | 통합 테스트·벤치마크에만: 이 패키지 실행 파일의 절대 경로 | 예(통합 테스트) |
 | `CARGO_TARGET_TMPDIR` | 통합 테스트·벤치마크에만: 테스트가 쓸 target 디렉터리 안의 임시 디렉터리 | 아니요 |
-| `OUT_DIR` | 빌드 스크립트가 있을 때만: 빌드 스크립트가 결과를 둔 디렉터리(Part 3 `ch8-build-scripts`) | 아니요 |
+| `OUT_DIR` | 빌드 스크립트가 있을 때만: 빌드 스크립트가 결과를 둔 디렉터리([ch8](../ch8-build-scripts/README.md)) | 예(빌드 스크립트가 있을 때) |
 
 - **매니페스트에 없는 값은 빈 문자열입니다.** 변수가 아예 없으면 `env!`가 컴파일 에러를 내므로, Cargo는 적지 않은 키도 빈 문자열로 넣어 줍니다. 예제 01의 `CARGO_PKG_HOMEPAGE`가 `""`인 것이 그 예입니다. `readme`만은 예외입니다. 매니페스트가 `readme`를 적지 않으면 Cargo가 패키지 디렉터리의 `README.md` 등을 찾아 쓰기 때문입니다.
 - **`env!`는 컴파일할 때, `std::env::var`는 실행할 때 읽습니다.** `env!("CARGO_PKG_VERSION")`은 실행 파일에 박힌 문자열이라 어디서 어떻게 실행하든 같습니다. `std::env::var("CARGO_PKG_VERSION")`은 `cargo run`으로 실행했을 때만 값이 있습니다. 프로그램이 자기 버전을 출력하려면 `env!`를 씁니다. [Part 1 ch14](../../part1-standard-lib/ch14-ffi-any-misc/README.md)의 `02_os_string`이 실행할 때 `CARGO_PKG_NAME`을 읽어, 직접 실행하면 `None`이 되는 것을 이미 보였습니다.
@@ -240,7 +240,7 @@ Cargo Book 3.6절에는 설정 키가 표 단위로 모여 있습니다. 이 챕
 - **컴파일할 때 읽은 변수는 Cargo가 기억합니다.** `env!`나 `option_env!`로 읽은 변수의 값이 바뀌면 Cargo는 그 크레이트를 다시 컴파일합니다. `cargo build -v`의 `Dirty` 줄에 `the environment variable GREETING changed`라고 나옵니다(예제 02).
 - [Part 0 ch20](../../part0-getting-started/ch20-web-server-project/README.md) 2.11절이 HTML 파일의 경로를 `env!("CARGO_MANIFEST_DIR")`로 만든 것은, 컴파일할 때의 패키지 디렉터리를 실행 파일에 넣어 두면 어느 디렉터리에서 실행해도 같은 파일을 찾기 때문입니다. 다만 그 경로는 빌드한 컴퓨터의 경로이므로, 실행 파일을 다른 컴퓨터로 옮기면 쓸 수 없습니다.
 
-빌드 스크립트에는 이보다 많은 변수(`TARGET`, `HOST`, `PROFILE`, `OPT_LEVEL`, 켜진 기능마다의 `CARGO_FEATURE_<이름>`, 타깃 정보 `CARGO_CFG_*` 등)가 들어갑니다. 빌드 스크립트는 컴파일된 뒤에 실행되므로 이것들은 `env!`가 아니라 `std::env::var`로 읽습니다. Part 3 `ch8-build-scripts`에서 다룹니다.
+빌드 스크립트에는 이보다 많은 변수(`TARGET`, `HOST`, `PROFILE`, `OPT_LEVEL`, 켜진 기능마다의 `CARGO_FEATURE_<이름>`, 타깃 정보 `CARGO_CFG_*` 등)가 들어갑니다. 빌드 스크립트는 컴파일된 뒤에 실행되므로 이것들은 `env!`가 아니라 `std::env::var`로 읽습니다. [ch8](../ch8-build-scripts/README.md)에서 다룹니다.
 
 ## 3. 예제 안내
 

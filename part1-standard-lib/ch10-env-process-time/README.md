@@ -105,7 +105,7 @@ fn workers_from_env() -> Result<u32, String> {
 
 `P1CH10_WORKERS=` 처럼 **빈 값**으로 설정하면 `Ok("")`가 되어 숫자 변환에서 실패합니다. "없음"과 "비어 있음"을 같게 볼지는 프로그램이 정할 일이므로, 같게 보려면 `Ok(text) if text.is_empty()` 갈래를 따로 둡니다. `vars()`가 UTF-8이 아닌 값에서 패닉한다는 것은 실제로 확인했습니다(4.6절). 예제 01은 그래서 `vars_os()`로 개수만 셉니다.
 
-Cargo가 빌드할 때 설정하는 환경 변수(`CARGO_PKG_VERSION` 등)와 컴파일 시점에 값을 읽는 `env!` 매크로는 Part 3 `ch7-configuration-env`에서 다룹니다. 설정 파일까지 아우르는 설정 관리는 Part 7 `ch6-signals-config-exit-codes`에서 다룹니다.
+Cargo가 빌드할 때 설정하는 환경 변수(`CARGO_PKG_VERSION` 등)와 컴파일 시점에 값을 읽는 `env!` 매크로는 [Part 3 ch7](../../part3-cargo/ch7-configuration-env/README.md)에서 다룹니다. 설정 파일까지 아우르는 설정 관리는 Part 7 `ch6-signals-config-exit-codes`에서 다룹니다.
 
 ### 2.4 환경을 바꾸는 함수는 왜 `unsafe`인가
 

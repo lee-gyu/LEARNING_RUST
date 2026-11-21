@@ -57,8 +57,8 @@
 | 타깃 | `[lib]`, `[[bin]]`, `[[example]]`, `[[test]]`, `[[bench]]` | 2.3절 |
 | 의존성 | `[dependencies]`, `[dev-dependencies]`, `[build-dependencies]`, `[target.….dependencies]`, `[patch]` | [ch2](../ch2-dependencies/README.md) |
 | 린트 | `[lints]` | 2.5절 |
-| 기능 | `[features]` | Part 3 `ch5-features` |
-| 빌드 설정 | `[profile.*]` | Part 3 `ch6-profiles-build-performance` |
+| 기능 | `[features]` | [ch5](../ch5-features/README.md) |
+| 빌드 설정 | `[profile.*]` | [ch6](../ch6-profiles-build-performance/README.md) |
 | 워크스페이스 | `[workspace]` | [ch4](../ch4-workspaces/README.md) |
 | 그 밖 | `[badges]`, `[hints]`, `[replace]` | 아래 설명 |
 
@@ -74,7 +74,7 @@
 | 컴파일에 영향 | `version`, `edition`, `rust-version` | `version`을 빼면 `0.0.0`이 됩니다. `edition`을 빼면 2015입니다([Part 2 ch1](../../part2-editions/ch1-editions-overview/README.md)). `rust-version`은 2.4절 |
 | 타깃 고르기 | `default-run`, `autolib`, `autobins`, `autoexamples`, `autotests`, `autobenches` | 2.3절 |
 | 게시할 때 쓰는 정보 | `description`, `license`, `license-file`, `repository`, `homepage`, `documentation`, `readme`, `keywords`, `categories`, `include`, `exclude`, `publish` | Part 3 `ch10-publishing-semver`. `authors`는 더는 권장하지 않는(deprecated) 키입니다. |
-| 빌드 스크립트 | `build`, `links` | Part 3 `ch8-build-scripts` |
+| 빌드 스크립트 | `build`, `links` | [ch8](../ch8-build-scripts/README.md) |
 | 워크스페이스 | `workspace`, `resolver` | [ch4](../ch4-workspaces/README.md) |
 | 다른 도구 | `metadata` | 아래 설명 |
 
@@ -180,7 +180,7 @@ test     report      tests/report.rs    O     -        -
 | `proc-macro` | 절차적 매크로 라이브러리인가(`[lib]`에만) | `false` |
 | `required-features` | 이 타깃을 빌드하는 데 필요한 기능(`[lib]`에는 효과 없음) | 없음 |
 
-위 출력의 `test`, `doctest`, `doc` 열이 이 표의 기본값 그대로입니다. `c2f`만 `test`가 `-`인 것은 `test = false`를 적었기 때문입니다. `proc-macro`는 [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md)의 `hello_macro`에서 썼고, `required-features`는 Part 3 `ch5-features`에서, `bench`와 벤치마크의 `harness`는 `ch9-testing-ci`에서, `crate-type`의 종류(`cdylib`, `staticlib` 등)는 Part 5 `ch1-rustc-basics`에서 다룹니다.
+위 출력의 `test`, `doctest`, `doc` 열이 이 표의 기본값 그대로입니다. `c2f`만 `test`가 `-`인 것은 `test = false`를 적었기 때문입니다. `proc-macro`는 [Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md)의 `hello_macro`에서 썼고, `required-features`는 [ch5](../ch5-features/README.md)에서, `bench`와 벤치마크의 `harness`는 `ch9-testing-ci`에서, `crate-type`의 종류(`cdylib`, `staticlib` 등)는 Part 5 `ch1-rustc-basics`에서 다룹니다.
 
 **`[lib] name`: 크레이트 이름을 패키지 이름과 다르게.** 패키지 이름은 `unit-tools`이지만 코드에서는 `units::c_to_f`로 씁니다. 만들어지는 파일도 `libunits.rlib`이고, `cargo test`의 문서 테스트 줄도 `Doc-tests units`입니다. 다만 **다른 패키지가 이 패키지를 의존성으로 적을 때는 패키지 이름을 씁니다**(`unit-tools = "0.1"`). 이름이 둘이면 사용자가 헷갈리므로 꼭 필요할 때만 바꿉니다.
 

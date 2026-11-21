@@ -297,7 +297,7 @@ cargo clippy --all-targets --all-features           # 전부
 
 조합을 자동으로 돌려 주는 도구와 CI 구성은 Part 3 `ch9-testing-ci`에서 다룹니다.
 
-**그 밖에.** 빌드 스크립트는 환경 변수 `CARGO_FEATURE_<이름>`(대문자, `-`는 `_`)으로 켜진 기능을 압니다(Part 3 `ch8-build-scripts`). 기능을 더하거나 빼는 것이 어떤 버전 변경에 해당하는지는 `ch10-publishing-semver`에서 다룹니다. crates.io는 새로 게시하는 크레이트의 기능을 300개까지로 제한합니다.
+**그 밖에.** 빌드 스크립트는 환경 변수 `CARGO_FEATURE_<이름>`(대문자, `-`는 `_`)으로 켜진 기능을 압니다([ch8](../ch8-build-scripts/README.md)). 기능을 더하거나 빼는 것이 어떤 버전 변경에 해당하는지는 `ch10-publishing-semver`에서 다룹니다. crates.io는 새로 게시하는 크레이트의 기능을 300개까지로 제한합니다.
 
 ## 3. 예제 안내
 

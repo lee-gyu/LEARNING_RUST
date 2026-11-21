@@ -13,7 +13,7 @@ Cargo의 기능(feature)은 크레이트의 일부를 켜고 끌 수 있게 해 
 - [Part 0 ch7](../../part0-getting-started/ch7-modules/README.md): 모듈, `pub`, `pub use`
 - [ch13](../ch13-default-implementations/README.md): 트레이트의 기본 구현
 
-`[features]` 테이블과 선택적 의존성(optional dependency)의 문법 전반은 Part 3 `ch5-features`에서, `--cfg`와 `--check-cfg`의 상세는 Part 5 `ch5-conditional-compilation`에서 다룹니다. 이 챕터는 판단에 필요한 만큼만 설명합니다.
+`[features]` 테이블과 선택적 의존성(optional dependency)의 문법 전반은 [Part 3 ch5](../../part3-cargo/ch5-features/README.md)에서, `--cfg`와 `--check-cfg`의 상세는 Part 5 `ch5-conditional-compilation`에서 다룹니다. 이 챕터는 판단에 필요한 만큼만 설명합니다.
 
 ## 1. 학습 목표
 

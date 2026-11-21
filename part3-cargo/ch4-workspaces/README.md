@@ -248,7 +248,7 @@ crates/shelf-wip은 멤버인가: 아니요(exclude)
 
 사본에서 루트의 `version`을 `"0.4.0"`으로 한 번만 고치고 `cargo run -q`를 실행하면 첫 줄이 `내 책장 (shelf 0.4.0)`으로 바뀌고, `Cargo.lock`의 세 멤버가 모두 0.4.0이 됩니다.
 
-**의존성 상속.** `[workspace.dependencies]`는 ch2에서 미뤄 둔 표입니다. 버전 요구 사항을 한 곳에만 적으므로 멤버들이 서로 다른 요구 사항을 적어 두 버전이 섞이는 일(ch2 2.6절의 규칙 4)을 막습니다. 멤버 간 path 의존성도 여기에 적어 두면 멤버는 경로를 몰라도 됩니다. 멤버는 물려받으면서 `features`·`default-features`·`optional`을 정할 수 있습니다(Part 3 `ch5-features`). `version`이나 `path` 같은 다른 키를 덧붙이면 `unused manifest key` 경고와 함께 무시됩니다.
+**의존성 상속.** `[workspace.dependencies]`는 ch2에서 미뤄 둔 표입니다. 버전 요구 사항을 한 곳에만 적으므로 멤버들이 서로 다른 요구 사항을 적어 두 버전이 섞이는 일(ch2 2.6절의 규칙 4)을 막습니다. 멤버 간 path 의존성도 여기에 적어 두면 멤버는 경로를 몰라도 됩니다. 멤버는 물려받으면서 `features`·`default-features`·`optional`을 정할 수 있습니다([ch5](../ch5-features/README.md)). `version`이나 `path` 같은 다른 키를 덧붙이면 `unused manifest key` 경고와 함께 무시됩니다.
 
 루트의 표에 적어 놓고 아무 멤버도 물려받지 않는 값은 Cargo가 알려 줍니다. 사본의 루트에 `heck = "0.5"`와 `description = "x"`를 더했을 때의 경고입니다(Cargo 린트 `unused_workspace_dependencies`, `unused_workspace_package_fields`. 둘 다 기본으로 warn).
 
@@ -301,7 +301,7 @@ workspace = true
 | --- | --- | --- |
 | `resolver` | 의존성 해석은 워크스페이스 전체에 대해 한 번 합니다. | 2.3절 |
 | `[patch]`, `[replace]` | 출처를 바꾸는 일은 그래프 전체에 미칩니다. | [ch2](../ch2-dependencies/README.md) 2.7절 |
-| `[profile.*]` | 최적화 수준 같은 빌드 설정은 한 빌드에 하나입니다. | Part 3 `ch6-profiles-build-performance` |
+| `[profile.*]` | 최적화 수준 같은 빌드 설정은 한 빌드에 하나입니다. | [ch6](../ch6-profiles-build-performance/README.md) |
 
 멤버의 `Cargo.toml`에 적으면 무시하고 경고합니다. 사본의 `shelf-cli`에 `[profile.release]`와 `[patch.crates-io]`를 넣었을 때의 경고입니다.
 

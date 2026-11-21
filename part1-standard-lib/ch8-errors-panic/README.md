@@ -356,7 +356,7 @@ match panic::catch_unwind(job) {
 **써도 되는 곳과 안 되는 곳.** `catch_unwind`는 "한 작업의 버그가 프로그램 전체를 멈추지 않게 하는 경계"에 씁니다. 스레드 풀이 작업마다 패닉을 가두거나, 서버가 요청 하나의 패닉을 그 요청의 실패로 바꾸거나, C 코드가 부르는 Rust 함수(FFI)에서 패닉을 에러 코드로 바꾸는 경우입니다. 문서에 따르면 `extern "C"`로 정의한 함수는 패닉하면 자동으로 프로세스를 끝내므로, 끝내지 않고 더 부드럽게 처리하고 싶을 때 `catch_unwind`를 씁니다. 일반적인 에러 처리(다른 언어의 try/catch)로 쓰면 안 됩니다. 문서도 자주 실패할 수 있는 함수에는 `Result`가 맞다고 말합니다.
 
 - 패닉은 버그를 뜻합니다. 예상되는 실패를 패닉으로 알리면 시그니처에서 실패 가능성이 사라지고, 호출한 쪽이 `?`와 `match`로 다룰 수 없습니다.
-- 모든 패닉을 붙잡는다는 보장이 없습니다. `panic = "abort"`로 빌드하면 패닉이 곧 프로세스 종료라서 `catch_unwind`가 아무것도 붙잡지 못합니다. 예제 06을 `rustc --edition 2024 -C panic=abort`로 컴파일해 실행하면 첫 패닉 메시지를 출력한 뒤 종료 코드 134(macOS의 zsh 기준)로 끝납니다. 프로필에서 패닉 전략을 고르는 방법은 Part 3 `ch6-profiles-build-performance`와 Part 5 `ch2-codegen-options`에서 다룹니다.
+- 모든 패닉을 붙잡는다는 보장이 없습니다. `panic = "abort"`로 빌드하면 패닉이 곧 프로세스 종료라서 `catch_unwind`가 아무것도 붙잡지 못합니다. 예제 06을 `rustc --edition 2024 -C panic=abort`로 컴파일해 실행하면 첫 패닉 메시지를 출력한 뒤 종료 코드 134(macOS의 zsh 기준)로 끝납니다. 프로필에서 패닉 전략을 고르는 방법은 [Part 3 ch6](../../part3-cargo/ch6-profiles-build-performance/README.md)와 Part 5 `ch2-codegen-options`에서 다룹니다.
 - 붙잡아도 훅이 메시지를 출력하고, 되감기 비용과 `UnwindSafe` 검토가 따라옵니다.
 
 ### 2.10 백트레이스

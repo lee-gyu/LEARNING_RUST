@@ -18,7 +18,7 @@ Rust 코드가 C 라이브러리를 부르거나 C 프로그램이 Rust 함수�
 
 앞 챕터가 넘긴 것도 받습니다. [ch6](../ch6-newtype-pattern/README.md)의 `#[repr(transparent)]`(2.4절), [ch25](../ch25-dependency-graph/README.md)의 `links` 키를 적는 이유(2.3절), ch16의 "FFI 경계의 unsafe를 래퍼에 가두기"와 [ch17](../ch17-shared-state-parallelism/README.md)의 "C 코드는 `Send`/`Sync` 검사를 받지 않는다"(2.6절), ch18의 FFI 경계를 넘는 패닉(2.8절)입니다.
 
-다음은 뒤로 미룹니다. `CString::into_raw`/`from_raw`의 상세, `CStr::from_ptr`이 돌려주는 참조의 라이프타임, `Option<NonZero<T>>`의 FFI 호환 보장, 콜백과 불투명 타입 선언의 세부는 Part 10 `ch12-ffi-beneath-std`에서, 레이아웃 규칙 전체는 Part 10 `ch2-data-layout`에서, ABI와 링크 방식·크레이트 타입은 Part 9 `ch9-memory-panic-linkage`에서, 빌드 스크립트 전반은 Part 3 `ch8-build-scripts`에서 다룹니다. 헤더에서 선언을 생성하는 일과 손으로 쓴 선언이 어긋났을 때의 재현은 [`ch35-bindgen`](../ch35-bindgen/README.md)이 이 챕터의 `projects/tally_ffi`를 가져가서 다룹니다.
+다음은 뒤로 미룹니다. `CString::into_raw`/`from_raw`의 상세, `CStr::from_ptr`이 돌려주는 참조의 라이프타임, `Option<NonZero<T>>`의 FFI 호환 보장, 콜백과 불투명 타입 선언의 세부는 Part 10 `ch12-ffi-beneath-std`에서, 레이아웃 규칙 전체는 Part 10 `ch2-data-layout`에서, ABI와 링크 방식·크레이트 타입은 Part 9 `ch9-memory-panic-linkage`에서, 빌드 스크립트 전반은 [Part 3 ch8](../../part3-cargo/ch8-build-scripts/README.md)에서 다룹니다. 헤더에서 선언을 생성하는 일과 손으로 쓴 선언이 어긋났을 때의 재현은 [`ch35-bindgen`](../ch35-bindgen/README.md)이 이 챕터의 `projects/tally_ffi`를 가져가서 다룹니다.
 
 ## 1. 학습 목표
 

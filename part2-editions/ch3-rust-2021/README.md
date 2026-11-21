@@ -109,7 +109,7 @@ warning: trait method `try_into` will become ambiguous in Rust 2021
 
 ### 2.3 기본 기능 리졸버가 2가 되었습니다
 
-**기능과 기능 통합.** Cargo의 기능(feature)은 크레이트가 선택해서 켤 수 있게 만든 코드 묶음입니다. 크레이트는 `Cargo.toml`의 `[features]`에 기능 이름을 적고 코드에서 `#[cfg(feature = "이름")]`이나 `cfg!(feature = "이름")`으로 확인하며, 그 크레이트를 쓰는 쪽은 의존성 선언에 `features = ["이름"]`을 적어 켭니다([Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서 tokio의 `features = ["full"]`을 보았습니다). 같은 의존성을 여러 곳에서 다른 기능으로 요청하면 Cargo는 그 크레이트를 한 번만 빌드하면서 요청된 기능을 모두 켭니다. 이것을 기능 통합(feature unification)이라고 하고, 어떤 기능을 켤지 정하는 Cargo의 알고리즘을 기능 리졸버라고 부릅니다. 기능 자체는 Part 3 `ch5-features`에서 자세히 다룹니다.
+**기능과 기능 통합.** Cargo의 기능(feature)은 크레이트가 선택해서 켤 수 있게 만든 코드 묶음입니다. 크레이트는 `Cargo.toml`의 `[features]`에 기능 이름을 적고 코드에서 `#[cfg(feature = "이름")]`이나 `cfg!(feature = "이름")`으로 확인하며, 그 크레이트를 쓰는 쪽은 의존성 선언에 `features = ["이름"]`을 적어 켭니다([Part 0 ch16](../../part0-getting-started/ch16-async/README.md)에서 tokio의 `features = ["full"]`을 보았습니다). 같은 의존성을 여러 곳에서 다른 기능으로 요청하면 Cargo는 그 크레이트를 한 번만 빌드하면서 요청된 기능을 모두 켭니다. 이것을 기능 통합(feature unification)이라고 하고, 어떤 기능을 켤지 정하는 Cargo의 알고리즘을 기능 리졸버라고 부릅니다. 기능 자체는 [Part 3 ch5](../../part3-cargo/ch5-features/README.md)에서 자세히 다룹니다.
 
 **2018에서는.** 기능 리졸버 1은 의존성이 **어디에서** 요청되었든 기능을 모두 합칩니다. 테스트에서만 쓰는 dev-dependency의 기능도, 다른 운영체제에서만 쓰는 의존성의 기능도 일반 빌드에 섞입니다.
 
@@ -385,7 +385,7 @@ warning: the meaning of the `pat` fragment specifier is changing in Rust 2021, w
 | 2024 에디션의 언어 변화(`gen` 키워드, `#"..."` 예약, `expr` 프래그먼트, 임시값 범위 등) | [Part 2 ch4](../ch4-rust-2024-language/README.md) |
 | 2024 에디션의 프렐류드(`Future`/`IntoFuture`), `resolver = "3"`, `Box<[T]>`의 `IntoIterator` | [Part 2 ch5](../ch5-rust-2024-ecosystem/README.md) |
 | `cargo fix --edition`의 절차와 자동 수정이 넣어 주는 코드 | [Part 2 ch6](../ch6-migration-practice/README.md) |
-| 기능, 의존성 해석의 상세 | Part 3 `ch5-features`, [ch2](../../part3-cargo/ch2-dependencies/README.md) |
+| 기능, 의존성 해석의 상세 | [Part 3 ch5](../../part3-cargo/ch5-features/README.md), [ch2](../../part3-cargo/ch2-dependencies/README.md) |
 | 매크로 프래그먼트 지정자 전체 | Part 9 `ch2-macros` |
 
 ## 3. 예제 안내
@@ -937,6 +937,6 @@ fn main() {
   - [4.10 C-string literals](https://doc.rust-lang.org/edition-guide/rust-2021/c-string-literals.html): 이스케이프와 raw C 문자열의 예.
 - Cargo Book
   - [Dependency Resolution: Feature resolver version 2](https://doc.rust-lang.org/cargo/reference/resolver.html#feature-resolver-version-2)와 [Resolver versions](https://doc.rust-lang.org/cargo/reference/resolver.html#resolver-versions): 리졸버 2가 기능을 합치지 않는 세 경우, 버전별 기본값, 가상 매니페스트의 `resolver`.
-  - [Features: Feature unification](https://doc.rust-lang.org/cargo/reference/features.html#feature-unification): 기능 통합의 원리. Part 3 `ch5-features`에서 자세히 읽습니다.
+  - [Features: Feature unification](https://doc.rust-lang.org/cargo/reference/features.html#feature-unification): 기능 통합의 원리. [Part 3 ch5](../../part3-cargo/ch5-features/README.md)에서 자세히 읽습니다.
 - 표준 라이브러리: [`std::prelude`](https://doc.rust-lang.org/std/prelude/index.html)의 "Prelude contents" 절. 2015·2018은 `v1`, 2021은 여기에 `TryFrom`/`TryInto`/`FromIterator`, 2024는 다시 `Future`/`IntoFuture`를 더한다고 적혀 있습니다.
 - 에러 설명: `rustc --explain E0034`처럼 에러 코드를 넣어 실행하면 터미널에서 설명과 예제를 볼 수 있습니다.

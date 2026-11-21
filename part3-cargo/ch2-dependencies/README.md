@@ -182,7 +182,7 @@ frame = { path = "crates/frame", version = "0.1.0" }
 | `[build-dependencies]` | 빌드 스크립트(`build.rs`)만 | 전해짐(빌드 스크립트를 실행해야 하므로) |
 | `[target.'cfg(…)'.dependencies]` | 조건에 맞는 플랫폼에서만 | 전해짐 |
 
-이 저장소의 챕터 패키지가 `rand`나 `semver`를 `[dev-dependencies]`에 적는 것은 예제(`examples/`)에서만 쓰기 때문입니다. `src/`의 코드에서 dev-dependency를 쓰면 4.1절의 에러가 납니다. 빌드 스크립트는 Part 3 `ch8-build-scripts`에서 다룹니다.
+이 저장소의 챕터 패키지가 `rand`나 `semver`를 `[dev-dependencies]`에 적는 것은 예제(`examples/`)에서만 쓰기 때문입니다. `src/`의 코드에서 dev-dependency를 쓰면 4.1절의 에러가 납니다. 빌드 스크립트는 [ch8](../ch8-build-scripts/README.md)에서 다룹니다.
 
 플랫폼별 의존성(platform-specific dependencies)은 `#[cfg]`와 같은 문법으로 조건을 적습니다.
 
@@ -201,7 +201,7 @@ int_text = { version = "1.0.19", package = "itoa" }
 
 왼쪽의 `int_text`가 코드에서 쓰는 이름이고(`int_text::Buffer`), `package`가 crates.io의 실제 이름입니다. 한 크레이트의 두 버전에 동시에 의존하거나 이름이 같은 두 출처의 크레이트를 함께 쓸 때 필요합니다.
 
-의존성 한 줄에는 이 밖에 `features`·`default-features`·`optional`(Part 3 `ch5-features`)과 `workspace = true`([ch4](../ch4-workspaces/README.md))를 적을 수 있습니다.
+의존성 한 줄에는 이 밖에 `features`·`default-features`·`optional`([ch5](../ch5-features/README.md))과 `workspace = true`([ch4](../ch4-workspaces/README.md))를 적을 수 있습니다.
 
 ### 2.5 의존성을 다루는 명령
 
@@ -290,7 +290,7 @@ replace-with = "practice-registry"
 directory = "vendor"
 ```
 
-"crates.io를 찾을 일이 생기면 `vendor/` 디렉터리에서 찾으라"는 설정입니다(소스 교체, Cargo Book 3.3.2 Source Replacement). 패키지 가까이에 두는 `.cargo/config.toml` 자체는 Part 3 `ch7-configuration-env`에서 다룹니다. `vendor/` 아래에는 `이름-버전/` 디렉터리마다 그 버전의 `Cargo.toml`과 `src/lib.rs`, 그리고 Cargo가 요구하는 `.cargo-checksum.json`이 들어 있습니다. 모두 이 실습을 위해 만든 가상의 크레이트이며, 실제 crates.io의 같은 이름 크레이트와는 관계가 없습니다.
+"crates.io를 찾을 일이 생기면 `vendor/` 디렉터리에서 찾으라"는 설정입니다(소스 교체, Cargo Book 3.3.2 Source Replacement). 패키지 가까이에 두는 `.cargo/config.toml` 자체는 [ch7](../ch7-configuration-env/README.md)에서 다룹니다. `vendor/` 아래에는 `이름-버전/` 디렉터리마다 그 버전의 `Cargo.toml`과 `src/lib.rs`, 그리고 Cargo가 요구하는 `.cargo-checksum.json`이 들어 있습니다. 모두 이 실습을 위해 만든 가상의 크레이트이며, 실제 crates.io의 같은 이름 크레이트와는 관계가 없습니다.
 
 | 크레이트 | 버전 | 내용 |
 | --- | --- | --- |

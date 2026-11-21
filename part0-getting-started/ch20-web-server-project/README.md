@@ -619,7 +619,7 @@ fn page_path(filename: &str) -> PathBuf {
 }
 ```
 
-- `env!`는 **컴파일할 때** 환경 변수를 읽어 문자열 리터럴로 바꾸는 매크로입니다(ch12의 `env::var`는 실행할 때 읽습니다). `CARGO_MANIFEST_DIR`은 Cargo가 컴파일할 때 알려 주는, 이 패키지의 `Cargo.toml`이 있는 디렉터리의 절대 경로입니다. Cargo가 설정하는 환경 변수는 Part 3 `ch7-configuration-env`에서 다룹니다.
+- `env!`는 **컴파일할 때** 환경 변수를 읽어 문자열 리터럴로 바꾸는 매크로입니다(ch12의 `env::var`는 실행할 때 읽습니다). `CARGO_MANIFEST_DIR`은 Cargo가 컴파일할 때 알려 주는, 이 패키지의 `Cargo.toml`이 있는 디렉터리의 절대 경로입니다. Cargo가 설정하는 환경 변수는 [Part 3 ch7](../../part3-cargo/ch7-configuration-env/README.md)에서 다룹니다.
 - `Path::join`은 경로 구분자(`/` 또는 `\`)를 운영체제에 맞게 붙여 줍니다.
 - 그래서 저장소 루트에서 `--manifest-path`로 실행하든, `cd /`한 뒤 `target/debug/hello-server`를 직접 실행하든 같은 파일을 찾습니다. 이 환경에서 두 경우 모두 확인했습니다.
 - 한계도 있습니다. 컴파일할 때의 절대 경로가 실행 파일에 박히므로, 프로젝트 디렉터리를 옮기거나 실행 파일만 다른 컴퓨터로 가져가면 다시 찾지 못합니다.
