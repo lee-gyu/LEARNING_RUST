@@ -59,6 +59,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch12-modern-cpp-enough](ch12-modern-cpp-enough/) | 모던 C++로 충분하지 않은가: 스마트 포인터·뷰·람다에 남는 수명 버그와 같은 구조의 Rust 컴파일 에러, `std::function`과 `Box<dyn FnMut()>`의 `'static`, 새니타이저·정적 분석·libc++ 하드닝이 잡는 것과 놓치는 것, C++26의 안전성 작업, 안전이 기본값이라는 뜻, C++가 더 나은 점, 커널·임베디드의 C |
 | [ch13-headers-build-templates](ch13-headers-build-templates/) | 헤더·빌드·템플릿: 헤더와 전방 선언이 없는 이유(크레이트가 컴파일 단위), 전처리기의 대체물, C 매크로의 중복 평가·이름 가로채기와 `macro_rules!`, Cargo, 템플릿과 제네릭(검사 시점, concept, const 제네릭과 한계, 가변 인자), ODR과 `no_mangle` 충돌, 네임스페이스·`friend`, 조건부 컴파일 |
 | [ch14-performance](ch14-performance/) | 성능: C/C++와 같은 백엔드에서 `&mut`가 주는 `noalias`, 비용 없는 추상화, 경계 검사와 오버플로 검사, 느린 프로그램의 흔한 원인과 할당 세기, 런타임과 GC, 벤치마크를 읽는 법, 바이너리 크기, `HashMap`의 해시 함수, 꼬리 호출이 보장되지 않는 이유, 메모리 사용량 |
+| [ch15-pain-points](ch15-pain-points/) | 어렵다는 말의 정체: 소유권·대여 규칙이 어려운 이유, 대여 에러를 푸는 순서, 거부되는 올바른 코드와 Polonius, 2단계 대여, 연결 리스트·그래프·자기 참조, 컴파일 시간과 `target/` 크기, 디버깅, 긴 에러 메시지 읽기, 버려야 할 습관, 언어의 복잡도 |
 
 ## 질문 색인
 
@@ -198,5 +199,16 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q14.8](ch14-performance/) | `HashMap`은 왜 기본 해시 함수가 느린 편인가요? |
 | [Q14.9](ch14-performance/) | 꼬리 호출 최적화가 있나요? |
 | [Q14.10](ch14-performance/) | 메모리는 얼마나 쓰나요? |
+| [Q15.1](ch15-pain-points/) | Rust는 왜 배우기 어렵다고 하나요? |
+| [Q15.2](ch15-pain-points/) | "대여 검사기와 싸운다"는 것은 어떤 상황이고 어떻게 푸나요? |
+| [Q15.3](ch15-pain-points/) | 컴파일러가 올바른 코드도 거부하나요? |
+| [Q15.4](ch15-pain-points/) | 연결 리스트, 트리, 그래프가 왜 어려운가요? |
+| [Q15.5](ch15-pain-points/) | 자기 자신의 필드를 가리키는 구조체는 왜 만들 수 없나요? |
+| [Q15.6](ch15-pain-points/) | 컴파일이 왜 느리고 어떻게 줄이나요? |
+| [Q15.7](ch15-pain-points/) | `target/` 디렉터리는 왜 이렇게 큰가요? |
+| [Q15.8](ch15-pain-points/) | 디버깅은 어떻게 하나요? |
+| [Q15.9](ch15-pain-points/) | 긴 에러 메시지는 어떻게 읽나요? |
+| [Q15.10](ch15-pain-points/) | 다른 언어에서 가져오면 안 되는 습관은 무엇인가요? |
+| [Q15.11](ch15-pain-points/) | 언어가 점점 복잡해지지 않나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

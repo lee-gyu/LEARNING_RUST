@@ -409,6 +409,10 @@ name = "faq-ch14-performance"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch15-pain-points"
+version = "0.0.0"
+
+[[package]]
 name = "faq-ch2-memory-safety"
 version = "0.0.0"
 
