@@ -50,6 +50,8 @@
 - README에 출력이나 메시지를 옮긴 뒤에는 저장된 파일을 다시 확인합니다. `\ub3c4`처럼 역슬래시 u 이스케이프가 든 출력은 쓰는 과정에서 글자로 바뀐 적이 있으므로 `grep`으로 역슬래시가 남았는지 보고, 실제 출력 파일과 README 블록을 스크립트로 대조합니다(대조할 출력 목록에 바이너리·독립 프로젝트의 출력도 넣습니다).
 - 백틱이 든 메시지를 인라인으로 인용할 때는 `` `` 내용 `` ``처럼 백틱 두 개와 공백으로 감쌉니다(세 개로 열면 세 개로 닫아야 함). 사이트가 쓰는 파서로 렌더링해 코드 밖에 남은 백틱을 찾으면 잡힙니다. `web/node_modules/.pnpm/` 아래의 `micromark`와 `micromark-extension-gfm-table`로 README를 HTML로 바꾸고 `<pre>`·`<code>`를 지운 뒤 백틱이 남은 줄을 셉니다.
 - 연습 문제가 `Compiling` 줄 수처럼 빌드 상태에 따라 달라지는 것을 물으면 시작 상태(새 사본, `cargo clean`)를 문제에 적습니다. 앞 연습의 변경이 뒤 연습의 답을 바꾸는지도 확인합니다.
+- `File`·`TcpStream`처럼 버려질 때 정리되는 표준 타입이 모두 `Drop`을 직접 구현하는 것은 아닙니다(안의 `OwnedFd` 등이 구현. `MutexGuard`는 직접 구현). "`Drop`을 구현한다"고 쓰기 전에 문서의 Trait Implementations나 `T: Drop` 바운드로 확인합니다(부록 B ch5 검증).
+- `compile_fail`의 메서드 이름은 실제로 컴파일해 보고 정합니다. `Option<String>`에 `len()`을 부르면 E0599가 아니라 E0624(``method `len` is private``)가 납니다(1.100.0, 부록 B ch5).
 
 ### 1.4 Cargo 관련 사실 (cargo 1.100.0에서 확인, Part 3의 남은 챕터용)
 
@@ -82,6 +84,8 @@
 - `Vec`·`String`이 용량을 늘릴 때 버퍼가 언제나 옮겨지는 것은 아닙니다. macOS에서 `Vec<i32>` 10만 개 이상은 할당기가 제자리에서 늘렸습니다(부록 B ch4 검증). "옮기고 옛 버퍼를 해제할 수 있다"로 쓰고, 옮겨졌는지를 출력하는 예제는 만들지 않습니다. 1.100.0 `Vec` 문서는 `capacity()`가 요청한 값 이상이라고만 보장하므로 `vec![..]` 직후 용량이 원소 수와 같다는 것은 현재 동작입니다.
 - `&T`는 용어 메모대로 "불변 참조"로 씁니다. 컴파일러 메시지에는 "shared reference"로 나오므로, 메시지를 인용하는 곳에서 둘을 이어 줍니다.
 - 회사 블로그의 "N% 절감" 같은 수치는 바로 뒤 문장이 그 원인을 무엇으로 드는지 확인합니다. 같은 글의 다른 지표(지연 시간 등)에 붙은 원인 설명을 옮겨 붙인 적이 있습니다(부록 B ch1, Cloudflare). 한정어("중간 크기 이상의 변경에서" 등)가 어느 수치에 붙는지도 봅니다.
+- 질문 표의 한 줄 답과 짧은 답에 "다른 점"을 쓸 때는 같은 소절의 비교 표와 칸마다 대조합니다. 부록 B ch5 검증에서 짧은 답이 자기 표와 어긋난 곳이 둘 있었습니다(Kotlin `T?`도 컴파일 에러인데 "경고가 아니라 에러"를 다른 점으로 듦, Java checked exception보다 약한 강제를 "무시하기 어렵다"고 씀).
+- 겹치는 시연을 찾을 때는 Part 0만이 아니라 앞 부록 B 챕터의 예제, Part 1·부록 A의 같은 주제 챕터도 봅니다. 부록 B ch5에서 ch1 예제 01, Part 0 ch9 예제 05, Part 0 ch14 예제 04, Part 0 ch15 예제 05와 겹친 시연을 검증에서야 찾았습니다.
 
 ## 2. 후속 조치
 
@@ -103,7 +107,6 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch5-no-null-no-exceptions` | 파일·잠금 같은 메모리 밖 자원의 정리를 `try`/`finally`·`defer`·`with`와 비교(부록 B ch1 Q1.1) |
 | 부록 B `ch8-concurrency-async` | ch1 예제 03 끝 주석의 두 변형: 스코프 스레드가 `Mutex` 없이 합계를 빌려 고치면 E0499, `move` 클로저로 고치면 `usize`가 복사되어 합계 0(경고 ``value captured by `total` is never read``). `move` 없는 클로저가 `&T` 타입 지역 변수를 쓰면 그 변수가 아니라 `*x`를 캡처하므로, 스코프 스레드에서 `chunk: &[T]`만 쓰는 클로저는 `move` 없이 컴파일됨(값 변수를 빌리면 E0373). Go 경쟁 검출기와 메모리 모델 비교(부록 B ch1 Q1.8) |
 | 부록 B `ch10-undefined-behavior` | ch2가 확인한 타입 안전성 사실(1.100.0): `&u32 as &f32`는 E0605(ch2 4.2절의 compile_fail), 원시 포인터로 거친 캐스트는 컴파일되고 역참조만 E0133, `unsafe { transmute(u32) }`는 `unnecessary_transmutes` 경고와 `f32::from_bits` 제안. C의 미초기화 변수 읽기(ch2 4.1절 E0381이 미룸) |
 | 부록 B `ch14-performance` | 디버그 빌드로 속도를 비교하는 실수, Discord·Cloudflare 사례를 읽는 법(구조 변경을 함께 함)(부록 B ch1 4절, Q1.3) |
@@ -370,6 +373,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (Part 3) configuration / config file / alias / config-relative path / command-line override | 설정 / 설정 파일 / 별칭 / 설정 기준 상대 경로 / 명령줄 `--config` |
 | (Part 3) build cache / target directory / build directory / final·intermediate artifact / dep-info / unit (timings) / critical path / frontend | 빌드 캐시 / target 디렉터리 / build 디렉터리 / 최종 산출물·중간 산출물 / `.d` 파일(dep-info) / 단위 / 가장 긴 의존 경로(critical path) / 프런트엔드 |
 | (부록 B) memory safety / garbage collector / null pointer optimization | 메모리 안전성 / 가비지 컬렉터(GC) / 널 포인터 최적화 |
+| (부록 B) platform type (Kotlin) / union type (TypeScript) / stack trace | 플랫폼 타입(처음에 "Java에서 온 값이라 Kotlin이 null 여부를 모르는 타입"으로 풀어 씀) / 합집합 타입 / 스택 추적(Rust에서는 백트레이스) |
 | (부록 B) admired / desired (Stack Overflow 설문) | admired / desired(번역하지 않고 처음에 뜻을 풀어 씀) |
 | (부록 B) spatial / temporal / type / initialization / data-race safety, class (of memory safety bugs) | 공간적 / 시간적 / 타입 / 초기화 / 데이터 경쟁 안전성, 종류("갈래"는 match arm이므로 쓰지 않음) |
 | overflow (정수) | 오버플로("넘침"은 쓰지 않음. 부록 A ch18 등에 "넘침"이 남아 있음) |

@@ -49,6 +49,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch2-memory-safety](ch2-memory-safety/) | 메모리 안전성의 다섯 종류(공간·시간·타입·초기화·데이터 경쟁)와 Rust가 막는 장치와 시점, 메모리 버그가 취약점이 되는 과정(Heartbleed 모양의 버그), "70%"를 읽는 법, GC 언어와의 차이, 패닉의 안전성, 정수 실수를 드러내는 장치, Android의 감소 자료를 읽는 법 |
 | [ch3-safety-limits](ch3-safety-limits/) | Rust가 보장하지 않는 것(논리 오류, 메모리 누수, 교착 상태와 경쟁 조건, 정수 오버플로, 패닉과 스택 오버플로로 인한 중단), `unsafe`의 범위와 안전한 API 안에 가두기, 표준 라이브러리의 검증, Rust 코드의 CVE 사례, 공급망과 컴파일러의 건전성 버그 |
 | [ch4-memory-without-gc](ch4-memory-without-gc/) | GC 없는 메모리 관리: Java식 공유를 이동·빌림·복제·`Rc<RefCell<T>>`로 옮기기, `Copy`의 기준, 참조와 C 포인터·Java 참조의 차이, 가변 참조가 하나뿐인 이유, `clone`의 비용, `Rc`/`Arc`와 추적 GC, 라이프타임 표기, GC가 없어서 얻고 잃는 것, 값이 그 자리에 놓이는 메모리 배치 |
+| [ch5-no-null-no-exceptions](ch5-no-null-no-exceptions/) | null도 예외도 없이: Kotlin·TS의 null 연산자를 `Option`으로 옮기기, Java `Optional`·Kotlin `T?`와의 차이, `Result`와 checked exception·Go `error`, `?`, `finally`·`defer`·`with` 자리의 `Drop`(파일·잠금), 패닉과 예외, `unwrap`의 자리, 에러 타입 고르기, 스택 추적 |
 
 ## 질문 색인
 
@@ -92,5 +93,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q4.8](ch4-memory-without-gc/) | 라이프타임 `'a`는 무엇이고 왜 직접 써야 하나요? |
 | [Q4.9](ch4-memory-without-gc/) | GC가 없어서 얻는 것과 잃는 것은 무엇인가요? |
 | [Q4.10](ch4-memory-without-gc/) | 값을 스택에 둘지 힙에 둘지 직접 골라야 하나요? |
+| [Q5.1](ch5-no-null-no-exceptions/) | `null`이 없으면 "값이 없음"을 어떻게 표현하나요? |
+| [Q5.2](ch5-no-null-no-exceptions/) | `Option`은 Java의 `Optional`, Kotlin의 `T?`, TypeScript의 `T \| undefined`와 무엇이 다른가요? |
+| [Q5.3](ch5-no-null-no-exceptions/) | 예외가 없는데 에러는 어떻게 알리고 처리하나요? |
+| [Q5.4](ch5-no-null-no-exceptions/) | `Result`는 Java의 checked exception, Go의 `if err != nil`과 무엇이 다른가요? |
+| [Q5.5](ch5-no-null-no-exceptions/) | `?` 연산자는 무엇을 하나요? |
+| [Q5.6](ch5-no-null-no-exceptions/) | `try`/`catch`/`finally`에 해당하는 것은 무엇인가요? |
+| [Q5.7](ch5-no-null-no-exceptions/) | 패닉은 예외인가요? 잡을 수 있나요? |
+| [Q5.8](ch5-no-null-no-exceptions/) | `unwrap()`은 써도 되나요? |
+| [Q5.9](ch5-no-null-no-exceptions/) | 에러 타입을 매번 직접 만들어야 하나요? |
+| [Q5.10](ch5-no-null-no-exceptions/) | 에러가 난 위치(스택 추적)는 어떻게 보나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
