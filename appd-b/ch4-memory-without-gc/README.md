@@ -133,7 +133,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **다른 언어에서는** GC 언어에서는 같은 객체를 여러 참조가 언제든 고칠 수 있고, 고치는 도중의 상태를 다른 쪽이 보는 문제는 프로그래머가 피해야 합니다. Java의 `ArrayList`는 반복자를 만든 뒤 리스트의 구조가 바뀌면 그 반복자가 `ConcurrentModificationException`을 던지는(fail-fast) 방식으로 일부를 실행 중에 잡습니다(Java API 문서). C++에서는 같은 상황이 미정의 동작(undefined behavior)이 됩니다([ch9](../ch9-c-memory-errors/README.md)의 반복자 무효화).
 
-**오해와 한계** 이 규칙은 보수적이라, 서로 다른 필드나 슬라이스의 겹치지 않는 부분을 동시에 고치는 것처럼 실제로는 안전한 코드도 거부할 때가 있습니다. `split_at_mut`처럼 겹치지 않음을 보증하는 API나 필드를 나눠 빌리는 방법으로 풉니다([부록 A ch15](../../appd-a/ch15-borrow-checker/README.md), ch15 `ch15-pain-points`).
+**오해와 한계** 이 규칙은 보수적이라, 서로 다른 필드나 슬라이스의 겹치지 않는 부분을 동시에 고치는 것처럼 실제로는 안전한 코드도 거부할 때가 있습니다. `split_at_mut`처럼 겹치지 않음을 보증하는 API나 필드를 나눠 빌리는 방법으로 풉니다([부록 A ch15](../../appd-a/ch15-borrow-checker/README.md), [ch15](../ch15-pain-points/README.md)).
 
 **더 읽기** Part 0 ch4 2.9절, 4.2절(가변 참조 둘, E0499), ch8 2.6절 / [ch8](../ch8-concurrency-async/README.md)(스레드 사이의 같은 규칙)
 
@@ -147,7 +147,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **오해와 한계** 대여 검사기(borrow checker)의 에러를 없애려고 아무 생각 없이 `clone()`을 넣으면, 원래 같은 값을 고쳐야 하는 코드가 사본을 고치는 버그가 됩니다(예제 01의 3번처럼 원본은 그대로 남습니다). 복제가 의미상 맞는지 먼저 봅니다.
 
-**더 읽기** [부록 A ch20](../../appd-a/ch20-avoid-over-optimizing/README.md) / ch14 `ch14-performance`
+**더 읽기** [부록 A ch20](../../appd-a/ch20-avoid-over-optimizing/README.md) / [ch14](../ch14-performance/README.md)
 
 ### Q4.7 `Rc`와 `Arc`는 GC가 아닌가요? 순환 참조는 어떻게 되나요?
 
@@ -157,7 +157,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **다른 언어에서는** Python의 기본 구현은 Rust의 `Rc`처럼 참조 카운팅으로 객체를 해제하고, 그 위에 순환 참조를 거두는 GC를 따로 둡니다(Python `gc` 모듈 문서). Rust에는 그 순환 수거기가 없다는 것이 차이입니다. Java·C#·Go의 추적 GC는 순환이 있어도 닿을 수 없으면 거둡니다.
 
-**오해와 한계** `Rc`를 쓰면 "GC 언어처럼 편하게" 쓸 수 있을 것 같지만, 참조 수 세기 비용이 있고 순환을 프로그래머가 끊어야 하며 고치려면 `RefCell`이 더 필요합니다. 그래프처럼 순환이 본질인 자료구조는 인덱스로 가리키는 방법이 더 나을 때가 많습니다(ch15 `ch15-pain-points`, [부록 A ch15](../../appd-a/ch15-borrow-checker/README.md)).
+**오해와 한계** `Rc`를 쓰면 "GC 언어처럼 편하게" 쓸 수 있을 것 같지만, 참조 수 세기 비용이 있고 순환을 프로그래머가 끊어야 하며 고치려면 `RefCell`이 더 필요합니다. 그래프처럼 순환이 본질인 자료구조는 인덱스로 가리키는 방법이 더 나을 때가 많습니다([ch15](../ch15-pain-points/README.md), [부록 A ch15](../../appd-a/ch15-borrow-checker/README.md)).
 
 **더 읽기** Part 0 ch14 2.7·2.10·2.11절 / ch3 Q3.4
 
@@ -190,11 +190,11 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 | --- | --- |
 | 안전함을 미리 보여야 하는 수고 | Google 보고서는 라이프타임과 대여 검사기가 넓은 범위의 코드에서 실행 비용 없이 컴파일 시간에 안전을 보장하는 대신, 코드가 안전함을 보이려면 프로그래머가 미리 더 많은 노력을 들여야 한다고 씁니다. 정적 타입이 동적 타입보다 미리 드는 노력이 많은 것과 비슷하다는 비유도 덧붙입니다 |
 | 순환하는 자료구조의 불편 | 같은 Google 보고서는 대여 검사기의 제약이 순환 참조 그래프 같은 구조를 막고, 표준 라이브러리가 참조 카운팅으로 실행 중 비용을 치르며 이를 허용한다고 씁니다 |
-| 보수적인 검사 | 안전한 코드도 규칙으로 증명할 수 없으면 거부(Q4.5, ch15 `ch15-pain-points`) |
+| 보수적인 검사 | 안전한 코드도 규칙으로 증명할 수 없으면 거부(Q4.5, [ch15](../ch15-pain-points/README.md)) |
 
 **오해와 한계** GC가 나쁘다는 뜻이 아닙니다. 지연 시간과 메모리 사용이 중요하지 않은 프로그램에서는 GC 언어가 더 생산적인 선택일 수 있습니다(ch1 Q1.6). 또 해제 시점이 정해진 대신, 큰 자료구조가 버려지는 자리에서는 그 안의 값을 해제하는 비용이 한꺼번에 듭니다.
 
-**더 읽기** ch1 Q1.1, Q1.6 / ch2 Q2.5 / ch14 `ch14-performance`
+**더 읽기** ch1 Q1.1, Q1.6 / ch2 Q2.5 / [ch14](../ch14-performance/README.md)
 
 ### Q4.10 값을 스택에 둘지 힙에 둘지 직접 골라야 하나요?
 

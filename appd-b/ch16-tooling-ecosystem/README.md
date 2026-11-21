@@ -176,7 +176,7 @@ npm과 pip의 칸에서 "—"는 이 챕터가 공식 문서로 확인하지 않
 
 **오해와 한계** C ABI로 경계를 만들면 제네릭, 트레이트 객체, `String`·`Vec` 같은 Rust 타입을 그대로 넘길 수 없고, 넘기는 쪽과 받는 쪽이 메모리 해제 책임을 직접 정해야 합니다. 플러그인을 Rust로만 만들 때도 같은 제약이 있어, 같은 컴파일러로 함께 빌드하거나(정적 링크) WebAssembly 같은 별도의 경계를 쓰는 방법을 고릅니다.
 
-**더 읽기** Part 1 ch7·ch14 / 부록 A ch34, [부록 A ch35](../../appd-a/ch35-bindgen/README.md) / ch17 `ch17-interop-migration`
+**더 읽기** Part 1 ch7·ch14 / 부록 A ch34, [부록 A ch35](../../appd-a/ch35-bindgen/README.md) / [ch17](../ch17-interop-migration/README.md) Q17.2·Q17.4
 
 ### Q16.10 누가 만들고 관리하나요? 라이선스는 무엇인가요?
 
@@ -210,7 +210,7 @@ npm과 pip의 칸에서 "—"는 이 챕터가 공식 문서로 확인하지 않
 
 **다른 언어에서는** Go와 Java는 런타임이 지원하는 플랫폼에서 돕니다. 모바일에서는 그 플랫폼의 주 언어로 앱을 만들고, Rust는 그 안에서 부르는 라이브러리로 쓰는 경우가 많습니다.
 
-**오해와 한계** Tier 2 타깃도 실제로 많이 쓰이지만, 자동 테스트가 늘 돌지는 않으므로 문제가 생기면 사용자가 먼저 발견할 수 있습니다. 웹에서 Rust를 쓰려면 WebAssembly와 JavaScript를 잇는 도구가, 모바일에서는 그 플랫폼의 언어(Kotlin, Swift)와 잇는 바인딩이 필요합니다(ch17 `ch17-interop-migration`).
+**오해와 한계** Tier 2 타깃도 실제로 많이 쓰이지만, 자동 테스트가 늘 돌지는 않으므로 문제가 생기면 사용자가 먼저 발견할 수 있습니다. 웹에서 Rust를 쓰려면 WebAssembly와 JavaScript를 잇는 도구가, 모바일에서는 그 플랫폼의 언어(Kotlin, Swift)와 잇는 바인딩이 필요합니다([ch17](../ch17-interop-migration/README.md)).
 
 **더 읽기** ch12 Q12.7 / 부록 A ch33 / The rustc book "Platform Support"
 

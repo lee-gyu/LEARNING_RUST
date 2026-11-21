@@ -178,7 +178,7 @@ define dso_local void @add_twice(ptr noalias … %a, ptr noalias … readonly �
 
 **다른 언어에서는** C++의 `std::unordered_map`은 기본 해시로 `std::hash`를 쓰고, 그 알고리즘은 표준 라이브러리 구현이 정합니다. 해시 맵을 노린 공격을 막을지는 언어와 구현마다 다르므로, 외부 입력을 키로 받는 맵이라면 쓰는 언어의 기본 해시가 무엇인지 확인해야 합니다.
 
-**오해와 한계** 해시 함수를 바꿀 때는 그 맵의 키를 외부 입력이 정하지 않는지 확인해야 합니다. 웹 요청의 헤더나 매개변수를 키로 쓰는 맵은 기본값을 두는 편이 안전합니다. crates.io의 빠른 해셔(예: `rustc-hash`, `ahash`)는 쓰기 쉽지만 의존성이 하나 늘어납니다(ch16 `ch16-tooling-ecosystem`).
+**오해와 한계** 해시 함수를 바꿀 때는 그 맵의 키를 외부 입력이 정하지 않는지 확인해야 합니다. 웹 요청의 헤더나 매개변수를 키로 쓰는 맵은 기본값을 두는 편이 안전합니다. crates.io의 빠른 해셔(예: `rustc-hash`, `ahash`)는 쓰기 쉽지만 의존성이 하나 늘어납니다([ch16](../ch16-tooling-ecosystem/README.md)).
 
 **더 읽기** Part 0 ch8 / Part 1 ch4 2.11절 / Part 1 ch6
 

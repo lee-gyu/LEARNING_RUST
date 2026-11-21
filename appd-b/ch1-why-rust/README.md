@@ -70,7 +70,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 **오해와 한계**
 
 - "안전하다"는 말의 범위는 정해져 있습니다. 안전한(safe) Rust 코드에는 메모리 오류와 데이터 경쟁이 없다는 뜻이지, 버그가 없다는 뜻이 아닙니다. 논리 오류, 메모리 누수(memory leak), 교착 상태(deadlock)는 막지 않습니다([ch3](../ch3-safety-limits/README.md)).
-- 모든 검사가 컴파일 시간에 끝나는 것은 아닙니다. 배열 인덱싱의 경계 검사처럼 실행 중에 하는 검사가 있고, 비용도 있습니다(02의 [3], ch14 `ch14-performance`).
+- 모든 검사가 컴파일 시간에 끝나는 것은 아닙니다. 배열 인덱싱의 경계 검사처럼 실행 중에 하는 검사가 있고, 비용도 있습니다(02의 [3], [ch14](../ch14-performance/README.md)).
 - 이 설계의 값은 배우는 비용과 컴파일 시간으로 치릅니다(Q1.6).
 
 **더 읽기** Part 0 ch4 2.1절, Part 0 ch13 2.15절, Part 0 ch15 2.1절 / [ch2](../ch2-memory-safety/README.md)(메모리 안전성의 뜻), [ch4](../ch4-memory-without-gc/README.md)(GC 없는 메모리 관리), [ch8](../ch8-concurrency-async/README.md)(데이터 경쟁) / Q1.8
@@ -90,7 +90,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 
 배포가 쉬운 이유는 표준 라이브러리를 포함한 크레이트가 실행 파일 안에 정적으로 링크되기 때문입니다. macOS에서 이 챕터의 예제 실행 파일을 `otool -L target/debug/examples/01_freed_without_gc`로 보면, 동적으로 링크하는 라이브러리는 시스템 라이브러리 `/usr/lib/libSystem.B.dylib` 하나뿐입니다. 대상 컴퓨터에 언어 런타임(JVM, 인터프리터)을 따로 설치할 필요가 없습니다.
 
-**오해와 한계** 쓸 수 있다는 것과 그 분야에서 가장 쉬운 선택이라는 것은 다릅니다. 웹 백엔드는 비동기 런타임과 프레임워크를 고르는 일부터 배워야 하고, 분야에 따라 다른 언어보다 라이브러리가 적을 수 있습니다(Q1.6, ch16 `ch16-tooling-ecosystem`).
+**오해와 한계** 쓸 수 있다는 것과 그 분야에서 가장 쉬운 선택이라는 것은 다릅니다. 웹 백엔드는 비동기 런타임과 프레임워크를 고르는 일부터 배워야 하고, 분야에 따라 다른 언어보다 라이브러리가 적을 수 있습니다(Q1.6, [ch16](../ch16-tooling-ecosystem/README.md)).
 
 **더 읽기** Part 0 ch12, ch20 / Q1.4, Q1.6
 
@@ -131,7 +131,7 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 - 다시 쓴 사례의 개선이 모두 언어 덕은 아닙니다. Cloudflare는 옛 프록시가 NGINX 위에서 Lua 코드를 돌리던 구조였다고 밝히며, CPU·메모리 절감이 Lua 대신 Rust 코드를 쓴 효율과 함께, 헤더를 복사하지 않고 요청 사이의 데이터를 스레드끼리 나누는 새 구조에서 왔다고 설명합니다. 지연 시간 단축은 코드가 빨라서가 아니라 스레드 사이에 연결을 공유하는 구조 덕분이라고 따로 밝힙니다. Discord도 자료구조를 `BTreeMap`으로 바꾸는 등의 최적화와 비동기 런타임 업그레이드를 함께 적었습니다. 두 글 모두 "같은 설계를 언어만 바꿔" 잰 결과가 아닙니다.
 - 메모리 안전성 취약점이 줄어도 다른 종류의 취약점(논리 오류, 인증·권한 실수)은 남습니다. Android 팀도 Rust로 쓴 코드에서 버퍼 오버플로(CVE-2025-48530)가 나왔다가 공개 릴리스 전에 잡힌 일을 함께 보고했습니다([ch3](../ch3-safety-limits/README.md) Q3.8).
 
-**더 읽기** [ch2](../ch2-memory-safety/README.md), [ch3](../ch3-safety-limits/README.md), ch14 `ch14-performance`(성능 비교를 읽는 법), ch17 `ch17-interop-migration`(도입 비용)
+**더 읽기** [ch2](../ch2-memory-safety/README.md), [ch3](../ch3-safety-limits/README.md), [ch14](../ch14-performance/README.md)(성능 비교를 읽는 법), [ch17](../ch17-interop-migration/README.md)(도입 비용)
 
 ### Q1.4 실제로 어디에서 쓰이나요?
 
@@ -185,17 +185,17 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 
 | 비용 | 내용 | 더 읽기 |
 | --- | --- | --- |
-| 컴파일 시간과 디스크 | 2025 State of Rust 설문 결과에서도 느린 컴파일과 저장 공간 사용이 여전히 상위의 불편으로 꼽혔습니다. 컴파일러가 검사하고 최적화하는 일이 많고, 제네릭을 쓰인 타입마다 따로 컴파일(단형성화, monomorphization)하기 때문입니다. | [Part 3 ch6](../../part3-cargo/ch6-profiles-build-performance/README.md), [부록 A ch12](../../appd-a/ch12-generics-vs-trait-objects/README.md), ch15 `ch15-pain-points` |
-| 배우는 비용 | 소유권과 라이프타임은 다른 언어에 대응하는 개념이 없어 처음에 시간이 듭니다. 같은 설문에서 언어가 점점 복잡해진다는 걱정도 이어졌습니다. | [ch4](../ch4-memory-without-gc/README.md), ch15 `ch15-pain-points` |
-| 설계를 먼저 정해야 함 | 누가 데이터를 소유하고 누가 빌리는지를 코드에 적어야 하므로, 구조를 자주 뒤엎는 탐색 단계에서는 고칠 곳이 늘어납니다. | ch15 `ch15-pain-points` |
-| 라이브러리 | 분야에 따라 다른 언어보다 성숙한 라이브러리가 적을 수 있습니다. 필요한 크레이트가 있는지 먼저 확인합니다. | ch16 `ch16-tooling-ecosystem` |
-| 기존 코드와의 연결 | 큰 C++·Java 코드베이스와 섞으면 경계를 만드는 비용이 듭니다. | ch17 `ch17-interop-migration` |
+| 컴파일 시간과 디스크 | 2025 State of Rust 설문 결과에서도 느린 컴파일과 저장 공간 사용이 여전히 상위의 불편으로 꼽혔습니다. 컴파일러가 검사하고 최적화하는 일이 많고, 제네릭을 쓰인 타입마다 따로 컴파일(단형성화, monomorphization)하기 때문입니다. | [Part 3 ch6](../../part3-cargo/ch6-profiles-build-performance/README.md), [부록 A ch12](../../appd-a/ch12-generics-vs-trait-objects/README.md), [ch15](../ch15-pain-points/README.md) |
+| 배우는 비용 | 소유권과 라이프타임은 다른 언어에 대응하는 개념이 없어 처음에 시간이 듭니다. 같은 설문에서 언어가 점점 복잡해진다는 걱정도 이어졌습니다. | [ch4](../ch4-memory-without-gc/README.md), [ch15](../ch15-pain-points/README.md) |
+| 설계를 먼저 정해야 함 | 누가 데이터를 소유하고 누가 빌리는지를 코드에 적어야 하므로, 구조를 자주 뒤엎는 탐색 단계에서는 고칠 곳이 늘어납니다. | [ch15](../ch15-pain-points/README.md) |
+| 라이브러리 | 분야에 따라 다른 언어보다 성숙한 라이브러리가 적을 수 있습니다. 필요한 크레이트가 있는지 먼저 확인합니다. | [ch16](../ch16-tooling-ecosystem/README.md) |
+| 기존 코드와의 연결 | 큰 C++·Java 코드베이스와 섞으면 경계를 만드는 비용이 듭니다. | [ch17](../ch17-interop-migration/README.md) |
 
 그래서 다음 조건이 많이 겹칠수록 Rust의 비용이 이득보다 커지기 쉽습니다(이 저장소의 정리이며, 자료에서 온 규칙은 아닙니다): 수명이 짧은 코드, 성능과 메모리가 병목이 아닌 일, 메모리 버그의 피해가 작은 일, Rust 경험자가 없는 팀, 필요한 라이브러리가 다른 언어에만 있는 경우.
 
 **오해와 한계** "맞지 않는다"는 "못 쓴다"가 아닙니다. 작은 도구를 Rust로 쓰는 사람도 많고, 익숙해지면 프로토타입 속도도 달라집니다. 다만 Rust를 처음 도입하는 팀이라면 비용이 가장 크게 느껴지는 곳에서 시작하지 않는 편이 낫습니다(Q1.7).
 
-**더 읽기** ch15 `ch15-pain-points`, ch16 `ch16-tooling-ecosystem` / Q1.7, Q1.8
+**더 읽기** [ch15](../ch15-pain-points/README.md), [ch16](../ch16-tooling-ecosystem/README.md) / Q1.7, Q1.8
 
 ### Q1.7 기존 코드를 전부 다시 써야 하나요?
 
@@ -203,9 +203,9 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 
 **왜 그런가** Android 팀의 2024년 글은 그 근거로, 취약점이 코드가 오래될수록 지수적으로 줄어든다는(반감기가 있다는) 관찰을 듭니다. 취약점은 주로 새로 쓰거나 최근에 고친 코드에서 나오므로, 새 코드가 메모리 안전하면 오래된 코드를 다시 쓰지 않아도 전체 위험이 빠르게 줄어든다는 것입니다. 기술적으로는 Rust 함수를 C에서 부르고 C 함수를 Rust에서 부를 수 있습니다([Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.4절, [부록 A ch34](../../appd-a/ch34-ffi-boundaries/README.md)).
 
-**오해와 한계** 경계에는 비용이 있습니다. C와의 경계는 컴파일러가 검사하지 못하는 `unsafe` 코드이고, C++와는 C만큼 직접 이어지지 않습니다. 어디부터 옮길지, 어떤 도구를 쓸지는 ch17 `ch17-interop-migration`에서 다룹니다.
+**오해와 한계** 경계에는 비용이 있습니다. C와의 경계는 컴파일러가 검사하지 못하는 `unsafe` 코드이고, C++와는 C만큼 직접 이어지지 않습니다. 어디부터 옮길지, 어떤 도구를 쓸지는 [ch17](../ch17-interop-migration/README.md) Q17.7·Q17.2~Q17.4에서 다룹니다.
 
-**더 읽기** ch17 `ch17-interop-migration`, 부록 A ch34
+**더 읽기** [ch17](../ch17-interop-migration/README.md) Q17.1·Q17.7, 부록 A ch34
 
 ### Q1.8 Go, C++와는 어떤 관계이고 무엇을 고르나요?
 
@@ -228,12 +228,12 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 | --- | --- |
 | 지연 시간이 고르게 낮아야 하거나 메모리가 빠듯함, 메모리 버그가 곧 보안 사고 | Rust |
 | 팀 전체가 빨리 읽고 고쳐야 하는 네트워크 서비스, GC 멈춤이 문제 되지 않음 | Go |
-| 큰 C++ 코드베이스나 C++ 전용 라이브러리에 깊게 묶여 있음 | C++를 유지하면서 새 구성 요소부터 Rust를 검토([ch12](../ch12-modern-cpp-enough/README.md), ch17 `ch17-interop-migration`) |
+| 큰 C++ 코드베이스나 C++ 전용 라이브러리에 깊게 묶여 있음 | C++를 유지하면서 새 구성 요소부터 Rust를 검토([ch12](../ch12-modern-cpp-enough/README.md), [ch17](../ch17-interop-migration/README.md)) |
 | 커널, 임베디드, 브라우저 엔진처럼 GC를 둘 수 없음 | Rust 또는 C/C++. 메모리 안전성이 필요하면 Rust |
 
 **오해와 한계** 언어 비교 표는 출발점일 뿐입니다. 실제 결정은 팀이 무엇을 잘 아는지, 어떤 라이브러리가 필요한지, 기존 코드와 어떻게 이어야 하는지에 더 크게 좌우됩니다. C++와의 더 자세한 비교는 [ch11](../ch11-cpp-raii-move/README.md)와 [ch12](../ch12-modern-cpp-enough/README.md)에서, Go를 포함한 동시성 모델의 비교는 [ch8](../ch8-concurrency-async/README.md)에서 합니다.
 
-**더 읽기** [ch8](../ch8-concurrency-async/README.md), [ch11](../ch11-cpp-raii-move/README.md), [ch12](../ch12-modern-cpp-enough/README.md), ch17 `ch17-interop-migration` / Q1.6
+**더 읽기** [ch8](../ch8-concurrency-async/README.md), [ch11](../ch11-cpp-raii-move/README.md), [ch12](../ch12-modern-cpp-enough/README.md), [ch17](../ch17-interop-migration/README.md) / Q1.6
 
 ## 3. 예제 안내
 
@@ -321,12 +321,12 @@ cargo run -p faq-ch1-why-rust --example 03_checked_thread_sharing
 
 | 실수 | 왜 틀렸나 | 바로잡기 | 관련 |
 | --- | --- | --- | --- |
-| 디버그 빌드로 다른 언어와 속도를 비교 | 디버그 빌드는 최적화를 끄고 오버플로 검사 등을 켭니다 | `--release`로 빌드해 비교합니다 | Part 0 ch13 2.15절, ch14 `ch14-performance` |
+| 디버그 빌드로 다른 언어와 속도를 비교 | 디버그 빌드는 최적화를 끄고 오버플로 검사 등을 켭니다 | `--release`로 빌드해 비교합니다 | Part 0 ch13 2.15절, [ch14](../ch14-performance/README.md) |
 | "가장 사랑받는 언어"를 "가장 많이 쓰는 언어"로 읽음 | admired는 Rust를 쓰는 사람 안에서의 비율입니다 | 사용률을 따로 봅니다 | Q1.5 |
 | "취약점의 70%"를 모든 프로젝트에 적용 | C/C++ 대형 코드베이스의 보안 취약점을 센 숫자입니다 | 누가 무엇을 셌는지 확인합니다 | Q1.3, [ch2](../ch2-memory-safety/README.md) |
 | "Rust로 쓰면 버그가 없다"고 기대 | 보장하는 것은 안전한 코드의 메모리 안전성과 데이터 경쟁 없음입니다 | 테스트와 리뷰는 그대로 필요합니다 | Q1.1, [ch3](../ch3-safety-limits/README.md) |
 | 다시 쓴 사례의 개선을 모두 언어 덕으로 봄 | 사례 대부분이 구조도 함께 바꿨습니다 | 무엇을 함께 바꿨는지 원문에서 확인합니다 | Q1.3 |
-| 도입을 "전부 다시 쓰기"로 생각 | 새 코드부터 들이는 방법이 있습니다 | 경계를 정해 조금씩 들입니다 | Q1.7, ch17 `ch17-interop-migration` |
+| 도입을 "전부 다시 쓰기"로 생각 | 새 코드부터 들이는 방법이 있습니다 | 경계를 정해 조금씩 들입니다 | Q1.7, [ch17](../ch17-interop-migration/README.md) |
 | 03의 합계를 `move` 클로저로 고치고 경고를 무시 | `Copy` 값은 스레드마다 복사되어 원래 변수는 그대로입니다 | 경고를 읽고 `Mutex`나 반환값으로 모읍니다 | 03 |
 
 ## 5. 연습 문제

@@ -48,7 +48,7 @@ C++ 개발자에게 Rust의 소유권은 낯설지 않습니다. RAII(자원 획
 
 **다른 언어에서는** C++ Core Guidelines는 소유권을 `unique_ptr`·`shared_ptr` 같은 타입으로 드러내라고 권하지만, 지키는 것은 사람과 도구의 몫입니다. 이 챕터의 compare/01을 `clang-tidy`의 `bugprone-use-after-move` 검사로 돌리면 이동 뒤 사용을 경고하지만, 컴파일러(`-Wall -Wextra`)는 아무 말도 하지 않았습니다.
 
-**오해와 한계** 모든 값에 규칙을 적용하므로, C++에서는 아무렇지 않게 쓰던 구조(서로를 가리키는 객체, 부모를 가리키는 자식)가 Rust에서는 `Rc`·`Weak`나 인덱스로 다시 짜야 할 때가 많습니다([ch4](../ch4-memory-without-gc/README.md) Q4.7, ch15 `ch15-pain-points`).
+**오해와 한계** 모든 값에 규칙을 적용하므로, C++에서는 아무렇지 않게 쓰던 구조(서로를 가리키는 객체, 부모를 가리키는 자식)가 Rust에서는 `Rc`·`Weak`나 인덱스로 다시 짜야 할 때가 많습니다([ch4](../ch4-memory-without-gc/README.md) Q4.7, [ch15](../ch15-pain-points/README.md)).
 
 **더 읽기** Part 0 ch4 2.1~2.3절 / ch4 Q4.1·Q4.4
 
@@ -190,9 +190,9 @@ C++ 개발자에게 Rust의 소유권은 낯설지 않습니다. RAII(자원 획
 
 **다른 언어에서는** C++ 표준 초안([class.copy.elision])은 반환문 같은 경우에 객체 생성을 생략하는 복사 생략(copy elision)을 정합니다. Rust에는 이동 생성자가 없으므로 "생략되지 않으면 사용자 코드가 돈다"는 걱정 자체가 없습니다.
 
-**오해와 한계** 바이트 복사가 생략될지는 최적화에 달려 있어 보장되지 않습니다. 아주 큰 배열 같은 값을 자주 옮기는 코드는 `Box`에 담거나 `&mut`로 넘겨 채우는 편이 나을 수 있지만, 그 판단은 측정으로 합니다(ch14 `ch14-performance`).
+**오해와 한계** 바이트 복사가 생략될지는 최적화에 달려 있어 보장되지 않습니다. 아주 큰 배열 같은 값을 자주 옮기는 코드는 `Box`에 담거나 `&mut`로 넘겨 채우는 편이 나을 수 있지만, 그 판단은 측정으로 합니다([ch14](../ch14-performance/README.md)).
 
-**더 읽기** Part 0 ch4 2.7절 / ch5 Q5.3 / ch14 `ch14-performance`
+**더 읽기** Part 0 ch4 2.7절 / ch5 Q5.3 / [ch14](../ch14-performance/README.md)
 
 ### Q11.9 placement new, 이동할 수 없는 타입, 자기를 가리키는 객체는 어떻게 하나요?
 
