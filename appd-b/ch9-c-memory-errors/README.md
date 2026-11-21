@@ -60,7 +60,7 @@ C와 C++로 일해 온 사람은 메모리 오류의 이름을 이미 압니다.
 
 해제는 마지막 소유자인 `checksum`이 끝날 때 한 번 일어나고, 그 뒤로 `buf`라는 이름은 쓸 수 없습니다. compare/01과 같은 구조, 곧 `drop(값)` 뒤에 그 값을 쓰는 코드가 E0382로 막힌다는 것은 Part 0 ch14 2.6절에서 봤습니다. 값을 빌려 둔 참조가 값보다 오래 살려 하면 E0597이 나고(Part 0 ch10 4.4절, 부록 A ch14), 빌려 준 값을 `drop`에 넘기면 E0505가 납니다(부록 A ch14).
 
-**다른 언어에서는** ch2 Q2.3에서 본 Chromium 프로젝트의 분석에서는 심각도 높은 보안 버그의 약 70%가 메모리 안전성 문제였고, 그 절반이 해제 후 사용이었습니다. C++의 `unique_ptr`는 해제를 자동으로 하지만, `get()`으로 얻은 원시 포인터를 따로 들고 있다가 `reset()` 뒤에 쓰는 일은 막지 못합니다. 이 환경에서 그렇게 쓴 짧은 코드를 ASan으로 실행하니 `heap-use-after-free`가 보고됐습니다(모던 C++의 남은 문제는 ch12 `ch12-modern-cpp-enough`). ASan은 이런 접근을 실행 중에 찾지만, 그 경로가 실제로 실행되어야 보고합니다.
+**다른 언어에서는** ch2 Q2.3에서 본 Chromium 프로젝트의 분석에서는 심각도 높은 보안 버그의 약 70%가 메모리 안전성 문제였고, 그 절반이 해제 후 사용이었습니다. C++의 `unique_ptr`는 해제를 자동으로 하지만, `get()`으로 얻은 원시 포인터를 따로 들고 있다가 `reset()` 뒤에 쓰는 일은 막지 못합니다. 이 환경에서 그렇게 쓴 짧은 코드를 ASan으로 실행하니 `heap-use-after-free`가 보고됐습니다(모던 C++의 남은 문제는 [ch12](../ch12-modern-cpp-enough/README.md)). ASan은 이런 접근을 실행 중에 찾지만, 그 경로가 실제로 실행되어야 보고합니다.
 
 **오해와 한계** `unsafe` 코드에서 원시 포인터(raw pointer)를 역참조하면 해제 후 사용을 만들 수 있고, 그것을 막는 책임은 `unsafe`를 쓴 사람에게 있습니다([ch3](../ch3-safety-limits/README.md) Q3.2). 또 해제 시점을 컴파일러가 정하는 대신, 여러 곳에서 함께 쓰는 값은 `Rc`처럼 실행 중에 참조 수를 세는 타입을 골라야 하는 설계 부담이 생깁니다([ch4](../ch4-memory-without-gc/README.md) Q4.7).
 
@@ -84,7 +84,7 @@ C와 C++로 일해 온 사람은 메모리 오류의 이름을 이미 압니다.
 
 둘 다 값을 써야 하면 `clone`으로 메모리를 따로 만들고, 그러면 해제도 따로 일어납니다. C에서 이중 해제를 피하려고 쓰는 `free(p); p = NULL;` 관용구는 `Option::take`에 해당합니다(`take` 자체는 [Part 0 ch20](../../part0-getting-started/ch20-web-server-project/README.md) 2.9절의 `drop(self.sender.take())`에서 봤습니다). 값을 꺼내 해제하면서 칸을 `None`으로 비우므로, 다시 꺼내도 해제할 것이 없습니다.
 
-**다른 언어에서는** C++에서도 같은 원시 포인터를 두 `unique_ptr`에 넘기면 둘 다 해제하려 하므로 이중 해제가 됩니다(이 환경에서 ASan이 `attempting double-free`를 보고). Rust에서 원시 포인터로 소유자를 만드는 `Box::from_raw`는 `unsafe` 함수라서, 안전한 코드에서는 같은 일을 쓸 수 없습니다(E0133). `unsafe` 블록에서 두 번 부르면 Rust도 컴파일되고 이중 해제가 됩니다. 안전한 코드에서 소유자를 넘기는 길은 이동뿐이고, 이동은 원래 변수를 쓸 수 없게 하는 파괴적 이동(destructive move)이라 4.1절처럼 컴파일 시간에 걸립니다(C++의 이동과의 차이는 ch11 `ch11-cpp-raii-move`).
+**다른 언어에서는** C++에서도 같은 원시 포인터를 두 `unique_ptr`에 넘기면 둘 다 해제하려 하므로 이중 해제가 됩니다(이 환경에서 ASan이 `attempting double-free`를 보고). Rust에서 원시 포인터로 소유자를 만드는 `Box::from_raw`는 `unsafe` 함수라서, 안전한 코드에서는 같은 일을 쓸 수 없습니다(E0133). `unsafe` 블록에서 두 번 부르면 Rust도 컴파일되고 이중 해제가 됩니다. 안전한 코드에서 소유자를 넘기는 길은 이동뿐이고, 이동은 원래 변수를 쓸 수 없게 하는 파괴적 이동(destructive move)이라 4.1절처럼 컴파일 시간에 걸립니다(C++의 이동과의 차이는 [ch11](../ch11-cpp-raii-move/README.md)).
 
 **오해와 한계** `ManuallyDrop`처럼 해제를 직접 다루는 도구로 `unsafe` 코드를 쓰면 이중 해제를 만들 수 있습니다. 4.1절의 컴파일러는 `clone`을 제안하지만, 사본을 만들어 버리는 것은 이중 해제를 고치는 길이 아닙니다. 두 번째 `drop`이 왜 필요했는지(필요 없었는지)를 따져야 합니다.
 
@@ -120,11 +120,11 @@ C와 C++로 일해 온 사람은 메모리 오류의 이름을 이미 압니다.
 
 **왜 그런가** 초기화하지 않은 값은 그 자리에 남아 있던 아무 비트나 될 수 있고, C에서는 읽는 것 자체가 미정의 동작(undefined behavior)이 될 수 있습니다. Rust는 "모든 경로에서 대입된 뒤에만 읽는다"를 컴파일러가 흐름을 따라 검사합니다.
 
-**다른 언어에서는** C의 `malloc`이 돌려준 메모리는 초기화되어 있지 않습니다. ASan은 초기화하지 않은 읽기를 찾지 않고, 그것을 찾는 MemorySanitizer는 Clang 문서에 따르면 Linux·NetBSD·FreeBSD에서만 지원되며, 이 환경의 Apple clang은 `-fsanitize=memory`를 `unsupported option`으로 거부했습니다. C에서 초기화하지 않은 변수를 읽는 코드는 미정의 동작을 다루는 ch10 `ch10-undefined-behavior`에서 봅니다.
+**다른 언어에서는** C의 `malloc`이 돌려준 메모리는 초기화되어 있지 않습니다. ASan은 초기화하지 않은 읽기를 찾지 않고, 그것을 찾는 MemorySanitizer는 Clang 문서에 따르면 Linux·NetBSD·FreeBSD에서만 지원되며, 이 환경의 Apple clang은 `-fsanitize=memory`를 `unsupported option`으로 거부했습니다. C에서 초기화하지 않은 변수를 읽는 코드는 미정의 동작을 다루는 [ch10](../ch10-undefined-behavior/README.md)에서 봅니다.
 
 **오해와 한계** 초기화 검사는 보수적이라, 실제로는 모든 경로에서 대입되는데도 컴파일러가 증명하지 못하면 거부합니다. 그럴 때는 선언과 동시에 값을 주거나 `if`·`match`를 표현식으로 써서 한 번에 대입합니다.
 
-**더 읽기** ch2 Q2.1, 4.1절 / ch10 `ch10-undefined-behavior`
+**더 읽기** ch2 Q2.1, 4.1절 / [ch10](../ch10-undefined-behavior/README.md)
 
 ### Q9.6 널 포인터 역참조는 어떻게 되나요?
 
@@ -132,7 +132,7 @@ C와 C++로 일해 온 사람은 메모리 오류의 이름을 이미 압니다.
 
 **왜 그런가** [compare/05_null_deref.c](compare/05_null_deref.c)의 `find`는 못 찾으면 `NULL`을 돌려주는데, 부르는 쪽이 확인하지 않고 필드를 읽습니다. UndefinedBehaviorSanitizer(UBSan)가 `member access within null pointer`를 먼저 알리고, 이어서 ASan이 `SEGV on unknown address 0x000000000000`을 보고합니다. C에서는 "없음"과 "있음"이 같은 포인터 타입이라 확인을 빼먹어도 타입이 맞습니다. Rust에서는 둘이 `Option`의 두 배리언트라 타입이 다릅니다. `Option<&T>`는 널 포인터 최적화(null pointer optimization) 덕분에 포인터 하나와 같은 크기입니다([ch1](../ch1-why-rust/README.md) 예제 02).
 
-**다른 언어에서는** UBSan이 이 줄을 `runtime error`로 보고한 것처럼 C에서 널 포인터 역참조는 미정의 동작입니다. 이 실행에서는 그 뒤에 ASan이 SEGV를 보고하며 멈췄지만, 미정의 동작에서 무엇이 일어날지는 언어가 정하지 않습니다(ch10 `ch10-undefined-behavior`).
+**다른 언어에서는** UBSan이 이 줄을 `runtime error`로 보고한 것처럼 C에서 널 포인터 역참조는 미정의 동작입니다. 이 실행에서는 그 뒤에 ASan이 SEGV를 보고하며 멈췄지만, 미정의 동작에서 무엇이 일어날지는 언어가 정하지 않습니다([ch10](../ch10-undefined-behavior/README.md)).
 
 **오해와 한계** 원시 포인터 `*const T`는 널일 수 있고, 역참조하려면 `unsafe`가 필요합니다. C 함수가 돌려준 포인터를 받는 FFI 코드에서는 널인지 확인하는 책임이 다시 프로그래머에게 옵니다.
 

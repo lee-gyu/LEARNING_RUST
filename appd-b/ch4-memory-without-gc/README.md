@@ -50,7 +50,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **왜 그런가** 해제 시점을 정하는 규칙이 컴파일러가 확인할 수 있을 만큼 단순하기 때문입니다. 소유자는 하나이고(Q4.2), 소유자의 스코프가 끝나는 곳은 코드에 보입니다. 해제가 실제로 그 자리에서 일어나는 것은 [ch1](../ch1-why-rust/README.md) 예제 01(살아 있는 버퍼 수가 최대 1개)과 Part 0 ch4 예제 01, ch14 예제 04에서 출력으로 확인했습니다.
 
-**다른 언어에서는** Java·C#·Go·JavaScript의 추적(tracing) GC는 실행 중에 닿을 수 없는 객체를 찾아 해제하므로, 해제 시점은 GC가 정합니다. Python의 기본 구현은 참조 카운팅으로 해제하고 GC로 순환 참조를 거둡니다(ch1 Q1.1). C는 `free`, C++는 `delete`나 RAII로 해제하며, Rust의 방식은 C++의 RAII를 언어 전체의 기본 규칙으로 삼고 컴파일러가 검사하게 만든 것에 가깝습니다(ch11 `ch11-cpp-raii-move`).
+**다른 언어에서는** Java·C#·Go·JavaScript의 추적(tracing) GC는 실행 중에 닿을 수 없는 객체를 찾아 해제하므로, 해제 시점은 GC가 정합니다. Python의 기본 구현은 참조 카운팅으로 해제하고 GC로 순환 참조를 거둡니다(ch1 Q1.1). C는 `free`, C++는 `delete`나 RAII로 해제하며, Rust의 방식은 C++의 RAII를 언어 전체의 기본 규칙으로 삼고 컴파일러가 검사하게 만든 것에 가깝습니다([ch11](../ch11-cpp-raii-move/README.md)).
 
 **오해와 한계** 메모리 말고도 파일·소켓·잠금이 같은 규칙으로 정리됩니다([ch5](../ch5-no-null-no-exceptions/README.md) Q5.6). 반대로 `mem::forget`이나 `Rc` 순환 참조처럼 소멸자가 실행되지 않는 길도 있습니다([ch3](../ch3-safety-limits/README.md) Q3.4).
 
@@ -80,7 +80,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 | 서로 독립된 사본이 필요 | `clone()` | 힙 데이터까지 새로 할당하고 복사 |
 | 여러 곳이 함께 소유하고 함께 고침 | `Rc<RefCell<T>>`(스레드 사이는 `Arc<Mutex<T>>`) | 참조 수 세기와 실행 중 대여 검사 |
 
-**다른 언어에서는** Java·C#·Python·JavaScript에서 객체를 담은 변수는 참조이고, 대입은 참조를 복사합니다. 위 표의 네 번째 줄이 그 언어들의 기본 동작이고, Rust에서는 그것을 특별히 고를 때만 씁니다. C++는 `auto b = a;`(초기화)면 복사 생성자, `b = a;`(대입)면 복사 대입 연산자가 돌아 기본으로 사본을 만들고, `std::move`로 이동을 요청합니다(ch11 `ch11-cpp-raii-move`).
+**다른 언어에서는** Java·C#·Python·JavaScript에서 객체를 담은 변수는 참조이고, 대입은 참조를 복사합니다. 위 표의 네 번째 줄이 그 언어들의 기본 동작이고, Rust에서는 그것을 특별히 고를 때만 씁니다. C++는 `auto b = a;`(초기화)면 복사 생성자, `b = a;`(대입)면 복사 대입 연산자가 돌아 기본으로 사본을 만들고, `std::move`로 이동을 요청합니다([ch11](../ch11-cpp-raii-move/README.md)).
 
 **오해와 한계** GC 언어의 습관대로 모든 곳에 `Rc<RefCell<T>>`를 쓰면 컴파일은 되지만, 대여 규칙 위반이 실행 중 패닉으로 미뤄지고 비용도 듭니다. 데이터의 주인을 먼저 정하고, 나머지는 빌리는 설계가 기본입니다([부록 A ch15](../../appd-a/ch15-borrow-checker/README.md)). 불변 참조로 받은 구조체에서 필드를 그대로 꺼내 오는 Java식 코드가 E0507로 거부되는 것은 4.1절에서 봅니다.
 
@@ -115,7 +115,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 **오해와 한계** 참조는 값을 소유하지 않으므로, 참조를 통해 값의 일부를 가져갈 수도 없습니다. 불변 참조 `&Account`에서 `String` 필드를 꺼내 오면 E0507이 납니다(4.1절). 읽기만 하려면 `&account.owner`처럼 빌리고, 따로 가져야 하면 복제합니다.
 
-**더 읽기** Part 0 ch4 2.8·2.11절 / ch2 Q2.5
+**더 읽기** Part 0 ch4 2.8·2.11절 / [ch2](../ch2-memory-safety/README.md) Q2.5
 
 ### Q4.5 왜 가변 참조는 한 번에 하나만 만들 수 있나요?
 
@@ -131,7 +131,7 @@ Java, C#, Go, Python, JavaScript처럼 가비지 컬렉터(garbage collector, GC
 
 `append_copy(dst: &mut Vec<i32>, src: &[i32])`에 같은 벡터를 `append_copy(&mut v, &v)`로 넘기면, 함수 안의 `push`가 버퍼를 옮기는 순간 `src`가 해제된 옛 버퍼를 가리키게 됩니다. 컴파일러는 이 호출을 E0502로 거부합니다(4.2절). 같은 벡터를 자기 뒤에 덧붙이려면 그 일을 안전하게 해 주는 `extend_from_within`을 쓰거나 사본을 먼저 만듭니다. 이 규칙 덕분에 `&mut` 매개변수를 받은 함수는 "이 함수가 도는 동안 아무도 이 값을 보지 않는다"고 믿을 수 있습니다.
 
-**다른 언어에서는** GC 언어에서는 같은 객체를 여러 참조가 언제든 고칠 수 있고, 고치는 도중의 상태를 다른 쪽이 보는 문제는 프로그래머가 피해야 합니다. Java의 `ArrayList`는 반복자를 만든 뒤 리스트의 구조가 바뀌면 그 반복자가 `ConcurrentModificationException`을 던지는(fail-fast) 방식으로 일부를 실행 중에 잡습니다(Java API 문서). C++에서는 같은 상황이 미정의 동작(undefined behavior)이 됩니다(ch9 `ch9-c-memory-errors`의 반복자 무효화).
+**다른 언어에서는** GC 언어에서는 같은 객체를 여러 참조가 언제든 고칠 수 있고, 고치는 도중의 상태를 다른 쪽이 보는 문제는 프로그래머가 피해야 합니다. Java의 `ArrayList`는 반복자를 만든 뒤 리스트의 구조가 바뀌면 그 반복자가 `ConcurrentModificationException`을 던지는(fail-fast) 방식으로 일부를 실행 중에 잡습니다(Java API 문서). C++에서는 같은 상황이 미정의 동작(undefined behavior)이 됩니다([ch9](../ch9-c-memory-errors/README.md)의 반복자 무효화).
 
 **오해와 한계** 이 규칙은 보수적이라, 서로 다른 필드나 슬라이스의 겹치지 않는 부분을 동시에 고치는 것처럼 실제로는 안전한 코드도 거부할 때가 있습니다. `split_at_mut`처럼 겹치지 않음을 보증하는 API나 필드를 나눠 빌리는 방법으로 풉니다([부록 A ch15](../../appd-a/ch15-borrow-checker/README.md), ch15 `ch15-pain-points`).
 

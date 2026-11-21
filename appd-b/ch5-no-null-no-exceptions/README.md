@@ -92,7 +92,7 @@ Rust에는 `null`이 없고 예외(exception)도 없습니다. Java, C#, Kotlin,
 - TypeScript 핸드북은 `strictNullChecks`를 켜야 null·undefined를 확인하게 하며, `!` 단언(assertion)은 실행 동작을 바꾸지 않는다고 설명합니다.
 - C#의 nullable 참조 형식은 같은 경우를 컴파일 에러가 아니라 경고로 알립니다(ch2 Q2.5).
 
-**오해와 한계** Kotlin의 `?.`처럼 짧은 연산자가 없어서 처음에는 장황하게 느껴질 수 있습니다. 대신 `?`가 함수 안에서 같은 일을 짧게 해 주고(01의 2번), 메서드 체인은 길어도 각 단계가 무엇을 하는지 이름으로 보입니다. Kotlin에서 `?.`를 쓸 자리에 Rust의 `.`를 쓰면 4.1절의 에러가 납니다. 또 C 코드에서 받은 원시 포인터(raw pointer, `*const T`)는 null일 수 있고, 그것을 참조로 바꾸는 일은 `unsafe` 코드가 책임집니다(Part 0 ch19).
+**오해와 한계** Kotlin의 `?.`처럼 짧은 연산자가 없어서 처음에는 장황하게 느껴질 수 있습니다. 대신 `?`가 함수 안에서 같은 일을 짧게 해 주고(01의 2번), 메서드 체인은 길어도 각 단계가 무엇을 하는지 이름으로 보입니다. Kotlin에서 `?.`를 쓸 자리에 Rust의 `.`를 쓰면 4.1절의 에러가 납니다. 또 C 코드에서 받은 원시 포인터(raw pointer, `*const T`)는 null일 수 있고, 그것을 참조로 바꾸는 일은 `unsafe` 코드가 책임집니다([Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md)).
 
 **더 읽기** Part 1 ch2 / [부록 A ch3](../../appd-a/ch3-option-result-transforms/README.md)(`match`를 변환 메서드로 바꾸기)
 
@@ -157,7 +157,7 @@ Rust에는 `null`이 없고 예외(exception)도 없습니다. Java, C#, Kotlin,
 
 **짧은 답** `catch`에 해당하는 것은 `Result`를 받는 `match`나 `if let`이고, 처리하지 않고 넘기는 것은 `?`입니다. `finally`에 해당하는 것은 `Drop`입니다. 파일(`File`)이나 잠금 가드(`MutexGuard`)처럼 정리가 필요한 표준 라이브러리 타입은 버려질 때 정리 코드가 실행되므로(`MutexGuard`는 자기 `Drop`이, `File`은 안에 든 파일 핸들의 `Drop`이), 그 값이 스코프를 벗어나는 모든 길(정상 종료, `?`로 인한 조기 반환, 패닉으로 인한 되감기)에서 파일이 닫히고 잠금이 풀립니다. 닫거나 푸는 코드는 따로 쓰지 않습니다.
 
-**왜 그런가** 정리 코드를 "정리할 값"에 붙여 두면 정리를 빼먹을 길이 없습니다. 표준 라이브러리 문서는 `File`이 스코프를 벗어나면 자동으로 닫히고, `MutexGuard`가 버려지면 잠금이 풀린다고 적습니다. 네트워크 연결(`TcpStream`)도 버려지면 닫힙니다(Part 0 ch20). [03_cleanup_like_finally](examples/03_cleanup_like_finally.rs)는 잠금으로 세 경우를 봅니다.
+**왜 그런가** 정리 코드를 "정리할 값"에 붙여 두면 정리를 빼먹을 길이 없습니다. 표준 라이브러리 문서는 `File`이 스코프를 벗어나면 자동으로 닫히고, `MutexGuard`가 버려지면 잠금이 풀린다고 적습니다. 네트워크 연결(`TcpStream`)도 버려지면 닫힙니다([Part 0 ch20](../../part0-getting-started/ch20-web-server-project/README.md)). [03_cleanup_like_finally](examples/03_cleanup_like_finally.rs)는 잠금으로 세 경우를 봅니다.
 
 ```text
 1. 정상적으로 끝남
@@ -192,7 +192,7 @@ Go의 `defer`와 다른 점은 정리가 붙는 단위입니다. Go 명세에 �
 
 값을 `let _ = …`로 받으면 그 자리에서 바로 버려지므로, `with` 블록처럼 끝까지 쥐고 있을 값에는 이름을 붙입니다. 표준 라이브러리의 잠금이면 rustc의 `let_underscore_lock` 린트(기본 deny)가 컴파일을 거부하지만, 직접 만든 타입은 아무 말 없이 버려집니다(부록 A ch11). 또 `mem::forget`이나 `process::exit`([ch3](../ch3-safety-limits/README.md) Q3.4), `panic = "abort"`로 인한 중단(Part 0 ch9 2.3절)에서는 `Drop`이 실행되지 않습니다.
 
-**더 읽기** Part 0 ch14 2.6절 / Part 0 ch15 2.7절(잠금 가드) / 부록 A ch11 / ch4 Q4.1
+**더 읽기** Part 0 ch14 2.6절 / [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md) 2.7절(잠금 가드) / 부록 A ch11 / ch4 Q4.1
 
 ### Q5.7 패닉은 예외인가요? 잡을 수 있나요?
 
@@ -307,7 +307,7 @@ cargo run -p faq-ch5-no-null-no-exceptions --example 02_errors_are_values
 ```
 
 - `fetch_config`는 실제 네트워크 대신 시도 횟수로 결과를 정하므로 출력이 실행마다 같습니다.
-- `Err(FetchError::Timeout) if attempt < max`는 매치 가드(match guard, Part 0 ch18)로, 시간 초과이면서 아직 다시 시도할 수 있을 때만 그 갈래(match arm)로 갑니다.
+- `Err(FetchError::Timeout) if attempt < max`는 매치 가드(match guard, [Part 0 ch18](../../part0-getting-started/ch18-patterns/README.md))로, 시간 초과이면서 아직 다시 시도할 수 있을 때만 그 갈래(match arm)로 갑니다.
 
 ### 03_cleanup_like_finally — finally 자리의 Drop
 
@@ -381,7 +381,7 @@ help: use `let _ = ...` to ignore the resulting value
 <details>
 <summary>힌트</summary>
 
-`city_chain(db, id).map_or(0, |c| c.chars().count())`처럼 `map_or`로 `?.`와 `?:`를 한 번에 씁니다. 바이트 수가 아니라 글자 수가 필요하므로 `len()` 대신 `chars().count()`를 씁니다(Part 0 ch8). 회원 1이면 2("부산"), 회원 2·3이면 0입니다.
+`city_chain(db, id).map_or(0, |c| c.chars().count())`처럼 `map_or`로 `?.`와 `?:`를 한 번에 씁니다. 바이트 수가 아니라 글자 수가 필요하므로 `len()` 대신 `chars().count()`를 씁니다([Part 0 ch8](../../part0-getting-started/ch8-collections/README.md)). 회원 1이면 2("부산"), 회원 2·3이면 0입니다.
 
 </details>
 

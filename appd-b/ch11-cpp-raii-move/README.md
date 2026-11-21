@@ -162,7 +162,7 @@ C++ 개발자에게 Rust의 소유권은 낯설지 않습니다. RAII(자원 획
   share 뒤 참조 수: 1
 ```
 
-소유권을 넘겨받는 `unique_ptr<Node>` 인자는 `Box<Node>`(보통은 그냥 `Node`), 관찰만 하는 `const Node&`는 `&Node`, 공유 소유를 하나 더 갖는 `shared_ptr` 인자는 `Rc`이며, `Rc::clone`으로 넘기면 함수 안에서 참조 수가 2가 되었다가 돌아오면 1로 줄어듭니다. `std::visit`로 `variant`의 대안을 고르던 자리는 `match`가 맡고, 빠뜨린 배리언트는 컴파일러가 알려 줍니다. C++에서 `string_view`나 `span`이 가리키는 원본이 먼저 사라지면 댕글링이 되는 문제는 ch12 `ch12-modern-cpp-enough`에서 C++ 코드로 봅니다.
+소유권을 넘겨받는 `unique_ptr<Node>` 인자는 `Box<Node>`(보통은 그냥 `Node`), 관찰만 하는 `const Node&`는 `&Node`, 공유 소유를 하나 더 갖는 `shared_ptr` 인자는 `Rc`이며, `Rc::clone`으로 넘기면 함수 안에서 참조 수가 2가 되었다가 돌아오면 1로 줄어듭니다. `std::visit`로 `variant`의 대안을 고르던 자리는 `match`가 맡고, 빠뜨린 배리언트는 컴파일러가 알려 줍니다. C++에서 `string_view`나 `span`이 가리키는 원본이 먼저 사라지면 댕글링이 되는 문제는 [ch12](../ch12-modern-cpp-enough/README.md)에서 C++ 코드로 봅니다.
 
 **다른 언어에서는** C++ 표준 초안([util.smartptr.shared.general])은 참조 수(`use_count`) 변경이 데이터 경쟁을 일으키는 수정이 아니라고 정해, 같은 대상을 가리키는 서로 다른 `shared_ptr` 객체를 여러 스레드에서 각각 복사·소멸해도 데이터 경쟁이 되지 않게 합니다. 반면 Rust는 참조 수를 원자적으로 세지 않는 `Rc`와 원자적으로 세는 `Arc`를 나누고, `Rc`를 다른 스레드로 보내면 컴파일 에러로 막습니다([Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md) 4.4절).
 

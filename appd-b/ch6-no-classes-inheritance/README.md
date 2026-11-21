@@ -58,7 +58,7 @@ Rust에는 클래스(class)도 상속(inheritance)도 없습니다. Java, C#, C+
 
 **짧은 답** 데이터는 `struct`(또는 `enum`)로 정의하고, 메서드는 그 타입의 `impl` 블록에 따로 적습니다. 한 타입에 `impl` 블록을 여러 개 둘 수 있고, 트레이트 구현도 `impl 트레이트 for 타입`이라는 별도의 블록입니다. 클래스 하나에 필드·메서드·인터페이스 구현을 모두 적는 대신, 데이터 정의와 동작을 나눠 적는 구조입니다.
 
-**왜 그런가** [01_inheritance_to_composition](examples/01_inheritance_to_composition.rs)의 `Employee`는 필드를 정의한 `struct Employee`, 생성 함수를 둔 `impl Employee`, 트레이트를 구현한 `impl Payable for Employee` 세 블록으로 나뉩니다. 메서드는 첫 매개변수 `self`의 모양(`&self`, `&mut self`, `self`)으로 값을 빌릴지, 고칠지, 가져갈지를 밝히며(Part 0 ch5 2.9절), 메서드 안에서 필드는 언제나 `self.name`처럼 씁니다. 열거형에도 같은 방식으로 메서드를 붙입니다(Part 0 ch6).
+**왜 그런가** [01_inheritance_to_composition](examples/01_inheritance_to_composition.rs)의 `Employee`는 필드를 정의한 `struct Employee`, 생성 함수를 둔 `impl Employee`, 트레이트를 구현한 `impl Payable for Employee` 세 블록으로 나뉩니다. 메서드는 첫 매개변수 `self`의 모양(`&self`, `&mut self`, `self`)으로 값을 빌릴지, 고칠지, 가져갈지를 밝히며(Part 0 ch5 2.9절), 메서드 안에서 필드는 언제나 `self.name`처럼 씁니다. 열거형에도 같은 방식으로 메서드를 붙입니다([Part 0 ch6](../../part0-getting-started/ch6-enums-pattern-matching/README.md)).
 
 **다른 언어에서는** Go가 가장 비슷합니다. 구조체를 정의하고 메서드는 수신자(receiver)를 받는 함수로 따로 선언하며, Go 명세는 수신자의 기본 타입이 메서드와 같은 패키지에 선언돼 있어야 한다고 정합니다. Rust의 고유 메서드(inherent method, 트레이트가 아니라 타입 자신의 `impl`에 둔 메서드)도 비슷한 제약이 있어서, 타입을 정의한 크레이트 밖에서는 `impl String { … }`처럼 쓸 수 없습니다(E0116). 남의 타입에 메서드를 더하는 일은 트레이트로 합니다(Q6.5).
 
@@ -70,7 +70,7 @@ Rust에는 클래스(class)도 상속(inheritance)도 없습니다. Java, C#, C+
 
 **짧은 답** 언어가 정한 생성자는 없습니다. 값은 구조체 리터럴(`Timer { label, duration }`)로 만들고, 필드를 하나라도 빠뜨리면 컴파일되지 않습니다(E0063). `new`는 이 리터럴을 감싼 연관 함수에 붙이는 관례적인 이름일 뿐이며, Rust API 가이드라인도 생성자를 "관례"로 설명합니다(C-CTOR). 이름이 자유로우므로 만드는 방법마다 `new`, `with_capacity`, `from_minutes`처럼 다른 이름을 붙입니다.
 
-**왜 그런가** 필드가 비공개면 모듈 밖에서는 구조체 리터럴을 쓸 수 없으므로, `new` 같은 공개 함수가 값을 만드는 유일한 입구가 됩니다. 불변식은 그 입구에서 한 번 검사하면 됩니다(Part 0 ch9 2.12절의 `Guess`, Part 0 ch17 2.2절). 또 Rust의 값은 모든 필드가 채워진 뒤에야 생기므로, 생성자가 도는 동안 반쯤 만들어진 객체가 바깥에 보이는 일이 없습니다. 실패할 수 있는 생성은 예외 대신 `Result<Self, E>`를 돌려줍니다(ch5 Q5.3).
+**왜 그런가** 필드가 비공개면 모듈 밖에서는 구조체 리터럴을 쓸 수 없으므로, `new` 같은 공개 함수가 값을 만드는 유일한 입구가 됩니다. 불변식은 그 입구에서 한 번 검사하면 됩니다([Part 0 ch9](../../part0-getting-started/ch9-error-handling/README.md) 2.12절의 `Guess`, Part 0 ch17 2.2절). 또 Rust의 값은 모든 필드가 채워진 뒤에야 생기므로, 생성자가 도는 동안 반쯤 만들어진 객체가 바깥에 보이는 일이 없습니다. 실패할 수 있는 생성은 예외 대신 `Result<Self, E>`를 돌려줍니다(ch5 Q5.3).
 
 [03_overloading_alternatives](examples/03_overloading_alternatives.rs)의 1번은 생성자 오버로딩 대신 이름이 다른 두 연관 함수를 씁니다.
 
@@ -133,7 +133,7 @@ Rust에는 클래스(class)도 상속(inheritance)도 없습니다. Java, C#, C+
 - C#의 인터페이스도 멤버의 기본 구현을 둘 수 있습니다(C# 문서).
 - Kotlin의 확장 함수(extension function)처럼 남의 타입에 메서드를 더하는 일은, Rust에서는 트레이트를 정의해 그 타입에 구현하는 방식으로 합니다. Part 0 ch10 예제 03이 내 트레이트 `Summary`를 표준 라이브러리의 `Vec`에 구현합니다. Kotlin 문서는 확장 함수가 정적으로 결정된다고 설명합니다.
 
-**오해와 한계** 명시적인 `impl`은 "우연히 메서드 이름이 같아서 구현된 것으로 취급되는" 일을 막는 대신, 이미 가진 메서드만으로 저절로 만족되는 Go의 편리함은 없어서 타입마다 `impl`을 써야 합니다. 고아 규칙 때문에 남의 트레이트를 남의 타입에 구현할 수 없어 뉴타입으로 감싸야 할 때가 있고(Part 0 ch19 2.12절), 트레이트의 메서드는 그 트레이트를 `use`로 가져와야 부를 수 있습니다(Part 0 ch10 2.6절).
+**오해와 한계** 명시적인 `impl`은 "우연히 메서드 이름이 같아서 구현된 것으로 취급되는" 일을 막는 대신, 이미 가진 메서드만으로 저절로 만족되는 Go의 편리함은 없어서 타입마다 `impl`을 써야 합니다. 고아 규칙 때문에 남의 트레이트를 남의 타입에 구현할 수 없어 뉴타입으로 감싸야 할 때가 있고([Part 0 ch19](../../part0-getting-started/ch19-advanced-features/README.md) 2.12절), 트레이트의 메서드는 그 트레이트를 `use`로 가져와야 부를 수 있습니다(Part 0 ch10 2.6절).
 
 **더 읽기** Part 0 ch10 2.5~2.7·2.11절 / Part 0 ch17 2.9절 / [부록 A ch2](../../appd-a/ch2-express-common-behavior/README.md)
 

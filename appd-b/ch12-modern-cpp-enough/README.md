@@ -163,12 +163,12 @@ C++26도 초기화하지 않은 지역 변수에서는 같은 설계를 택했�
 | 기존 코드와 라이브러리, 개발자 | 새로 쓰거나 FFI로 연결해야 함 | ch17 `ch17-interop-migration` |
 | C++ 코드와 직접 섞기 | C ABI(`extern "C"`)를 거치거나 `cxx` 같은 도구를 씀 | [Part 1 ch14](../../part1-standard-lib/ch14-ffi-any-misc/README.md), [부록 A ch34](../../appd-a/ch34-ffi-boundaries/README.md) |
 | 템플릿 특수화 | 안정판에서 쓸 수 없음. `#![feature(specialization)]`은 안정판에서 E0554 | [ch6](../ch6-no-classes-inheritance/README.md) Q6.6 |
-| 가변 인자 템플릿 | 가변 인자 제네릭이 없음. 표준 라이브러리도 `PartialEq` 등 여러 트레이트를 원소 12개 이하의 튜플에만 구현(`tuple` 문서) | ch6 Q6.7, ch13 `ch13-headers-build-templates` |
+| 가변 인자 템플릿 | 가변 인자 제네릭이 없음. 표준 라이브러리도 `PartialEq` 등 여러 트레이트를 원소 12개 이하의 튜플에만 구현(`tuple` 문서) | ch6 Q6.7, [ch13](../ch13-headers-build-templates/README.md) |
 | 자기 참조, 침습적 자료 구조 | `Pin`, `Rc`/`Weak`, 또는 `unsafe`가 필요 | ch11 Q11.9, [부록 A ch15](../../appd-a/ch15-borrow-checker/README.md) |
 | 여러 독립 구현과 ISO 표준 | 주 구현은 `rustc` 하나. 다른 구현은 초기 단계 | ch16 `ch16-tooling-ecosystem` |
 | 다시 컴파일만 해서 얻는 안전성 개선 | 다시 써야 얻음 | Q12.4 |
 
-C++의 템플릿은 쓰이는 자리에서 실제 타입으로 컴파일되므로 제약을 미리 적지 않아도 되고(C++20 concepts로 적는 것은 선택), Rust의 제네릭은 본문에서 쓰는 능력을 모두 트레이트 바운드로 적어야 합니다(ch6 Q6.6). 에러가 정의 쪽에서 일찍 나는 대신 표현할 수 있는 것이 그만큼 좁습니다. 가변 인자가 없는 것은 ch6 Q6.7에서 봤습니다.
+C++의 템플릿은 본문 가운데 `T`에 기대는 부분을 쓰이는 자리에서 실제 타입으로 검사하므로 제약을 미리 적지 않아도 되고(C++20 concepts로 적는 것은 선택, [ch13](../ch13-headers-build-templates/README.md) Q13.5), Rust의 제네릭은 본문에서 쓰는 능력을 모두 트레이트 바운드로 적어야 합니다(ch6 Q6.6). 에러가 정의 쪽에서 일찍 나는 대신 표현할 수 있는 것이 그만큼 좁습니다. 가변 인자가 없는 것은 ch6 Q6.7에서 봤습니다.
 
 **다른 언어에서는** 같은 질문을 Rust 쪽에서 보면, Rust가 맞지 않는 곳에 대한 ch1 Q1.6의 답과 이어집니다. 빨리 결과를 봐야 하거나, 기존 생태계를 벗어날 수 없거나, 팀이 새 언어를 배울 여유가 없는 곳입니다.
 

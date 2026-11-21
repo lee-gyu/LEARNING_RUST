@@ -65,7 +65,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 
 이 설계는 2015년 5월 15일의 1.0 발표로 안정 버전이 되었고, 발표문은 그 뒤로 기존 코드를 깨는 변경을 대부분 하지 않겠다고 약속했습니다. 그 약속을 지키면서 언어를 바꾸는 장치가 에디션입니다([Part 2](../../part2-editions/)).
 
-**다른 언어에서는** GC 언어도 메모리 안전하지만, 해제 시점을 GC가 정하므로 메모리를 다 쓴 객체가 다음 수거 때까지 남습니다. Python은 조금 다릅니다. 기본 구현은 참조 카운팅(reference counting)으로 객체를 해제하고, GC는 참조 카운팅이 거두지 못하는 순환 참조(reference cycle)를 위한 보조 장치입니다(Python `gc` 모듈 문서). C++는 RAII(자원 획득은 초기화, 자원을 객체의 수명에 묶어 소멸자가 해제하는 방식)와 스마트 포인터로 Rust와 비슷한 해제 시점을 얻을 수 있지만, 그 규칙을 지키는지 검사하는 것은 프로그래머의 몫입니다(ch11 `ch11-cpp-raii-move`, ch12 `ch12-modern-cpp-enough`). 파일·잠금 같은 메모리 밖의 자원을 정리하는 방식(`try`/`finally`, `defer`, `with`)과의 비교는 [ch5](../ch5-no-null-no-exceptions/README.md)에서 합니다.
+**다른 언어에서는** GC 언어도 메모리 안전하지만, 해제 시점을 GC가 정하므로 메모리를 다 쓴 객체가 다음 수거 때까지 남습니다. Python은 조금 다릅니다. 기본 구현은 참조 카운팅(reference counting)으로 객체를 해제하고, GC는 참조 카운팅이 거두지 못하는 순환 참조(reference cycle)를 위한 보조 장치입니다(Python `gc` 모듈 문서). C++는 RAII(자원 획득은 초기화, 자원을 객체의 수명에 묶어 소멸자가 해제하는 방식)와 스마트 포인터로 Rust와 비슷한 해제 시점을 얻을 수 있지만, 그 규칙을 지키는지 검사하는 것은 프로그래머의 몫입니다([ch11](../ch11-cpp-raii-move/README.md), [ch12](../ch12-modern-cpp-enough/README.md)). 파일·잠금 같은 메모리 밖의 자원을 정리하는 방식(`try`/`finally`, `defer`, `with`)과의 비교는 [ch5](../ch5-no-null-no-exceptions/README.md)에서 합니다.
 
 **오해와 한계**
 
@@ -73,7 +73,7 @@ Rust는 표의 오른쪽 열을 세 가지 약속으로 지킵니다. 이 챕터
 - 모든 검사가 컴파일 시간에 끝나는 것은 아닙니다. 배열 인덱싱의 경계 검사처럼 실행 중에 하는 검사가 있고, 비용도 있습니다(02의 [3], ch14 `ch14-performance`).
 - 이 설계의 값은 배우는 비용과 컴파일 시간으로 치릅니다(Q1.6).
 
-**더 읽기** Part 0 ch4 2.1절, ch13 2.15절, ch15 2.1절 / [ch2](../ch2-memory-safety/README.md)(메모리 안전성의 뜻), [ch4](../ch4-memory-without-gc/README.md)(GC 없는 메모리 관리), [ch8](../ch8-concurrency-async/README.md)(데이터 경쟁) / Q1.8
+**더 읽기** Part 0 ch4 2.1절, Part 0 ch13 2.15절, Part 0 ch15 2.1절 / [ch2](../ch2-memory-safety/README.md)(메모리 안전성의 뜻), [ch4](../ch4-memory-without-gc/README.md)(GC 없는 메모리 관리), [ch8](../ch8-concurrency-async/README.md)(데이터 경쟁) / Q1.8
 
 ### Q1.2 "시스템 프로그래밍 언어"라는데 웹 백엔드나 CLI 도구에도 쓰나요?
 
@@ -228,12 +228,12 @@ Google Android 팀의 2025년 글은 중간 크기 이상의 변경에서 Rust �
 | --- | --- |
 | 지연 시간이 고르게 낮아야 하거나 메모리가 빠듯함, 메모리 버그가 곧 보안 사고 | Rust |
 | 팀 전체가 빨리 읽고 고쳐야 하는 네트워크 서비스, GC 멈춤이 문제 되지 않음 | Go |
-| 큰 C++ 코드베이스나 C++ 전용 라이브러리에 깊게 묶여 있음 | C++를 유지하면서 새 구성 요소부터 Rust를 검토(ch12 `ch12-modern-cpp-enough`, ch17 `ch17-interop-migration`) |
+| 큰 C++ 코드베이스나 C++ 전용 라이브러리에 깊게 묶여 있음 | C++를 유지하면서 새 구성 요소부터 Rust를 검토([ch12](../ch12-modern-cpp-enough/README.md), ch17 `ch17-interop-migration`) |
 | 커널, 임베디드, 브라우저 엔진처럼 GC를 둘 수 없음 | Rust 또는 C/C++. 메모리 안전성이 필요하면 Rust |
 
-**오해와 한계** 언어 비교 표는 출발점일 뿐입니다. 실제 결정은 팀이 무엇을 잘 아는지, 어떤 라이브러리가 필요한지, 기존 코드와 어떻게 이어야 하는지에 더 크게 좌우됩니다. C++와의 더 자세한 비교는 ch11 `ch11-cpp-raii-move`와 ch12 `ch12-modern-cpp-enough`에서, Go를 포함한 동시성 모델의 비교는 [ch8](../ch8-concurrency-async/README.md)에서 합니다.
+**오해와 한계** 언어 비교 표는 출발점일 뿐입니다. 실제 결정은 팀이 무엇을 잘 아는지, 어떤 라이브러리가 필요한지, 기존 코드와 어떻게 이어야 하는지에 더 크게 좌우됩니다. C++와의 더 자세한 비교는 [ch11](../ch11-cpp-raii-move/README.md)와 [ch12](../ch12-modern-cpp-enough/README.md)에서, Go를 포함한 동시성 모델의 비교는 [ch8](../ch8-concurrency-async/README.md)에서 합니다.
 
-**더 읽기** [ch8](../ch8-concurrency-async/README.md), ch11 `ch11-cpp-raii-move`, ch12 `ch12-modern-cpp-enough`, ch17 `ch17-interop-migration` / Q1.6
+**더 읽기** [ch8](../ch8-concurrency-async/README.md), [ch11](../ch11-cpp-raii-move/README.md), [ch12](../ch12-modern-cpp-enough/README.md), ch17 `ch17-interop-migration` / Q1.6
 
 ## 3. 예제 안내
 

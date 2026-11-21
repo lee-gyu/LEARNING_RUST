@@ -60,7 +60,7 @@ Rust를 소개하는 글은 거의 언제나 "메모리 안전하다"는 말로 
 
 **오해와 한계** 메모리 안전성은 "버그가 없다"가 아닙니다. 계산이 틀리거나, 비밀을 담은 데이터를 엉뚱한 사람에게 보내는 논리 오류(logic error)는 메모리 안전성과 상관없이 생깁니다(예제 02의 3번, [ch3](../ch3-safety-limits/README.md)). 메모리 누수(memory leak)도 메모리 안전성 위반이 아닙니다(ch3).
 
-**더 읽기** Part 0 ch4 2.1절 / ch9 `ch9-c-memory-errors`(종류마다 C 코드와 나란히 보기) / Q2.4
+**더 읽기** Part 0 ch4 2.1절 / [ch9](../ch9-c-memory-errors/README.md)(종류마다 C 코드와 나란히 보기) / Q2.4
 
 ### Q2.2 메모리 버그가 왜 보안 취약점이 되나요?
 
@@ -92,7 +92,7 @@ Rust를 소개하는 글은 거의 언제나 "메모리 안전하다"는 말로 
   길이 19: 응답 "pingSECRET-KEY-1234"
 ```
 
-**더 읽기** ch9 `ch9-c-memory-errors`(경계 밖 읽기·쓰기를 C 코드로 재현) / Q2.6
+**더 읽기** [ch9](../ch9-c-memory-errors/README.md)(경계 밖 읽기·쓰기를 C 코드로 재현) / Q2.6
 
 ### Q2.3 "취약점의 70%가 메모리 문제"라는 숫자는 어디서 나왔나요?
 
@@ -141,7 +141,7 @@ Rust를 소개하는 글은 거의 언제나 "메모리 안전하다"는 말로 
 
 이 표의 보장에는 조건이 있습니다. Rustonomicon은 안전한 Rust만 쓰면 타입 안전성과 메모리 안전성을 걱정할 일이 없고 댕글링 포인터, 해제 후 사용 같은 미정의 동작(undefined behavior)을 겪지 않는다고 설명합니다. 거꾸로 말하면 `unsafe` 블록 안에서는 그 보장을 프로그래머가 대신 지켜야 합니다([ch3](../ch3-safety-limits/README.md)).
 
-**다른 언어에서는** C의 배열 인덱싱과 C++의 기본 인덱싱(`operator[]`)은 경계를 검사하지 않습니다. C++에는 검사하는 `at()`이 있고, 표준 라이브러리에도 검사 장치가 있습니다. GCC의 표준 라이브러리(libstdc++)는 최적화하지 않은 빌드에서 문자열 경계 검사 같은 전제 조건 검사를 기본으로 켜고, 디버그 모드(`_GLIBCXX_DEBUG`)로 빌드하면 일부 반복자 오류(예: 이미 파괴된 컨테이너를 가리키는 반복자의 역참조)까지 잡습니다. 다만 최적화한 빌드에서는 기본으로 꺼져 있고, 시간적 안전성 전체를 보장하지는 않습니다. Google 보고서는 C++가 시간적 안전성을 포함한 엄밀한 메모리 안전성을 갖추는 쪽으로 발전할 현실적인 길이 없다고 봅니다. 같은 종류의 버그를 찾으려면 새니타이저(sanitizer) 같은 도구를 켜고 테스트에서 그 경로를 실제로 실행해야 합니다(ch9 `ch9-c-memory-errors`, ch12 `ch12-modern-cpp-enough`).
+**다른 언어에서는** C의 배열 인덱싱과 C++의 기본 인덱싱(`operator[]`)은 경계를 검사하지 않습니다. C++에는 검사하는 `at()`이 있고, 표준 라이브러리에도 검사 장치가 있습니다. GCC의 표준 라이브러리(libstdc++)는 최적화하지 않은 빌드에서 문자열 경계 검사 같은 전제 조건 검사를 기본으로 켜고, 디버그 모드(`_GLIBCXX_DEBUG`)로 빌드하면 일부 반복자 오류(예: 이미 파괴된 컨테이너를 가리키는 반복자의 역참조)까지 잡습니다. 다만 최적화한 빌드에서는 기본으로 꺼져 있고, 시간적 안전성 전체를 보장하지는 않습니다. Google 보고서는 C++가 시간적 안전성을 포함한 엄밀한 메모리 안전성을 갖추는 쪽으로 발전할 현실적인 길이 없다고 봅니다. 같은 종류의 버그를 찾으려면 새니타이저(sanitizer) 같은 도구를 켜고 테스트에서 그 경로를 실제로 실행해야 합니다([ch9](../ch9-c-memory-errors/README.md), [ch12](../ch12-modern-cpp-enough/README.md)).
 
 **오해와 한계** 컴파일 시간 검사는 보수적입니다. 실제로는 안전한 코드도 규칙으로 증명할 수 없으면 거부하므로, 코드를 다시 짜야 할 때가 있습니다(ch15 `ch15-pain-points`). 실행 중 경계 검사에는 비용이 있습니다(ch14 `ch14-performance`).
 
@@ -223,7 +223,7 @@ range end index 64 out of range for slice of length 4
 
 **오해와 한계** 그냥 `*`나 `+`로 계산하면 디버그 빌드는 오버플로가 나면 패닉하지만 릴리스 빌드는 기본적으로 래핑합니다([ch3](../ch3-safety-limits/README.md) Q3.6). `as`는 여전히 조용히 잘라 냅니다. 그리고 인증을 빠뜨리거나 권한을 잘못 검사하는 논리 오류는 어떤 타입 검사로도 막지 못합니다.
 
-**더 읽기** [ch3](../ch3-safety-limits/README.md), ch5, ch7, ch10 `ch10-undefined-behavior`
+**더 읽기** [ch3](../ch3-safety-limits/README.md), ch5, ch7, [ch10](../ch10-undefined-behavior/README.md)
 
 ### Q2.8 실제로 취약점이 줄었나요?
 
@@ -328,7 +328,7 @@ cargo run -p faq-ch2-memory-safety --example 04_size_and_conversion
 
 ## 4. 자주 하는 실수
 
-이 챕터의 `compile_fail/`은 메모리 안전성의 종류 가운데 초기화와 타입을 맡습니다. 시간적 안전성의 컴파일 에러는 앞 챕터에 있습니다. 요소를 빌린 채 `push`하면 재할당으로 예전 공간이 해제되므로 이를 막는 [Part 0 ch8](../../part0-getting-started/ch8-collections/README.md) 4.1절(E0502)이 해제 후 사용의 모양이고, 함수 안에서 만든 값의 참조를 돌려주는 [Part 0 ch4](../../part0-getting-started/ch4-ownership/README.md) 4.5절(E0106)이 끝난 함수의 지역 변수를 가리키는 모양입니다. 같은 버그를 C 코드와 나란히 놓은 비교는 ch9 `ch9-c-memory-errors`에 있습니다.
+이 챕터의 `compile_fail/`은 메모리 안전성의 종류 가운데 초기화와 타입을 맡습니다. 시간적 안전성의 컴파일 에러는 앞 챕터에 있습니다. 요소를 빌린 채 `push`하면 재할당으로 예전 공간이 해제되므로 이를 막는 [Part 0 ch8](../../part0-getting-started/ch8-collections/README.md) 4.1절(E0502)이 해제 후 사용의 모양이고, 함수 안에서 만든 값의 참조를 돌려주는 [Part 0 ch4](../../part0-getting-started/ch4-ownership/README.md) 4.5절(E0106)이 끝난 함수의 지역 변수를 가리키는 모양입니다. 같은 버그를 C 코드와 나란히 놓은 비교는 [ch9](../ch9-c-memory-errors/README.md)에 있습니다.
 
 ### 4.1 일부 경로에서만 초기화한 변수 — E0381
 
