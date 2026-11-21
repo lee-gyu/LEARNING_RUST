@@ -470,7 +470,7 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 | --- | --- | --- | --- | --- |
 | ✅ | `ch14-performance` | C/C++와의 성능 비교를 읽는 법, 비용 없는 추상화, 경계 검사와 오버플로 검사의 비용, 느린 Rust 프로그램의 흔한 원인, 런타임과 GC 멈춤, 바이너리 크기 | 반복자와 반복문, `Option`의 크기, 경계 검사를 피하는 모양, 버퍼링, 디버그·릴리스 실행 비교 | 도입 사례(Discord, Cloudflare), Book 13장, Cargo Book |
 | ✅ | `ch15-pain-points` | 어렵다고 하는 이유: 대여 검사기와 싸우는 전형, 컴파일러가 거부하는 올바른 코드, 연결 리스트·그래프·자기 참조, 컴파일 시간과 `target/` 크기, 디버깅, 버려야 할 습관 | 대여 에러 전형 세 가지와 해법, 인덱스로 만든 그래프, `Rc<RefCell<T>>` 트리, 보수적 거부와 우회, entry API | State of Rust 설문, Book 4·15장 |
-| ⬜ | `ch16-tooling-ecosystem` | Cargo와 다른 언어의 패키지 관리자 비교, 작은 표준 라이브러리, 크레이트 고르기와 공급망, 릴리스 주기·안정성 보장·에디션, 명세와 컴파일러 구현, ABI, 관리 주체, 지원 플랫폼 | 표준 라이브러리만으로 되는 일의 범위, 의존성 하나를 가진 프로젝트의 `Cargo.lock`과 `cargo tree`(`projects/`) | Rust 블로그(명세), gccrs, Cargo Book, Edition Guide |
+| ✅ | `ch16-tooling-ecosystem` | Cargo와 다른 언어의 패키지 관리자 비교, 작은 표준 라이브러리, 크레이트 고르기와 공급망, 릴리스 주기·안정성 보장·에디션, 명세와 컴파일러 구현, ABI, 관리 주체, 지원 플랫폼 | 표준 라이브러리만으로 되는 일의 범위, 의존성 하나를 가진 프로젝트의 `Cargo.lock`과 `cargo tree`(`projects/`) | Rust 블로그(명세), gccrs, Cargo Book, Edition Guide |
 | ⬜ | `ch17-interop-migration` | 기존 코드와 함께 쓰기: C 호출과 C에서 호출되기, C++ 연동의 한계, 다른 언어에서 Rust 부르기, 자동 번역의 현황, 어디부터 옮길지, 도입 비용과 판단 기준 | libc 함수 호출, C 프로그램의 함수 하나를 Rust 구현으로 바꿔 끼우기(`projects/`) | Android 보안 블로그, CISA·NSA 지침, DARPA TRACTOR, Rustonomicon FFI |
 
 ---
@@ -494,4 +494,4 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **51 / 109 챕터** |
 | 부록 A. Effective Rust (합계와 별도) | 35 / 35 |
-| 부록 B. Rust FAQ (합계와 별도) | 15 / 17 |
+| 부록 B. Rust FAQ (합계와 별도) | 16 / 17 |

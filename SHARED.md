@@ -101,6 +101,9 @@
 - 연산자나 메서드 호출을 "`Trait::method(&mut x, …)`와 같다"고 풀어 쓸 때는 대여 검사 결과가 다를 수 있습니다. 소스에 직접 적은 `&mut`는 2단계 대여가 아니므로 `x += x`·`v.push(v.len())`는 통과하지만 풀어 쓴 꼴은 E0503·E0502입니다(1.100.0, 부록 B ch15).
 - 최적화가 무엇을 막는지 보이는 예제에서 `std::hint::black_box`는 다른 원인을 섞습니다. 1.100.0 릴리스에서 `black_box`로 감싼 지역 값은 `Copy`인 `u64`라도 꼬리 재귀가 반복문으로 바뀌는 것을 막았습니다(값의 주소를 inline asm에 넘김). 반대로 아무 일도 하지 않는 값이나 쓰이지 않는 `String`은 최적화가 통째로 지웁니다. 원인 하나만 보이려면 부수 효과가 있는 `Drop` 타입(전역 원자 카운터를 올리는 등)처럼 원인을 떼어 냅니다(부록 B ch14 검증).
 - 실행 파일 크기는 패키지 이름에 따라 수십 바이트씩 달라집니다(1.100.0 release hello world 기준 `hw` 435,824, `hello` 435,840바이트). Go는 모듈 모드인지에 따라 크기가 다릅니다. 크기를 실을 때는 만든 조건을 함께 적습니다(부록 B ch14).
+- 다른 생태계와 나란히 놓는 비교 표는 칸마다, 그리고 한 칸 안의 동사(빌드·테스트·문서·게시)마다 공식 문서를 따로 확인합니다. 부록 B ch16에서 "npm은 스크립트로 다른 도구를 부름"(게시는 내장 `npm publish`), "Go는 `go` 하나"(게시는 태그 푸시)로 묶어 썼다가 검증에서 고쳤습니다.
+- RFC를 "X를 줄이려는 제안"처럼 목적으로 요약하기 전에 Motivation과 FAQ 절을 읽습니다. 문장을 절 이름과 함께 인용할 때는 제목 구조(h2/h3/h4)로 그 문장이 어느 절에 속하는지 확인합니다. Rationale and alternatives 아래에는 예전 판의 단점이 들어 있기도 합니다(부록 B ch16, RFC 3243은 일반적인 스쿼팅을 다루지 않는다고 FAQ에 적혀 있고, `foo-bar` 문장은 예전 `/` 구분자 판의 단점이었음).
+- 기능이 "아직 구현되지 않았다"고 쓰기 전에 툴체인에 딸린 Cargo Book의 `reference/unstable.html`과 rustc의 기능 게이트를 찾아봅니다. 추적 이슈가 열려 있어도 nightly 전용으로 들어 있는 경우가 있습니다(부록 B ch16, RFC 3243 → Cargo `open-namespaces`. 안정판 cargo 1.100.0은 `name = "foo::bar"`를 거부).
 - PATH의 `python3`는 mise shim이므로, 검사 스크립트는 `/usr/bin/python3`(3.9)로 돌립니다(부록 B 계획서 5절).
 - 크레이트 사이의 `#[unsafe(no_mangle)]`·`export_name` 이름 충돌은 macOS 링커에서 경고(`linker_messages`, 기본 warn)만 나고 빌드가 성공하며 한쪽 정의가 쓰입니다. 같은 크레이트 안은 ``symbol `…` is already defined`` 컴파일 에러입니다(1.100.0, 부록 B ch13).
 - 인라인 `const { assert!(…) }`처럼 const 매개변수에 기대는 검사의 에러(E0080)는 단형성화할 때 나므로 `cargo build`에서만 나고 `cargo check`로는 드러나지 않습니다(1.100.0, 부록 B ch13).
@@ -131,7 +134,7 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5) |
+| 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5). 웹(WebAssembly와 JavaScript)과 모바일(Kotlin·Swift)에서 Rust를 잇는 바인딩, Rust끼리도 C ABI로 만드는 플러그인 경계(부록 B ch16 Q16.9·Q16.12가 ch17을 가리킴) |
 
 ### 2.2 nightly와 Miri를 준비하면 다시 확인할 것
 
