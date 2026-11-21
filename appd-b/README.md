@@ -48,6 +48,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch1-why-rust](ch1-why-rust/) | Rust가 풀려는 문제(GC 없는 메모리 안전성, 비용 없는 추상화, 검사되는 스레드 공유), 조직들이 옮기는 이유와 근거(보안 보고서, 도입 사례), 쓰이는 분야와 사용 현황, 맞지 않는 곳, 기존 코드를 다시 써야 하는지, Go·C++와 고르는 기준 |
 | [ch2-memory-safety](ch2-memory-safety/) | 메모리 안전성의 다섯 종류(공간·시간·타입·초기화·데이터 경쟁)와 Rust가 막는 장치와 시점, 메모리 버그가 취약점이 되는 과정(Heartbleed 모양의 버그), "70%"를 읽는 법, GC 언어와의 차이, 패닉의 안전성, 정수 실수를 드러내는 장치, Android의 감소 자료를 읽는 법 |
 | [ch3-safety-limits](ch3-safety-limits/) | Rust가 보장하지 않는 것(논리 오류, 메모리 누수, 교착 상태와 경쟁 조건, 정수 오버플로, 패닉과 스택 오버플로로 인한 중단), `unsafe`의 범위와 안전한 API 안에 가두기, 표준 라이브러리의 검증, Rust 코드의 CVE 사례, 공급망과 컴파일러의 건전성 버그 |
+| [ch4-memory-without-gc](ch4-memory-without-gc/) | GC 없는 메모리 관리: Java식 공유를 이동·빌림·복제·`Rc<RefCell<T>>`로 옮기기, `Copy`의 기준, 참조와 C 포인터·Java 참조의 차이, 가변 참조가 하나뿐인 이유, `clone`의 비용, `Rc`/`Arc`와 추적 GC, 라이프타임 표기, GC가 없어서 얻고 잃는 것, 값이 그 자리에 놓이는 메모리 배치 |
 
 ## 질문 색인
 
@@ -81,5 +82,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q3.8](ch3-safety-limits/) | Rust로 쓴 코드에서도 CVE가 나오나요? |
 | [Q3.9](ch3-safety-limits/) | 의존하는 크레이트가 많은데 공급망은 안전한가요? |
 | [Q3.10](ch3-safety-limits/) | 컴파일러에 버그가 있으면 보장이 깨지나요? |
+| [Q4.1](ch4-memory-without-gc/) | GC도 없고 `free`도 부르지 않는데 메모리는 누가 언제 해제하나요? |
+| [Q4.2](ch4-memory-without-gc/) | 변수를 다른 변수에 넣거나 함수에 넘겼더니 왜 더 쓸 수 없나요? |
+| [Q4.3](ch4-memory-without-gc/) | 어떤 타입은 넘긴 뒤에도 쓸 수 있는데 기준이 무엇인가요? |
+| [Q4.4](ch4-memory-without-gc/) | 참조 `&T`는 C의 포인터, Java의 참조와 무엇이 다른가요? |
+| [Q4.5](ch4-memory-without-gc/) | 왜 가변 참조는 한 번에 하나만 만들 수 있나요? |
+| [Q4.6](ch4-memory-without-gc/) | `clone()`을 많이 쓰면 나쁜 코드인가요? |
+| [Q4.7](ch4-memory-without-gc/) | `Rc`와 `Arc`는 GC가 아닌가요? 순환 참조는 어떻게 되나요? |
+| [Q4.8](ch4-memory-without-gc/) | 라이프타임 `'a`는 무엇이고 왜 직접 써야 하나요? |
+| [Q4.9](ch4-memory-without-gc/) | GC가 없어서 얻는 것과 잃는 것은 무엇인가요? |
+| [Q4.10](ch4-memory-without-gc/) | 값을 스택에 둘지 힙에 둘지 직접 골라야 하나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

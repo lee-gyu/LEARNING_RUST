@@ -448,7 +448,7 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 근거 자료 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch4-memory-without-gc` | GC도 `free`도 없는 메모리 관리: 소유권과 스코프, 이동과 `Copy`, 참조와 대여 규칙, `clone`의 비용, `Rc`/`Arc`와 GC의 차이, 라이프타임 표기 | drop 시점 출력, 이동과 복사, 넘기는 대신 빌려주기, `Rc`의 참조 수와 `Weak`, `clone` 비용 | Book 4·10·15장 |
+| ✅ | `ch4-memory-without-gc` | GC도 `free`도 없는 메모리 관리: 소유권과 스코프, 이동과 `Copy`, 참조와 대여 규칙, `clone`의 비용, `Rc`/`Arc`와 GC의 차이, 라이프타임 표기 | drop 시점 출력, 이동과 복사, 넘기는 대신 빌려주기, `Rc`의 참조 수와 `Weak`, `clone` 비용 | Book 4·10·15장 |
 | ⬜ | `ch5-no-null-no-exceptions` | `null` 대신 `Option`, 예외 대신 `Result`와 `?`, `finally` 대신 `Drop`, 패닉과 예외의 차이, `unwrap`의 자리, 에러 타입 | `Option`으로 바꾼 널 검사, `Result`와 `?` 전파, `Drop`으로 정리, 패닉과 `Result` 비교 | Book 6·9장 |
 | ⬜ | `ch6-no-classes-inheritance` | 클래스·상속 없는 설계: 구조체와 `impl`, 생성자 관례, 조합과 트레이트, 인터페이스와의 차이, 제네릭 구현 방식 비교, 오버로딩·기본 인자의 대안, 열거형으로 옮기는 타입 계층 | `new`와 `Default`, 조합, 남의 타입에 트레이트 구현, 정적·동적 디스패치, 계층 대신 열거형, 오버로딩 대안 | Book 5·10·18장 |
 | ⬜ | `ch7-syntax-type-surprises` | 문법과 타입에서 낯선 것: 불변 기본과 섀도잉, 표현식 기반 문법, 암묵적 변환이 없는 수 타입, `String`과 `&str`, UTF-8과 인덱싱, 시그니처의 타입 표기, 매크로 `!`, 완전한 `match` | 불변과 섀도잉, 표현식, 수 변환, 문자열 두 타입, UTF-8 인덱싱, 완전성 검사 | Book 3·6·8장 |
@@ -494,4 +494,4 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **51 / 109 챕터** |
 | 부록 A. Effective Rust (합계와 별도) | 35 / 35 |
-| 부록 B. Rust FAQ (합계와 별도) | 3 / 17 |
+| 부록 B. Rust FAQ (합계와 별도) | 4 / 17 |

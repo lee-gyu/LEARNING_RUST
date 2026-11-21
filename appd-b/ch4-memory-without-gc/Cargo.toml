@@ -1,0 +1,5 @@
+[package]
+name = "faq-ch4-memory-without-gc"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
