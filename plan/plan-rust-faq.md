@@ -27,18 +27,18 @@
 
 | 기호 | 자료 | 가져온 것 | 확인한 내용 |
 | --- | --- | --- | --- |
-| F1 | 보관된 공식 FAQ: [rust-lang/prev.rust-lang.org `en-US/faq.md`](https://github.com/rust-lang/prev.rust-lang.org/blob/master/en-US/faq.md) | 질문 약 120개의 제목(프로젝트, 성능, 문법, 소유권, 라이프타임, 에러 처리, 다른 언어 등 20개 절) | 저장소는 2020-09-30에 보관 처리됐고 `prev.rust-lang.org/en-US/faq.html`은 404입니다. 본문은 2015년 무렵 기준(`try!` 매크로, Mozilla 언급)이라 **질문만 참고하고 답은 현재 툴체인 기준으로 새로 씁니다.** |
-| F2 | [Microsoft RustTraining](https://microsoft.github.io/RustTraining/) | C/C++·C#·Python 사용자용 교재의 목차 | C/C++ 교재 19개 장 목차 확인. 라이선스는 확인하지 못함 |
-| F3 | [C++ to Rust Phrasebook](https://cel.cs.brown.edu/crp/) (Brown 대학교) | C++ 관용구 26개 항목의 목차(생성자, Rule of three/five/zero, 헤더, 예외, 템플릿 특수화, RVO, PIMPL 등) | 목차 확인. 라이선스는 확인하지 못함 |
-| F4 | [Rust for C#/.NET Developers](https://microsoft.github.io/rust-for-dotnet-devs/latest/) | GC 언어 사용자가 대응시키려는 개념 | 열리는 것만 확인 |
-| F5 | [Comprehensive Rust](https://google.github.io/comprehensive-rust/) (Google Android 팀) | 사내 교육에서 다른 언어 경험자에게 설명하는 순서 | 열리는 것과 한국어 번역이 있다는 것만 확인 |
+| F1 | 보관된 공식 FAQ: [rust-lang/prev.rust-lang.org `en-US/faq.md`](https://github.com/rust-lang/prev.rust-lang.org/blob/master/en-US/faq.md) | 질문 약 120개의 제목(프로젝트, 성능, 문법, 소유권, 라이프타임, 에러 처리, 다른 언어 등 20개 절) | 저장소는 2020-09-30에 보관 처리됐고 `prev.rust-lang.org/en-US/faq.html`은 404입니다. 본문은 2015년 무렵 기준(`try!` 매크로, Mozilla 언급)이라 **질문만 참고하고 답은 현재 툴체인 기준으로 새로 씁니다.** 라이선스: Apache-2.0, MIT |
+| F2 | [Microsoft RustTraining](https://microsoft.github.io/RustTraining/) | C/C++·C#·Python 사용자용 교재의 목차 | C/C++ 교재 19개 장 목차 확인. 라이선스: 코드 MIT, 문서 CC BY 4.0 |
+| F3 | [C++ to Rust Phrasebook](https://cel.cs.brown.edu/crp/) (Brown 대학교) | C++ 관용구 26개 항목의 목차(생성자, Rule of three/five/zero, 헤더, 예외, 템플릿 특수화, RVO, PIMPL 등) | 목차 확인. 라이선스: Apache-2.0, MIT(저장소 기준) |
+| F4 | [Rust for C#/.NET Developers](https://microsoft.github.io/rust-for-dotnet-devs/latest/) | GC 언어 사용자가 대응시키려는 개념 | 열리는 것만 확인. 라이선스: MIT 문구(이름은 적혀 있지 않음) |
+| F5 | [Comprehensive Rust](https://google.github.io/comprehensive-rust/) (Google Android 팀) | 사내 교육에서 다른 언어 경험자에게 설명하는 순서 | 한국어판 <https://google.github.io/comprehensive-rust/ko/> 확인. 라이선스: 코드 Apache-2.0, 문서 CC BY 4.0 |
 | F6 | [2025 State of Rust Survey 결과](https://blog.rust-lang.org/2026/03/02/2025-State-Of-Rust-Survey-results) (2026-03-02) | 쓰는 사람이 꼽은 불편과 걱정 | 응답 7,156건. 본문에 따르면 느린 컴파일과 저장 공간 사용이 여전히 상위 불편이고, 디버깅은 2위에서 4위로 내려갔으며, 언어가 점점 복잡해진다는 걱정이 이어집니다. 항목별 수치는 그림에만 있어 확인하지 못함 |
 
 한계는 다음과 같습니다.
 
 - 질문의 빈도를 계량하지 않았습니다. 목록은 위 자료의 목차와 편집 판단으로 정한 것입니다.
 - 커뮤니티 게시판(users.rust-lang.org, Stack Overflow의 `rust` 태그, Reddit)은 조사하지 않았습니다. 보충 조사는 하지 않기로 했으므로(9절) 4절의 질문 목록으로 진행합니다.
-- F2~F5의 라이선스는 사전 작업 P8에서 확인합니다. 결과와 관계없이 본문과 코드는 옮기지 않습니다(1.6절).
+- F1~F5의 라이선스는 2026-11-21에 확인했습니다(위 표). 모두 허용적이지만 본문과 코드는 옮기지 않습니다(1.6절).
 
 ### 1.3 본편·부록 A와 다른 점
 
@@ -57,15 +57,15 @@
 | R1 | Microsoft MSRC, [A proactive approach to more secure code](https://www.microsoft.com/en-us/msrc/blog/2019/07/a-proactive-approach-to-more-secure-code) (2019-07-16) | Microsoft가 매년 CVE를 부여하는 취약점의 약 70%가 메모리 안전성 문제 | 확인 | Q1.3, Q2.3 |
 | R2 | Chromium, [Memory safety](https://www.chromium.org/Home/chromium-security/memory-safety/) (날짜 없음) | 심각도 높은 보안 버그의 약 70%가 메모리 안전성 문제이고 그 절반이 해제 후 사용. 2015년 이후 안정 채널의 버그 912건 분석 | 확인 | Q2.3, Q9.1 |
 | R3 | Google, [Rust in Android: move fast and fix things](https://blog.google/security/rust-in-android-move-fast-fix-things/) (2025-11-13) | 메모리 안전성 취약점이 처음으로 전체의 20% 아래로. C/C++ 코드 대비 취약점 밀도 1000배 감소. Rust 변경의 롤백률은 약 4배 낮고 코드 리뷰 시간은 약 25% 짧음. unsafe Rust의 버퍼 오버플로(CVE-2025-48530)는 공개 릴리스 전에 잡힘 | 확인 | Q1.3, Q2.8, Q3.8, Q17.1 |
-| R4 | Google, [Eliminating Memory Safety Vulnerabilities at the Source](https://security.googleblog.com/2024/09/eliminating-memory-safety-vulnerabilities-Android.html) (2024-09-25) | 새 코드만 메모리 안전 언어로 써도 취약점이 줄어든다는 주장과 연도별 비율 | **본문 미확인**(제목과 날짜만) | Q17.1 |
+| R4 | Google, [Eliminating Memory Safety Vulnerabilities at the Source](https://security.googleblog.com/2024/09/eliminating-memory-safety-vulnerabilities-Android.html) (2024-09-25) | Android 취약점 가운데 메모리 안전성 문제의 비율 76%(2019) → 24%(2024). 취약점은 코드가 오래될수록 지수적으로 줄어든다(반감기). 새 코드를 메모리 안전 언어로 쓰는 Safe Coding | 확인 | Q1.3, Q1.7, Q17.1 |
 | R5 | CISA·NSA, [Memory Safe Languages: Reducing Vulnerabilities in Modern Software Development](https://www.cisa.gov/resources-tools/resources/memory-safe-languages-reducing-vulnerabilities-modern-software-development) (2025-06-24) | 메모리 안전 언어 도입의 장애물과 해법을 다룬 합동 지침 | 제목·날짜·기관 확인. 본문은 미확인 | Q1.3, Q17.8 |
 | R6 | CISA, [The Case for Memory Safe Roadmaps](https://www.cisa.gov/resources-tools/resources/case-memory-safe-roadmaps) (2023-12-06) | 소프트웨어 제조사에 메모리 안전 로드맵을 요구 | 제목·날짜 확인 | Q1.3 |
-| R7 | 미국 백악관 ONCD, [Back to the Building Blocks](https://bidenwhitehouse.archives.gov/wp-content/uploads/2024/02/Final-ONCD-Technical-Report.pdf) (2024-02) | 프로그래밍 언어를 메모리 안전성 문제를 줄일 출발점으로 지목 | 검색 결과로만 확인. PDF 미열람 | Q1.3 |
+| R7 | 미국 백악관 ONCD, [Back to the Building Blocks](https://bidenwhitehouse.archives.gov/wp-content/uploads/2024/02/Final-ONCD-Technical-Report.pdf) (2024-02) | 보도자료 [Future Software Should Be Memory Safe](https://bidenwhitehouse.archives.gov/oncd/briefing-room/2024/02/26/press-release-technical-report/)(2024-02-26): 메모리 안전 언어를 쓰면 취약점의 한 부류 전체를 막을 수 있다고 주장 | 보도자료 확인. PDF 본문 미열람 | Q1.3 |
 | R8 | Discord, [Why Discord is switching from Go to Rust](https://discord.com/blog/why-discord-is-switching-from-go-to-rust) (2020-02-04) | Read States 서비스의 주기적인 지연 시간 급증 원인을 Go의 메모리 모델과 GC로 진단하고 Rust로 옮김 | 확인 | Q1.3, Q4.9, Q14.5 |
 | R9 | Cloudflare, [How we built Pingora](https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet/) (2022-09-14) | NGINX 기반 프록시를 대체. 같은 트래픽에서 CPU 약 70%, 메모리 약 67% 감소. C가 메모리 안전하지 않다는 점을 동기로 듦 | 확인 | Q1.3, Q14.6 |
 | R10 | DARPA, [TRACTOR](https://www.darpa.mil/research/programs/translating-all-c-to-rust) (날짜 없음) | C 코드를 숙련된 Rust 개발자 수준의 Rust로 자동 번역하는 연구 프로그램 | 확인 | Q17.6 |
-| R11 | Linux 커널: LWN의 2025년 Maintainers Summit 기사([1](https://lwn.net/Articles/1050308/), [2](https://lwn.net/Articles/1049831/)), 문서 [docs.kernel.org/rust](https://docs.kernel.org/rust/index.html) | 2025년 12월 Maintainers Summit에서 "Rust 실험"을 끝내기로 합의. 커널 문서 첫 페이지에는 "experimental"이라는 표현이 없음 | 문서 첫 페이지만 확인. LWN 기사는 미열람 | Q1.4, Q12.7 |
-| R12 | Stack Overflow Developer Survey [2025](https://survey.stackoverflow.co/2025/technology), [2026](https://survey.stackoverflow.co/2026/technology) | 2025년 사용률: 전체 응답자 14.8%, 전문 개발자 14.5%. 2025년 "most admired" 1위(72%)는 검색 결과 요약으로만 봄. 2026년 수치는 공식 페이지에서 찾지 못함 | 사용률만 확인 | Q1.5 |
+| R11 | Linux 커널: LWN의 2025년 Maintainers Summit 기사([1](https://lwn.net/Articles/1050308/), [2](https://lwn.net/Articles/1049831/)), 문서 [docs.kernel.org/rust](https://docs.kernel.org/rust/index.html) | LWN "The (successful) end of the kernel Rust experiment"(2025-12-10): 2025 Maintainers Summit의 합의는 커널의 Rust가 더는 실험이 아니라는 것. Miguel Ojeda의 패치 "rust: conclude the Rust experiment"(2025-12-13). 커널 문서 첫 페이지에는 "experimental"이라는 표현이 없음 | 확인 | Q1.4, Q12.7 |
+| R12 | Stack Overflow Developer Survey [2025](https://survey.stackoverflow.co/2025/technology), [2026 언어 데이터](https://survey.stackoverflow.co/2026/technology/data/languages), [2026 Admired and Desired](https://survey.stackoverflow.co/2026/technology/data/da-language) | 2025년: admired 1위 72%(Gleam 70%, Elixir 66%, Zig 64%), 사용률 전체 14.8%·전문 개발자 14.5%. 2026년: admired 1위 67%(Elixir 62%, Zig 58%), desired 26%, 사용률 18.0% | 확인 | Q1.5 |
 | R13 | 2025 State of Rust Survey (F6과 같음) | 불편과 걱정의 순위 | 본문 확인, 수치 미확인 | Q15.1, Q15.6 |
 | R14 | Rust 블로그, [Adopting the FLS](https://blog.rust-lang.org/2025/03/26/adopting-the-fls/) (2025-03-26) | Rust 프로젝트가 Ferrocene Language Specification을 명세 작업의 일부로 받아들임 | 확인 | Q16.7 |
 | R15 | [gccrs](https://rust-gcc.github.io/) 첫 페이지 | 아직 초기 단계이고 대여 검사기가 없다고 밝힘 | 확인 | Q16.8 |
@@ -182,14 +182,14 @@ LEARNING_RUST/
 
 | 상태 | 번호 | 작업 | 확인 방법 |
 | --- | --- | --- | --- |
-| ⬜ | P1 | 툴체인 확인: `rustc --version`이 1.100.0인지, `cc --version`. 이 저장소에서는 mise 명령을 실행하지 않고 설치 상태는 `rustup toolchain list`로만 봅니다. | — |
-| ⬜ | P2 | `docs/roadmap.md`: 머리말과 1절의 부록 표에 부록 B 행, 학습 순서 문단에 선수 과정, 2.1절 구조에 `compare/`, 2.2절에 이 문서 2.1절의 이름 규칙, 3절 끝에 "부록 B. Rust FAQ" 절(이 문서 4절의 표), 4절 진행 현황에 `부록 B. Rust FAQ 0 / 17` 행 | 사이트의 `/roadmap/` 페이지 |
-| ⬜ | P3 | `PROGRESS.md`: 요약 표에 부록 B 행, "부록 B. Rust FAQ" 표. 산출물 표기에 비교 코드 수를 넣을지 정합니다(예: `예제 5 / 에러 3 / 프로젝트 0 / 비교 4`). | — |
-| ⬜ | P4 | `.claude/skills/writing-guide/SKILL.md`: "부록을 쓸 때"에 부록 B 문단을 더합니다. 범위 표기(`/writing-guide appd-b ch1~ch3`), 패키지 접두사 `faq-`, 이 문서 6절 블록을 작성 규칙에 더하고 검증 요청에도 넣는다는 것, `compare/`의 자체 검증 명령, 검증 요청에 더 볼 것(8절) | ch1 하나로 시험 |
-| ⬜ | P5 | `web/scripts/sync-content.mjs`: `CODE_LANGS`에 `c`, `h`, `cpp`, `hpp`를 더합니다. 지금은 이 확장자가 코드 페이지가 되지 않아 `compare/` 파일 링크가 GitHub로 나갑니다. | `cd web && pnpm build` 후 비교 코드 페이지 |
-| ⬜ | P6 | `appd-b/README.md`: 개요(독자, 본편·부록 A와의 관계), 읽는 법(묶음, 질문 번호), 근거 자료 원칙(시점 표기, 비교 코드를 확인한 환경), 질문 색인(완료된 챕터의 질문만 행으로 추가) | — |
+| ✅ | P1 | 툴체인 확인: `rustc --version`이 1.100.0인지, `cc --version`. 이 저장소에서는 mise 명령을 실행하지 않고 설치 상태는 `rustup toolchain list`로만 봅니다. | — |
+| ✅ | P2 | `docs/roadmap.md`: 머리말과 1절의 부록 표에 부록 B 행, 학습 순서 문단에 선수 과정, 2.1절 구조에 `compare/`, 2.2절에 이 문서 2.1절의 이름 규칙, 3절 끝에 "부록 B. Rust FAQ" 절(이 문서 4절의 표), 4절 진행 현황에 `부록 B. Rust FAQ 0 / 17` 행 | 사이트의 `/roadmap/` 페이지 |
+| ✅ | P3 | `PROGRESS.md`: 요약 표에 부록 B 행, "부록 B. Rust FAQ" 표. 산출물 표기에 비교 코드 수를 넣을지 정합니다(예: `예제 5 / 에러 3 / 프로젝트 0 / 비교 4`). | — |
+| ✅ | P4 | `.claude/skills/writing-guide/SKILL.md`: "부록을 쓸 때"에 부록 B 문단을 더합니다. 범위 표기(`/writing-guide appd-b ch1~ch3`), 패키지 접두사 `faq-`, 이 문서 6절 블록을 작성 규칙에 더하고 검증 요청에도 넣는다는 것, `compare/`의 자체 검증 명령, 검증 요청에 더 볼 것(8절) | ch1 하나로 시험 |
+| ✅ | P5 | `web/scripts/sync-content.mjs`: `CODE_LANGS`에 `c`, `h`, `cpp`, `hpp`를 더합니다. 지금은 이 확장자가 코드 페이지가 되지 않아 `compare/` 파일 링크가 GitHub로 나갑니다. | `cd web && pnpm build` 후 비교 코드 페이지 |
+| ✅ | P6 | `appd-b/README.md`: 개요(독자, 본편·부록 A와의 관계), 읽는 법(묶음, 질문 번호), 근거 자료 원칙(시점 표기, 비교 코드를 확인한 환경), 질문 색인(완료된 챕터의 질문만 행으로 추가) | — |
 | ⬜ | P7 | 루트 `README.md`의 "구성" 표에 부록 B 행(첫 챕터가 완료될 때) | — |
-| ⬜ | P8 | F2~F5의 라이선스 확인 | — |
+| ✅ | P8 | F1~F5의 라이선스 확인(2026-11-21, 1.2절 표) | — |
 | ✅ | P9 | 9절의 네 가지 확정(2026-11-21) | — |
 
 P2를 마친 뒤에는 **챕터 상태의 기준이 `docs/roadmap.md`와 `PROGRESS.md`** 입니다. 이 문서에서는 3절과 7절의 상태만 갱신합니다.
@@ -202,7 +202,7 @@ P2를 마친 뒤에는 **챕터 상태의 기준이 `docs/roadmap.md`와 `PROGRE
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 근거 자료 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch1-why-rust` | Rust가 풀려는 문제(안전성·속도·동시성을 함께), 쓰이는 분야, 조직들이 옮기는 이유(보안·자원·생산성), 사용 현황, 맞지 않는 곳 | 세 가지 약속 맛보기: 컴파일러가 잡는 버그, 비용 없는 추상화, 검사되는 스레드 공유 | R1~R3, R5~R9, R11, R12 |
+| ⬜ | `ch1-why-rust` | Rust가 풀려는 문제(안전성·속도·동시성을 함께), 쓰이는 분야, 조직들이 옮기는 이유(보안·자원·생산성), 사용 현황, 맞지 않는 곳 | 세 가지 약속 맛보기: GC 없이 정해진 때 해제, 비용 없는 추상화, 검사되는 스레드 공유 | R1~R9, R11, R12 |
 | ⬜ | `ch2-memory-safety` | 메모리 안전성의 뜻(공간적·시간적), 메모리 버그가 취약점이 되는 이유, "70%"의 출처, Rust가 막는 방법(컴파일 시간과 실행 시간), GC 언어와의 차이, 메모리 밖의 안전장치 | 경계 밖 접근이 패닉으로 멈춤, 해제 후 사용과 초기화하지 않은 변수가 컴파일되지 않음, 명시적 변환 | R1~R3, Book 4장 |
 | ⬜ | `ch3-safety-limits` | Rust가 보장하지 않는 것: 논리 버그, 누수, 교착 상태, 오버플로, 패닉. `unsafe`의 범위와 책임, Rust 코드의 취약점, 공급망 | 안전한 코드로 만든 누수, 교착 상태 관찰, 오버플로의 디버그·릴리스 동작, 컴파일되는 논리 버그, `unsafe` 안에서도 유지되는 검사 | R3, R17 |
 
@@ -537,7 +537,7 @@ P2를 마친 뒤에는 **챕터 상태의 기준이 `docs/roadmap.md`와 `PROGRE
 
 | 상태 | 묶음 | 범위 | 챕터 수 | 실행 | 비고 |
 | --- | --- | --- | --- | --- | --- |
-| ⬜ | 0 | 사전 작업 P1~P8 | — | 메인 세션이 직접 | Part 3 완료 뒤 사용자 요청으로 시작 |
+| ✅ | 0 | 사전 작업 P1~P8 | — | 메인 세션이 직접 | 2026-11-21 완료(P7은 ch1 완료 때) |
 | ⬜ | 1 | 왜 Rust인가 | 3 | `/writing-guide appd-b ch1~ch3` | ch1은 자료 확인이 먼저 |
 | ⬜ | 2 | 다른 언어와 무엇이 다른가 | 5 | `… ch4~ch8` | 추가 도구 없이 가능 |
 | ⬜ | 3 | C/C++의 문제를 어떻게 풀었나 | 5 | `… ch9~ch13` | `compare/`가 가장 많음. ch12는 ch9·ch11 뒤에 |

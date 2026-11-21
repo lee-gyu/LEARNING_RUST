@@ -38,6 +38,10 @@ const CODE_LANGS = {
 	json: 'json',
 	yaml: 'yaml',
 	yml: 'yaml',
+	c: 'c',
+	h: 'c',
+	cpp: 'cpp',
+	hpp: 'cpp',
 };
 
 const SKIP_DIRS = new Set(['target', 'node_modules']);

@@ -19,8 +19,9 @@
 | Part 3. Cargo | 11 / 11 | 23 / 8 / 12 |
 | Part 4~11 | 0 / 58 | |
 | 부록 A. Effective Rust (본편 합계와 별도) | 35 / 35 | 169 / 97 / 21 |
+| 부록 B. Rust FAQ (본편 합계와 별도) | 0 / 17 | 0 / 0 / 0 / 비교 0 |
 
-산출물은 예제(`examples/`) / 컴파일 에러 예제(`compile_fail/`) / 독립 프로젝트(`projects/`)의 개수입니다. 사전 작업(루트 `Cargo.toml`, `.gitignore`, 루트 `README.md`)은 2026-11-17에 마쳤습니다.
+산출물은 예제(`examples/`) / 컴파일 에러 예제(`compile_fail/`) / 독립 프로젝트(`projects/`)의 개수입니다. 부록 B는 C/C++ 비교 코드(`compare/`)의 개수를 "비교"로 덧붙입니다. 사전 작업(루트 `Cargo.toml`, `.gitignore`, 루트 `README.md`)은 2026-11-17에 마쳤습니다. 부록 B의 사전 작업은 2026-11-21에 마쳤습니다(`plan/plan-rust-faq.md` 3절).
 
 ## Part 0. 시작하기 — `part0-getting-started/`
 
@@ -136,3 +137,8 @@
 | ✅ | `ch33-no-std` | 예제 5 / 에러 6 / 프로젝트 2 | 2026-11-20 |
 | ✅ | `ch34-ffi-boundaries` | 예제 7 / 에러 3 / 프로젝트 2 | 2026-11-20 |
 | ✅ | `ch35-bindgen` | 예제 3 / 에러 3 / 프로젝트 1 | 2026-11-20 |
+
+## 부록 B. Rust FAQ — `appd-b/`
+
+| 상태 | 챕터 | 산출물 | 완료일 |
+| --- | --- | --- | --- |
