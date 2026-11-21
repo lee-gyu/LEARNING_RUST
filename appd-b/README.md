@@ -54,6 +54,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch7-syntax-type-surprises](ch7-syntax-type-surprises/) | 문법과 타입에서 낯선 것: 불변 기본과 섀도잉, 표현식과 `++`·삼항 연산자, 정수의 폭과 `usize`, 암묵적 변환이 없는 수 타입, `String`과 `&str`, 언어마다 다른 문자열 길이와 `s[0]`, 시그니처의 타입 표기, 매크로 `!`, 완전한 `match`, 실수와 `Eq`·`Hash` |
 | [ch8-concurrency-async](ch8-concurrency-async/) | 동시성과 비동기: 겁 없는 동시성이 약속하는 것, `Send`·`Sync`와 대여 규칙, 데이터를 소유한 `Mutex`(C의 데이터 경쟁과 ThreadSanitizer), GIL·경쟁 검출기와의 차이, 고루틴과 태스크, 표준 라이브러리에 없는 비동기 런타임, 게으른 퓨처와 Promise, 일반 함수와 `async`, 스레드와 `async` 고르기, 전역 상태 |
 | [ch9-c-memory-errors](ch9-c-memory-errors/) | C의 메모리 오류와 Rust: 해제 후 사용, 이중 해제, 댕글링 포인터, 경계 밖 읽기·쓰기, 초기화하지 않은 메모리, 널 역참조, 반복자 무효화, C 문자열 버그, 크기 계산을 C·C++ 비교 코드(새니타이저)와 Rust의 장치로 나란히, 누수와 실행 비용 |
+| [ch10-undefined-behavior](ch10-undefined-behavior/) | 미정의 동작: 틀린 결과보다 위험한 이유, "안전한 Rust에는 미정의 동작이 없다"의 뜻, 오버플로·시프트·나눗셈·정수 승격·부호 비교·평가 순서·전역 초기화·별칭 규칙·잘못된 값을 C·C++(UBSan, 경고)과 Rust로 비교, `unsafe`의 미정의 동작 |
 
 ## 질문 색인
 
@@ -148,5 +149,14 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q9.9](ch9-c-memory-errors/) | `malloc`의 크기 계산과 `void*` 형 변환 실수는 어떻게 되나요? |
 | [Q9.10](ch9-c-memory-errors/) | 메모리 누수는 막아 주나요? |
 | [Q9.11](ch9-c-memory-errors/) | 이 검사들은 실행 비용이 드나요? |
+| [Q10.1](ch10-undefined-behavior/) | 미정의 동작이 무엇이고 왜 "틀린 결과"보다 위험한가요? |
+| [Q10.2](ch10-undefined-behavior/) | "안전한 Rust에는 미정의 동작이 없다"는 말은 무슨 뜻인가요? |
+| [Q10.3](ch10-undefined-behavior/) | 부호 있는 정수의 오버플로는 어떻게 다른가요? |
+| [Q10.4](ch10-undefined-behavior/) | 암묵적 변환, 정수 승격, 부호 있는 수와 없는 수의 비교 문제는 어떻게 되나요? |
+| [Q10.5](ch10-undefined-behavior/) | 0으로 나누기, 폭을 넘는 시프트, `switch`의 fallthrough, 값을 돌려주지 않고 끝나는 함수는 어떻게 되나요? |
+| [Q10.6](ch10-undefined-behavior/) | `i = i++ + 1` 같은 평가 순서 문제와 전역 객체의 초기화 순서 문제는 어떻게 되나요? |
+| [Q10.7](ch10-undefined-behavior/) | 엄격한 별칭 규칙(strict aliasing)과 `restrict`에 해당하는 것은 무엇인가요? |
+| [Q10.8](ch10-undefined-behavior/) | `bool`이나 열거형에 잘못된 값이 들어가는 것, 유니언으로 타입을 바꿔 읽는 것은 어떻게 되나요? |
+| [Q10.9](ch10-undefined-behavior/) | `unsafe` Rust에서는 미정의 동작이 가능한가요? C보다 쉬운가요, 어려운가요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

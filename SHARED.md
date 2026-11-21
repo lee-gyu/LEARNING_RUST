@@ -91,6 +91,10 @@
 - 앞 챕터를 "N절"로 가리킬 때는 그 README의 번호 체계를 확인합니다. Part 0 초기 챕터(ch3 등)는 핵심 개념의 소절에만 "1.", "4." 같은 번호가 있고 "자주 하는 실수"에는 번호가 없어서, "4절"이 엉뚱한 곳(ch3에서는 오버플로 절)을 가리킵니다. 그럴 때는 "'자주 하는 실수' 1"처럼 씁니다(부록 B ch7).
 - 예전 공식 Rust FAQ는 보관된 저장소 rust-lang/prev.rust-lang.org의 `en-US/faq.md`에 남아 있어 "Rust에는 왜 X가 없나"의 1차 자료로 쓸 수 있습니다(prev.rust-lang.org 주소는 404). 보관된 저장소의 날짜를 쓸 때 GitHub API의 `pushed_at`은 보관 시각이 아니라 마지막 push 시각이므로, 파일의 마지막 수정일을 `gh api 'repos/<저장소>/commits?path=<파일>&per_page=1'`로 확인해 적습니다(부록 B ch7, `faq.md`는 2018-06-22).
 - 서식 문자열의 인라인 캡처(`"{a} {b}"`)는 매크로 인자가 하나이므로 "인자 개수가 자유롭다"의 예로 쓰지 않습니다(부록 B ch7).
+- 반환값이 빠진 경로의 Rust 에러 코드는 모양에 따라 다릅니다. 마지막이 `else` 없는 `if`면 E0317(`` `if` may be missing an `else` clause ``), 마지막이 문장이면 E0308(`implicitly returns ()`)입니다(1.100.0, 부록 B ch10).
+- 실행 중의 오버플로·시프트·0으로 나누기를 보이려는 코드에 상수를 쓰면 `arithmetic_overflow`·`unconditional_panic` 린트(둘 다 기본 deny)가 컴파일 에러로 막습니다. 실행 동작은 `std::hint::black_box`로 감싼 값이나 입력값으로 확인합니다. 릴리스 빌드의 `<<`는 시프트 양을 폭으로 나눈 나머지만큼 밀고, 0으로 나누기와 `MIN / -1`은 빌드와 상관없이 패닉합니다(부록 B ch10).
+- (compare) UBSan은 대부분의 검사에서 보고한 뒤 실행을 계속하므로 종료 상태가 0이고(`-fsanitize=return`은 멈춰서 134), 이 환경에서는 같은 소스 위치의 두 번째 보고를 내지 않았습니다(한 함수에서 두 경우를 보이려면 위치를 나눔). `-fsanitize=enum`은 C 코드에서는 보고하지 않고 C++에서만 보고했습니다. `-Wsign-compare`는 `-Wextra`, `-Wsometimes-uninitialized`는 `-Wall`이 있어야 나오고, `-Wunsequenced`·`-Wreturn-type`은 기본으로 켜져 있습니다(부록 B ch10).
+- 완성된 챕터가 README에 한 번이라도 상대 링크로 걸렸는지는 사람이 훑으면 놓치기 쉽습니다(부록 B ch9·ch10 검증에서 반복). README의 `chN`·`Part N chM`·`부록 A chN` 이름과 링크 텍스트를 스크립트로 대조해 확인합니다(코드 서식 이름 `chN-slug`와 링크 경로 안의 이름은 제외).
 - `compare/`의 명령: `cc`·`c++`의 `-o`는 rustc의 `--out-dir`와 달리 디렉터리를 만들지 않으므로 README와 파일 머리의 명령 앞에 `mkdir -p target/tmp/<패키지>`를 둡니다. 메인 세션에는 디렉터리가 이미 있어 드러나지 않으므로, `target/`이 없는 새 디렉터리에서 README 블록을 그대로 실행해 확인합니다. macOS Apple clang의 TSan은 `abort_on_error`가 기본 true(보고가 있으면 종료 134, 끄면 `exitcode` 66)이고 `halt_on_error`가 false라서 보고 뒤에도 끝까지 실행되어 일반 출력이 함께 나옵니다(부록 B ch8). ASan도 macOS에서는 `abort_on_error`가 기본 true라서 보고하면 134로 끝나고(끄면 1), `stack-use-after-return` 검출은 macOS에서 기본으로 꺼져 있어 `ASAN_OPTIONS=detect_stack_use_after_return=1`이 필요합니다(Clang 문서는 Linux에서는 기본으로 켜져 있다고 적음). 이 Apple clang은 MemorySanitizer(`-fsanitize=memory`)를 거부하고 LeakSanitizer(`detect_leaks=1`)도 지원하지 않습니다. `return &local;`(-Wreturn-stack-address), 상수 문자열의 `strcpy` 넘침(-Wfortify-source)은 clang이 기본으로 경고하므로, 새니타이저 보고를 보이려는 비교 코드는 포인터 변수나 함수 인자를 거쳐 씁니다(부록 B ch9).
 
 ## 2. 후속 조치
@@ -114,7 +118,6 @@
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
 | 부록 B `ch12-modern-cpp-enough` | C++ 표준 초안 [vector.modifiers]는 재할당이 없어도 넣은 자리 뒤와 끝 반복자를 무효로 봄. `reserve` 뒤 범위 기반 `for` + `push_back`은 이 환경의 ASan이 보고하지 않지만 표준상 미정의 동작(부록 B ch9 검증). `unique_ptr`의 `get()` 뒤 `reset()` 후 사용은 ASan `heap-use-after-free`, 같은 원시 포인터를 `unique_ptr` 둘에 넘기면 `attempting double-free`(부록 B ch9 Q9.1·Q9.2가 짧게만 다룸) |
-| 부록 B `ch10-undefined-behavior` | ch2가 확인한 타입 안전성 사실(1.100.0): `&u32 as &f32`는 E0605(ch2 4.2절의 compile_fail), 원시 포인터로 거친 캐스트는 컴파일되고 역참조만 E0133, `unsafe { transmute(u32) }`는 `unnecessary_transmutes` 경고와 `f32::from_bits` 제안. C의 미초기화 변수 읽기(ch2 4.1절 E0381이 미룸) |
 | 부록 B `ch14-performance` | 디버그 빌드로 속도를 비교하는 실수, Discord·Cloudflare 사례를 읽는 법(구조 변경을 함께 함)(부록 B ch1 4절, Q1.3) |
 | 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5) |
 
