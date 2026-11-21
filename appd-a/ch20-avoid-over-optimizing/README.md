@@ -107,7 +107,7 @@ fn run_auction(mut input: impl BufRead) -> io::Result<Auction> {
 
 ### 2.3 지침 2: 보이는 복사를 지우려 하지 말고, 먼저 센다
 
-**문제 상황.** 경매가 끝나면 낙찰 알림(물품, 낙찰자, 금액)을 만들어 발송 대기열에 넣고, 경매 기록은 정리합니다. 알림을 만드는 코드에 `clone()`이 줄줄이 보여서 지우고 싶어집니다.
+**문제 상황.** 경매가 끝나면 낙찰 알림(물품, 낙찰자, 금액)을 만들어 발송 큐에 넣고, 경매 기록은 정리합니다. 알림을 만드는 코드에 `clone()`이 줄줄이 보여서 지우고 싶어집니다.
 
 **비권장 코드.** 복제를 피하려고 알림이 판매 기록을 빌립니다.
 
@@ -117,7 +117,7 @@ struct NoticeView<'a> { item: &'a str, winner: &'a str, amount: u32 }
 fn notices_view(sales: &[Sale]) -> Vec<NoticeView<'_>> // 결과가 sales에 묶임
 ```
 
-알림을 다 보낼 때까지 판매 기록을 버릴 수 없습니다. 알림이 남아 있는데 `drop(sales)`를 부르면 ``error[E0505]: cannot move out of `sales` because it is borrowed``이고, 대기열을 발송 스레드로 넘기려 하면 2.2절의 표처럼 E0597(``requires that `sales` is borrowed for `'static` ``)입니다. 그렇게 해서 아낀 것이 얼마인지는 세어 봐야 압니다.
+알림을 다 보낼 때까지 판매 기록을 버릴 수 없습니다. 알림이 남아 있는데 `drop(sales)`를 부르면 ``error[E0505]: cannot move out of `sales` because it is borrowed``이고, 큐를 발송 스레드로 넘기려 하면 2.2절의 표처럼 E0597(``requires that `sales` is borrowed for `'static` ``)입니다. 그렇게 해서 아낀 것이 얼마인지는 세어 봐야 압니다.
 
 **권장 코드.** 그냥 복제하고, 복제를 셉니다.
 

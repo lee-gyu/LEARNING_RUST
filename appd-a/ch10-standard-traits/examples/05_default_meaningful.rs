@@ -1,7 +1,7 @@
 // 지침: "비어 있음"이나 "아무것도 고르지 않음"처럼 뜻이 분명한 기본값이 있는 공개 타입에는
 //       Default를 구현합니다. 인자 없는 new()가 있다면 Default도 함께 둡니다.
 //       반대로 불변식이 있어 아무 값이나 만들면 안 되는 타입에는 Default를 두지 않습니다.
-// 비권장: 인쇄 대기열 JobQueue에 new()만 있고 Default가 없음 (사용자가 우회 코드를 씀)
+// 비권장: 인쇄 큐 JobQueue에 new()만 있고 Default가 없음 (사용자가 우회 코드를 씀)
 //         1~99만 허용하는 인쇄 부수 Copies에 derive(Default) (생성자가 거부하는 0이 만들어짐)
 // 권장:   JobQueue에 derive(Default), Copies에는 Default 대신 이름 붙은 상수
 //
@@ -10,7 +10,7 @@
 use std::collections::HashMap;
 use std::mem;
 
-// ---- 라이브러리 v0: Default가 없는 대기열 ---------------------------------------
+// ---- 라이브러리 v0: Default가 없는 큐 ---------------------------------------
 
 pub mod v0 {
     #[derive(Debug)]
@@ -42,10 +42,10 @@ pub mod v0 {
     }
 }
 
-// ---- 라이브러리 v1: 빈 대기열이 곧 기본값 -------------------------------------
+// ---- 라이브러리 v1: 빈 큐가 곧 기본값 -------------------------------------
 
 pub mod v1 {
-    // 빈 대기열은 누가 봐도 같은 뜻이므로 derive로 충분합니다.
+    // 빈 큐는 누가 봐도 같은 뜻이므로 derive로 충분합니다.
     #[derive(Debug, Default)]
     pub struct JobQueue {
         jobs: Vec<&'static str>,
@@ -123,7 +123,7 @@ struct Office {
 }
 
 fn main() {
-    println!("[비권장] new()만 있는 대기열: 사용자가 우회합니다");
+    println!("[비권장] new()만 있는 큐: 사용자가 우회합니다");
     let mut floors: HashMap<u8, v0::JobQueue> = HashMap::new();
     floors
         .entry(3)
@@ -138,7 +138,7 @@ fn main() {
     println!("  3층에서 {}건을 보냄, 남은 {}건", sent.len(), third.len());
     // 출력:   3층에서 2건을 보냄, 남은 0건
 
-    println!("[권장] Default가 있는 대기열: 표준 API가 그대로 열립니다");
+    println!("[권장] Default가 있는 큐: 표준 API가 그대로 열립니다");
     let mut floors: HashMap<u8, v1::JobQueue> = HashMap::new();
     floors.entry(3).or_default().push("회의록.pdf");
     floors.entry(3).or_default().push("일정표.pdf");
@@ -148,11 +148,11 @@ fn main() {
     // 출력:   3층에서 2건을 보냄, 남은 0건
     let office = Office::default();
     println!(
-        "  사용자의 Office::default(): 대기열 비었나 {}, 방향 {:?}",
+        "  사용자의 Office::default(): 큐 비었나 {}, 방향 {:?}",
         office.queue.is_empty(),
         office.orientation
     );
-    // 출력:   사용자의 Office::default(): 대기열 비었나 true, 방향 Portrait
+    // 출력:   사용자의 Office::default(): 큐 비었나 true, 방향 Portrait
 
     println!("[비권장] 불변식이 있는 타입에 derive(Default)");
     let made = bad_copies::Copies::new(0);

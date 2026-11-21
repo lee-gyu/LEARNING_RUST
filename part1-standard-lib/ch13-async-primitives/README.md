@@ -21,7 +21,7 @@
 2. 웨이커가 무엇을 하는지 설명하고, `std::task::Wake`를 `Arc<T>`에 구현해 unsafe 없이 웨이커를 만들 수 있다. `wake`/`wake_by_ref`/`clone`/`will_wake`를 구별해 쓸 수 있다.
 3. `Future`를 직접 구현할 수 있다. 스스로 깨우는 퓨처, 다른 스레드가 공유 상태와 저장해 둔 웨이커로 완료시키는 퓨처(타이머, 일회용 채널), 두 퓨처를 함께 기다리는 `join`을 만들고, `async fn`이 만드는 상태 기계와 손으로 쓴 `poll`을 비교할 수 있다.
 4. `Pin`이 왜 필요한지(자기 참조 상태 기계)와 `Unpin`인 타입에는 아무 제약도 아니라는 것을 설명할 수 있다. `Unpin`이 아닌 퓨처를 `pin!`이나 `Box::pin`으로 고정해 `as_mut()`으로 여러 번 폴링하고, `Pin<Box<dyn Future<Output = T>>>`를 읽고 쓸 수 있다.
-5. `park`/`unpark`로 `block_on`을, 채널을 태스크 대기열로 써서 여러 태스크를 돌리는 실행기를 만들 수 있다. 깨우지 않으면 멈추고 쉬지 않고 깨우면 바쁜 폴링이 된다는 것, 그리고 실제 런타임이 이것과 무엇이 다른지 설명할 수 있다.
+5. `park`/`unpark`로 `block_on`을, 채널을 태스크 큐로 써서 여러 태스크를 돌리는 실행기를 만들 수 있다. 깨우지 않으면 멈추고 쉬지 않고 깨우면 바쁜 폴링이 된다는 것, 그리고 실제 런타임이 이것과 무엇이 다른지 설명할 수 있다.
 
 ## 2. 핵심 개념
 
@@ -114,7 +114,7 @@ pub trait Wake {
 impl<W: Wake + Send + Sync + 'static> From<Arc<W>> for Waker
 ```
 
-`self`를 `Arc<Self>`로 받는 이유는 웨이커가 여러 곳에 복제되고 다른 스레드로 건너가기 때문입니다. 알맹이를 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)의 `Arc`로 공유하므로 `Send + Sync + 'static`도 필요합니다. `Waker::from(arc)`는 할당 없이 `Arc`를 웨이커로 옮기고, 웨이커를 복제하면 `Arc`가 복제되고 버리면 `Arc`도 버려집니다. [`02_waker_and_wake.rs`](examples/02_waker_and_wake.rs)는 깨워진 횟수만 세는 웨이커로 이것을 확인합니다. `Waker::from` 직후 소유자 수가 2, `clone` 뒤 3, `wake` 뒤 다시 2가 됩니다. 실제 실행기라면 `wake` 안에서 "잠든 스레드 깨우기"(2.5절)나 "태스크를 대기열에 다시 넣기"(2.9절)를 합니다. `wake`를 빈 몸체로 구현하면 Clippy가 `manual_noop_waker`로 `Waker::noop()`을 쓰라고 알려 줍니다.
+`self`를 `Arc<Self>`로 받는 이유는 웨이커가 여러 곳에 복제되고 다른 스레드로 건너가기 때문입니다. 알맹이를 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)의 `Arc`로 공유하므로 `Send + Sync + 'static`도 필요합니다. `Waker::from(arc)`는 할당 없이 `Arc`를 웨이커로 옮기고, 웨이커를 복제하면 `Arc`가 복제되고 버리면 `Arc`도 버려집니다. [`02_waker_and_wake.rs`](examples/02_waker_and_wake.rs)는 깨워진 횟수만 세는 웨이커로 이것을 확인합니다. `Waker::from` 직후 소유자 수가 2, `clone` 뒤 3, `wake` 뒤 다시 2가 됩니다. 실제 실행기라면 `wake` 안에서 "잠든 스레드 깨우기"(2.5절)나 "태스크를 큐에 다시 넣기"(2.9절)를 합니다. `wake`를 빈 몸체로 구현하면 Clippy가 `manual_noop_waker`로 `Waker::noop()`을 쓰라고 알려 줍니다.
 
 ### 2.4 퓨처 직접 구현하기
 
@@ -330,7 +330,7 @@ struct Join<A: Future, B: Future> {
 
 ### 2.9 여러 태스크를 돌리는 실행기
 
-`block_on`은 퓨처 하나만 실행합니다. [`08_mini_executor.rs`](examples/08_mini_executor.rs)는 Part 0 ch16의 `spawn_task`처럼 여러 **태스크**를 돌리는 실행기를 만듭니다. 태스크는 실행기에 맡긴 최상위 퓨처이고, 대기열은 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)의 `mpsc` 채널입니다.
+`block_on`은 퓨처 하나만 실행합니다. [`08_mini_executor.rs`](examples/08_mini_executor.rs)는 Part 0 ch16의 `spawn_task`처럼 여러 **태스크**를 돌리는 실행기를 만듭니다. 태스크는 실행기에 맡긴 최상위 퓨처이고, 큐는 [Part 0 ch15](../../part0-getting-started/ch15-concurrency/README.md)의 `mpsc` 채널입니다.
 
 ```rust
 type BoxFuture = Pin<Box<dyn Future<Output = ()> + Send + 'static>>;
@@ -338,23 +338,23 @@ type BoxFuture = Pin<Box<dyn Future<Output = ()> + Send + 'static>>;
 struct Task {
     name: &'static str,
     future: Mutex<Option<BoxFuture>>, // 끝나면 None
-    queue: Sender<Arc<Task>>,         // 자기 자신을 다시 넣을 대기열
+    queue: Sender<Arc<Task>>,         // 자기 자신을 다시 넣을 큐
     polls: AtomicUsize,
 }
 
 impl Wake for Task {
     fn wake(self: Arc<Self>) { self.wake_by_ref(); }
     fn wake_by_ref(self: &Arc<Self>) {
-        let _ = self.queue.send(Arc::clone(self)); // 웨이커 = "이 태스크를 대기열에 다시 넣기"
+        let _ = self.queue.send(Arc::clone(self)); // 웨이커 = "이 태스크를 큐에 다시 넣기"
     }
 }
 ```
 
-- `spawn`은 퓨처를 `Box::pin`으로 고정해 `Task`에 담고 대기열에 넣습니다. `run`은 `recv()`로 태스크를 하나 꺼내 그 태스크로 만든 웨이커로 폴링하고, `Ready`면 퓨처를 버립니다. 대기열이 비면 `recv()`에서 잠들므로 바쁜 폴링이 아닙니다. 타이머 스레드가 웨이커를 부르면 태스크가 대기열에 들어가고 실행기가 깨어납니다.
-- **`Option`인 이유**: 한 태스크가 폴링되기 전에 두 번 깨워지면 대기열에 두 번 들어갑니다. 끝난 뒤에 꺼낸 것은 `None`을 보고 건너뜁니다.
+- `spawn`은 퓨처를 `Box::pin`으로 고정해 `Task`에 담고 큐에 넣습니다. `run`은 `recv()`로 태스크를 하나 꺼내 그 태스크로 만든 웨이커로 폴링하고, `Ready`면 퓨처를 버립니다. 큐가 비면 `recv()`에서 잠들므로 바쁜 폴링이 아닙니다. 타이머 스레드가 웨이커를 부르면 태스크가 큐에 들어가고 실행기가 깨어납니다.
+- **`Option`인 이유**: 한 태스크가 폴링되기 전에 두 번 깨워지면 큐에 두 번 들어갑니다. 끝난 뒤에 꺼낸 것은 `None`을 보고 건너뜁니다.
 - **`Mutex`, `Send + 'static`인 이유**: 웨이커가 `Arc<Task>`를 품은 채 타이머 스레드로 건너가므로 `Arc<Task>`가 `Send`여야 하고, 그러려면 `Task`가 `Send + Sync`여야 합니다. `Mutex<T>`는 `T: Send`면 `Sync`이므로, 결국 퓨처가 `Send`여야 합니다. `'static`은 태스크가 `spawn`을 부른 코드보다 오래 살 수 있기 때문입니다. `Rc`를 await 너머로 들고 가는 퓨처를 넘기면 4.5절의 에러가 납니다. tokio의 `spawn`(Part 0 ch16의 `spawn_task`)이 `Send + 'static`을 요구하는 이유도 같습니다.
 
-1번 구역은 스스로 양보하는 태스크 A(3단계)·B(2단계)·C(1단계)를 실행해 `A1 B1 C1 A2 B2 A3` 순서와, 끝난 순서 `C`(폴링 2번) → `B`(3번) → `A`(4번)를 보여 줍니다. 대기열이 선입선출이라 양보한 태스크는 맨 뒤로 갑니다. 태스크는 await 지점에서만 차례를 넘기는 협력적 멀티태스킹이므로, 한 태스크가 양보 없이 오래 계산하면 나머지가 모두 기다립니다(Part 0 ch16 2.9절). 2번 구역은 20·60·100ms 타이머를 기다리는 태스크 셋이 각각 2번씩만 폴링되고 전체가 100ms 남짓(합인 180ms보다 짧게)에 끝나는 것을 확인합니다.
+1번 구역은 스스로 양보하는 태스크 A(3단계)·B(2단계)·C(1단계)를 실행해 `A1 B1 C1 A2 B2 A3` 순서와, 끝난 순서 `C`(폴링 2번) → `B`(3번) → `A`(4번)를 보여 줍니다. 큐가 선입선출이라 양보한 태스크는 맨 뒤로 갑니다. 태스크는 await 지점에서만 차례를 넘기는 협력적 멀티태스킹이므로, 한 태스크가 양보 없이 오래 계산하면 나머지가 모두 기다립니다(Part 0 ch16 2.9절). 2번 구역은 20·60·100ms 타이머를 기다리는 태스크 셋이 각각 2번씩만 폴링되고 전체가 100ms 남짓(합인 180ms보다 짧게)에 끝나는 것을 확인합니다.
 
 ### 2.10 우리가 만든 것과 실제 런타임의 차이
 
@@ -398,7 +398,7 @@ impl Wake for Task {
 | [`05_timer_and_oneshot.rs`](examples/05_timer_and_oneshot.rs) | 공유 상태와 저장한 웨이커로 만든 타이머, oneshot 채널과 `Drop`, 마지막 웨이커만 깨우기 | 2, 3 |
 | [`06_pin_unpin.rs`](examples/06_pin_unpin.rs) | `Pin::new`/`get_mut`, `pin!`/`Box::pin`/`set`, 자기 참조 주소 확인, `Pin<Box<dyn Future>>`, 재귀 `async fn` | 4 |
 | [`07_join_and_tools.rs`](examples/07_join_and_tools.rs) | 직접 만든 `join`, `poll_fn`, `task::ready!`로 만든 `map`, `IntoFuture` 빌더 | 3 |
-| [`08_mini_executor.rs`](examples/08_mini_executor.rs) | 태스크 대기열(채널)과 `spawn`, 태스크를 대기열에 다시 넣는 웨이커, 타이머를 기다리는 태스크 | 5 |
+| [`08_mini_executor.rs`](examples/08_mini_executor.rs) | 태스크 큐(채널)와 `spawn`, 태스크를 큐에 다시 넣는 웨이커, 타이머를 기다리는 태스크 | 5 |
 | [`compile_fail/`](compile_fail) | 고정·`poll` 시그니처·재귀·`Send`에서 만나는 컴파일 에러 5개(4절) | 1, 3, 4, 5 |
 
 모든 명령은 저장소 루트에서 실행합니다. 모든 예제는 종료 코드 0으로 몇 초 안에 끝나고 표준 에러에 아무것도 출력하지 않습니다. 시간은 "몇 ms 이상/미만인가"라는 비교 결과로만 출력하고, 실행마다 달라지는 폴링 횟수(04의 4번 구역)는 "1000번을 넘는가"로 출력하므로 여러 번 실행해도 출력이 같았습니다. 다만 시간 비교는 컴퓨터가 몹시 바빠 스레드가 제때 실행되지 못하면 달라질 수 있습니다. 메모리 주소는 출력하지 않고 비교 결과만 출력합니다.
@@ -598,7 +598,7 @@ cargo run -p p1-ch13-async-primitives --example 08_mini_executor
 ```
 
 ```text
-1. 스스로 양보하는 태스크 셋: 대기열 순서대로 번갈아 실행됩니다
+1. 스스로 양보하는 태스크 셋: 큐 순서대로 번갈아 실행됩니다
     실행 순서: A1 B1 C1 A2 B2 A3
     끝난 순서와 폴링 횟수: [("C", 2), ("B", 3), ("A", 4)]
 2. 타이머를 기다리는 태스크 셋: 기다리는 동안 실행기는 잠듭니다

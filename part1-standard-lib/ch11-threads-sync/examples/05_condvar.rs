@@ -1,6 +1,6 @@
 // Condvar: 조건이 만족될 때까지 CPU를 쓰지 않고 잠들어 기다리기.
 // notify는 쌓이지 않으므로 조건은 항상 Mutex 안의 값으로 확인합니다(wait_while).
-// 마지막 구역은 Mutex<VecDeque> + Condvar 두 개로 용량이 정해진 대기열을 만들어
+// 마지막 구역은 Mutex<VecDeque> + Condvar 두 개로 용량이 정해진 큐를 만들어
 // 생산자-소비자를 구현합니다.
 //
 // 실행: cargo run -p p1-ch11-threads-sync --example 05_condvar
@@ -13,7 +13,7 @@ use std::sync::{Condvar, Mutex};
 use std::thread;
 use std::time::Duration;
 
-/// 용량이 정해진 대기열. 가득 차면 push가, 비어 있으면 pop이 기다립니다.
+/// 용량이 정해진 큐. 가득 차면 push가, 비어 있으면 pop이 기다립니다.
 struct BoundedQueue<T> {
     items: Mutex<VecDeque<T>>,
     not_empty: Condvar, // "하나 이상 들어 있다"를 기다리는 소비자용
@@ -35,7 +35,7 @@ impl<T> BoundedQueue<T> {
     fn push(&self, item: T) -> usize {
         let guard = self.items.lock().unwrap();
         // wait_while은 조건이 참인 동안 잠듭니다. 잠들 때 잠금을 풀고, 깨어나면 다시 잠근 뒤
-        // 조건을 또 확인합니다. 그래서 가짜 깨어남이 있어도 가득 찬 대기열에 넣지 않습니다.
+        // 조건을 또 확인합니다. 그래서 가짜 깨어남이 있어도 가득 찬 큐에 넣지 않습니다.
         let mut items = self
             .not_full
             .wait_while(guard, |items| items.len() == self.capacity)
@@ -138,7 +138,7 @@ fn main() {
         // 출력: (다) 아무도 바꾸지 않음 → 시간 초과: true
     }
 
-    println!("3. 생산자-소비자: 용량 3짜리 대기열에 생산자 2개가 10개씩 넣습니다");
+    println!("3. 생산자-소비자: 용량 3짜리 큐에 생산자 2개가 10개씩 넣습니다");
     {
         let queue = BoundedQueue::new(3);
 
@@ -157,7 +157,7 @@ fn main() {
                 let mut got = Vec::new();
                 for _ in 0..20 {
                     got.push(queue.pop());
-                    thread::sleep(Duration::from_millis(1)); // 느린 소비자 → 대기열이 금방 참
+                    thread::sleep(Duration::from_millis(1)); // 느린 소비자 → 큐가 금방 참
                 }
                 got
             });
@@ -186,13 +186,10 @@ fn main() {
             "    생산자 1의 값이 넣은 순서대로 왔는가: {}",
             from_1.is_sorted()
         );
-        println!(
-            "    대기열 길이가 용량(3)을 넘은 적이 없는가: {}",
-            max_len <= 3
-        );
+        println!("    큐 길이가 용량(3)을 넘은 적이 없는가: {}", max_len <= 3);
         // 출력: 받은 개수: 20, 합계: 1110
         // 출력: 생산자 0의 값이 넣은 순서대로 왔는가: true
         // 출력: 생산자 1의 값이 넣은 순서대로 왔는가: true
-        // 출력: 대기열 길이가 용량(3)을 넘은 적이 없는가: true
+        // 출력: 큐 길이가 용량(3)을 넘은 적이 없는가: true
     }
 }

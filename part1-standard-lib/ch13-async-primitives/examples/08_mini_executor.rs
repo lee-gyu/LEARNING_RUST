@@ -1,6 +1,6 @@
-// 여러 태스크를 돌리는 작은 실행기: spawn한 퓨처를 태스크 대기열(채널)에 넣고, 실행기는 대기열에서
-// 하나씩 꺼내 폴링합니다. 태스크의 웨이커는 "자기 자신을 대기열에 다시 넣는 것"입니다.
-// 대기열이 비면 실행기는 recv에서 잠들고, 어느 태스크든 깨워지면 다시 일합니다.
+// 여러 태스크를 돌리는 작은 실행기: spawn한 퓨처를 태스크 큐(채널)에 넣고, 실행기는 큐에서
+// 하나씩 꺼내 폴링합니다. 태스크의 웨이커는 "자기 자신을 큐에 다시 넣는 것"입니다.
+// 큐가 비면 실행기는 recv에서 잠들고, 어느 태스크든 깨워지면 다시 일합니다.
 //
 // 실행: cargo run -p p1-ch13-async-primitives --example 08_mini_executor
 //
@@ -25,14 +25,14 @@ type BoxFuture = Pin<Box<dyn Future<Output = ()> + Send + 'static>>;
 
 struct Task {
     name: &'static str,
-    // 끝난 태스크는 None. 같은 태스크가 대기열에 두 번 들어갈 수 있으므로(두 번 깨워짐)
+    // 끝난 태스크는 None. 같은 태스크가 큐에 두 번 들어갈 수 있으므로(두 번 깨워짐)
     // 꺼냈는데 이미 끝났으면 건너뜁니다. Arc<Task>가 여러 스레드에서 공유되므로 Mutex로 감쌉니다.
     future: Mutex<Option<BoxFuture>>,
     queue: Sender<Arc<Task>>,
     polls: AtomicUsize,
 }
 
-// 웨이커 = "이 태스크를 대기열에 다시 넣어 주세요".
+// 웨이커 = "이 태스크를 큐에 다시 넣어 주세요".
 impl Wake for Task {
     fn wake(self: Arc<Self>) {
         self.wake_by_ref();
@@ -59,7 +59,7 @@ impl Executor {
         }
     }
 
-    /// 퓨처를 태스크로 만들어 대기열에 넣습니다. 아직 실행하지는 않습니다.
+    /// 퓨처를 태스크로 만들어 큐에 넣습니다. 아직 실행하지는 않습니다.
     fn spawn(&mut self, name: &'static str, future: impl Future<Output = ()> + Send + 'static) {
         let task = Arc::new(Task {
             name,
@@ -75,7 +75,7 @@ impl Executor {
     fn run(mut self) -> Vec<(&'static str, usize)> {
         let mut finished = Vec::new();
         while self.unfinished > 0 {
-            // 대기열이 비어 있으면 누군가 깨울 때까지 여기서 잠듭니다(바쁜 폴링이 아닙니다).
+            // 큐가 비어 있으면 누군가 깨울 때까지 여기서 잠듭니다(바쁜 폴링이 아닙니다).
             let task = self.queue.recv().unwrap();
             let mut slot = task.future.lock().unwrap();
             let Some(future) = slot.as_mut() else {
@@ -89,7 +89,7 @@ impl Executor {
                 self.unfinished -= 1;
                 finished.push((task.name, polls));
             }
-            // Pending이면 할 일이 없습니다. 깨워 주는 쪽이 태스크를 대기열에 다시 넣습니다.
+            // Pending이면 할 일이 없습니다. 깨워 주는 쪽이 태스크를 큐에 다시 넣습니다.
         }
         finished
     }
@@ -114,7 +114,7 @@ impl Future for YieldOnce {
             Poll::Ready(())
         } else {
             self.yielded = true;
-            cx.waker().wake_by_ref(); // 대기열의 맨 뒤로 갑니다.
+            cx.waker().wake_by_ref(); // 큐의 맨 뒤로 갑니다.
             Poll::Pending
         }
     }
@@ -156,7 +156,7 @@ impl Future for Sleep {
                     st.waker.take()
                 };
                 if let Some(waker) = waker {
-                    waker.wake(); // 타이머 스레드에서 태스크를 대기열에 넣습니다.
+                    waker.wake(); // 타이머 스레드에서 태스크를 큐에 넣습니다.
                 }
             });
             state
@@ -171,7 +171,7 @@ impl Future for Sleep {
 }
 
 fn main() {
-    println!("1. 스스로 양보하는 태스크 셋: 대기열 순서대로 번갈아 실행됩니다");
+    println!("1. 스스로 양보하는 태스크 셋: 큐 순서대로 번갈아 실행됩니다");
     let log = Arc::new(Mutex::new(Vec::new())); // 태스크는 'static이어야 하므로 Arc로 공유합니다.
     let mut executor = Executor::new();
     for (name, steps) in [("A", 3), ("B", 2), ("C", 1)] {

@@ -12,7 +12,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::task::{Context, Wake, Waker};
 use std::thread;
 
-/// 깨워진 횟수를 세는 웨이커의 "알맹이". 실제 실행기라면 여기에 태스크를 대기열에 다시 넣거나
+/// 깨워진 횟수를 세는 웨이커의 "알맹이". 실제 실행기라면 여기에 태스크를 큐에 다시 넣거나
 /// 잠든 스레드를 깨우는 코드가 들어갑니다(04, 08 예제).
 struct CountingWaker {
     name: &'static str,

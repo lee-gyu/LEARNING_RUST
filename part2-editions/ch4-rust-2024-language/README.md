@@ -1064,15 +1064,15 @@ println!("{:?} {seps:?}", it.collect::<Vec<_>>()); // ["사과", "배", "포도"
 
 </details>
 
-### 연습 4. 대기열의 `while` 함정 고치기
+### 연습 4. 큐의 `while` 함정 고치기
 
-`VecDeque::from([5, 4, 0, 3])`에서 앞에서부터 0보다 큰 작업만 처리하고, 처음으로 0이 나오면 멈추되 **0과 그 뒤의 작업은 대기열에 남기세요**. `while let Some(job) = queue.pop_front() && job > 0`으로 쓰면 남는 것이 `[3]`뿐인 것을 먼저 확인하고, `[0, 3]`이 남도록 고치세요.
+`VecDeque::from([5, 4, 0, 3])`에서 앞에서부터 0보다 큰 작업만 처리하고, 처음으로 0이 나오면 멈추되 **0과 그 뒤의 작업은 큐에 남기세요**. `while let Some(job) = queue.pop_front() && job > 0`으로 쓰면 남는 것이 `[3]`뿐인 것을 먼저 확인하고, `[0, 3]`이 남도록 고치세요.
 
 <details>
 <summary>힌트</summary>
 
 - 예제 03의 4번 구역처럼 `while let Some(&job) = queue.front() && job > 0 { queue.pop_front(); .. }`로 꺼내기 전에 확인합니다.
-- `VecDeque::pop_front_if`(1.93.0)를 쓰면 `while let Some(job) = queue.pop_front_if(|j| *j > 0)`처럼 let 체인 없이도 됩니다. 두 방법 모두 남은 대기열이 `[0, 3]`인지 확인하세요.
+- `VecDeque::pop_front_if`(1.93.0)를 쓰면 `while let Some(job) = queue.pop_front_if(|j| *j > 0)`처럼 let 체인 없이도 됩니다. 두 방법 모두 남은 큐가 `[0, 3]`인지 확인하세요.
 
 </details>
 

@@ -130,7 +130,7 @@ fn main() -> io::Result<()> {
     listener.set_nonblocking(true)?;
     // 기다리는 연결이 없으므로, 블로킹 모드라면 여기서 영원히 멈췄을 것입니다.
     println!("    연결이 없을 때 accept → {}", show(&listener.accept()));
-    // 연결은 운영체제가 받아 대기열에 넣어 두므로, 서버가 accept하지 않아도 connect는 성공합니다.
+    // 연결은 운영체제가 받아 큐에 넣어 두므로, 서버가 accept하지 않아도 connect는 성공합니다.
     let client = TcpStream::connect(listener.local_addr()?)?;
     client.set_nonblocking(true)?;
     let start = Instant::now();

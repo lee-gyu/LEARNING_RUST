@@ -208,11 +208,11 @@ impl PinKey {
 
 [ch7](../ch7-builders/README.md) 2.3절은 `Default`와 `..Default::default()`를 쓰려면 모든 필드에 뜻이 있는 기본값이 있어야 한다고 했고, Part 1 ch6 2.12절은 기본값이 0이 아닐 때 손으로 구현하는 법을 다뤘습니다. 이 절은 그 앞의 질문, 공개 타입에 `Default`를 구현할지 자체를 다룹니다.
 
-**문제 상황.** 인쇄 라이브러리에 공개 타입이 둘 있습니다. 문서를 쌓아 두는 대기열 `JobQueue`와, 1~99만 허용하는 인쇄 부수 `Copies`입니다.
+**문제 상황.** 인쇄 라이브러리에 공개 타입이 둘 있습니다. 문서를 쌓아 두는 큐 `JobQueue`와, 1~99만 허용하는 인쇄 부수 `Copies`입니다.
 
-**비권장 코드 1.** 빈 대기열을 만드는 `new()`만 두고 `Default`는 구현하지 않습니다. clippy가 ``you should consider adding a `Default` implementation for `JobQueue` ``(`new_without_default`, 기본 warn)로 알려 주는 모양입니다. [`05_default_meaningful.rs`](examples/05_default_meaningful.rs)의 사용자 코드는 층마다 대기열을 두는 `HashMap`에서 `or_default()` 대신 `or_insert_with(JobQueue::new)`를, 대기열을 비우며 꺼낼 때 `mem::take` 대신 `mem::replace(&mut q, JobQueue::new())`를 씁니다. 사용자가 `JobQueue` 필드를 가진 자기 타입에 `derive(Default)`를 붙이면 ``the trait bound `JobQueue: Default` is not satisfied``(E0277)입니다.
+**비권장 코드 1.** 빈 큐를 만드는 `new()`만 두고 `Default`는 구현하지 않습니다. clippy가 ``you should consider adding a `Default` implementation for `JobQueue` ``(`new_without_default`, 기본 warn)로 알려 주는 모양입니다. [`05_default_meaningful.rs`](examples/05_default_meaningful.rs)의 사용자 코드는 층마다 큐를 두는 `HashMap`에서 `or_default()` 대신 `or_insert_with(JobQueue::new)`를, 큐를 비우며 꺼낼 때 `mem::take` 대신 `mem::replace(&mut q, JobQueue::new())`를 씁니다. 사용자가 `JobQueue` 필드를 가진 자기 타입에 `derive(Default)`를 붙이면 ``the trait bound `JobQueue: Default` is not satisfied``(E0277)입니다.
 
-**권장 코드 1.** 빈 대기열은 누가 봐도 같은 뜻이므로 `derive(Default)`를 붙이고, `new()`는 `Self::default()`를 돌려줍니다. 결과는 같지만 사용자는 `or_default`, `unwrap_or_default`, `mem::take`를 그대로 쓰고, 자기 타입 `Office`에도 `derive(Default)`를 붙입니다. 열거형은 기본 배리언트에 `#[default]`를 붙여 derive합니다(예제의 `Orientation`). 빠뜨리면 E0665입니다(4.3절).
+**권장 코드 1.** 빈 큐는 누가 봐도 같은 뜻이므로 `derive(Default)`를 붙이고, `new()`는 `Self::default()`를 돌려줍니다. 결과는 같지만 사용자는 `or_default`, `unwrap_or_default`, `mem::take`를 그대로 쓰고, 자기 타입 `Office`에도 `derive(Default)`를 붙입니다. 열거형은 기본 배리언트에 `#[default]`를 붙여 derive합니다(예제의 `Orientation`). 빠뜨리면 E0665입니다(4.3절).
 
 **비권장 코드 2.** 불변식이 있는 `Copies`에 `derive(Default)`를 붙입니다.
 
@@ -482,18 +482,18 @@ cargo run -p er-ch10-standard-traits --example 04_float_fields
 
 ### 05_default_meaningful — `Default` 판단
 
-3층 대기열에 문서 두 건을 넣고 비우며 꺼냅니다. 두 판의 결과는 같고 사용자 코드만 다릅니다. 뒤의 두 구역은 인쇄 부수 `Copies`의 `Default`입니다.
+3층 큐에 문서 두 건을 넣고 비우며 꺼냅니다. 두 판의 결과는 같고 사용자 코드만 다릅니다. 뒤의 두 구역은 인쇄 부수 `Copies`의 `Default`입니다.
 
 ```sh
 cargo run -p er-ch10-standard-traits --example 05_default_meaningful
 ```
 
 ```text
-[비권장] new()만 있는 대기열: 사용자가 우회합니다
+[비권장] new()만 있는 큐: 사용자가 우회합니다
   3층에서 2건을 보냄, 남은 0건
-[권장] Default가 있는 대기열: 표준 API가 그대로 열립니다
+[권장] Default가 있는 큐: 표준 API가 그대로 열립니다
   3층에서 2건을 보냄, 남은 0건
-  사용자의 Office::default(): 대기열 비었나 true, 방향 Portrait
+  사용자의 Office::default(): 큐 비었나 true, 방향 Portrait
 [비권장] 불변식이 있는 타입에 derive(Default)
   Copies::new(0) = None, Copies::default() = 0부
 [권장] Default 대신 이름 붙은 상수

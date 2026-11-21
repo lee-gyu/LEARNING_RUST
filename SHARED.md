@@ -241,7 +241,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | operator overloading / fully qualified syntax / supertrait | 연산자 오버로딩 / 완전 정규화 문법 / 슈퍼트레이트 |
 | newtype pattern / never type / DST / wide pointer / function pointer | 뉴타입 패턴 / never 타입 / 동적 크기 타입 / 넓은 포인터 / 함수 포인터 |
 | declarative / procedural macro / token stream / expand | 선언적 / 절차적 매크로 / 토큰 스트림 / 펼쳐지다 |
-| thread pool / graceful shutdown / worker / job / queue | 스레드 풀 / 우아한 종료 / 작업자 / 작업 / 대기열 |
+| thread pool / graceful shutdown / worker / job / queue | 스레드 풀 / 우아한 종료 / 작업자 / 작업 / 큐(이전 표기 "큐"에서 바꿈) |
 | request line / status line / header / body | 요청 줄 / 상태 줄 / 헤더 / 본문 |
 | temporary (value) / bind | 임시값 / 바인드 |
 | stdout / stderr | 표준 출력 / 표준 에러 |
@@ -282,7 +282,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | reader / writer / buffering / flush / line buffering | 리더 / 라이터 / 버퍼링 / 플러시(버퍼 비우기) / 줄 버퍼링 |
 | system call / EOF / seek / metadata | 시스템 호출 / EOF(입력의 끝) / 위치 옮기기 / 메타데이터 |
 | path component / separator / extension / symbolic link / canonical path | 구성 요소 / 구분자 / 확장자 / 심볼릭 링크 / 정규 경로 |
-| poll / waker / wake / pinned / task queue / busy polling | 폴링 / 웨이커 / 깨우다 / 고정된 / 태스크 대기열 / 바쁜 폴링 |
+| poll / waker / wake / pinned / task queue / busy polling | 폴링 / 웨이커 / 깨우다 / 고정된 / 태스크 큐 / 바쁜 폴링 |
 | auto trait / pin projection / oneshot channel | 자동 트레이트 / 고정 투영 / 일회용 채널(oneshot) |
 | C string / NUL terminator / interior NUL | C 문자열 / NUL 종료 바이트(0 바이트) / 중간의 0 바이트 |
 | OS string (`OsString`/`OsStr`) / upcast / type map | 운영체제 문자열 / 업캐스트 / 타입 맵 |

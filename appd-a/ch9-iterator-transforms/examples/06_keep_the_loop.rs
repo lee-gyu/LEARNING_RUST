@@ -172,7 +172,7 @@ fn waiting(name: &'static str, kg: u32, going_up: bool) -> Waiting {
 fn main() {
     let queues = [
         (
-            "대기열 A",
+            "큐 A",
             vec![
                 waiting("가람", 70, true),
                 waiting("나리", 80, false),
@@ -183,7 +183,7 @@ fn main() {
             ],
         ),
         (
-            "대기열 B",
+            "큐 B",
             vec![
                 waiting("가람", 50, true),
                 waiting("나리", 55, true),
@@ -193,7 +193,7 @@ fn main() {
             ],
         ),
         (
-            "대기열 C",
+            "큐 C",
             vec![waiting("가람", 70, true), waiting("나리", 80, false)],
         ),
     ];
@@ -207,9 +207,9 @@ fn main() {
             b.riders, b.load_kg, b.skipped, b.stop
         );
     }
-    // 출력: 대기열 A → 탑승 ["가람", "다온", "루다"] 225kg, 건너뜀 ["나리"], 마감 Some(Overweight("마루")) (두 판 일치: true)
-    // 출력: 대기열 B → 탑승 ["가람", "나리", "다온", "루다"] 210kg, 건너뜀 [], 마감 Some(Full) (두 판 일치: true)
-    // 출력: 대기열 C → 탑승 ["가람"] 70kg, 건너뜀 ["나리"], 마감 None (두 판 일치: true)
+    // 출력: 큐 A → 탑승 ["가람", "다온", "루다"] 225kg, 건너뜀 ["나리"], 마감 Some(Overweight("마루")) (두 판 일치: true)
+    // 출력: 큐 B → 탑승 ["가람", "나리", "다온", "루다"] 210kg, 건너뜀 [], 마감 Some(Full) (두 판 일치: true)
+    // 출력: 큐 C → 탑승 ["가람"] 70kg, 건너뜀 ["나리"], 마감 None (두 판 일치: true)
 
     println!();
     println!("== 2. 명단만 필요하면: filter + take + scan ==");
@@ -218,9 +218,9 @@ fn main() {
         let same = riders == board_loop(queue).riders;
         println!("{label} → {riders:?} (for판의 명단과 일치: {same})");
     }
-    // 출력: 대기열 A → ["가람", "다온", "루다"] (for판의 명단과 일치: true)
-    // 출력: 대기열 B → ["가람", "나리", "다온", "루다"] (for판의 명단과 일치: true)
-    // 출력: 대기열 C → ["가람"] (for판의 명단과 일치: true)
+    // 출력: 큐 A → ["가람", "다온", "루다"] (for판의 명단과 일치: true)
+    // 출력: 큐 B → ["가람", "나리", "다온", "루다"] (for판의 명단과 일치: true)
+    // 출력: 큐 C → ["가람"] (for판의 명단과 일치: true)
 
     println!();
     println!("== 3. 클로저 안의 match: for + match판과 take_while + fold판 ==");

@@ -845,12 +845,12 @@ error[E0505]: cannot move out of `line` because it is borrowed
 
 ### 연습 2. 호출을 미루는 `skip`
 
-[`03_swap_out_of_mut.rs`](examples/03_swap_out_of_mut.rs)의 `Waitlist`에 `fn skip(&mut self)`를 추가하세요. 호출 중인 손님을 대기열의 맨 뒤로 보내고 다음 손님을 부릅니다. 대기열이 비어 있으면 호출 중인 손님을 그대로 둡니다. `Party`를 복제하지 않습니다.
+[`03_swap_out_of_mut.rs`](examples/03_swap_out_of_mut.rs)의 `Waitlist`에 `fn skip(&mut self)`를 추가하세요. 호출 중인 손님을 큐의 맨 뒤로 보내고 다음 손님을 부릅니다. 큐가 비어 있으면 호출 중인 손님을 그대로 둡니다. `Party`를 복제하지 않습니다.
 
 <details>
 <summary>힌트</summary>
 
-`self.waiting.is_empty()`이면 바로 돌아갑니다. 아니면 `if let Some(p) = self.calling.take() { self.waiting.push_back(p); }`로 꺼내 뒤에 넣고, `self.calling = self.waiting.pop_front();`로 다음 손님을 부릅니다. 대기열에 한 팀만 있을 때 호출 중인 손님과 그 팀이 자리를 바꾸는지 확인하세요. `take()` 대신 `let p = self.calling;`으로 쓰면 4.3절의 E0507입니다.
+`self.waiting.is_empty()`이면 바로 돌아갑니다. 아니면 `if let Some(p) = self.calling.take() { self.waiting.push_back(p); }`로 꺼내 뒤에 넣고, `self.calling = self.waiting.pop_front();`로 다음 손님을 부릅니다. 큐에 한 팀만 있을 때 호출 중인 손님과 그 팀이 자리를 바꾸는지 확인하세요. `take()` 대신 `let p = self.calling;`으로 쓰면 4.3절의 E0507입니다.
 
 </details>
 

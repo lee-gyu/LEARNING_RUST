@@ -153,7 +153,7 @@ let (stream, peer) = listener.accept()?;    // 연결이 올 때까지 기다림
 | `listener.local_addr()` | == | `stream.peer_addr()` |
 | `accept`가 준 상대 주소 | == | `stream.local_addr()` (임시 포트) |
 
-**서버가 `accept`하기 전에도 `connect`는 성공합니다.** 연결을 맺는 절차(핸드셰이크)는 운영체제가 처리하고 맺어진 연결을 대기열에 넣어 두며, `accept`는 그 대기열에서 하나를 꺼낼 뿐입니다. 04 예제의 5번 구역은 `accept`를 부르지 않는 리스너에 `connect`가 성공하는 것을 보여 줍니다.
+**서버가 `accept`하기 전에도 `connect`는 성공합니다.** 연결을 맺는 절차(핸드셰이크)는 운영체제가 처리하고 맺어진 연결을 큐에 넣어 두며, `accept`는 그 큐에서 하나를 꺼낼 뿐입니다. 04 예제의 5번 구역은 `accept`를 부르지 않는 리스너에 `connect`가 성공하는 것을 보여 줍니다.
 
 ### 2.5 연결 닫기: EOF와 `shutdown`
 

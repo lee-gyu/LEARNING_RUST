@@ -20,7 +20,7 @@
 
 1. `thread::scope`로 지역 변수를 `move` 없이 빌려 쓰는 스레드를 만들고, 그것이 허용되는 이유(스코프가 끝나기 전에 모든 스레드가 join됨)와 스코프 안에서 패닉했을 때의 동작을 설명할 수 있다. `thread::Builder`로 스레드에 이름을 붙이고 생성 실패를 `io::Result`로 처리할 수 있다.
 2. `Mutex`의 `try_lock`, 가드 범위 줄이기, 잠그는 순서 정하기, 포이즈닝 복구, `get_mut`/`into_inner`를 상황에 맞게 쓰고, `RwLock`이 `Mutex`보다 나은 경우를 설명할 수 있다.
-3. `Condvar`로 조건이 만족될 때까지 기다리는 코드를 `wait_while`로 작성하고, 가짜 깨어남과 "신호는 쌓이지 않는다"는 점 때문에 조건을 항상 다시 확인해야 하는 이유를 설명할 수 있다. 용량이 정해진 대기열이나 `sync_channel`로 배압이 있는 생산자-소비자를 작성할 수 있다.
+3. `Condvar`로 조건이 만족될 때까지 기다리는 코드를 `wait_while`로 작성하고, 가짜 깨어남과 "신호는 쌓이지 않는다"는 점 때문에 조건을 항상 다시 확인해야 하는 이유를 설명할 수 있다. 용량이 정해진 큐나 `sync_channel`로 배압이 있는 생산자-소비자를 작성할 수 있다.
 4. 원자 타입의 `fetch_add`, `compare_exchange`, `try_update`로 잠금 없이 값을 고치고, `load` 뒤에 `store`하는 코드가 왜 틀리는지와 `Ordering`을 고르는 실용 지침을 설명할 수 있다.
 5. `OnceLock`/`LazyLock`으로 전역 설정과 캐시를 만들고, `static`에 둘 수 있는 값의 조건(`Sync`, 컴파일할 때 계산되는 초기값)을 설명하며, 상황에 맞는 동기화 도구를 고를 수 있다.
 
@@ -246,9 +246,9 @@ cfg.version = 2;
 
 ### 2.6 `Condvar`: 조건이 만족될 때까지 기다리기
 
-"대기열에 일감이 들어올 때까지", "준비가 끝날 때까지"처럼 **어떤 조건이 참이 될 때까지** 기다려야 할 때가 있습니다. 반복문에서 `lock()`하고 확인하고 풀기를 되풀이하면(바쁜 대기, busy waiting) 기다리는 동안에도 CPU를 계속 씁니다. **조건 변수(condition variable)** `Condvar`는 스레드를 CPU를 쓰지 않는 상태로 재워 두었다가, 조건을 바꾼 쪽이 깨워 주게 하는 도구입니다.
+"큐에 일감이 들어올 때까지", "준비가 끝날 때까지"처럼 **어떤 조건이 참이 될 때까지** 기다려야 할 때가 있습니다. 반복문에서 `lock()`하고 확인하고 풀기를 되풀이하면(바쁜 대기, busy waiting) 기다리는 동안에도 CPU를 계속 씁니다. **조건 변수(condition variable)** `Condvar`는 스레드를 CPU를 쓰지 않는 상태로 재워 두었다가, 조건을 바꾼 쪽이 깨워 주게 하는 도구입니다.
 
-`Condvar`는 언제나 `Mutex`와 짝을 이룹니다. 조건(예: "대기열이 비어 있다")은 `Mutex` 안의 값이고, `Condvar`는 "그 값이 바뀌었을지 모른다"는 알림만 전합니다.
+`Condvar`는 언제나 `Mutex`와 짝을 이룹니다. 조건(예: "큐가 비어 있다")은 `Mutex` 안의 값이고, `Condvar`는 "그 값이 바뀌었을지 모른다"는 알림만 전합니다.
 
 ```rust
 let ready = Mutex::new(false);
@@ -288,13 +288,13 @@ while !*started {
 | `notify_one()` | — | 기다리는 스레드 하나를 깨움 |
 | `notify_all()` | — | 기다리는 스레드를 모두 깨움 |
 
-`notify_one`과 `notify_all`은 깨워야 할 상대가 몇인지로 고릅니다. 출발 신호처럼 모두가 진행해야 하면 `notify_all`, 대기열에 일감 하나가 들어왔다면 그것을 가져갈 소비자 하나만 깨우면 되므로 `notify_one`입니다. 시간 제한이 있는 대기에 쓰는 `Duration`은 [ch10](../ch10-env-process-time/README.md)에서 다뤘습니다.
+`notify_one`과 `notify_all`은 깨워야 할 상대가 몇인지로 고릅니다. 출발 신호처럼 모두가 진행해야 하면 `notify_all`, 큐에 일감 하나가 들어왔다면 그것을 가져갈 소비자 하나만 깨우면 되므로 `notify_one`입니다. 시간 제한이 있는 대기에 쓰는 `Duration`은 [ch10](../ch10-env-process-time/README.md)에서 다뤘습니다.
 
 **`Condvar` 하나에는 `Mutex` 하나.** 문서는 한 `Condvar`를 시간을 두고 여러 `Mutex`와 쓰면 패닉할 수 있다고 경고합니다. 이 챕터의 예제를 작성하는 동안 실제로 만났는데, 앞에서 쓴 `Condvar`를 다른 `Mutex`와 함께 쓰자 이 환경(macOS)에서 `attempted to use a condition variable with two mutexes`로 패닉했습니다. 그래서 `Condvar`는 보통 지키는 `Mutex`와 같은 구조체에 나란히 둡니다.
 
-#### 용량이 정해진 대기열: 생산자-소비자
+#### 용량이 정해진 큐: 생산자-소비자
 
-`Mutex<VecDeque<T>>`와 `Condvar` 두 개로 용량이 정해진 대기열을 만들 수 있습니다. 비어 있으면 꺼내는 쪽(소비자)이, 가득 차면 넣는 쪽(생산자)이 기다립니다.
+`Mutex<VecDeque<T>>`와 `Condvar` 두 개로 용량이 정해진 큐를 만들 수 있습니다. 비어 있으면 꺼내는 쪽(소비자)이, 가득 차면 넣는 쪽(생산자)이 기다립니다.
 
 ```rust
 struct BoundedQueue<T> {
@@ -314,7 +314,7 @@ fn push(&self, item: T) { // 예제의 push는 넣은 뒤의 길이도 돌려줍
 // pop은 not_empty에서 기다리고, 꺼낸 뒤 not_full로 생산자 하나를 깨웁니다.
 ```
 
-생산자가 소비자보다 빠르면 대기열이 차고, 그때부터 생산자는 소비자가 하나를 꺼낼 때까지 기다립니다. 이렇게 받는 쪽의 속도가 보내는 쪽을 늦추는 것을 **배압(backpressure)** 이라고 합니다. 용량 제한이 없으면 느린 소비자 앞에 일감이 끝없이 쌓여 메모리가 바닥날 수 있습니다. 예제 05의 3번 구역에서 생산자 둘이 10개씩 넣는 동안 대기열 길이는 한 번도 3을 넘지 않습니다. 같은 일을 표준 라이브러리가 이미 만들어 둔 것이 다음 절의 `sync_channel`입니다.
+생산자가 소비자보다 빠르면 큐가 차고, 그때부터 생산자는 소비자가 하나를 꺼낼 때까지 기다립니다. 이렇게 받는 쪽의 속도가 보내는 쪽을 늦추는 것을 **배압(backpressure)** 이라고 합니다. 용량 제한이 없으면 느린 소비자 앞에 일감이 끝없이 쌓여 메모리가 바닥날 수 있습니다. 예제 05의 3번 구역에서 생산자 둘이 10개씩 넣는 동안 큐 길이는 한 번도 3을 넘지 않습니다. 같은 일을 표준 라이브러리가 이미 만들어 둔 것이 다음 절의 `sync_channel`입니다.
 
 ### 2.7 채널 더 쓰기: `sync_channel`과 배압
 
@@ -325,7 +325,7 @@ fn push(&self, item: T) { // 예제의 push는 넣은 뒤의 길이도 돌려줍
 | `channel()` | `Sender<T>` | 제한 없음 | 기다리지 않음 |
 | `sync_channel(n)` | `SyncSender<T>` | 미리 정한 `n`칸 | 칸이 모두 찼으면 빈칸이 생길 때까지 기다림 |
 
-**용량이 정해진 채널(bounded channel)** `sync_channel(n)`은 2.6절의 대기열과 같은 배압을 줍니다. [`06_sync_channel.rs`](examples/06_sync_channel.rs)의 2번 구역은 생산자가 10개를 보내는 동안 `main`이 50ms 동안 아무것도 받지 않게 합니다. `channel()`이면 그동안 10개를 모두 보내고, `sync_channel(3)`이면 3개를 보낸 뒤 네 번째 `send`에서 멈춰 있습니다. `main`이 받기 시작하면 생산자도 다시 움직여 결국 10개가 모두 도착합니다.
+**용량이 정해진 채널(bounded channel)** `sync_channel(n)`은 2.6절의 큐와 같은 배압을 줍니다. [`06_sync_channel.rs`](examples/06_sync_channel.rs)의 2번 구역은 생산자가 10개를 보내는 동안 `main`이 50ms 동안 아무것도 받지 않게 합니다. `channel()`이면 그동안 10개를 모두 보내고, `sync_channel(3)`이면 3개를 보낸 뒤 네 번째 `send`에서 멈춰 있습니다. `main`이 받기 시작하면 생산자도 다시 움직여 결국 10개가 모두 도착합니다.
 
 `n = 0`이면 버퍼가 없는 **랑데부(rendezvous) 채널**이 됩니다. `send`는 받는 쪽이 그 값을 실제로 가져갈 때까지 끝나지 않으므로, 보내는 쪽과 받는 쪽이 만나는 시점을 맞추는 데 씁니다(예제 06의 3번 구역에서 50ms 동안 보낸 개수 0).
 
@@ -357,7 +357,7 @@ fn push(&self, item: T) { // 예제의 push는 넣은 뒤의 길이도 돌려줍
 | 값의 주인이 단계마다 바뀜(생산 → 가공 → 저장) | 채널. 값이 한 번에 한 스레드에만 있으므로 잠금이 필요 없음 |
 | 일감을 작업자에게 나눠 주고 결과를 모음 | 채널 (일감용, 결과용) |
 | 여러 스레드가 같은 값을 계속 보고 고침(카운터, 캐시, 설정) | 공유 상태(`Mutex`, `RwLock`, 원자 타입) |
-| 받는 쪽이 느릴 때 보내는 쪽을 늦춰야 함 | `sync_channel` (또는 2.6절의 대기열) |
+| 받는 쪽이 느릴 때 보내는 쪽을 늦춰야 함 | `sync_channel` (또는 2.6절의 큐) |
 | "어떤 상태가 될 때까지" 기다림 | `Condvar` (상태가 공유 값일 때), 채널 (사건을 메시지로 보낼 수 있을 때) |
 
 ### 2.8 원자 타입: 잠금 없이 값 하나 고치기
@@ -513,7 +513,7 @@ ch7의 표를 이어서 단일 스레드 도구와 스레드 안전한 짝을 �
 | [`02_thread_builder.rs`](examples/02_thread_builder.rs) | `Builder`의 이름·스택 크기·실패 처리, `ThreadId`, `available_parallelism`, `thread_local!`, 패닉 훅과 `join` | 1 |
 | [`03_mutex_more.rs`](examples/03_mutex_more.rs) | `try_lock`, 가드 범위, 잠그는 순서, 포이즈닝 복구, `get_mut`/`into_inner`/`Arc::into_inner` | 2 |
 | [`04_rwlock.rs`](examples/04_rwlock.rs) | 동시에 쥔 읽기 잠금, 혼자 쥐는 쓰기 잠금, `RwLock<Arc<T>>`와 `Arc::make_mut` | 2 |
-| [`05_condvar.rs`](examples/05_condvar.rs) | `notify_all` 출발 신호, 쌓이지 않는 알림과 `wait_timeout_while`, 용량이 정해진 대기열의 생산자-소비자 | 3 |
+| [`05_condvar.rs`](examples/05_condvar.rs) | `notify_all` 출발 신호, 쌓이지 않는 알림과 `wait_timeout_while`, 용량이 정해진 큐의 생산자-소비자 | 3 |
 | [`06_sync_channel.rs`](examples/06_sync_channel.rs) | `try_send`와 `Full`, 배압, 랑데부 채널, `try_iter`, `&Sender` 공유 | 3 |
 | [`07_atomics.rs`](examples/07_atomics.rs) | `fetch_add`와 `load` 후 `store`, `compare_exchange`, `try_update`, `AtomicBool`, `static` 원자 변수 | 4 |
 | [`08_once_lock_lazy_lock.rs`](examples/08_once_lock_lazy_lock.rs) | `OnceLock` 전역 설정과 `wait`, 필드에 둔 `OnceLock`, `LazyLock` `static` | 5 |
@@ -660,11 +660,11 @@ cargo run -p p1-ch11-threads-sync --example 05_condvar
     (가) 조건 없이 기다림  → 시간 초과: true
     (나) 조건을 보며 기다림 → 시간 초과: false
     (다) 아무도 바꾸지 않음 → 시간 초과: true
-3. 생산자-소비자: 용량 3짜리 대기열에 생산자 2개가 10개씩 넣습니다
+3. 생산자-소비자: 용량 3짜리 큐에 생산자 2개가 10개씩 넣습니다
     받은 개수: 20, 합계: 1110
     생산자 0의 값이 넣은 순서대로 왔는가: true
     생산자 1의 값이 넣은 순서대로 왔는가: true
-    대기열 길이가 용량(3)을 넘은 적이 없는가: true
+    큐 길이가 용량(3)을 넘은 적이 없는가: true
 ```
 
 - **1번 구역**: 작업자가 `wait_while`에 도착하기 전에 `main`이 신호를 보냈더라도, 조건(`ready`)이 이미 `true`라 기다리지 않고 지나갑니다. 그래서 언제 실행해도 세 작업자가 모두 출발합니다.
@@ -906,9 +906,9 @@ let text = "가는 말이 고와야\n오는 말이 곱다\n낮말은 새가 듣�
 
 </details>
 
-### 연습 3. 닫을 수 있는 대기열
+### 연습 3. 닫을 수 있는 큐
 
-[`05_condvar.rs`](examples/05_condvar.rs)의 `BoundedQueue`에 `close(&self)`를 추가하세요. 닫힌 뒤에는 `pop`이 대기열이 빌 때까지는 남은 값을, 비면 `None`을 돌려줍니다(`fn pop(&self) -> Option<T>`). 소비자는 개수를 미리 알지 못해도 `while let Some(v) = queue.pop()`으로 모든 값을 받고 끝나야 합니다. 생산자 둘이 끝난 뒤 `main`이 `close`를 부르게 하세요.
+[`05_condvar.rs`](examples/05_condvar.rs)의 `BoundedQueue`에 `close(&self)`를 추가하세요. 닫힌 뒤에는 `pop`이 큐가 빌 때까지는 남은 값을, 비면 `None`을 돌려줍니다(`fn pop(&self) -> Option<T>`). 소비자는 개수를 미리 알지 못해도 `while let Some(v) = queue.pop()`으로 모든 값을 받고 끝나야 합니다. 생산자 둘이 끝난 뒤 `main`이 `close`를 부르게 하세요.
 
 <details>
 <summary>힌트</summary>

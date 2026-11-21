@@ -125,7 +125,7 @@ pub mod cinema {
 
 ### 2.3 지침 2: 구조체의 필드는 비공개로 두고 메서드로 연다
 
-**문제 상황.** 음악 재생 대기열 `PlayQueue`의 첫 판은 곡을 `Vec<String>`에 담습니다. 맨 앞 곡을 꺼내는 `Vec::remove(0)`은 남은 원소를 모두 한 칸씩 당기므로 대기열이 길수록 느려집니다. 둘째 판에서는 앞에서 꺼내기가 싼 `VecDeque`로 바꾸려 합니다. 책이 말한 "더 효율적인 자료구조로 바꾸기"입니다.
+**문제 상황.** 음악 재생 큐 `PlayQueue`의 첫 판은 곡을 `Vec<String>`에 담습니다. 맨 앞 곡을 꺼내는 `Vec::remove(0)`은 남은 원소를 모두 한 칸씩 당기므로 큐가 길수록 느려집니다. 둘째 판에서는 앞에서 꺼내기가 싼 `VecDeque`로 바꾸려 합니다. 책이 말한 "더 효율적인 자료구조로 바꾸기"입니다.
 
 **비권장 코드.** 첫 판이 필드를 공개했습니다([`02_private_fields.rs`](examples/02_private_fields.rs)의 `queue_pub_v1`).
 
@@ -152,7 +152,7 @@ error[E0308]: mismatched types
   |                       ^^^^^^^^^^^^^^^^^ expected `String`, found `Option<String>`
 ```
 
-`VecDeque::remove`는 `Option`을 돌려주고 `push`라는 메서드가 없습니다. 사용자 코드는 "대기열"이 아니라 "`Vec`"에 기대고 있었습니다. 필드를 하나 **더하는** 것도 마찬가지입니다. 같은 곡이 두 번 들어가지 않게 `seen: HashSet<String>` 필드를 추가하면 사용자의 구조체 리터럴이 ``error[E0063]: missing field `seen` in initializer of `queue_pub_v1::PlayQueue` ``로 깨집니다(연습 2).
+`VecDeque::remove`는 `Option`을 돌려주고 `push`라는 메서드가 없습니다. 사용자 코드는 "큐"가 아니라 "`Vec`"에 기대고 있었습니다. 필드를 하나 **더하는** 것도 마찬가지입니다. 같은 곡이 두 번 들어가지 않게 `seen: HashSet<String>` 필드를 추가하면 사용자의 구조체 리터럴이 ``error[E0063]: missing field `seen` in initializer of `queue_pub_v1::PlayQueue` ``로 깨집니다(연습 2).
 
 **권장 코드.** 필드는 비공개로 두고, 사용자가 할 일(넣기, 꺼내기, 남은 곡 보기)을 메서드로 엽니다.
 
@@ -567,9 +567,9 @@ note: consider marking `total_of` as `pub` in the imported module
 
 </details>
 
-### 연습 2. 대기열에 중복 막기 더하기
+### 연습 2. 큐에 중복 막기 더하기
 
-[`02_private_fields.rs`](examples/02_private_fields.rs)에 셋째 판 `queue_v3`를 만드세요. 이미 대기열에 있는 곡은 `add`해도 다시 들어가지 않습니다. 사용자 코드 `listen_v3`의 본문은 `listen_v2`와 같아야 합니다. 그다음 비권장 판 `queue_pub_v1`의 구조체에 같은 목적의 `pub seen: HashSet<String>` 필드를 추가하면 `listen_pub_v1`에서 무슨 일이 생기는지 확인하세요.
+[`02_private_fields.rs`](examples/02_private_fields.rs)에 셋째 판 `queue_v3`를 만드세요. 이미 큐에 있는 곡은 `add`해도 다시 들어가지 않습니다. 사용자 코드 `listen_v3`의 본문은 `listen_v2`와 같아야 합니다. 그다음 비권장 판 `queue_pub_v1`의 구조체에 같은 목적의 `pub seen: HashSet<String>` 필드를 추가하면 `listen_pub_v1`에서 무슨 일이 생기는지 확인하세요.
 
 <details>
 <summary>힌트</summary>
