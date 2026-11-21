@@ -1,4 +1,4 @@
-# ch5. 기능: `[features]`, 선택적 의존성, 기능 통합, `cfg(feature)`
+# ch5. 기능: `[features]`와 `cfg`
 
 크레이트 하나가 여러 일을 할 수 있어도, 쓰는 쪽은 그 가운데 일부만 필요한 경우가 많습니다. 기능(feature)은 크레이트가 "이 부분은 원하는 사람만 켜서 쓰라"고 나눠 두는 Cargo의 장치입니다. [ch2](../ch2-dependencies/README.md)에서 의존성 한 줄에 `features`와 `default-features`를 적을 수 있다고만 하고 넘어갔고, [ch3](../ch3-manifest-targets/README.md)에서는 `required-features` 키를 표에서만 보았습니다. 이 챕터는 기능을 정의하는 쪽과 켜는 쪽을 모두 다루고, 여러 패키지가 같은 크레이트의 기능을 서로 다르게 켤 때 무슨 일이 일어나는지(기능 통합)를 확인합니다.
 

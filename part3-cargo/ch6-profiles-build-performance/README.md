@@ -1,4 +1,4 @@
-# ch6. 프로필과 빌드 성능: `[profile]`, 빌드 캐시, `--timings`
+# ch6. 프로필과 빌드 성능
 
 [Part 0 ch1](../../part0-getting-started/ch1-hello-cargo/README.md)에서 `cargo build`의 마지막 줄에 나오는 `dev`와 `release`가 빌드 설정 묶음인 프로필(profile)의 이름이라는 것만 보고 넘어갔습니다. 이 챕터는 그 묶음 안에 무엇이 들어 있는지, 묶음을 직접 만들고 패키지마다 다르게 적용하는 방법을 다룹니다. 이어서 빌드 결과가 쌓이는 빌드 캐시(build cache)의 구조와, 빌드가 어디서 시간을 쓰는지 재고 줄이는 방법을 봅니다.
 

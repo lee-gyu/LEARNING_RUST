@@ -1,4 +1,4 @@
-# ch1. Cargo 시작하기: 패키지 만들기, 레이아웃, `Cargo.toml`과 `Cargo.lock`, Cargo home
+# ch1. Cargo 시작하기
 
 Part 3의 첫 챕터입니다. [Part 0 ch1](../../part0-getting-started/ch1-hello-cargo/README.md)에서 `cargo new`, `cargo build`, `cargo run`을 써 보았고, 그 뒤로 이 저장소의 모든 예제를 Cargo로 실행해 왔습니다. 이 챕터는 그동안 "그렇게 하면 된다"로 넘어간 것들을 정리합니다. Cargo가 `rustc` 위에서 무슨 일을 하는지, 파일을 어디에 두면 무엇이 되는지, `Cargo.toml`과 `Cargo.lock`은 왜 둘인지, 내려받은 크레이트는 어디에 있는지를 직접 확인합니다.
 

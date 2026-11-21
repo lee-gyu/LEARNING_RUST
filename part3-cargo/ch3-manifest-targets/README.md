@@ -1,4 +1,4 @@
-# ch3. 매니페스트와 타깃: `Cargo.toml`의 표, 타깃 설정, `rust-version`, `[lints]`
+# ch3. 매니페스트와 타깃
 
 [ch1](../ch1-getting-started/README.md)에서는 `Cargo.toml`에 거의 아무것도 적지 않고 파일의 위치만으로 타깃을 만들었고, [ch2](../ch2-dependencies/README.md)에서는 의존성 표를 채웠습니다. 이 챕터는 매니페스트(manifest)의 나머지를 봅니다. 어떤 표가 있고 각각 무엇을 정하는지, 관례와 다르게 타깃을 구성하려면 무엇을 적는지, 지원하는 Rust 버전과 린트 수준을 패키지 단위로 어떻게 선언하는지입니다.
 
