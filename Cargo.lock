@@ -405,6 +405,10 @@ name = "faq-ch13-headers-build-templates"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch14-performance"
+version = "0.0.0"
+
+[[package]]
 name = "faq-ch2-memory-safety"
 version = "0.0.0"
 

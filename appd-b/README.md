@@ -58,6 +58,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch11-cpp-raii-move](ch11-cpp-raii-move/) | C++의 RAII와 이동: 파괴적 이동과 `std::move`, 복사 생성자와 `Copy`·`Clone`, Rule of three/five/zero와 `Drop`, `const`·`mutable`과 불변 기본·내부 가변성, C++ 표준 타입(스마트 포인터·`optional`·`variant`·`expected`·`span`) 대응, 예외 안전성, RVO, `Pin` |
 | [ch12-modern-cpp-enough](ch12-modern-cpp-enough/) | 모던 C++로 충분하지 않은가: 스마트 포인터·뷰·람다에 남는 수명 버그와 같은 구조의 Rust 컴파일 에러, `std::function`과 `Box<dyn FnMut()>`의 `'static`, 새니타이저·정적 분석·libc++ 하드닝이 잡는 것과 놓치는 것, C++26의 안전성 작업, 안전이 기본값이라는 뜻, C++가 더 나은 점, 커널·임베디드의 C |
 | [ch13-headers-build-templates](ch13-headers-build-templates/) | 헤더·빌드·템플릿: 헤더와 전방 선언이 없는 이유(크레이트가 컴파일 단위), 전처리기의 대체물, C 매크로의 중복 평가·이름 가로채기와 `macro_rules!`, Cargo, 템플릿과 제네릭(검사 시점, concept, const 제네릭과 한계, 가변 인자), ODR과 `no_mangle` 충돌, 네임스페이스·`friend`, 조건부 컴파일 |
+| [ch14-performance](ch14-performance/) | 성능: C/C++와 같은 백엔드에서 `&mut`가 주는 `noalias`, 비용 없는 추상화, 경계 검사와 오버플로 검사, 느린 프로그램의 흔한 원인과 할당 세기, 런타임과 GC, 벤치마크를 읽는 법, 바이너리 크기, `HashMap`의 해시 함수, 꼬리 호출이 보장되지 않는 이유, 메모리 사용량 |
 
 ## 질문 색인
 
@@ -187,5 +188,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q13.8](ch13-headers-build-templates/) | 컴파일 단위는 무엇인가요? |
 | [Q13.9](ch13-headers-build-templates/) | 테스트, 문서, 포매터, 린터를 따로 골라야 하나요? |
 | [Q13.10](ch13-headers-build-templates/) | 플랫폼별 코드와 조건부 컴파일은 어떻게 하나요? |
+| [Q14.1](ch14-performance/) | Rust는 정말 C/C++만큼 빠른가요? |
+| [Q14.2](ch14-performance/) | "비용 없는 추상화"는 무슨 뜻인가요? |
+| [Q14.3](ch14-performance/) | 경계 검사와 오버플로 검사는 느리지 않나요? 끌 수 있나요? |
+| [Q14.4](ch14-performance/) | 왜 제 Rust 프로그램이 느린가요? |
+| [Q14.5](ch14-performance/) | 런타임이 있나요? GC 멈춤이나 시작 지연은 없나요? |
+| [Q14.6](ch14-performance/) | Go나 Java보다 얼마나 빠른가요? (벤치마크를 읽는 법) |
+| [Q14.7](ch14-performance/) | 바이너리가 왜 크고 어떻게 줄이나요? |
+| [Q14.8](ch14-performance/) | `HashMap`은 왜 기본 해시 함수가 느린 편인가요? |
+| [Q14.9](ch14-performance/) | 꼬리 호출 최적화가 있나요? |
+| [Q14.10](ch14-performance/) | 메모리는 얼마나 쓰나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

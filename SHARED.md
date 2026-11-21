@@ -97,6 +97,9 @@
 - 완성된 챕터가 README에 한 번이라도 상대 링크로 걸렸는지는 사람이 훑으면 놓치기 쉽습니다(부록 B ch9·ch10 검증에서 반복). README의 `chN`·`Part N chM`·`부록 A chN` 이름과 링크 텍스트를 스크립트로 대조해 확인합니다(코드 서식 이름 `chN-slug`와 링크 경로 안의 이름은 제외). 이름 앞의 공백을 경계로 빼면 "…, ch8"이나 "/ ch10" 같은 이름을 놓칩니다(부록 B ch12에서 찾은 대조 스크립트의 버그).
 - `unsafe`를 "검사를 끈다", "검사를 피한다"로 쓰지 않습니다. `unsafe`는 정해진 연산(원시 포인터 역참조, `unsafe` 함수 호출 등)을 허락할 뿐이고 대여 검사는 그 안에서도 그대로입니다(부록 B ch3 Q3.2·4.1). 부록 B ch12 초고에서 이 표현이 다시 나와 검증에서 고쳤습니다.
 - `Box<dyn Trait>`의 기본 라이프타임은 구조체 필드와 함수 시그니처에서는 `'static`이고, 함수 본문의 `let` 타입 표기에서는 추론됩니다. 기본 객체 라이프타임에서 생긴 `'static` 요구로 E0597이 나면 rustc가 ``due to object lifetime defaults, `Box<dyn FnMut()>` actually means `Box<(dyn FnMut() + 'static)>` `` note를 붙입니다(1.100.0, 부록 B ch12).
+- 최적화가 무엇을 막는지 보이는 예제에서 `std::hint::black_box`는 다른 원인을 섞습니다. 1.100.0 릴리스에서 `black_box`로 감싼 지역 값은 `Copy`인 `u64`라도 꼬리 재귀가 반복문으로 바뀌는 것을 막았습니다(값의 주소를 inline asm에 넘김). 반대로 아무 일도 하지 않는 값이나 쓰이지 않는 `String`은 최적화가 통째로 지웁니다. 원인 하나만 보이려면 부수 효과가 있는 `Drop` 타입(전역 원자 카운터를 올리는 등)처럼 원인을 떼어 냅니다(부록 B ch14 검증).
+- 실행 파일 크기는 패키지 이름에 따라 수십 바이트씩 달라집니다(1.100.0 release hello world 기준 `hw` 435,824, `hello` 435,840바이트). Go는 모듈 모드인지에 따라 크기가 다릅니다. 크기를 실을 때는 만든 조건을 함께 적습니다(부록 B ch14).
+- PATH의 `python3`는 mise shim이므로, 검사 스크립트는 `/usr/bin/python3`(3.9)로 돌립니다(부록 B 계획서 5절).
 - 크레이트 사이의 `#[unsafe(no_mangle)]`·`export_name` 이름 충돌은 macOS 링커에서 경고(`linker_messages`, 기본 warn)만 나고 빌드가 성공하며 한쪽 정의가 쓰입니다. 같은 크레이트 안은 ``symbol `…` is already defined`` 컴파일 에러입니다(1.100.0, 부록 B ch13).
 - 인라인 `const { assert!(…) }`처럼 const 매개변수에 기대는 검사의 에러(E0080)는 단형성화할 때 나므로 `cargo build`에서만 나고 `cargo check`로는 드러나지 않습니다(1.100.0, 부록 B ch13).
 - 코드 밖에 남은 백틱 수를 세는 검사는, 짝은 맞지만 안쪽 백틱 때문에 잘못 끊긴 인라인 코드를 잡지 못합니다. 백틱 런의 길이를 맞춰 코드 구간을 찾고, 구간이 공백으로 시작하거나 끝나는지도 봅니다(부록 B ch13 검증). 안쪽에 백틱이 있는 메시지는 백틱 두 개와 공백으로 감쌉니다.
@@ -125,7 +128,6 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch14-performance` | 디버그 빌드로 속도를 비교하는 실수, Discord·Cloudflare 사례를 읽는 법(구조 변경을 함께 함)(부록 B ch1 4절, Q1.3) |
 | 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5) |
 
 ### 2.2 nightly와 Miri를 준비하면 다시 확인할 것
