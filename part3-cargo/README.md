@@ -27,5 +27,6 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch5-features](ch5-features/) | `[features]`와 `default`, `#[cfg(feature)]`와 `cfg!`, `--features`·`--no-default-features`·`--all-features`와 의존성의 `features`·`default-features`, `required-features`, 선택적 의존성과 `dep:`·`?`, 기능 통합과 `cargo tree -e features`, 가산적인 기능 설계 — 기능을 서로 다르게 켜는 워크스페이스(`formats`) |
 | [ch6-profiles-build-performance](ch6-profiles-build-performance/) | 내장 프로필과 명령별 선택, 프로필 설정(`opt-level`·`debug`·`strip`·`debug-assertions`·`overflow-checks`·`lto`·`codegen-units`·`panic`·`incremental`), `inherits`와 `--profile`, 패키지별 재정의와 `build-override`·제네릭의 한계, target 디렉터리와 build 디렉터리, `.d` 파일과 `Dirty`, `--timings` 보고서, 빌드 시간 단축 방법 — 프로필만 바꿔 크기와 속도를 비교하는 프로젝트(`collatz`) |
 | [ch7-configuration-env](ch7-configuration-env/) | 설정 파일을 찾는 곳과 합치는 규칙, 설정 파일·`CARGO_<키>` 환경 변수·`--config`의 우선순위, `[alias]`, `[env]`·`build.rustflags`·`[term]` 등 설정 키, Cargo가 읽는 환경 변수, Cargo가 크레이트에 알려 주는 환경 변수와 `env!`·`option_env!`·`std::env::var` — 설정 파일 둘을 겹쳐 쓰는 프로젝트(`configured`) |
+| [ch8-build-scripts](ch8-build-scripts/) | 빌드 스크립트의 한살이와 입력(환경 변수)·출력(`OUT_DIR`, 지시문), 데이터 파일로 코드 생성과 `include!`, `cargo::` 지시문과 `rerun-if-changed`, `-vv`로 출력 보기, `cc`로 C 라이브러리 링크, `links`와 `DEP_<links>_<키>`, `-sys` 관례와 빌드 스크립트 재정의 — 챕터 패키지의 `build.rs`, C 라이브러리를 감싼 프로젝트(`fletcher`) |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

@@ -1,0 +1,9 @@
+[package]
+name = "p3-ch8-build-scripts"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+[features]
+# 켜면 빌드 스크립트가 data/extra_units.txt도 읽어 표에 넣습니다(CARGO_FEATURE_EXTRA_UNITS).
+extra-units = []

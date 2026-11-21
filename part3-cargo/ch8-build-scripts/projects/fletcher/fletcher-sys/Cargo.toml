@@ -1,0 +1,12 @@
+[package]
+name = "fletcher-sys"
+version = "0.1.0"
+edition = "2024"
+publish = false
+# 이 패키지가 네이티브 라이브러리 libfletcher를 링크한다고 Cargo에 알립니다.
+# 같은 links 값을 가진 패키지는 한 빌드에 하나뿐이고, 빌드 스크립트의 cargo::metadata가
+# 이 패키지에 직접 의존하는 패키지의 빌드 스크립트에 DEP_FLETCHER_<키>로 전달됩니다.
+links = "fletcher"
+
+[build-dependencies]
+cc = "1.11.2"
