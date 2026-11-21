@@ -53,6 +53,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch6-no-classes-inheritance](ch6-no-classes-inheritance/) | 클래스도 상속도 없이: 구조체와 `impl`, 생성자 관례, Java 계층을 조합·위임·기본 메서드로 옮기기, 트레이트와 Java·Go 인터페이스, 제네릭과 Java 타입 소거·C++ 템플릿·Go, 오버로딩·기본 인자·가변 인자의 대안, 열거형과 트레이트 객체로 옮기는 계층, 리플렉션 대신 매크로, 모듈 단위 공개 범위 |
 | [ch7-syntax-type-surprises](ch7-syntax-type-surprises/) | 문법과 타입에서 낯선 것: 불변 기본과 섀도잉, 표현식과 `++`·삼항 연산자, 정수의 폭과 `usize`, 암묵적 변환이 없는 수 타입, `String`과 `&str`, 언어마다 다른 문자열 길이와 `s[0]`, 시그니처의 타입 표기, 매크로 `!`, 완전한 `match`, 실수와 `Eq`·`Hash` |
 | [ch8-concurrency-async](ch8-concurrency-async/) | 동시성과 비동기: 겁 없는 동시성이 약속하는 것, `Send`·`Sync`와 대여 규칙, 데이터를 소유한 `Mutex`(C의 데이터 경쟁과 ThreadSanitizer), GIL·경쟁 검출기와의 차이, 고루틴과 태스크, 표준 라이브러리에 없는 비동기 런타임, 게으른 퓨처와 Promise, 일반 함수와 `async`, 스레드와 `async` 고르기, 전역 상태 |
+| [ch9-c-memory-errors](ch9-c-memory-errors/) | C의 메모리 오류와 Rust: 해제 후 사용, 이중 해제, 댕글링 포인터, 경계 밖 읽기·쓰기, 초기화하지 않은 메모리, 널 역참조, 반복자 무효화, C 문자열 버그, 크기 계산을 C·C++ 비교 코드(새니타이저)와 Rust의 장치로 나란히, 누수와 실행 비용 |
 
 ## 질문 색인
 
@@ -136,5 +137,16 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q8.8](ch8-concurrency-async/) | 일반 함수에서 `async` 함수를 그냥 부를 수 없는 이유는 무엇인가요? |
 | [Q8.9](ch8-concurrency-async/) | 스레드와 `async` 중 무엇을 고르나요? |
 | [Q8.10](ch8-concurrency-async/) | 전역 가변 상태나 싱글턴은 어떻게 만드나요? |
+| [Q9.1](ch9-c-memory-errors/) | 해제 후 사용(use-after-free)은 어떻게 막나요? |
+| [Q9.2](ch9-c-memory-errors/) | 이중 해제는 어떻게 막나요? |
+| [Q9.3](ch9-c-memory-errors/) | 지역 변수의 주소를 돌려주는 것 같은 댕글링 포인터는 어떻게 되나요? |
+| [Q9.4](ch9-c-memory-errors/) | 버퍼 오버플로와 경계 밖 읽기는 어떻게 막나요? |
+| [Q9.5](ch9-c-memory-errors/) | 초기화하지 않은 메모리를 읽는 것은 어떻게 막나요? |
+| [Q9.6](ch9-c-memory-errors/) | 널 포인터 역참조는 어떻게 되나요? |
+| [Q9.7](ch9-c-memory-errors/) | 순회하는 중에 컨테이너를 고치는 반복자 무효화는 어떻게 되나요? |
+| [Q9.8](ch9-c-memory-errors/) | C 문자열의 버그(`strcpy`, 널 종료 누락, 서식 문자열)는 어떻게 되나요? |
+| [Q9.9](ch9-c-memory-errors/) | `malloc`의 크기 계산과 `void*` 형 변환 실수는 어떻게 되나요? |
+| [Q9.10](ch9-c-memory-errors/) | 메모리 누수는 막아 주나요? |
+| [Q9.11](ch9-c-memory-errors/) | 이 검사들은 실행 비용이 드나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

@@ -458,7 +458,7 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 
 | 상태 | 챕터 | 학습 주제 | 예제 계획 | 근거 자료 |
 | --- | --- | --- | --- | --- |
-| ⬜ | `ch9-c-memory-errors` | 메모리 오류를 종류별로: 해제 후 사용, 이중 해제, 댕글링 포인터, 버퍼 오버플로, 초기화하지 않은 메모리, 널 역참조, 반복자 무효화, 문자열 버그. 오류마다 Rust의 장치와 잡는 시점 | 오류 종류마다 C 비교 코드와 Rust 해법 한 쌍 | Chromium 보안 보고서, Book 4·8·15장 |
+| ✅ | `ch9-c-memory-errors` | 메모리 오류를 종류별로: 해제 후 사용, 이중 해제, 댕글링 포인터, 버퍼 오버플로, 초기화하지 않은 메모리, 널 역참조, 반복자 무효화, 문자열 버그. 오류마다 Rust의 장치와 잡는 시점 | 오류 종류마다 C 비교 코드와 Rust 해법 한 쌍 | Chromium 보안 보고서, Book 4·8·15장 |
 | ⬜ | `ch10-undefined-behavior` | 미정의 동작의 뜻과 위험, "안전한 Rust에는 미정의 동작이 없다"의 의미, 정수 오버플로·암묵적 변환·평가 순서·별칭 규칙의 차이, `unsafe` Rust의 미정의 동작 | 정의된 오버플로, 변환이 필요한 비교, 0으로 나누기와 시프트, 평가 순서, 배타적 `&mut` | Reference "Behavior considered undefined" |
 | ⬜ | `ch11-cpp-raii-move` | C++의 RAII·스마트 포인터·이동 의미론과 비교: 파괴적 이동, 명시적 복제, `Drop`과 Rule of three/five/zero, `const`와 불변 기본, 표준 타입 대응 | 이동 뒤 사용 불가, 명시적 `clone`, drop 순서, 스마트 포인터 대응, 공유와 변경의 배타성, `variant`와 열거형 | Book 4·15장 |
 | ⬜ | `ch12-modern-cpp-enough` | "모던 C++와 도구로 충분하지 않은가": 스마트 포인터가 남기는 문제, 새니타이저와 정적 분석의 범위, C++ 표준의 안전성 작업, 안전이 기본값이라는 것의 의미, C++가 더 나은 점 | 모던 C++로 써도 새니타이저에 걸리는 조각과 같은 구조의 Rust 컴파일 에러 | C++ 표준화 문서, Linux 커널 |
@@ -494,4 +494,4 @@ C/C++, Java, C#, Go, Python, JavaScript/TypeScript를 써 온 프로그래머가
 | Part 11. 불안정 기능 | 0 / 4 |
 | **합계** | **51 / 109 챕터** |
 | 부록 A. Effective Rust (합계와 별도) | 35 / 35 |
-| 부록 B. Rust FAQ (합계와 별도) | 8 / 17 |
+| 부록 B. Rust FAQ (합계와 별도) | 9 / 17 |
