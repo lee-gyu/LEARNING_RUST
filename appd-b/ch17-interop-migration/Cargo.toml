@@ -1,0 +1,5 @@
+[package]
+name = "faq-ch17-interop-migration"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true

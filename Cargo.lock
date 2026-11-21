@@ -417,6 +417,10 @@ name = "faq-ch16-tooling-ecosystem"
 version = "0.0.0"
 
 [[package]]
+name = "faq-ch17-interop-migration"
+version = "0.0.0"
+
+[[package]]
 name = "faq-ch2-memory-safety"
 version = "0.0.0"
 

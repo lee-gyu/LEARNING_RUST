@@ -104,6 +104,11 @@
 - 다른 생태계와 나란히 놓는 비교 표는 칸마다, 그리고 한 칸 안의 동사(빌드·테스트·문서·게시)마다 공식 문서를 따로 확인합니다. 부록 B ch16에서 "npm은 스크립트로 다른 도구를 부름"(게시는 내장 `npm publish`), "Go는 `go` 하나"(게시는 태그 푸시)로 묶어 썼다가 검증에서 고쳤습니다.
 - RFC를 "X를 줄이려는 제안"처럼 목적으로 요약하기 전에 Motivation과 FAQ 절을 읽습니다. 문장을 절 이름과 함께 인용할 때는 제목 구조(h2/h3/h4)로 그 문장이 어느 절에 속하는지 확인합니다. Rationale and alternatives 아래에는 예전 판의 단점이 들어 있기도 합니다(부록 B ch16, RFC 3243은 일반적인 스쿼팅을 다루지 않는다고 FAQ에 적혀 있고, `foo-bar` 문장은 예전 `/` 구분자 판의 단점이었음).
 - 기능이 "아직 구현되지 않았다"고 쓰기 전에 툴체인에 딸린 Cargo Book의 `reference/unstable.html`과 rustc의 기능 게이트를 찾아봅니다. 추적 이슈가 열려 있어도 nightly 전용으로 들어 있는 경우가 있습니다(부록 B ch16, RFC 3243 → Cargo `open-namespaces`. 안정판 cargo 1.100.0은 `name = "foo::bar"`를 거부).
+- Rust `staticlib`을 링크한 macOS 실행 파일에는 std 오브젝트마다 `.a`의 절대 경로가 디버그 맵(OSO)으로 들어가, 빌드한 디렉터리에 따라 크기가 수십~수백 바이트 달라집니다. 이런 실행 파일의 크기는 반올림해 적고 조건을 밝힙니다(부록 B ch17 검증).
+- crates.io의 크레이트 페이지는 curl에 404를, 브라우저 헤더에는 없는 크레이트에도 200을 주므로 링크 검사에 쓸 수 없습니다. 크레이트가 있는지와 설명·버전은 `https://crates.io/api/v1/crates/<이름>`으로 확인합니다(부록 B ch17 검증).
+- "C++ 함수는 Rust에서 부를 수 없다"고 단정하지 않습니다. `#[link_name]`에 맹글링된 이름을 적으면 자유 함수와 오버로드를 부를 수 있고(bindgen이 쓰는 방식), 막히는 것은 템플릿·인라인 함수와 생성자·소멸자·예외의 자동 처리입니다(부록 B ch17 검증).
+- 다른 언어의 FFI를 "C 함수를 부르는 장치"로 묶을 때는 임의의 C ABI 함수를 부르는 것(`ctypes`, FFM API, P/Invoke, cgo)과 규약대로 함수를 등록해야 하는 네이티브 확장 API(CPython C API, Node-API, JNI)를 나눕니다(부록 B ch17 검증).
+- 검증 지적을 고친 뒤에는 질문 표의 한 줄 답도 짧은 답·본문과 함께 다시 대조합니다. 부록 B ch17에서 본문만 고치고 표가 반대 내용으로 남아 한 번 더 검증을 받았습니다(ch5의 메모와 같은 종류).
 - PATH의 `python3`는 mise shim이므로, 검사 스크립트는 `/usr/bin/python3`(3.9)로 돌립니다(부록 B 계획서 5절).
 - 크레이트 사이의 `#[unsafe(no_mangle)]`·`export_name` 이름 충돌은 macOS 링커에서 경고(`linker_messages`, 기본 warn)만 나고 빌드가 성공하며 한쪽 정의가 쓰입니다. 같은 크레이트 안은 ``symbol `…` is already defined`` 컴파일 에러입니다(1.100.0, 부록 B ch13).
 - 인라인 `const { assert!(…) }`처럼 const 매개변수에 기대는 검사의 에러(E0080)는 단형성화할 때 나므로 `cargo build`에서만 나고 `cargo check`로는 드러나지 않습니다(1.100.0, 부록 B ch13).
@@ -129,12 +134,12 @@
 | Part 6 `ch1-reading-diagnostics` | 에디션과 무관한 `cargo fix`(Part 2 ch6) |
 | Part 7 `ch2-implementation-errors` | `anyhow`의 `context`와 종료 코드(부록 A ch4). Part 1 ch8 2.4절이 이 챕터를 가리킴 |
 | Part 8 `ch1`·`ch5`·`ch7` | `no_std`(부록 A ch33), 타입 상태 빌더(부록 A ch7) |
+| Part 8 `ch8-c-interop-optimizations` | C에서 Rust 호출·Rust에서 C 호출. C의 `main`이 Rust `staticlib`을 링크하는 예(부록 B ch17 `projects/version_swap`)와 서로 링크 |
 | Part 9 `ch2`·`ch4`·`ch6`·`ch8`·`ch9` | 매크로(부록 A ch19·ch28). `#[non_exhaustive]`·`#[deprecated]`·`#[doc(hidden)]`(부록 A ch21~ch26). 2024 에디션 바인딩 모드 규칙의 상세(Part 0 ch18). 가시성과 이름 해석 규칙 전체, 봉인된 트레이트를 다룰지(부록 A ch22). 패닉과 링크(부록 A ch18·ch34) |
 | Part 10 `ch2-data-layout` | `Packet { u8, u32, u8 }`은 기본 표현 8바이트·`#[repr(C)]` 12바이트, `Option<Cell<bool>>`은 2바이트(1.100.0). `#[repr(transparent)]`(부록 A ch6) |
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
-| Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
+| Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크. `#[link_name = "_Z…"]`로 C++ 자유 함수를 맹글링된 이름으로 부를 수 있음(1.100.0, macOS. `_` 접두사는 Rust가 붙임). 부록 B ch17 Q17.2·Q17.3과 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5). 웹(WebAssembly와 JavaScript)과 모바일(Kotlin·Swift)에서 Rust를 잇는 바인딩, Rust끼리도 C ABI로 만드는 플러그인 경계(부록 B ch16 Q16.9·Q16.12가 ch17을 가리킴) |
 
 ### 2.2 nightly와 Miri를 준비하면 다시 확인할 것
 

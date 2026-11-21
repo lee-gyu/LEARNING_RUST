@@ -1,0 +1,13 @@
+[package]
+name = "version-swap"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# C 프로그램에 링크할 정적 라이브러리(libsemver_rs.a)를 만듭니다.
+[lib]
+name = "semver_rs"
+crate-type = ["staticlib"]
+
+# 저장소 루트의 워크스페이스와 분리합니다.
+[workspace]

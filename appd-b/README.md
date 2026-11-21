@@ -61,6 +61,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch14-performance](ch14-performance/) | 성능: C/C++와 같은 백엔드에서 `&mut`가 주는 `noalias`, 비용 없는 추상화, 경계 검사와 오버플로 검사, 느린 프로그램의 흔한 원인과 할당 세기, 런타임과 GC, 벤치마크를 읽는 법, 바이너리 크기, `HashMap`의 해시 함수, 꼬리 호출이 보장되지 않는 이유, 메모리 사용량 |
 | [ch15-pain-points](ch15-pain-points/) | 어렵다는 말의 정체: 소유권·대여 규칙이 어려운 이유, 대여 에러를 푸는 순서, 거부되는 올바른 코드와 Polonius, 2단계 대여, 연결 리스트·그래프·자기 참조, 컴파일 시간과 `target/` 크기, 디버깅, 긴 에러 메시지 읽기, 버려야 할 습관, 언어의 복잡도 |
 | [ch16-tooling-ecosystem](ch16-tooling-ecosystem/) | 도구와 생태계: Cargo와 npm·pip·Maven·Go 모듈의 비교, 작은 표준 라이브러리, 크레이트 고르기와 공급망, crates.io의 네임스페이스, 6주 릴리스·안정성 보장·에디션·nightly, 명세와 컴파일러 구현, ABI, 관리 주체와 라이선스, 편집기 도구, 지원 플랫폼 |
+| [ch17-interop-migration](ch17-interop-migration/) | 기존 코드와 함께 쓰기: 다시 쓰지 않고 들이는 근거, C 호출과 C에서 호출되기, C++와 다른 언어 연동, 경계의 `unsafe`, 자동 번역의 현황, 어디부터 옮길지, 도입 비용, 빌드 시스템 통합, 판단할 때 물을 것 |
 
 ## 질문 색인
 
@@ -223,5 +224,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q16.10](ch16-tooling-ecosystem/) | 누가 만들고 관리하나요? 라이선스는 무엇인가요? |
 | [Q16.11](ch16-tooling-ecosystem/) | 편집기, 포매터, 린터는 무엇을 쓰나요? |
 | [Q16.12](ch16-tooling-ecosystem/) | 어떤 플랫폼을 지원하나요? 웹(WebAssembly), 모바일, 임베디드는요? |
+| [Q17.1](ch17-interop-migration/) | 기존 C/C++ 코드를 버리고 다시 써야 하나요? |
+| [Q17.2](ch17-interop-migration/) | Rust에서 C 라이브러리를 어떻게 부르고, C에서 Rust를 어떻게 부르나요? |
+| [Q17.3](ch17-interop-migration/) | C++와는 어떻게 연동하나요? |
+| [Q17.4](ch17-interop-migration/) | Python, Node.js, Java, C#, Go에서 Rust 코드를 부를 수 있나요? |
+| [Q17.5](ch17-interop-migration/) | 경계의 `unsafe`는 안전성을 얼마나 깎나요? |
+| [Q17.6](ch17-interop-migration/) | C 코드를 자동으로 Rust로 바꿀 수 있나요? |
+| [Q17.7](ch17-interop-migration/) | 어디부터 옮기는 것이 좋은가요? |
+| [Q17.8](ch17-interop-migration/) | 팀에 도입할 때 드는 비용은 무엇인가요? |
+| [Q17.9](ch17-interop-migration/) | 기존 빌드 시스템(CMake, Bazel)에 Rust를 넣을 수 있나요? |
+| [Q17.10](ch17-interop-migration/) | 도입을 판단할 때 무엇을 물어야 하나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.
