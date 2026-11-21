@@ -1,0 +1,12 @@
+[package]
+name = "p3-ch9-testing-ci"
+version = "0.0.0"
+edition.workspace = true
+publish.workspace = true
+
+# 예제 01은 `cargo test`가 실행하는 테스트 타깃이기도 합니다(test = true).
+# harness = false: libtest 대신 예제의 main이 그대로 실행되고, 종료 상태로 성공·실패를 판정합니다.
+[[example]]
+name = "01_custom_harness"
+test = true
+harness = false

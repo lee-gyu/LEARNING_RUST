@@ -1,0 +1,19 @@
+[package]
+name = "linestat"
+version = "0.1.0"
+edition = "2024"
+# 이 패키지를 컴파일할 수 있는 가장 낮은 Rust 버전. CI의 test 작업 매트릭스("1.98")가 실제 1.98 툴체인으로 확인합니다.
+rust-version = "1.98"
+publish = false
+
+[features]
+default = ["top"]
+# 자주 나온 단어 순위(top_words)와 명령줄의 --top
+top = []
+
+[workspace]
+
+[[bench]]
+name = "count"
+# libtest의 #[bench]는 nightly 전용이므로, 벤치마크 파일이 직접 main을 가집니다.
+harness = false

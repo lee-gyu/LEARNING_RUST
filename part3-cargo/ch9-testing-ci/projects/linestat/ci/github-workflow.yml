@@ -1,0 +1,104 @@
+# linestat의 GitHub Actions 워크플로 예시입니다(ch9 README 2.6절).
+#
+# - 실제로 쓰려면 저장소 루트의 .github/workflows/ 아래(예: .github/workflows/ci.yml)에 두어야
+#   합니다. 이 위치(projects/linestat/ci/)의 파일은 GitHub가 읽지 않으므로 실행되지 않습니다.
+# - 이 파일은 GitHub에서 실행해 확인하지 못했습니다. YAML 문법만 확인했습니다(ruby -ryaml).
+#   각 작업의 cargo 명령은 로컬에서 같은 순서로 실행해 확인했습니다(README 3절).
+# - 액션의 커밋 SHA는 2026-11-21에 git ls-remote로 확인한 것입니다.
+
+name: linestat CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 18 * * 0"   # 매주 일요일 18:00 UTC(한국 시간 월요일 03:00): 최신 의존성 확인
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+    # 이 저장소에서는 프로젝트가 하위 디렉터리에 있습니다. 프로젝트가 저장소 루트라면 이 줄을 지웁니다.
+    working-directory: part3-cargo/ch9-testing-ci/projects/linestat
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # 테스트: 최신 stable과, Cargo.toml의 rust-version(MSRV)인 1.98 두 툴체인에서.
+  test:
+    name: test (${{ matrix.toolchain }})
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false        # 한 툴체인이 실패해도 다른 툴체인의 결과를 끝까지 봅니다
+      matrix:
+        toolchain: [stable, "1.98"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install ${{ matrix.toolchain }} --profile minimal && rustup default ${{ matrix.toolchain }}
+      # 실제로 설치된 컴파일러 버전을 캐시 키에 쓰려고 출력으로 남깁니다.
+      # 매트릭스 값 stable은 새 버전이 나와도 그대로라 키에 쓸 수 없습니다.
+      - id: rustc
+        run: echo "version=$(rustc -V)" >> "$GITHUB_OUTPUT"
+      # Cargo home의 내려받은 크레이트와 target/을 저장해 두었다가 다음 실행에서 되살립니다.
+      # Cargo.lock이나 컴파일러 버전이 바뀌면 키가 달라져 새로 만듭니다.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            part3-cargo/ch9-testing-ci/projects/linestat/target/
+          key: ${{ runner.os }}-${{ steps.rustc.outputs.version }}-${{ hashFiles('part3-cargo/ch9-testing-ci/projects/linestat/Cargo.lock') }}
+      - run: cargo test --locked --all-targets   # 단위·통합 테스트, 예제·벤치마크를 테스트 모드로
+      - run: cargo test --locked --doc           # --all-targets는 문서 테스트를 돌리지 않습니다
+
+  # 기능 조합: 기본, 기능 없음, 전부.
+  features:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: rustup update stable && rustup default stable
+      - run: |
+          for flags in "" "--no-default-features" "--all-features"; do
+            echo "== cargo test $flags"
+            cargo test --locked $flags
+          done
+
+  # 경고: 하나라도 있으면 실패. --keep-going으로 모든 크레이트의 경고를 한 번에 봅니다.
+  warnings:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    env:
+      CARGO_BUILD_WARNINGS: deny
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: rustup update stable && rustup default stable && rustup component add clippy rustfmt
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets --all-features --keep-going
+
+  # 최신 의존성: 잠금 파일을 무시하고 지금 고를 수 있는 가장 새 버전으로 테스트합니다.
+  # 예약 실행이라 PR을 막지 않습니다. 실패가 눈에 띄도록 continue-on-error는 두지 않았습니다.
+  latest-deps:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    env:
+      CARGO_RESOLVER_INCOMPATIBLE_RUST_VERSIONS: allow
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: rustup update stable && rustup default stable
+      - run: cargo update --verbose
+      - run: cargo test --verbose
