@@ -91,6 +91,7 @@
 - 앞 챕터를 "N절"로 가리킬 때는 그 README의 번호 체계를 확인합니다. Part 0 초기 챕터(ch3 등)는 핵심 개념의 소절에만 "1.", "4." 같은 번호가 있고 "자주 하는 실수"에는 번호가 없어서, "4절"이 엉뚱한 곳(ch3에서는 오버플로 절)을 가리킵니다. 그럴 때는 "'자주 하는 실수' 1"처럼 씁니다(부록 B ch7).
 - 예전 공식 Rust FAQ는 보관된 저장소 rust-lang/prev.rust-lang.org의 `en-US/faq.md`에 남아 있어 "Rust에는 왜 X가 없나"의 1차 자료로 쓸 수 있습니다(prev.rust-lang.org 주소는 404). 보관된 저장소의 날짜를 쓸 때 GitHub API의 `pushed_at`은 보관 시각이 아니라 마지막 push 시각이므로, 파일의 마지막 수정일을 `gh api 'repos/<저장소>/commits?path=<파일>&per_page=1'`로 확인해 적습니다(부록 B ch7, `faq.md`는 2018-06-22).
 - 서식 문자열의 인라인 캡처(`"{a} {b}"`)는 매크로 인자가 하나이므로 "인자 개수가 자유롭다"의 예로 쓰지 않습니다(부록 B ch7).
+- `compare/`의 명령: `cc`·`c++`의 `-o`는 rustc의 `--out-dir`와 달리 디렉터리를 만들지 않으므로 README와 파일 머리의 명령 앞에 `mkdir -p target/tmp/<패키지>`를 둡니다. 메인 세션에는 디렉터리가 이미 있어 드러나지 않으므로, `target/`이 없는 새 디렉터리에서 README 블록을 그대로 실행해 확인합니다. macOS Apple clang의 TSan은 `abort_on_error`가 기본 true(보고가 있으면 종료 134, 끄면 `exitcode` 66)이고 `halt_on_error`가 false라서 보고 뒤에도 끝까지 실행되어 일반 출력이 함께 나옵니다(부록 B ch8).
 
 ## 2. 후속 조치
 
@@ -112,7 +113,6 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch8-concurrency-async` | ch1 예제 03 끝 주석의 두 변형: 스코프 스레드가 `Mutex` 없이 합계를 빌려 고치면 E0499, `move` 클로저로 고치면 `usize`가 복사되어 합계 0(경고 ``value captured by `total` is never read``). `move` 없는 클로저가 `&T` 타입 지역 변수를 쓰면 그 변수가 아니라 `*x`를 캡처하므로, 스코프 스레드에서 `chunk: &[T]`만 쓰는 클로저는 `move` 없이 컴파일됨(값 변수를 빌리면 E0373). Go 경쟁 검출기와 메모리 모델 비교(부록 B ch1 Q1.8) |
 | 부록 B `ch10-undefined-behavior` | ch2가 확인한 타입 안전성 사실(1.100.0): `&u32 as &f32`는 E0605(ch2 4.2절의 compile_fail), 원시 포인터로 거친 캐스트는 컴파일되고 역참조만 E0133, `unsafe { transmute(u32) }`는 `unnecessary_transmutes` 경고와 `f32::from_bits` 제안. C의 미초기화 변수 읽기(ch2 4.1절 E0381이 미룸) |
 | 부록 B `ch14-performance` | 디버그 빌드로 속도를 비교하는 실수, Discord·Cloudflare 사례를 읽는 법(구조 변경을 함께 함)(부록 B ch1 4절, Q1.3) |
 | 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5) |
@@ -380,6 +380,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (부록 B) memory safety / garbage collector / null pointer optimization | 메모리 안전성 / 가비지 컬렉터(GC) / 널 포인터 최적화 |
 | (부록 B) platform type (Kotlin) / union type (TypeScript) / stack trace | 플랫폼 타입(처음에 "Java에서 온 값이라 Kotlin이 null 여부를 모르는 타입"으로 풀어 씀) / 합집합 타입 / 스택 추적(Rust에서는 백트레이스) |
 | (부록 B) composition / delegation / structural typing / type erasure (Java 제네릭) / subtyping | 조합 / 위임 / 구조적 타이핑 / 타입 소거(에러 타입을 지우는 일은 위의 "종류를 지우다") / 하위 타입 관계 |
+| (부록 B) fearless concurrency / race detector / function coloring | 겁 없는 동시성(Part 0 ch15와 같음) / 경쟁 검출기 / 함수의 "색"이 나뉘는 문제 |
 | (부록 B) admired / desired (Stack Overflow 설문) | admired / desired(번역하지 않고 처음에 뜻을 풀어 씀) |
 | (부록 B) spatial / temporal / type / initialization / data-race safety, class (of memory safety bugs) | 공간적 / 시간적 / 타입 / 초기화 / 데이터 경쟁 안전성, 종류("갈래"는 match arm이므로 쓰지 않음) |
 | overflow (정수) | 오버플로("넘침"은 쓰지 않음. 부록 A ch18 등에 "넘침"이 남아 있음) |

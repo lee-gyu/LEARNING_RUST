@@ -52,6 +52,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch5-no-null-no-exceptions](ch5-no-null-no-exceptions/) | null도 예외도 없이: Kotlin·TS의 null 연산자를 `Option`으로 옮기기, Java `Optional`·Kotlin `T?`와의 차이, `Result`와 checked exception·Go `error`, `?`, `finally`·`defer`·`with` 자리의 `Drop`(파일·잠금), 패닉과 예외, `unwrap`의 자리, 에러 타입 고르기, 스택 추적 |
 | [ch6-no-classes-inheritance](ch6-no-classes-inheritance/) | 클래스도 상속도 없이: 구조체와 `impl`, 생성자 관례, Java 계층을 조합·위임·기본 메서드로 옮기기, 트레이트와 Java·Go 인터페이스, 제네릭과 Java 타입 소거·C++ 템플릿·Go, 오버로딩·기본 인자·가변 인자의 대안, 열거형과 트레이트 객체로 옮기는 계층, 리플렉션 대신 매크로, 모듈 단위 공개 범위 |
 | [ch7-syntax-type-surprises](ch7-syntax-type-surprises/) | 문법과 타입에서 낯선 것: 불변 기본과 섀도잉, 표현식과 `++`·삼항 연산자, 정수의 폭과 `usize`, 암묵적 변환이 없는 수 타입, `String`과 `&str`, 언어마다 다른 문자열 길이와 `s[0]`, 시그니처의 타입 표기, 매크로 `!`, 완전한 `match`, 실수와 `Eq`·`Hash` |
+| [ch8-concurrency-async](ch8-concurrency-async/) | 동시성과 비동기: 겁 없는 동시성이 약속하는 것, `Send`·`Sync`와 대여 규칙, 데이터를 소유한 `Mutex`(C의 데이터 경쟁과 ThreadSanitizer), GIL·경쟁 검출기와의 차이, 고루틴과 태스크, 표준 라이브러리에 없는 비동기 런타임, 게으른 퓨처와 Promise, 일반 함수와 `async`, 스레드와 `async` 고르기, 전역 상태 |
 
 ## 질문 색인
 
@@ -125,5 +126,15 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q7.8](ch7-syntax-type-surprises/) | `println!`의 `!`는 무엇이고 왜 함수가 아닌가요? |
 | [Q7.9](ch7-syntax-type-surprises/) | `match`는 왜 모든 경우를 다뤄야 하나요? `switch`와 무엇이 다른가요? |
 | [Q7.10](ch7-syntax-type-surprises/) | 실수는 왜 `HashMap`의 키로 쓰거나 바로 정렬할 수 없나요? |
+| [Q8.1](ch8-concurrency-async/) | "겁 없는 동시성"은 무슨 뜻인가요? |
+| [Q8.2](ch8-concurrency-async/) | 데이터 경쟁을 컴파일 시간에 어떻게 막나요? |
+| [Q8.3](ch8-concurrency-async/) | `Mutex`가 왜 데이터를 감싸나요? (C++의 `std::mutex`, Java의 `synchronized`, Go의 `sync.Mutex`와 비교) |
+| [Q8.4](ch8-concurrency-async/) | Python의 GIL, Go의 race detector, C/C++의 ThreadSanitizer와 무엇이 다른가요? |
+| [Q8.5](ch8-concurrency-async/) | Go의 고루틴 같은 가벼운 스레드가 있나요? |
+| [Q8.6](ch8-concurrency-async/) | 비동기 런타임이 왜 표준 라이브러리에 없나요? tokio는 무엇인가요? |
+| [Q8.7](ch8-concurrency-async/) | Rust의 `async`는 JavaScript의 `async`/Promise와 무엇이 다른가요? |
+| [Q8.8](ch8-concurrency-async/) | 일반 함수에서 `async` 함수를 그냥 부를 수 없는 이유는 무엇인가요? |
+| [Q8.9](ch8-concurrency-async/) | 스레드와 `async` 중 무엇을 고르나요? |
+| [Q8.10](ch8-concurrency-async/) | 전역 가변 상태나 싱글턴은 어떻게 만드나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

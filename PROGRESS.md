@@ -2,8 +2,8 @@
 
 [로드맵](docs/roadmap.md)의 챕터가 어디까지 끝났는지만 적습니다. 챕터 사이에 함께 봐야 하는 메모(작업 방식, 후속 조치, 용어)는 [SHARED.md](SHARED.md)에 있습니다.
 
-- 마지막 갱신: 2026-11-21 (부록 B ch7 완료)
-- 다음 작업: Part 4 `ch1-rustdoc-basics`, 부록 B `ch8-concurrency-async`
+- 마지막 갱신: 2026-11-21 (부록 B ch8 완료)
+- 다음 작업: Part 4 `ch1-rustdoc-basics`, 부록 B `ch9-c-memory-errors`
 - 툴체인: rustc 1.100.0, cargo 1.100.0 (2024 에디션). Part 0과 Part 1 ch1~ch4는 1.98.1에서 작성했고, 2026-11-20에 예제 출력과 `compile_fail/` 메시지를 1.100.0에서 다시 확인했습니다. 그 뒤의 챕터는 1.100.0에서 작성·검증했습니다.
 
 상태 표기: ⬜ 대기 · 🔄 작성 중 · ✅ 완료(검증 통과) · ⚠️ 부분 완료
@@ -19,7 +19,7 @@
 | Part 3. Cargo | 11 / 11 | 23 / 8 / 12 |
 | Part 4~11 | 0 / 58 | |
 | 부록 A. Effective Rust (본편 합계와 별도) | 35 / 35 | 169 / 97 / 21 |
-| 부록 B. Rust FAQ (본편 합계와 별도) | 7 / 17 | 23 / 12 / 0 / 비교 0 |
+| 부록 B. Rust FAQ (본편 합계와 별도) | 8 / 17 | 24 / 14 / 0 / 비교 1 |
 
 산출물은 예제(`examples/`) / 컴파일 에러 예제(`compile_fail/`) / 독립 프로젝트(`projects/`)의 개수입니다. 부록 B는 C/C++ 비교 코드(`compare/`)의 개수를 "비교"로 덧붙입니다. 사전 작업(루트 `Cargo.toml`, `.gitignore`, 루트 `README.md`)은 2026-11-17에 마쳤습니다. 부록 B의 사전 작업은 2026-11-21에 마쳤습니다(`plan/plan-rust-faq.md` 3절).
 
@@ -149,3 +149,4 @@
 | ✅ | `ch5-no-null-no-exceptions` | 예제 3 / 에러 2 / 프로젝트 0 / 비교 0 | 2026-11-21 |
 | ✅ | `ch6-no-classes-inheritance` | 예제 3 / 에러 2 / 프로젝트 0 / 비교 0 | 2026-11-21 |
 | ✅ | `ch7-syntax-type-surprises` | 예제 2 / 에러 2 / 프로젝트 0 / 비교 0 | 2026-11-21 |
+| ✅ | `ch8-concurrency-async` | 예제 1 / 에러 2 / 프로젝트 0 / 비교 1 | 2026-11-21 |
