@@ -46,6 +46,7 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | 챕터 | 주제 |
 | --- | --- |
 | [ch1-why-rust](ch1-why-rust/) | Rust가 풀려는 문제(GC 없는 메모리 안전성, 비용 없는 추상화, 검사되는 스레드 공유), 조직들이 옮기는 이유와 근거(보안 보고서, 도입 사례), 쓰이는 분야와 사용 현황, 맞지 않는 곳, 기존 코드를 다시 써야 하는지, Go·C++와 고르는 기준 |
+| [ch2-memory-safety](ch2-memory-safety/) | 메모리 안전성의 다섯 종류(공간·시간·타입·초기화·데이터 경쟁)와 Rust가 막는 장치와 시점, 메모리 버그가 취약점이 되는 과정(Heartbleed 모양의 버그), "70%"를 읽는 법, GC 언어와의 차이, 패닉의 안전성, 정수 실수를 드러내는 장치, Android의 감소 자료를 읽는 법 |
 
 ## 질문 색인
 
@@ -61,5 +62,13 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [Q1.6](ch1-why-rust/) | Rust가 맞지 않는 곳은 어디인가요? |
 | [Q1.7](ch1-why-rust/) | 기존 코드를 전부 다시 써야 하나요? |
 | [Q1.8](ch1-why-rust/) | Go, C++와는 어떤 관계이고 무엇을 고르나요? |
+| [Q2.1](ch2-memory-safety/) | 메모리 안전성이 정확히 무엇인가요? |
+| [Q2.2](ch2-memory-safety/) | 메모리 버그가 왜 보안 취약점이 되나요? |
+| [Q2.3](ch2-memory-safety/) | "취약점의 70%가 메모리 문제"라는 숫자는 어디서 나왔나요? |
+| [Q2.4](ch2-memory-safety/) | Rust는 메모리 오류를 어떻게 막나요? 언제 잡나요? |
+| [Q2.5](ch2-memory-safety/) | Java, Go, Python, C#도 메모리 안전한데 Rust는 무엇이 다른가요? |
+| [Q2.6](ch2-memory-safety/) | 패닉으로 프로그램이 죽는 것도 안전한 건가요? |
+| [Q2.7](ch2-memory-safety/) | 메모리 안전성 말고 보안에 도움이 되는 것은 무엇인가요? |
+| [Q2.8](ch2-memory-safety/) | 실제로 취약점이 줄었나요? |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

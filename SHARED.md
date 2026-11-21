@@ -38,7 +38,7 @@
 
 - 실행마다 같은 출력이 나오게 씁니다. 스레드의 결과는 `main`에서 출력하고, 주소·해시 값·경과 시간은 값 대신 비교 결과를 출력하고, `HashMap`은 정렬한 뒤 출력합니다. 테스트 이름이 출력되는 순서는 실행마다 다를 수 있어 README에 싣지 않습니다.
 - 표준 입력을 읽는 예제는 `< /dev/null`이나 파이프를 명시하고 제한 시간을 걸어 실행합니다.
-- 일부러 패닉하는 예제는 기본 패닉 훅의 메시지에 실행마다 다른 스레드 번호가 들어갑니다. `println!`은 `BrokenPipe`에서 패닉하므로 출력을 `| head`로 자르지 않습니다.
+- 일부러 패닉하는 예제는 기본 패닉 훅의 메시지에 실행마다 다른 스레드 번호가 들어갑니다. 1.100.0의 기본 패닉 훅은 표준 에러에 빈 줄을 먼저 출력하므로 "표준 에러의 첫 줄"이라고 쓰면 틀립니다. `println!`은 `BrokenPipe`에서 패닉하므로 출력을 `| head`로 자르지 않습니다.
 - `rustc`나 `cargo`를 자식 프로세스로 부르는 예제는 환경 변수 `CARGO`를 쓰고, 출력의 절대 경로는 줄여서 싣습니다. `cargo metadata --no-deps`, `cargo fmt`, `cargo tree`는 빌드하지 않고 `target/`도 만들지 않습니다.
 - unsafe 코드는 Miri로 검증할 수 없습니다. 블록마다 `// SAFETY:` 주석이 대는 전제 조건을 바로 위 코드가 확인하는 모양으로만 쓰고, 메인 세션이 블록을 읽어 검토하고, README에 미검증이라고 밝힙니다.
 - `#[expect(lint)]`는 기본으로 꺼진 린트도 그 범위에서 켜서 충족시킵니다. "Clippy가 잡는다"고 쓰기 전에 속성을 지우고 경고가 실제로 나는지 확인합니다(기본 수준은 `clippy-driver -W help`). `println!` 문에 붙인 `#[expect]`는 무시되므로 `let` 문에 붙입니다. 매크로가 펼친 코드의 린트는 매크로를 부른 곳에 붙입니다. 조건(에디션, 기능, 생성 옵션)에 따라 나기도 하고 안 나기도 하는 경고에는 `#[allow]`를 씁니다.
@@ -98,12 +98,12 @@
 | Part 10 `ch7`·`ch8`·`ch9` | 소멸자가 실행되지 않는 경우(부록 A ch11), 이중 패닉과 `catch_unwind`(부록 A ch11·ch18), 동시성(부록 A ch17). 변성·HRTB·drop 검사(부록 A ch14) |
 | Part 10 `ch12-ffi-beneath-std` | `CString::into_raw`/`from_raw`, `CStr::from_ptr`이 돌려주는 참조의 라이프타임이 아무것에도 묶여 있지 않다는 점, `Option<NonZero<T>>`의 FFI 호환 보장(Part 1 ch14). 부록 A ch34·ch35와 서로 링크 |
 | Part 11 `ch2-compiler-flags` | 새니타이저(부록 A ch31) |
-| 부록 B `ch2-memory-safety` | 메모리 버그가 취약점이 되는 이유와 "70%"(MSRC·Chromium·Android)를 읽는 법(부록 B ch1 Q1.3) |
-| 부록 B `ch3-safety-limits` | Android의 `unsafe` Rust 버퍼 오버플로 CVE-2025-48530(공개 릴리스 전에 잡힘), 메모리 안전성 밖의 취약점(부록 B ch1 Q1.1·Q1.3) |
+| 부록 B `ch3-safety-limits` | Android의 `unsafe` Rust 버퍼 오버플로 CVE-2025-48530(공개 릴리스 전에 잡힘. Android의 "1000배" 추정의 근거가 된 1건), 메모리 안전성 밖의 취약점(부록 B ch1 Q1.1·Q1.3, ch2 Q2.8). 패닉을 이용한 서비스 거부, 릴리스 빌드의 정수 오버플로(ch2 Q2.6·Q2.7) |
 | 부록 B `ch5-no-null-no-exceptions` | 파일·잠금 같은 메모리 밖 자원의 정리를 `try`/`finally`·`defer`·`with`와 비교(부록 B ch1 Q1.1) |
 | 부록 B `ch8-concurrency-async` | ch1 예제 03 끝 주석의 두 변형: 스코프 스레드가 `Mutex` 없이 합계를 빌려 고치면 E0499, `move` 클로저로 고치면 `usize`가 복사되어 합계 0(경고 ``value captured by `total` is never read``). `move` 없는 클로저가 `&T` 타입 지역 변수를 쓰면 그 변수가 아니라 `*x`를 캡처하므로, 스코프 스레드에서 `chunk: &[T]`만 쓰는 클로저는 `move` 없이 컴파일됨(값 변수를 빌리면 E0373). Go 경쟁 검출기와 메모리 모델 비교(부록 B ch1 Q1.8) |
+| 부록 B `ch10-undefined-behavior` | ch2가 확인한 타입 안전성 사실(1.100.0): `&u32 as &f32`는 E0605(ch2 4.2절의 compile_fail), 원시 포인터로 거친 캐스트는 컴파일되고 역참조만 E0133, `unsafe { transmute(u32) }`는 `unnecessary_transmutes` 경고와 `f32::from_bits` 제안. C의 미초기화 변수 읽기(ch2 4.1절 E0381이 미룸) |
 | 부록 B `ch14-performance` | 디버그 빌드로 속도를 비교하는 실수, Discord·Cloudflare 사례를 읽는 법(구조 변경을 함께 함)(부록 B ch1 4절, Q1.3) |
-| 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7) |
+| 부록 B `ch17-interop-migration` | Android의 "새 코드부터 메모리 안전한 언어로"와 취약점 반감기(부록 B ch1 Q1.7). `unsafe extern` 블록 안에서 `safe fn`으로 선언한 함수는 `unsafe` 없이 부를 수 있고 일반 `fn`은 E0133(1.100.0, ch2 검증에서 확인). Java JNI·Go `unsafe` 패키지도 경계를 드러낸다는 Google 보고서의 서술(ch2 Q2.5) |
 
 ### 2.2 nightly와 Miri를 준비하면 다시 확인할 것
 
@@ -133,7 +133,7 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 - 2026-11-19: Part 2 ch5 `projects/msrv_resolver`, 부록 A ch25 `projects/real_graph`(2026-11-20에 다시 확인, 변화 없음), 부록 A ch15·ch16이 소개한 크레이트 버전
 - 2026-11-20: 부록 A ch27~ch35의 프로젝트, Part 3 ch1 `text-stat`, ch2 `three-sources`(GitHub `rust-lang/cfg-if`의 태그 `v1.0.4` 포함), ch4 `bookshelf`, 챕터 패키지의 dev-dependency(`rand`, `trpl`, `thiserror`, `anyhow`, `derive_builder`, `semver`)
 - 2026-11-21: Part 3 ch6 `collatz`(`thiserror` 2.0.21, 그 아래 `syn` 3.0.10 등), ch8 `fletcher`(`cc` 1.11.3, `find-msvc-tools` 0.1.15, `shlex` 2.0.1)
-- 2026-11-21(crates.io 밖의 시점): 부록 B ch1의 보안 통계, 도입 사례, Stack Overflow 2025·2026 설문 수치, Linux 커널의 Rust 상태. README 6절에 확인일을 적었습니다.
+- 2026-11-21(crates.io 밖의 시점): 부록 B ch1의 보안 통계, 도입 사례, Stack Overflow 2025·2026 설문 수치, Linux 커널의 Rust 상태. ch2의 CWE Top 25(2025), Android 취약점 자료. README 6절에 확인일을 적었습니다.
 
 ## 3. 용어 메모
 
@@ -367,3 +367,5 @@ README에 "실행해 확인하지 못했다"고 밝힌 도구입니다. 실행�
 | (Part 3) build cache / target directory / build directory / final·intermediate artifact / dep-info / unit (timings) / critical path / frontend | 빌드 캐시 / target 디렉터리 / build 디렉터리 / 최종 산출물·중간 산출물 / `.d` 파일(dep-info) / 단위 / 가장 긴 의존 경로(critical path) / 프런트엔드 |
 | (부록 B) memory safety / garbage collector / null pointer optimization | 메모리 안전성 / 가비지 컬렉터(GC) / 널 포인터 최적화 |
 | (부록 B) admired / desired (Stack Overflow 설문) | admired / desired(번역하지 않고 처음에 뜻을 풀어 씀) |
+| (부록 B) spatial / temporal / type / initialization / data-race safety, class (of memory safety bugs) | 공간적 / 시간적 / 타입 / 초기화 / 데이터 경쟁 안전성, 종류("갈래"는 match arm이므로 쓰지 않음) |
+| overflow (정수) | 오버플로("넘침"은 쓰지 않음. 부록 A ch18 등에 "넘침"이 남아 있음) |
