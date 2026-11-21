@@ -1,0 +1,11 @@
+[package]
+name = "cargo-hello"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "cargo metadata를 읽어 워크스페이스를 요약하는 사용자 정의 하위 명령(학습용)"
+
+[dependencies]
+serde_json = "1.0.154"
+
+[workspace]

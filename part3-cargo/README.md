@@ -30,5 +30,6 @@ cargo run -p <패키지 이름> --example <예제 이름>
 | [ch8-build-scripts](ch8-build-scripts/) | 빌드 스크립트의 한살이와 입력(환경 변수)·출력(`OUT_DIR`, 지시문), 데이터 파일로 코드 생성과 `include!`, `cargo::` 지시문과 `rerun-if-changed`, `-vv`로 출력 보기, `cc`로 C 라이브러리 링크, `links`와 `DEP_<links>_<키>`, `-sys` 관례와 빌드 스크립트 재정의 — 챕터 패키지의 `build.rs`, C 라이브러리를 감싼 프로젝트(`fletcher`) |
 | [ch9-testing-ci](ch9-testing-ci/) | `cargo test`가 빌드·실행하는 타깃과 고르는 옵션, 이름 거르기와 문서 테스트, `test`·`harness`·`doctest` 키, 프로필에 따라 갈리는 테스트, `cargo bench`와 `harness = false` 벤치마크, GitHub Actions 워크플로 읽기와 CI 작업(테스트·MSRV·기능 조합·경고·최신 의존성·캐시) — 테스트 종류를 모두 갖춘 프로젝트(`linestat`) |
 | [ch10-publishing-semver](ch10-publishing-semver/) | 게시 절차와 토큰·메타데이터, `cargo package`(정규화된 매니페스트, `include`·`exclude`, 확인 빌드), path·git 의존성과 `cargo publish --workspace`, 게시 취소·소유자, 다른 레지스트리, SemVer 분류와 규칙(구조체 필드, 고유 메서드, 기능·의존성), `cargo install` — 게시 정보를 갖춘 워크스페이스(`tally-units`) |
+| [ch11-commands-tools](ch11-commands-tools/) | Cargo 명령의 여섯 갈래, 패키지 ID 지정과 `cargo pkgid`, `cargo metadata`의 JSON, `--message-format=json`, 사용자 정의 하위 명령(찾는 곳, 인자, `CARGO`), 장래 비호환 보고서 — `cargo metadata`를 읽는 하위 명령(`cargo-hello`) |
 
 전체 계획은 [로드맵](../docs/roadmap.md)을, 진행 상황은 [PROGRESS.md](../PROGRESS.md)를 참고합니다.

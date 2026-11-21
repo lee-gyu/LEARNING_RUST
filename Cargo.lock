@@ -1062,6 +1062,10 @@ name = "p3-ch10-publishing-semver"
 version = "0.0.0"
 
 [[package]]
+name = "p3-ch11-commands-tools"
+version = "0.0.0"
+
+[[package]]
 name = "p3-ch2-dependencies"
 version = "0.0.0"
 dependencies = [
