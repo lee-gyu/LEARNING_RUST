@@ -1,0 +1,11 @@
+[workspace]
+resolver = "3"
+members = ["tally-units-core", "tally-units"]
+
+# 두 패키지가 함께 쓰는 게시 정보입니다. 멤버는 `키.workspace = true`로 물려받습니다.
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+repository = "https://example.com/tally-units"

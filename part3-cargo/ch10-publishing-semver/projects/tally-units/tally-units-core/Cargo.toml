@@ -1,0 +1,13 @@
+[package]
+name = "tally-units-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "길이 단위를 미터 기준으로 바꾸는 작은 라이브러리(학습용 예제)"
+readme = "README.md"
+keywords = ["units", "conversion", "length"]
+categories = ["science"]
+# 게시하는 .crate 파일에서 뺄 파일. 테스트와 테스트용 큰 데이터는 사용자에게 필요 없습니다.
+exclude = ["tests/"]
